@@ -81,7 +81,7 @@ export function AppShell({ children, generatedAt, showGlobalFilters = true }: { 
         <div className="topbar-actions"><button className="search-trigger" aria-label="Buscar en informes, insights, URLs e incidencias" onClick={() => setSearchOpen(true)}><Search size={16} /></button><span className="confidential">Confidencial</span><span className="avatar" title="Sesión corporativa">SEO</span></div>
       </header>
       {showGlobalFilters ? (
-        <div className="filterbar" aria-label="Filtros globales">
+        <div className="filterbar" role="region" aria-label="Filtros globales">
           <label className="filter-label"><span>Proyecto</span><select className="ds-select filter-select" value={project} onChange={(event) => update("project", event.target.value)}><option value="all">Conjunto</option>{PILOT_PROJECTS.map((item) => <option key={item.slug} value={item.slug}>{item.name}</option>)}</select></label>
           <label className="filter-label"><span>Mercado</span><select className="ds-select filter-select" value={market} onChange={(event) => update("market", event.target.value)}><option value="all">Tier 1 · Todos</option>{MARKETS.map((item) => <option key={item.code} value={item.code}>{item.name}</option>)}</select></label>
           <label className="filter-label"><span>Periodo</span><select className="ds-select filter-select" value={period} onChange={(event) => update("period", event.target.value)}>{PERIODS.map((item) => <option key={item.key} value={item.key}>{item.label}</option>)}</select></label>

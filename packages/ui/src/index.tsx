@@ -122,3 +122,196 @@ export function MetricStrip({ metrics }: { metrics: DashboardPayload["metrics"] 
 }
 
 export { cx };
+
+/**
+ * Panel de tabla densa: la superficie desplaza en horizontal cuando la tabla no
+ * cabe, así que es una región con nombre y alcanzable con teclado (`tabIndex`).
+ * Sin eso, quien navega con teclado no puede desplazar la tabla y Axe lo marca
+ * como `scrollable-region-focusable`.
+ */
+export function DataTablePanel({ label, className, children, ...props }: HTMLAttributes<HTMLDivElement> & { label: string }) {
+  return <div className={cx("card ds-panel matrix", className)} role="region" aria-label={label} tabIndex={0} {...props}>{children}</div>;
+}
+
+/* ---------------------------------------------------------------------------
+ * Sistema de decisiones (DESIGN_SYSTEM.md · Component contract)
+ * ------------------------------------------------------------------------- */
+
+export type DecisionThreadStep = {
+  id: string;
+  label: ReactNode;
+  /** Procedencia o contexto breve: fuente, corte, responsable. */
+  meta?: ReactNode;
+  href: string;
+  state?: "done" | "current" | "pending";
+};
+
+/**
+ * Hilo de decisión: raíl de procedencia y navegación pegajoso en vertical, que
+ * pasa a horizontal y desplazable en móvil (nunca se oculta, porque es la única
+ * forma de saber de dónde viene una conclusión).
+ *
+ * Es un `nav` real con lista ordenada: el orden de los pasos es información, no
+ * decoración, y se recorre entero con teclado.
+ */
+export function DecisionThread({ steps, label = "Hilo de decisión", className }: { steps: DecisionThreadStep[]; label?: string; className?: string }) {
+  if (!steps.length) return null;
+  return (
+    <nav className={cx("ds-thread", className)} aria-label={label}>
+      <p className="ds-eyebrow ds-thread-title">{label}</p>
+      <ol className="ds-thread-list">
+        {steps.map((step, index) => {
+          const state = step.state ?? "pending";
+          return (
+            <li key={step.id} className={cx("ds-thread-step", `ds-thread-${state}`)}>
+              <a href={step.href} aria-current={state === "current" ? "step" : undefined}>
+                <span className="ds-thread-index" aria-hidden>{String(index + 1).padStart(2, "0")}</span>
+                <span className="ds-thread-body">
+                  <strong>{step.label}</strong>
+                  {step.meta ? <small>{step.meta}</small> : null}
+                </span>
+              </a>
+            </li>
+          );
+        })}
+      </ol>
+    </nav>
+  );
+}
+
+export type InsightStackItem = {
+  id: string;
+  title: ReactNode;
+  summary?: ReactNode;
+  /** Categoría, confianza y cualquier otro estado semántico ya construido. */
+  badges?: ReactNode;
+  evidence?: Array<{ id: string; label: ReactNode; href?: string }>;
+  /** Decisión propuesta y quién la asume; el criterio de éxito va en `meta`. */
+  action?: { label: ReactNode; owner?: ReactNode };
+  meta?: ReactNode;
+  href?: string;
+};
+
+/**
+ * Pila de conclusiones: lista numerada y editorial, con evidencia, confianza y
+ * acción visibles sin abrir nada. El número es el orden de lectura decidido por
+ * una persona, no un ranking automático.
+ *
+ * El título es el enlace (cuando hay `href`), así que en móvil no hace falta
+ * ocultar ningún control para que quepa.
+ */
+export function InsightStack({ items, startIndex = 1, className }: { items: InsightStackItem[]; startIndex?: number; className?: string }) {
+  if (!items.length) return <EmptyState title="Sin conclusiones para este periodo">Ninguna señal ha superado el umbral de impacto y confianza.</EmptyState>;
+  return (
+    <ol className={cx("ds-insight-stack", className)} start={startIndex}>
+      {items.map((item, index) => (
+        <li key={item.id} id={item.id} className="ds-insight-item">
+          <span className="ds-insight-index" aria-hidden>{String(startIndex + index).padStart(2, "0")}</span>
+          <div className="ds-insight-body">
+            <div className="ds-insight-head">
+              <h3 className="ds-h3">{item.href ? <a href={item.href}>{item.title}</a> : item.title}</h3>
+              {item.badges ? <div className="ds-insight-badges">{item.badges}</div> : null}
+            </div>
+            {item.summary ? <p className="ds-insight-summary">{item.summary}</p> : null}
+            {item.action ? <p className="ds-insight-action"><span>Decisión propuesta</span><strong>{item.action.label}</strong>{item.action.owner ? <small>{item.action.owner}</small> : null}</p> : null}
+            {item.evidence?.length ? <div className="ds-insight-evidence">{item.evidence.map((evidence) => (evidence.href ? <EvidenceLink key={evidence.id} href={evidence.href}>{evidence.label}</EvidenceLink> : <span key={evidence.id} className="ds-evidence ds-evidence-flat">{evidence.label}</span>))}</div> : null}
+            {item.meta ? <p className="ds-insight-meta">{item.meta}</p> : null}
+          </div>
+        </li>
+      ))}
+    </ol>
+  );
+}
+
+export type ChartFrameUnit = DashboardPayload["metrics"][number]["unit"];
+
+export type ChartFrameTable = {
+  caption: string;
+  columns: string[];
+  rows: Array<{ key: string; cells: Array<string | number | null> }>;
+  /** Filas visibles antes de recortar la tabla; el resto sigue en la API. */
+  limit?: number;
+};
+
+/**
+ * Marco de gráfico: valor actual, periodo anterior, interanual, objetivo y
+ * cobertura junto al gráfico, más la alternativa tabular obligatoria.
+ *
+ * La tabla vive en un `details` dentro del propio marco y no en otra página:
+ * el contrato de accesibilidad pide que sea alcanzable con teclado desde el
+ * mismo sitio donde está el gráfico.
+ */
+export function ChartFrame({
+  eyebrow,
+  title,
+  description,
+  value = null,
+  unit = "number",
+  previous = null,
+  previousYear = null,
+  target = null,
+  coverage = null,
+  goodDirection = "up",
+  legend,
+  table,
+  footnote,
+  children,
+  className,
+  level = 3,
+}: {
+  eyebrow?: ReactNode;
+  title: ReactNode;
+  description?: ReactNode;
+  value?: number | null;
+  unit?: ChartFrameUnit;
+  previous?: number | null;
+  previousYear?: number | null;
+  target?: number | null;
+  coverage?: { ratio: number; label: string; quality?: string } | null;
+  goodDirection?: "up" | "down";
+  legend?: ReactNode;
+  table?: ChartFrameTable;
+  footnote?: ReactNode;
+  children: ReactNode;
+  className?: string;
+  /** El marco es h3 dentro de una sección con h2; sube a h2 cuando encabeza la sección. */
+  level?: 2 | 3;
+}) {
+  const Heading = level === 2 ? "h2" : "h3";
+  const rows = table ? (table.limit ? table.rows.slice(0, table.limit) : table.rows) : [];
+  const hidden = table ? table.rows.length - rows.length : 0;
+  return (
+    <figure className={cx("ds-chart-frame", className)}>
+      <div className="ds-chart-head">
+        <div>
+          {eyebrow ? <p className="ds-eyebrow">{eyebrow}</p> : null}
+          <Heading className="ds-h3">{title}</Heading>
+          {description ? <p className="ds-chart-description">{description}</p> : null}
+        </div>
+        {legend ? <div className="ds-chart-legend">{legend}</div> : null}
+      </div>
+      <dl className="ds-chart-readout">
+        <div><dt>Valor actual</dt><dd>{value === null ? "Pendiente" : formatValue(value, unit)}</dd></div>
+        <div><dt>Periodo anterior</dt><dd>{previous === null ? "Sin comparación" : <>{formatValue(previous, unit)} {value !== null ? <Delta current={value} comparison={previous} goodDirection={goodDirection} /> : null}</>}</dd></div>
+        <div><dt>Interanual</dt><dd>{previousYear === null ? "Sin interanual" : <>{formatValue(previousYear, unit)} {value !== null ? <Delta current={value} comparison={previousYear} goodDirection={goodDirection} /> : null}</>}</dd></div>
+        <div><dt>Objetivo</dt><dd>{target === null ? "Sin objetivo definido" : formatValue(target, unit)}</dd></div>
+        <div><dt>Cobertura</dt><dd>{coverage ? <>{Math.round(coverage.ratio * 100)}% <small>{coverage.label}</small></> : "Sin declarar"}</dd></div>
+      </dl>
+      <div className="ds-chart-plot">{children}</div>
+      {table ? (
+        <details className="ds-chart-table">
+          <summary>Ver los datos como tabla</summary>
+          <div className="ds-chart-table-scroll" role="region" aria-label={table.caption} tabIndex={0}>
+            <table className="ds-table ds-table-dense">
+              <caption>{table.caption}</caption>
+              <thead><tr>{table.columns.map((column) => <th key={column} scope="col">{column}</th>)}</tr></thead>
+              <tbody>{rows.map((row) => <tr key={row.key}>{row.cells.map((cell, index) => (index === 0 ? <th key={index} scope="row">{cell ?? "—"}</th> : <td key={index} className="ds-num">{cell === null ? "—" : typeof cell === "number" ? formatValue(cell, unit) : cell}</td>))}</tr>)}</tbody>
+            </table>
+          </div>
+          {hidden > 0 ? <p className="ds-chart-footnote">Se muestran {rows.length} de {table.rows.length} filas; la serie completa está en la API.</p> : null}
+        </details>
+      ) : null}
+      {footnote ? <figcaption className="ds-chart-footnote">{footnote}</figcaption> : null}
+    </figure>
+  );
+}

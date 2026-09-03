@@ -133,6 +133,7 @@ The serif never appears in filters, badges, operational tables or the workbench.
 | `DataPanel` | White or mineral surface with border and no default shadow. |
 | `ChartFrame` | Current value, previous period, YoY, target, coverage and accessible table. |
 | `DataTable` | Sticky header, optional sticky first column, density control and tabular numerals. |
+| `DataTablePanel` | Scroll container for a dense table: named region, keyboard reachable. |
 | `StatusBadge` | Semantic colour plus text or icon; colour alone never conveys meaning. |
 | `EvidenceLink` | Compact provenance link marked in cobalt. |
 | `ReportIndex` | Fixed report navigation connected by the decision thread. |
@@ -181,4 +182,11 @@ The serif never appears in filters, badges, operational tables or the workbench.
 - Calendar has desktop month and mobile agenda presentations.
 - Essential comparisons remain available at every supported viewport.
 - The product passes automated accessibility checks and a manual keyboard journey.
+  Met on 2026-09-03: `pnpm axe` (axe-core 4.13.0) reports 0 WCAG 2.1 A/AA
+  violations and 0 best-practice warnings across 36 route x viewport
+  combinations of both apps; see `docs/design/axe-report.json`. The in-house
+  script still covers what Axe does not: real document width per viewport,
+  contrast, minimum text size and touch targets.
 - Reference screenshots exist for all four target viewports before P1 is closed.
+  Met on 2026-09-03: 13 routes x 4 viewports in `docs/design/screenshots/after`,
+  regenerated after the P1.5 primitives landed.

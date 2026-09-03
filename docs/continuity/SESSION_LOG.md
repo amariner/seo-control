@@ -109,3 +109,58 @@
   se commitean. Activador añadido a `AGENTS.md`; convención documentada en
   `informes-adicionales/README.md`; `.gitignore` excluye toda la carpeta
   salvo ese README.
+
+## 2026-09-03 · Cierre de P1.4 y P1.5: reciprocidad, primitivas, permisos y Axe
+
+- **Reciprocidad de `links` (P1.4, D-015).** Nuevo módulo puro
+  `packages/editorial/src/links.ts`: `buildBacklinkIndex`, `backlinksFor`,
+  `listBacklinks`, `linkKey`, `linkTargetHref`, `editorialPieceHref`. La
+  relación inversa se deriva del array `piece.links`; no se guarda copia. En el
+  visor: `editorialBacklinks`/`editorialBacklinkIndex` en `lib/editorial.ts`,
+  componente `components/editorial/backlinks.tsx` y bloque de reciprocidad en
+  las fichas de insight (`/insights`), acción (`/actions`, con anclajes nuevos
+  por fila), página (`/pages/[id]`), informe (`/reports/[id]`) y query. Los
+  enlaces de ida pasan a ser navegables desde el detalle de la pieza, y
+  `cluster`/`result` se muestran como texto porque su ficha llega en P6/P9.
+  Nueva API `GET /api/v1/editorial/backlinks`. Se publica `/queries/[id]`, que
+  era un enlace roto: la API y las evidencias de los insights ya apuntaban ahí.
+- **Primitivas de `@seo/ui` (P1.5).** `DecisionThread` (raíl pegajoso vertical,
+  horizontal y desplazable por debajo de 820 px), `InsightStack` (lista numerada
+  con badges, decisión propuesta, evidencia y procedencia) y `ChartFrame` (valor
+  actual, periodo anterior, interanual, objetivo, cobertura y tabla accesible
+  junto al gráfico), más `DataTablePanel`, que salió de un hallazgo de Axe. Todas
+  en uso real: portada, ficha de proyecto y detalle de informe. Se retiró la CSS
+  muerta de la lista de conclusiones ad hoc del visor.
+- **Permisos con pruebas (P1.5).** `apps/viewer/lib/permissions.test.ts` (12
+  pruebas) lee las fuentes de `app/` y falla si el visor exporta un método de
+  escritura, declara `"use server"` o importa un módulo de escritura; también
+  cubre `serviceAuthorized`. La primera versión de una de esas pruebas encontró
+  una asimetría real: `api/v1/service/scheduled` se protege con `CRON_SECRET`, no
+  con el token de servicio, así que la aserción se ajustó a la realidad en lugar
+  de forzar el código. `apps/workbench/lib/permissions.test.ts` (5) fija el
+  embudo de escritura en `app/editorial/actions.ts`. Total: 60 → 85 pruebas.
+- **Axe como herramienta externa (D-016).** `axe-core` 4.13.0 + `pnpm axe`
+  (`scripts/axe-audit.mjs`, protocolo DevTools, sale 1 si hay incumplimientos).
+  Primera pasada: **18 incumplimientos reales** que el script propio no veía
+  (`select-name` en los tres filtros globales a 375 px, `aria-pressed` en enlaces
+  del calendario, tablas desplazables sin acceso por teclado, editor TipTap sin
+  nombre accesible). Corregidos todos, más los avisos de `heading-order` y un
+  `landmark-unique`. Estado final: 36 combinaciones ruta × viewport, **0
+  incumplimientos y 0 avisos** (`docs/design/axe-report.json`).
+- **QA en navegador.** Dos procesos reales (workbench 3021 escribe, visor 3020
+  lee, porque 3000 y 3010 estaban ocupados por otros proyectos): se curó una
+  pieza Noken con seis enlaces, se comprobó la reciprocidad en las cinco fichas y
+  el estado vacío explícito en el resto, y se revirtió el dato de prueba con
+  `git checkout` al terminar. `pnpm editorial:import` sigue diciendo «Sin
+  cambios». Capturas `after` regeneradas: 13 rutas × 4 viewports sin
+  desbordamiento.
+- **Estado (D-017).** P1 pasa del 84% a `complete` con 30 de sus 32 criterios
+  cumplidos dentro de la fase. Los dos restantes —ventanas de 28/90/180 días y
+  recorrido oportunidad → resultado— se trasladan con el mismo alcance a la nueva
+  subfase `P3.5`, porque describen datos que solo existen cuando GA4 y GSC entren
+  como fuentes reales; se descartó reformularlos para cerrar 32/32, que habría
+  borrado del roadmap la obligación de medir el resultado. `P2` queda `active` al
+  0% y su primera tarea es `P2.1` (inventario y clasificación de V1).
+- Verificaciones: `pnpm continuity:check`, `pnpm typecheck` (8 paquetes),
+  `pnpm test` (85), `pnpm build` (visor + workbench, con `/queries/[id]`),
+  `pnpm editorial:import` y `pnpm axe` en verde.

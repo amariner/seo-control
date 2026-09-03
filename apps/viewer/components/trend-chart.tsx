@@ -33,5 +33,5 @@ export function TrendChart({ points, annotations }: { points: DashboardPayload["
     return () => { observer.disconnect(); chart.dispose(); };
   }, [annotations, points]);
 
-  return <div ref={container} className="chart" role="img" aria-label={`Evolución diaria: serie actual en cobalto (${CHART_COLORS.accent}) e interanual en grafito discontinuo. La alternativa tabular está disponible en la página de datos.`} />;
+  return <div ref={container} className="chart" role="img" aria-label={`Evolución diaria: serie actual en cobalto (${CHART_COLORS.accent}) e interanual en grafito discontinuo. La alternativa tabular está en «Ver los datos como tabla», justo debajo del gráfico.`} />;
 }

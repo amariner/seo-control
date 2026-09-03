@@ -11,6 +11,11 @@ export function ReportEditor() {
     extensions: [StarterKit],
     content: `<h2>Resumen ejecutivo</h2><p>El crecimiento orgánico del piloto se mantiene, con Noken impulsando la demanda non-branded en Reino Unido. La incidencia de canonical en colecciones francesas de Porcelanosa es la prioridad del periodo.</p><h2>Decisión propuesta</h2><p>Corregir la fuente canónica del template y validar una muestra antes de la publicación completa.</p>`,
     onUpdate: () => setSaved("Cambios sin publicar"),
+    // El área editable es un `role="textbox"`: sin nombre accesible, quien usa
+    // lector de pantalla no sabe qué está editando (Axe: aria-input-field-name).
+    // `contenteditable` por sí solo no expone un rol que admita `aria-multiline`,
+    // así que el rol se declara explícitamente junto al nombre accesible.
+    editorProps: { attributes: { role: "textbox", "aria-label": "Cuerpo del informe ejecutivo", "aria-multiline": "true" } },
   });
 
   if (!editor) return <div className="editor-wrap"><div className="tiptap">Cargando editor…</div></div>;

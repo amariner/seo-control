@@ -1,7 +1,7 @@
 # Matriz de paridad — SEO Dashboard V1 -> V2
 
 Última auditoría: 2 de septiembre de 2026.
-Última actualización de paridad editorial: 3 de septiembre de 2026 (P1.4: curación en el workbench).
+Última actualización de paridad editorial: 3 de septiembre de 2026 (P1.4 y P1.5 cerradas: curación, reciprocidad de enlaces y `/queries/[id]` publicada).
 
 ## Dictamen
 
@@ -26,7 +26,7 @@ Estados válidos: `missing`, `foundation`, `partial-synthetic`, `implemented`,
 | Ruta V1 | Capacidad que se debe conservar | Estado V2 | Fase / criterio de paridad |
 | --- | --- | --- | --- |
 | `/` | GA4 por proyecto/mercado/periodo; KPIs, previa, YoY, tendencias, canales, alertas, divergencia GSC/GA4, movers, tráfico IA y contexto SEMrush. | `partial-synthetic` | P2/P3. Datos reales, cobertura, comparativas, segmentos y drill-down. Se retira el contador aleatorio de usuarios en directo. |
-| `/tracking` | GSC + GA4; rangos predefinidos/personalizados; clics, impresiones, CTR, posición, usuarios, engagement, conversiones, queries, páginas, mercados, branded/non-branded, sugerencias y set estable. | `partial-synthetic` | P3/P4. Series reales, tablas query/URL, movers, CTR esperado, sugerencias trazables y página `/queries/[id]`. |
+| `/tracking` | GSC + GA4; rangos predefinidos/personalizados; clics, impresiones, CTR, posición, usuarios, engagement, conversiones, queries, páginas, mercados, branded/non-branded, sugerencias y set estable. | `partial-synthetic` | P3/P4. Series reales, tablas query/URL, movers, CTR esperado y sugerencias trazables. La ruta `/queries/[id]` ya existe (P1.4, D-015) con la evidencia del insight que la cita y su reciprocidad editorial; le falta la serie propia, que llega con GSC real en P3. |
 | `/optimizacion/crawl` | Crawler local configurable; robots/sitemap, inicio/parada, streaming, filtros, exportación, snapshots, carga y repetición de configuración. | `foundation` | P5. Experiencia completa en workbench, DuckDB/Parquet y publicación firmada de hasta 50.000 URLs. |
 | `/optimizacion/estado-del-sitio` | Score, 43 tipos de issue, severidad, histórico, movimientos, detalle, muestras URL, páginas, estadísticas, sitemap de producto y comparación de crawls. | `partial-synthetic` | P5. Inventario/detalle/histórico/diff completos y enlaces a acciones. El score se recalibra, no se copia a ciegas. |
 | `/vision-general/tareas` | Generación de tareas desde crawl, sitemap, GSC e inbound links; búsqueda, agrupación, severidad, expansión, exportación y enlaces de evidencia. | `foundation` | P4/P5. Tareas reales y persistentes con origen, template, prioridad, owner, estado y resultado. No usar `localStorage` compartido. |
@@ -37,7 +37,7 @@ Estados válidos: `missing`, `foundation`, `partial-synthetic`, `implemented`,
 | `/tracking/prompts-geo` | Inventario de prompts por mercado/categoría/funnel; citado/parcial/ausente/no probado; evidencia, filtros y CSV. | `missing` | P8. Set semanal versionado de 30 prompts por proyecto y mercado Tier 1. Los 24 prompts V1 son referencia, no universo final. |
 | `/canales/sem` | Paid Search como contexto: sesiones, usuarios, engagement, eventos, coste, impresiones, clics, ROAS/CPA, campañas, fuentes y mercados. | `missing` | P6. Solo contexto de sinergia/solapamiento; posterior al núcleo orgánico. |
 | `/conjunto` | Visión de webs/mercados, GA4/GSC, configuración, tráfico por marca/mercado, fuentes y top URL. | `partial-synthetic` | P2/P3. Datos reales, cobertura y agregaciones matemáticamente compatibles; sin ranking absoluto de marcas. |
-| `/conjunto/plan-editorial` | Calendario Jul–Dic 2026, cadencia, temas, backlog, briefs, filtros, orden y CSV; más plan/propuestas no montados. | `redirected` + `implemented` | **P1**. Redirección 308 a `/editorial/calendario`. Calendario, backlog, plan histórico y propuestas publicados en solo lectura con procedencia. Edición, selección de propuestas y vínculo evento-pieza ya se curan desde `/editorial` en el workbench (P1.4); pendiente solo el enlace recíproco con insight/acción/informe. |
+| `/conjunto/plan-editorial` | Calendario Jul–Dic 2026, cadencia, temas, backlog, briefs, filtros, orden y CSV; más plan/propuestas no montados. | `redirected` + `implemented` | **P1**. Redirección 308 a `/editorial/calendario`. Calendario, backlog, plan histórico y propuestas publicados en solo lectura con procedencia. Edición, selección de propuestas y vínculo evento-pieza se curan desde `/editorial` en el workbench (P1.4), y el enlace con insight/acción/query/página/informe es recíproco en las dos direcciones (D-015). Queda solo la medición a 28/90/180 días, que depende de P3. |
 | `/conjunto/radar` | Hitos Google/GEO/SEO/producto, búsqueda, filtros, orden, detalle y fuente. | `missing` | P4/P5. Integrar en cronología/anotaciones; no conservar como vertical aislado hasta automatizarlo. |
 | `/conjunto/canibalizaciones` | Análisis entre marcas/URLs, grafo, pares, riesgo, líder/secundaria, mercados, keywords, posiciones, tráfico, detalle y acciones. | `missing` | P6. Recuperar como solapamiento multiseñal conectado con entidades y calendario. |
 | `/tracking/pilar-contenidos` | Redirección 301 a autoridad temática conservando query string. | `missing` | P2/P6. Redirigir al capítulo V2 equivalente cuando exista. |

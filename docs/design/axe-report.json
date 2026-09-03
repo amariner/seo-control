@@ -1,0 +1,8 @@
+{
+  "tool": "axe-core 4.13.0",
+  "ranAt": "2026-09-03T14:52:58.482Z",
+  "pagesAudited": 36,
+  "blocking": 0,
+  "advisory": 0,
+  "findings": []
+}

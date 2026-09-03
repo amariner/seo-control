@@ -46,7 +46,7 @@ export default async function CalendarPage({ searchParams }: { searchParams: Pro
               const monthEvents = events.filter((event) => event.month === item.month);
               return (
                 <article className="calendar-month" key={`${item.year}-${item.month}`} aria-labelledby={`mes-${item.month}`}>
-                  <div className="calendar-month-head"><h3 id={`mes-${item.month}`}><Link href={hrefWith(BASE, input, { view: "month", month: item.month })}>{MONTH_NAMES_ES[item.month]} {item.year}</Link></h3><small>{monthEvents.length} publicaciones</small></div>
+                  <div className="calendar-month-head"><h2 id={`mes-${item.month}`} className="ds-h3"><Link href={hrefWith(BASE, input, { view: "month", month: item.month })}>{MONTH_NAMES_ES[item.month]} {item.year}</Link></h2><small>{monthEvents.length} publicaciones</small></div>
                   <div className="calendar-weekdays" aria-hidden>{WEEKDAYS.map((day, index) => <span key={`${day}-${index}`}>{day}</span>)}</div>
                   <div className="calendar-cells" role="list">
                     {cells.map((cell, index) => cell.day === null ? <div className="calendar-cell calendar-cell-empty" key={`empty-${index}`} aria-hidden /> : (
@@ -69,10 +69,10 @@ export default async function CalendarPage({ searchParams }: { searchParams: Pro
           </section>
 
           <nav className="calendar-legend" aria-label="Leyenda y filtro por marca">
-            <Link href={hrefWith(BASE, input, { brand: null, event: null })} className={brand === "all" ? "legend-active" : ""}>Todas <span className="legend-count">{dataset.calendar.events.filter((event) => event.year === year).length}</span></Link>
+            <Link href={hrefWith(BASE, input, { brand: null, event: null })} className={brand === "all" ? "legend-active" : ""} aria-current={brand === "all" ? "true" : undefined}>Todas <span className="legend-count">{dataset.calendar.events.filter((event) => event.year === year).length}</span></Link>
             {EDITORIAL_BRANDS.map((item) => {
               const count = countsByBrand.get(item.slug) ?? 0;
-              return <Link key={item.slug} href={hrefWith(BASE, input, { brand: brand === item.slug ? null : item.slug, event: null })} className={`${brand === item.slug ? "legend-active" : ""} ${count === 0 ? "legend-zero" : ""}`} aria-pressed={brand === item.slug} style={{ "--brand-color": brandColor(item.slug) } as React.CSSProperties}><span className="legend-swatch" aria-hidden />{item.name}<span className="legend-count" title={`${count} publicaciones en ${year}`}>{count}</span>{count === 0 ? <span className="ds-sr-only">sin eventos</span> : null}</Link>;
+              return <Link key={item.slug} href={hrefWith(BASE, input, { brand: brand === item.slug ? null : item.slug, event: null })} className={`${brand === item.slug ? "legend-active" : ""} ${count === 0 ? "legend-zero" : ""}`} aria-current={brand === item.slug ? "true" : undefined} style={{ "--brand-color": brandColor(item.slug) } as React.CSSProperties}><span className="legend-swatch" aria-hidden />{item.name}<span className="legend-count" title={`${count} publicaciones en ${year}`}>{count}</span>{count === 0 ? <span className="ds-sr-only">sin eventos</span> : null}</Link>;
             })}
           </nav>
         </section>

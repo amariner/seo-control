@@ -207,3 +207,124 @@ No se reescriben decisiones antiguas. Si una cambia, se añade una nueva entrada
 - Consecuencia: cualquier informe que deba conservarse como histórico de
   producto se traslada, depurado, al lugar que corresponda (p. ej. un informe
   ejecutivo real de P7) — no se fuerza su entrada aquí.
+
+## D-015 · La reciprocidad de `links` se deriva; las fichas viven donde ya vivían
+
+- Fecha: 2026-09-03.
+- Estado: vigente.
+- Decisión: cerrar el enlace bidireccional de `P1.4` sin crear una segunda
+  fuente de verdad ni una ruta nueva de agregación.
+  1. **La pieza editorial es la única propietaria del vínculo.** `piece.links`
+     se escribe solo desde el workbench. La vista recíproca —qué piezas
+     referencian una ficha— se **calcula** con `buildBacklinkIndex(dataset)` /
+     `backlinksFor(index, kind, id)` en `packages/editorial/src/links.ts`
+     (módulo puro). No se guarda un array invertido: duplicarlo permitiría que
+     las dos mitades divergieran y obligaría al visor a escribir.
+  2. **El índice se reconstruye en cada petición** (`editorialBacklinks` en
+     `apps/viewer/lib/editorial.ts`). Con 261 piezas el coste es irrelevante y
+     evita servir una relación obsoleta justo después de curar en el workbench,
+     que es un proceso distinto.
+  3. **Las fichas destino son las que ya existían**, no rutas nuevas:
+     `insight` → `/insights#<id>`, `action` → `/actions#<id>` (se añadieron los
+     anclajes en las filas), `page` → `/pages/<id>`, `report` → `/reports/<id>`.
+     `linkTargetHref` es la única función que resuelve esa correspondencia, y
+     `editorialPieceHref` la única que resuelve la inversa; el buscador
+     (`/api/v1/search`) también las usa, para que no haya dos formas de enlazar
+     lo mismo.
+  4. **`query` sí necesitaba ficha**: la API `/api/v1/queries/[id]` y las
+     evidencias de los insights ya apuntaban a `/queries/<id>`, pero la ruta no
+     estaba publicada, así que era un enlace roto. Se publica
+     `apps/viewer/app/queries/[id]/page.tsx`, que declara explícitamente que la
+     query no es todavía una entidad del contrato (llega en P3 con GSC) y que
+     lo único real de la página es la relación editorial.
+  5. **`cluster` y `result` no reciben ficha inventada.** Son conceptos de P6 y
+     P9; hasta entonces `linkTargetHref` devuelve `null` y el detalle de la
+     pieza los muestra como texto con borde discontinuo, no como enlace que
+     daría 404.
+  6. Se expone `/api/v1/editorial/backlinks` (solo `GET`): sin parámetros
+     devuelve el índice completo de fichas referenciadas; con `kind` e `id`, las
+     piezas de una ficha. Un `kind` fuera de `editorialLinkKindSchema` es 400.
+- Motivo: el criterio de P1.4 pedía bidireccionalidad, no un almacén nuevo. La
+  dirección de escritura sigue siendo una sola, el visor sigue siendo de solo
+  lectura por construcción y P3 puede sustituir el dataset por PostgreSQL sin
+  tocar ninguna de estas firmas.
+- Verificación: 8 pruebas en `packages/editorial/src/links.test.ts` y
+  comprobación en navegador de extremo a extremo con dos procesos reales
+  (workbench escribiendo, visor leyendo): se curó una pieza Noken con seis
+  enlaces, se vio la reciprocidad en las cinco fichas y el estado vacío
+  explícito en el resto, y se revirtió el dato de prueba al terminar.
+
+## D-016 · Axe se ejecuta como herramienta externa y encontró lo que el script propio no veía
+
+- Fecha: 2026-09-03.
+- Estado: vigente.
+- Decisión: añadir `axe-core` como dependencia de desarrollo de la raíz y
+  `scripts/axe-audit.mjs` (`pnpm axe`), que inyecta `axe.min.js` en la página
+  real por el protocolo DevTools —el mismo enfoque que
+  `capture-screenshots.mjs`— y analiza WCAG 2.1 A/AA más buenas prácticas en
+  cada ruta y viewport. Sale con código 1 si aparece cualquier incumplimiento,
+  así que sirve tal cual para CI. Acepta `--app`, `--viewport`, `--json` y
+  `--viewer-base`/`--workbench-base`.
+- Motivo: el script propio de QA visual mide desbordamiento horizontal,
+  contraste y objetivos táctiles, y con eso se había declarado la
+  accesibilidad de P1. Axe demostró que no era suficiente: en la primera
+  ejecución aparecieron **18 incumplimientos** en cuatro familias, todos
+  reales y ninguno detectable con las tres métricas anteriores.
+  1. `select-name` (crítico, 10 rutas a 375 px): la regla
+     `.filter-label > span { display: none }` ocultaba el texto de los tres
+     filtros globales en móvil, dejando los `<select>` sin nombre accesible.
+     Corregido ocultándolo visualmente en lugar de con `display: none`.
+  2. `aria-allowed-attr` (crítico, calendario): los filtros de marca son
+     enlaces y llevaban `aria-pressed`, que `<a>` no admite. Se sustituye por
+     `aria-current`.
+  3. `scrollable-region-focusable` (serio): las tablas densas desplazan en
+     horizontal sin ser alcanzables con teclado. Se crea `DataTablePanel` en
+     `@seo/ui` (`role="region"`, `aria-label` propio, `tabIndex={0}`) y se
+     aplica a las nueve tablas y a la tabla alternativa de `ChartFrame`.
+  4. `aria-input-field-name` (serio, workbench): el editor TipTap no tenía
+     nombre accesible ni rol declarado. Se añaden `role="textbox"`,
+     `aria-label` y `aria-multiline` por `editorProps`.
+  Además se corrigieron los avisos de `heading-order` (h1 → h3 en calendario,
+  propuestas, `/data`, ficha de proyecto y workbench) y un `landmark-unique`
+  provocado por dar al panel de tabla el mismo nombre que el `h2` de su
+  sección. `ChartFrame` gana `level` para poder encabezar una sección con `h2`
+  sin cambiar su tamaño visual.
+- Consecuencia: 36 combinaciones ruta × viewport con 0 incumplimientos y 0
+  avisos, registradas en `docs/design/axe-report.json`. El script propio se
+  mantiene: mide cosas que Axe no (ancho real del documento por viewport), pero
+  ya no se presenta como prueba suficiente de accesibilidad.
+- Nota operativa: la QA de esta sesión se levantó en los puertos 3020/3021
+  (`viewer-qa` y `workbench-qa` en `.claude/launch.json`) porque 3000 y 3010
+  estaban ocupados por procesos de otros proyectos. Los puertos canónicos
+  siguen siendo 3000 (visor) y 3001 (workbench).
+
+## D-017 · P1 se cierra y sus dos criterios dependientes de dato real pasan a P3.5
+
+- Fecha: 2026-09-03.
+- Estado: vigente.
+- Decisión: marcar `P1` como `complete` con 30 de sus 32 criterios cumplidos
+  dentro de la fase, y trasladar los dos restantes a una subfase nueva y
+  explícita, `P3.5 · Medición editorial heredada de P1`:
+  1. rellenar las ventanas de 28, 90 y 180 días de cada pieza con medición real;
+  2. cerrar el recorrido oportunidad -> pieza -> acción -> **resultado medido**.
+  Los criterios no se reinterpretan ni se rebajan: se copian a P3.5 con el mismo
+  alcance y se añade allí la migración de la curación a PostgreSQL que D-012 ya
+  preveía. `P2` pasa a `active`.
+- Motivo: los dos criterios no describen trabajo de diseño ni de contrato, sino
+  la existencia de datos que solo aparecen cuando GA4 y GSC entren como fuentes
+  reales en `P3`. Dentro de P1 no hay nada que se pueda hacer para cerrarlos, y
+  lo que sí le correspondía a P1 está hecho: `editorialMeasurementSchema` modela
+  las tres ventanas, la interfaz muestra su estado pendiente sin inventar cifras,
+  y la relación insight/acción/query/página/informe es recíproca en las dos
+  direcciones (D-015). Mantener P1 `active` durante P2 y P3 rompería la regla de
+  «solo una fase activa» de `AGENTS.md` de una forma peor: obligaría a abrir P2
+  en paralelo o a detener el proyecto esperando datos que dependen de
+  presupuesto y credenciales externas (bloqueo `cloud-credentials`).
+- Alternativa descartada: reescribir los dos criterios para que midieran solo lo
+  que P1 podía entregar. Habría cerrado la fase con 32/32, pero borrando del
+  roadmap la obligación de medir el resultado real, que es precisamente el
+  final del ciclo «Detectar -> ... -> Medir -> Aprender» del norte de producto.
+  Trasladar es más honesto que reformular.
+- Consecuencia: la regla de `AGENTS.md` se mantiene intacta —P1 no queda con
+  criterios abiertos— y la deuda queda localizada, no diluida: `P3` no puede
+  cerrarse sin resolver `P3.5`, porque figura como su primer criterio de salida.

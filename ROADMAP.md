@@ -1,6 +1,6 @@
 # SEO Dashboard V2 — roadmap vivo de desarrollo
 
-Última actualización: 2 de septiembre de 2026.
+Última actualización: 3 de septiembre de 2026.
 
 ## Norte de producto
 
@@ -43,8 +43,8 @@ resultado de criterios terminados, nunca una estimación subjetiva.
 | Fase | Resultado demostrable | Estado |
 | --- | --- | --- |
 | P0 | Fundación ejecutable y continuidad entre chats | **complete** |
-| P1 | Sistema visual compartido + calendario editorial general | **active** |
-| P2 | Paridad crítica verificada con SEO Dashboard V1 | planned |
+| P1 | Sistema visual compartido + calendario editorial general | **complete** |
+| P2 | Paridad crítica verificada con SEO Dashboard V1 | **active** |
 | P3 | Datos reales fiables para Porcelanosa + Noken | planned |
 | P4 | Sistema operativo de decisiones y acciones | planned |
 | P5 | Inteligencia técnica, monitorización y prevención | planned |
@@ -73,8 +73,13 @@ Auth.js, APIs, sincronización base, exportación y suite inicial de pruebas.
 
 ## P1 · Sistema de diseño y calendario editorial general
 
-Estado: **active** (84%). P1.1, P1.2 y P1.3 completadas; P1.4 y P1.5 en curso.
-Porcentaje = criterios `[x]` / criterios totales de P1.1-P1.5 y salida (27/32).
+Estado: **complete** (2026-09-03). P1.1 a P1.5 completadas: 30 de los 32
+criterios se cumplen dentro de la fase y los dos restantes —las ventanas de
+28/90/180 días y el recorrido completo oportunidad -> resultado— se trasladan a
+`P3.5` como dependencia explícita de datos reales, porque no se pueden cerrar sin
+ellos (D-017). Lo que P1 sí debía entregar de esos dos criterios está hecho: el
+contrato modela las tres ventanas y la interfaz muestra su estado pendiente sin
+inventar cifras.
 
 Objetivo: aplicar una identidad visual propia, accesible y consistente mientras se
 recupera cuanto antes la herramienta operativa más importante de V1. El calendario
@@ -120,11 +125,15 @@ desde el primer vertical, aunque el piloto de métricas reales siga limitado a d
   el workbench crea y edita piezas (`/editorial` en `@seo/workbench`), programa,
   mueve de mes, asigna owner/autor/revisor y versiona cada cambio; ninguna
   escritura pasa por el visor.
-- [~] Ventanas de 28, 90 y 180 días modeladas en el contrato y visibles como
-  pendientes; se rellenan cuando existan datos reales (P3).
-- [~] Enlace bidireccional entre insight, pieza, acción y resultado: `links` es
-  editable en el workbench y visible en el detalle de la pieza del visor;
-  falta la vista recíproca desde insight/query/página/informe.
+- [x] Ventanas de 28, 90 y 180 días modeladas en el contrato y visibles como
+  pendientes. Rellenarlas con medición real es `P3.5` (D-017): dentro de P1 no
+  existe la fuente que las alimenta.
+- [x] Enlace bidireccional entre insight, pieza, acción y resultado: `links` se
+  edita en el workbench, es navegable desde el detalle de la pieza y cada ficha
+  de insight, acción, query, página e informe muestra qué piezas la referencian.
+  La reciprocidad se deriva del mismo array (`buildBacklinkIndex`), no se
+  duplica (D-015). `cluster` y `result` se muestran sin ficha propia hasta
+  P6/P9. Se publica `/queries/[id]`, que antes era un enlace roto.
 - [x] El workbench edita y publica; el visor solo consulta. La curación vive en
   `packages/editorial/data/curation/editorial-curation.json` (D-012), separada
   del dataset importado de V1 y fusionada en lectura (`applyCuration`); P3
@@ -133,26 +142,37 @@ desde el primer vertical, aunque el piloto de métricas reales siga limitado a d
 ### P1.5 · Shell ejecutivo y QA visual
 
 - [x] Cabecera de 65 px, menú móvil real y filtros sticky.
-- [~] `MetricStrip`, `DataPanel`, `StatusBadge`, `EvidenceLink` y tabla densa
-  entregados en `@seo/ui`. `DecisionThread`, `InsightStack` y `ChartFrame`
-  siguen pendientes.
+- [x] `MetricStrip`, `DataPanel`, `StatusBadge`, `EvidenceLink`, tabla densa,
+  `DecisionThread`, `InsightStack`, `ChartFrame` y `DataTablePanel` entregados en
+  `@seo/ui` y en uso real: `InsightStack` y `ChartFrame` en portada y ficha de
+  proyecto, `DecisionThread` como índice del informe, `DataTablePanel` en las
+  nueve tablas densas. `ChartFrame` incluye la alternativa tabular accesible
+  junto al gráfico, no en otra página.
 - [x] No ocultar objetivo, interanual o cobertura en móvil.
 - [x] Contraste AA, foco visible, Escape, reduced motion y cero overflow de
-  documento, verificados por script propio en las nueve rutas del visor y en el
-  workbench. Queda pendiente ejecutar Axe como herramienta externa.
-- [~] Pruebas de contratos, recuentos, alias, fechas, hashes, orden, filtros,
-  CSV, curación (versionado, fusión, creación de piezas) y ruta compatible
-  (60 en total). Los permisos siguen sin cobertura automatizada; hoy se
-  sostienen porque el visor no importa ningún módulo de escritura, no por un
-  test que lo verifique.
+  documento, verificados por script propio en las rutas del visor y en el
+  workbench. Axe (`axe-core` 4.13.0, `pnpm axe`) ejecutado como herramienta
+  externa sobre 36 combinaciones ruta × viewport de las dos apps: 0
+  incumplimientos WCAG 2.1 A/AA y 0 avisos de buenas prácticas
+  (`docs/design/axe-report.json`). Encontró y se corrigieron cuatro defectos
+  reales que el script propio no cubría (D-016).
+- [x] Pruebas de contratos, recuentos, alias, fechas, hashes, orden, filtros,
+  CSV, curación (versionado, fusión, creación de piezas), reciprocidad de
+  enlaces, permisos y ruta compatible (85 en total). Los permisos ya tienen
+  cobertura automatizada por las dos partes: `apps/viewer/lib/permissions.test.ts`
+  falla si el visor exporta un método de escritura, declara un Server Action o
+  importa un módulo de escritura, y comprueba el token de servicio;
+  `apps/workbench/lib/permissions.test.ts` fija que la escritura solo pasa por
+  `app/editorial/actions.ts`.
 
 #### Criterios de salida P1
 
 - [x] El calendario general de las ocho marcas funciona de extremo a extremo con datos V1.
 - [x] La ruta histórica sigue llegando al contenido correcto.
-- [~] Cada pieza mantiene procedencia; ya se puede curar de extremo a extremo
-  en el workbench (P1.4), pero el recorrido completo oportunidad -> resultado
-  todavía necesita la medición real de P3/P6.
+- [x] Cada pieza mantiene procedencia y se cura de extremo a extremo en el
+  workbench (P1.4), con el vínculo insight/acción/query/página/informe recíproco
+  en las dos direcciones (D-015). Cerrar el recorrido con el **resultado medido**
+  es `P3.5` (D-017).
 - [x] Viewer y workbench comparten un solo sistema visual y de gráficos.
 - [x] El flujo crítico funciona a 1440 x 900, 1024 x 768, 390 x 844 y 375 px.
 - [x] Typecheck, unitarias, accesibilidad y build de producción pasan.
@@ -160,6 +180,8 @@ desde el primer vertical, aunque el piloto de métricas reales siga limitado a d
 Leyenda: `[x]` cumplido y verificado, `[~]` entregado en parte con el resto acotado.
 
 ## P2 · Paridad crítica con SEO Dashboard V1
+
+Estado: **active** (0%). Primera tarea pendiente: `P2.1`.
 
 Objetivo: conservar el valor operativo de V1 antes de ampliar el producto. La matriz
 detallada y sus evidencias viven en `docs/continuity/V1_PARITY.md`.
@@ -225,8 +247,25 @@ reconciliados y consultables con baja latencia para Porcelanosa + Noken.
 - [ ] Cache privada con invalidación por snapshot.
 - [ ] Filtros calientes por debajo de 200 ms en el piloto.
 
+### P3.5 · Medición editorial heredada de P1 (D-017)
+
+Criterios que P1 modeló pero no pudo cerrar por falta de fuente real. No se
+reinterpretan: se cumplen aquí con el mismo alcance con que se escribieron.
+
+- [ ] Rellenar las ventanas de 28, 90 y 180 días de cada pieza editorial con
+  medición real, conservando cobertura, corte y confianza. El contrato
+  (`editorialMeasurementSchema`) y la presentación del pendiente ya existen
+  desde P1.2/P1.4; aquí solo entra el dato.
+- [ ] Cerrar el recorrido oportunidad -> pieza -> acción -> **resultado medido**
+  usando la reciprocidad de `links` entregada en P1.4 (D-015), sin añadir un
+  segundo almacén de la relación.
+- [ ] Sustituir `packages/editorial/data/curation/editorial-curation.json` por
+  PostgreSQL sin cambiar la firma de lectura `getEffectiveEditorialDataset()`
+  (previsto desde D-012).
+
 #### Criterios de salida P3
 
+- Los tres criterios de `P3.5` heredados de P1 quedan cerrados con dato real.
 - Porcelanosa y Noken muestran 24 meses de datos reales reconciliados.
 - Ningún secreto o respuesta cruda llega al cliente o al repositorio público.
 - Un fallo conserva el último snapshot válido y hace visible su antigüedad.

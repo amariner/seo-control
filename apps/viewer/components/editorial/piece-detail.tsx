@@ -1,9 +1,8 @@
 import Link from "next/link";
-import { EDITORIAL_STATUS_LABELS, EDITORIAL_TYPE_LABELS, MONTH_NAMES_ES, editorialPiecePriority, type EditorialPiece, type EditorialPieceCurationRevision } from "@seo/contracts";
+import { EDITORIAL_LINK_KIND_LABELS, EDITORIAL_STATUS_LABELS, EDITORIAL_TYPE_LABELS, MONTH_NAMES_ES, editorialPiecePriority, type EditorialPiece, type EditorialPieceCurationRevision } from "@seo/contracts";
+import { linkTargetHref } from "@seo/editorial";
 import { StatusBadge } from "@seo/ui";
 import { brandName } from "@/lib/editorial";
-
-const LINK_KIND_LABELS: Record<EditorialPiece["links"][number]["kind"], string> = { insight: "Insight", action: "Acción", query: "Query", page: "Página", cluster: "Cluster", report: "Informe", result: "Resultado" };
 
 const statusTone = { backlog: "neutral", aceptado: "info", redactando: "info", revision: "warn", programado: "info", publicado: "good", descartado: "bad", desconocido: "outline" } as const;
 
@@ -60,7 +59,13 @@ export function PieceDetail({ piece, curation }: { piece: EditorialPiece; curati
 
       <section className="detail-section">
         <h3>Enlaces</h3>
-        {piece.links.length ? <ul className="detail-list">{piece.links.map((link) => <li key={`${link.kind}-${link.id}`}>{LINK_KIND_LABELS[link.kind]}<small>{link.id}</small></li>)}</ul> : <p className="pending">Sin enlaces curados a insight, acción, query, página, cluster o informe.</p>}
+        {piece.links.length ? <ul className="detail-list">{piece.links.map((link) => {
+          const href = linkTargetHref(link.kind, link.id);
+          const body = <>{EDITORIAL_LINK_KIND_LABELS[link.kind]}<small>{link.id}</small></>;
+          // `cluster` y `result` todavía no tienen ficha propia (P6/P9): se
+          // muestran como texto en lugar de enlazar a una URL que daría 404.
+          return <li key={`${link.kind}-${link.id}`}>{href ? <Link href={href}>{body}</Link> : <span className="detail-link-plain">{body}</span>}</li>;
+        })}</ul> : <p className="pending">Sin enlaces curados a insight, acción, query, página, cluster o informe.</p>}
       </section>
 
       <section className="detail-section">

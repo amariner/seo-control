@@ -13,9 +13,12 @@ tomar, quién debería ejecutarla y cómo sabremos si funcionó.
 - `P0` completada: monorepo, contratos, datos sintéticos, visor, workbench,
   DuckDB/Parquet, PostgreSQL/Drizzle, Auth.js, APIs, exportaciones, seguridad base,
   cron y pruebas.
-- `P1` **activa al 84%**: `P1.1`, `P1.2` y `P1.3` completadas; `P1.4` casi completa
-  (falta solo el enlace recíproco de `links`); `P1.5` en curso (faltan tres
-  primitivas de `@seo/ui` y las pruebas de permisos/Axe).
+- `P1` **completada** el 2026-09-03: sistema visual compartido, contrato editorial,
+  calendario general de las ocho marcas, curación en el workbench, reciprocidad de
+  enlaces, primitivas de decisión y QA de accesibilidad con Axe. Sus dos criterios
+  dependientes de dato real (ventanas de 28/90/180 días y recorrido completo
+  oportunidad -> resultado) se trasladaron a `P3.5` con el mismo alcance (D-017).
+- `P2` **activa al 0%**: paridad crítica con V1. Primera tarea pendiente: `P2.1`.
 - El piloto de datos sigue siendo Porcelanosa + Noken; el calendario editorial ya
   cubre las ocho marcas, y ahora se puede curar de extremo a extremo desde el workbench.
 - Bloqueo: aproximadamente 6,2 GiB libres (última medición 2026-09-02); no ejecutar
@@ -53,54 +56,82 @@ tomar, quién debería ejecutarla y cómo sabremos si funcionó.
 6. **Prioridad explicable.** `editorialPiecePriority` en `packages/contracts/src/scoring.ts`:
    impacto ÷ esfuerzo, con la fórmula visible; `null` si falta un componente. Se
    muestra en el detalle del visor y en el formulario del workbench.
-7. **Rutas del visor**: `/editorial/calendario`, `/editorial/backlog` y
+7. **Reciprocidad de `links` (P1.4, D-015).** `packages/editorial/src/links.ts`
+   (puro: `buildBacklinkIndex`, `backlinksFor`, `listBacklinks`, `linkTargetHref`,
+   `editorialPieceHref`, `linkKey`) deriva la relación inversa del mismo array
+   `piece.links`; no hay segundo almacén. En el visor,
+   `editorialBacklinks(kind, id)` y el componente
+   `components/editorial/backlinks.tsx` la muestran en las fichas de insight,
+   acción, query, página e informe, y `/api/v1/editorial/backlinks` la sirve en
+   JSON. Los enlaces de ida son navegables desde el detalle de la pieza;
+   `cluster` y `result` se muestran como texto porque su ficha llega en P6/P9.
+8. **Primitivas de decisión (P1.5).** `DecisionThread`, `InsightStack`,
+   `ChartFrame` y `DataTablePanel` en `@seo/ui`, con su CSS en `tokens.css`
+   (`.ds-thread`, `.ds-insight-stack`, `.ds-chart-*`) y ya en uso:
+   `InsightStack` en la portada, `ChartFrame` en portada y ficha de proyecto
+   (con la tabla accesible junto al gráfico), `DecisionThread` como índice del
+   informe y `DataTablePanel` en las nueve tablas densas.
+9. **Accesibilidad con Axe (D-016).** `pnpm axe` ejecuta `axe-core` sobre las dos
+   apps a 1440 y 375 px. Estado actual: 36 combinaciones, 0 incumplimientos y 0
+   avisos. No vuelvas a declarar accesibilidad solo con el script propio.
+10. **Permisos con cobertura automatizada.**
+   `apps/viewer/lib/permissions.test.ts` falla si el visor exporta un método de
+   escritura, declara un Server Action o importa un módulo de escritura, y
+   cubre el token de servicio; `apps/workbench/lib/permissions.test.ts` fija que
+   la escritura solo pasa por `app/editorial/actions.ts`.
+11. **Rutas del visor**: `/editorial/calendario`, `/editorial/backlog` y
    `/editorial/propuestas`, más redirección 308 desde `/conjunto/plan-editorial`.
-8. **APIs**: `/api/v1/editorial/{calendar,pieces,pieces/[id],slots,import-report}` y
+12. **APIs**: `/api/v1/editorial/{calendar,pieces,pieces/[id],slots,import-report,backlinks}` y
    `/api/v1/editorial/export/{plan-editorial-conjunto.csv,plan-editorial-propuestas.csv}`.
-9. **Capturas**: `pnpm screenshots --out docs/design/screenshots/after` con el servidor
+13. **Capturas**: `pnpm screenshots --out docs/design/screenshots/after` con el servidor
    en marcha. Nunca uses `--window-size` por debajo de 500 px con Chrome headless.
 
 ## Siguiente incremento exacto
 
-Terminar `P1.4` y `P1.5` en este orden:
+`P2.1 · Inventario y contratos de migración`. No empieces por escribir pantallas:
+P2 falla si se reimplementan superficies de V1 sin saber qué se conserva.
 
-1. Enlace recíproco de `links`: hoy se edita y se ve desde la pieza (visor y
-   workbench); falta que la ficha de un insight/query/página/informe muestre qué
-   piezas editoriales lo referencian. Requiere decidir dónde viven esas fichas (aún
-   son en su mayoría datos sintéticos de `packages/contracts/src/mock.ts`) antes de
-   construir la vista recíproca.
-2. Añadir a `@seo/ui` las primitivas que faltan: `DecisionThread`, `InsightStack` y
-   `ChartFrame` con valor actual, periodo anterior, interanual, objetivo, cobertura y
-   alternativa tabular accesible. No son necesarias para que la curación del workbench
-   funcione (ya funciona con los primitivos existentes); son para el sistema de
-   decisiones de P4 y para enriquecer el propio detalle editorial más adelante.
-3. Cubrir con pruebas los permisos: hoy el visor no puede escribir porque no importa
-   ningún módulo de escritura (propiedad estructural, verificada manualmente esta
-   sesión), pero no hay un test automatizado que lo aserte ni que pruebe el token de
-   servicio. Añadir una prueba en `apps/viewer` que falle si alguna ruta bajo
-   `app/editorial` o `app/api/v1/editorial` exporta algo distinto de `GET`.
-4. Ejecutar Axe como herramienta externa sobre las nueve rutas del visor, el
-   workbench y la nueva sección `/editorial` (el script propio ya cubre desbordamiento
-   horizontal, contraste y objetivos táctiles, pero no sustituye a Axe).
+1. **Catalogar V1 superficie por superficie**: ruta, fuentes que consume,
+   transformaciones que aplica, filtros, exportaciones y dependencias.
+   `docs/continuity/V1_PARITY.md` ya tiene el inventario de las ~15 superficies
+   con su estado V2; el trabajo es completar fuentes, transformaciones y
+   dependencias, que hoy están descritas en prosa y no en columnas.
+2. **Clasificar cada capacidad** como `retain`, `redesign`, `merge`, `defer` o
+   `retire`, con motivo. Los estados de paridad ya existentes (`missing`,
+   `foundation`, `partial-synthetic`, `implemented`, `verified`, `redirected`,
+   `retired-approved`) describen *dónde está* V2; esta clasificación describe
+   *qué se va a hacer*. Son ejes distintos y conviene no fusionarlos.
+3. **Definir reconciliación y tolerancia por dataset migrado**: qué muestra se
+   compara, contra qué, con qué margen aceptable y qué se hace cuando no cuadra.
+   Sin esto, `P2.4` no tiene criterio de aceptación.
+4. Ninguna retirada de capacidad V1 se da por buena sin registrarla con motivo y
+   alternativa (regla de `ROADMAP.md`).
 
-Con eso, P1 debería quedar en condiciones de marcarse `complete` (revisar los
-criterios de salida en `ROADMAP.md` antes de darlo por hecho).
+Deuda menor conocida, ninguna bloqueante (decide si entra en P2 o más tarde):
+
+- `/queries/[id]` no tiene serie propia: la query no es una entidad del contrato
+  hasta `P3`. La ficha lo declara explícitamente.
+- `cluster` y `result` no tienen ficha destino (`linkTargetHref` devuelve `null`).
+  Llegan con `P6` y `P9`; cuando existan, basta añadir el caso.
 
 ## Verificaciones que deben seguir pasando
 
 ```bash
 pnpm continuity:check
 pnpm typecheck        # 8 paquetes
-pnpm test             # 60 pruebas
-pnpm build             # viewer + workbench
+pnpm test             # 85 pruebas
+pnpm build            # viewer + workbench
 pnpm editorial:import # debe decir "Sin cambios" si no tocaste los snapshots V1
+pnpm axe              # requiere los servidores en marcha; sale 1 si hay incumplimientos
 ```
 
-Accesibilidad medida en las nueve rutas del visor y en el workbench a 375 px (última
-vez completa el 2026-09-02): cero fallos de contraste AA, cero textos por debajo de
-12 px, cero objetivos por debajo de 24 px y cero desbordamiento horizontal. La nueva
-sección `/editorial` del workbench se comprobó sin desbordamiento a 375 px, pero no
-ha pasado el barrido completo de contraste/foco ni Axe.
+Accesibilidad (última vez completa el 2026-09-03): `pnpm axe` sobre 36
+combinaciones ruta × viewport de visor y workbench a 1440 y 375 px devuelve 0
+incumplimientos WCAG 2.1 A/AA y 0 avisos de buenas prácticas; el informe queda en
+`docs/design/axe-report.json`. El script propio sigue midiendo lo que Axe no:
+cero desbordamiento horizontal en 13 rutas × 4 viewports, cero contraste AA
+fallido, cero textos por debajo de 12 px y cero objetivos por debajo de 24 px.
+Los dos scripts son complementarios; ninguno sustituye al otro.
 
 ## No hacer todavía
 
@@ -116,8 +147,16 @@ ha pasado el barrido completo de contraste/foco ni Axe.
   ningún sitio que no sea `pnpm editorial:import`: la curación vive en
   `data/curation/editorial-curation.json`, un fichero aparte (D-012).
 - No precargar un campo de edición con el valor V1/efectivo vigente como valor de
-  envío del formulario: causó el fallo real de esta sesión (año/mes se fijaban como
-  curados en cualquier guardado). Usa `placeholder` o una pista en la etiqueta.
+  envío del formulario: causó un fallo real (año/mes se fijaban como curados en
+  cualquier guardado). Usa `placeholder` o una pista en la etiqueta.
+- No guardar un array invertido de `links` ni ninguna otra copia de la relación:
+  la reciprocidad se deriva (D-015). Duplicarla reabre la puerta a que el visor
+  escriba y a que las dos mitades divergan.
+- No declarar la accesibilidad resuelta con el script propio: Axe encontró 18
+  incumplimientos reales que aquel no veía (D-016). Ejecuta `pnpm axe`.
+- No inventar una ruta de ficha para un tipo de enlace que aún no la tiene
+  (`cluster`, `result`): `linkTargetHref` devuelve `null` y la UI lo muestra como
+  texto, no como enlace roto.
 
 ## Control de versiones
 
@@ -134,4 +173,9 @@ pnpm status
 git status
 ```
 
-Después se trabaja la primera tarea pendiente de `P1.4`/`P1.5` de la lista de arriba.
+Después se arranca `P2.1` según «Siguiente incremento exacto».
+
+Para levantar la QA visual y de accesibilidad hacen falta los dos servidores:
+`pnpm dev:viewer` (3000) y `pnpm dev:workbench` (3001). Si esos puertos están
+ocupados, `.claude/launch.json` incluye `viewer-qa` (3020) y `workbench-qa`
+(3021), y tanto `pnpm axe` como `pnpm screenshots` aceptan la base por bandera.

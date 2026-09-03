@@ -38,6 +38,12 @@ const ROUTES = [
   { name: "project", path: "/projects/porcelanosa" },
   { name: "insights", path: "/insights" },
   { name: "reports", path: "/reports" },
+  // Superficies añadidas en P1.4/P1.5: reciprocidad editorial, ficha de query,
+  // hilo de decisión del informe y marco de gráfico con tabla accesible.
+  { name: "report-detail", path: "/reports/report-2026-08" },
+  { name: "page-detail", path: "/pages/page-3" },
+  { name: "query-detail", path: "/queries/noken-taps-uk" },
+  { name: "actions", path: "/actions" },
 ];
 
 const args = process.argv.slice(2);

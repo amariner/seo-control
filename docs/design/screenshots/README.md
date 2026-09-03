@@ -3,7 +3,11 @@
 Se conservan dos conjuntos para la QA visual de P1:
 
 - `before/`: estado anterior al sistema de diseño compartido (2 de septiembre de 2026).
-- `after/`: estado con tokens de `@seo/ui`, calendario editorial y correcciones de accesibilidad.
+- `after/`: estado con tokens de `@seo/ui`, calendario editorial y correcciones de
+  accesibilidad. Regenerado el 3 de septiembre de 2026 con las primitivas de P1.5
+  (`InsightStack`, `ChartFrame`, `DecisionThread`, `DataTablePanel`) y las rutas
+  añadidas en P1.4 (`report-detail`, `page-detail`, `query-detail`, `actions`):
+  13 rutas × 4 viewports, sin desbordamiento horizontal en ninguna.
 
 Viewports objetivo: 1440x900, 1024x768, 390x844 y 375x812.
 

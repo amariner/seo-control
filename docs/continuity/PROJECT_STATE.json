@@ -1,20 +1,20 @@
 {
   "schemaVersion": 1,
   "project": "SEO Dashboard V2",
-  "updatedAt": "2026-09-03T08:55:00+02:00",
+  "updatedAt": "2026-09-03T17:40:00+02:00",
   "objective": "Construir la plataforma SEO más útil y desarrollada del sector para convertir grandes volúmenes de datos en decisiones trazables, responsables y resultados medibles.",
   "repository": "https://github.com/amariner/seo-control",
   "currentPhase": {
-    "id": "P1",
-    "name": "Sistema de diseño y calendario editorial general",
+    "id": "P2",
+    "name": "Paridad crítica con SEO Dashboard V1",
     "status": "active",
-    "progressPercent": 84
+    "progressPercent": 0
   },
   "lastCompletedPhase": {
-    "id": "P0",
-    "name": "Fundación ejecutable y protocolo de continuidad"
+    "id": "P1",
+    "name": "Sistema de diseño y calendario editorial general"
   },
-  "nextAction": "Completar P1.4 y P1.5: vista recíproca de links desde insight/query/página/informe (hoy solo se ve y edita desde la pieza), primitivas DecisionThread, InsightStack y ChartFrame en @seo/ui, pruebas automatizadas de permisos (visor sin escritura, workbench con escritura) y ejecutar Axe como herramienta externa además del script propio.",
+  "nextAction": "Arrancar P2.1 (inventario y contratos de migración): catalogar rutas, fuentes, transformaciones, filtros, exportaciones y dependencias de V1; clasificar cada capacidad como retain, redesign, merge, defer o retire; y definir reconciliación y tolerancia por dataset migrado. La matriz y sus evidencias viven en docs/continuity/V1_PARITY.md, que ya tiene el inventario de superficies y sirve de punto de partida.",
   "pilot": [
     "porcelanosa",
     "noken"
@@ -61,11 +61,12 @@
     "date": "2026-09-03",
     "continuity": "passed: active phase, roadmap and required checkpoint files",
     "typecheck": "passed: 8 packages",
-    "tests": "passed: 60 tests (33 editorial incl. 11 curation, 14 viewer, 13 contracts+local-data+sync)",
-    "productionBuild": "passed: viewer + workbench (incluye la nueva ruta /editorial del workbench)",
-    "browserQa": "passed: workbench /editorial (piezas, propuestas, eventos, crear pieza) verificado en navegador con dos procesos reales (workbench :3001 escribe, visor :3000 lee); ciclo completo pieza->curación->visor confirmado con el JSON de curación en disco; datos de prueba limpiados al cerrar",
-    "apiQa": "passed: rutas editoriales 200 sin cambios; /api/v1/editorial/pieces/[id] confirmado sirviendo campos curados (status, owner, month.yearSource) fusionados con la procedencia V1",
-    "accessibilityQa": "partial: workbench /editorial comprobado sin desbordamiento horizontal a 375 px (script ad hoc, no el barrido completo de las nueve rutas); no se repitió Axe ni el barrido completo de contraste/foco de la sesión anterior porque esas páginas no cambiaron"
+    "tests": "passed: 85 tests (41 editorial incl. 8 links, 26 viewer incl. 12 permisos, 5 workbench permisos, 13 contracts+local-data+sync)",
+    "productionBuild": "passed: viewer + workbench (incluye la nueva ruta /queries/[id])",
+    "editorialImport": "passed: 'Sin cambios' tras curar y revertir, confirmando que dataset y curación siguen siendo ficheros independientes (D-012)",
+    "browserQa": "passed: reciprocidad de links verificada de extremo a extremo con dos procesos reales (workbench :3021 escribe, visor :3020 lee); una pieza Noken curada con seis enlaces se vio en las fichas de insight, acción, query, página e informe, y el estado vacío explícito en las demás; enlaces de ida navegables desde el detalle de la pieza, con cluster/result como texto sin ruta; dato de prueba revertido al cerrar",
+    "apiQa": "passed: /api/v1/editorial/backlinks devuelve el índice completo y por ficha, y 400 ante un kind no válido; el resto de rutas editoriales sin cambios",
+    "accessibilityQa": "passed: axe-core 4.13.0 (pnpm axe) sobre 36 combinaciones ruta x viewport de visor y workbench a 1440 y 375 px: 0 incumplimientos WCAG 2.1 A/AA y 0 avisos de buenas prácticas (docs/design/axe-report.json). Encontró 18 incumplimientos reales en la primera pasada, todos corregidos (D-016). Cero desbordamiento horizontal en 13 rutas x 4 viewports con scripts/capture-screenshots.mjs"
   },
   "editorialImport": {
     "schemaVersion": "editorial.v1",

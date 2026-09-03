@@ -1,7 +1,7 @@
-import { EDITORIAL_BRANDS, type EditorialBrandSlug, type EditorialDataset, type EditorialPiece } from "@seo/contracts";
+import { EDITORIAL_BRANDS, type EditorialBrandSlug, type EditorialDataset, type EditorialLinkKind, type EditorialPiece } from "@seo/contracts";
 import { getEffectiveEditorialDataset } from "@seo/editorial/dataset";
 import { readCurationStore } from "@seo/editorial/curation-store";
-import { PIECE_SORT_KEYS, calendarMonths, distinctValues, filterEvents, filterPieces, filterSlots, findPieceCuration, parsePieceFilters, sortPieces, sortSlots, type PieceFilters, type PieceSortKey, type SortDirection } from "@seo/editorial";
+import { PIECE_SORT_KEYS, backlinksFor, buildBacklinkIndex, calendarMonths, distinctValues, filterEvents, filterPieces, filterSlots, findPieceCuration, parsePieceFilters, sortPieces, sortSlots, type PieceFilters, type PieceSortKey, type SortDirection } from "@seo/editorial";
 
 /**
  * Capa de acceso editorial del visor (solo lectura).
@@ -155,6 +155,25 @@ export function relatedForEvent(event: NonNullable<ReturnType<typeof findEvent>>
     slots: dataset.slots.filter((slot) => slot.brand.slug === event.brand.slug && slot.month.month === event.month),
     theme: dataset.calendar.themes.find((theme) => theme.year === event.year && theme.month === event.month) ?? null,
   };
+}
+
+/**
+ * Vista recíproca de `links` (P1.4, D-015): piezas editoriales que referencian
+ * una ficha de insight, acción, query, página, cluster o informe.
+ *
+ * Se deriva del dataset efectivo en cada petición, igual que el resto de la
+ * lectura editorial: la pieza sigue siendo la propietaria del enlace y el visor
+ * no escribe nada. El índice se reconstruye por llamada porque la curación
+ * cambia en caliente; con 261 piezas el coste es irrelevante y evita servir una
+ * relación obsoleta tras guardar en el workbench.
+ */
+export function editorialBacklinks(kind: EditorialLinkKind, id: string): EditorialPiece[] {
+  return backlinksFor(buildBacklinkIndex(getEditorial()), kind, id);
+}
+
+/** Índice completo, para páginas que resuelven varias fichas en un mismo render. */
+export function editorialBacklinkIndex() {
+  return buildBacklinkIndex(getEditorial());
 }
 
 /** Construye un href conservando los parámetros actuales y aplicando cambios. */

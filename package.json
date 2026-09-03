@@ -19,10 +19,12 @@
     "db:generate": "pnpm --filter @seo/db generate",
     "db:migrate": "pnpm --filter @seo/db migrate",
     "editorial:import": "pnpm --filter @seo/editorial import:v1",
-    "screenshots": "node scripts/capture-screenshots.mjs"
+    "screenshots": "node scripts/capture-screenshots.mjs",
+    "axe": "node scripts/axe-audit.mjs"
   },
   "devDependencies": {
     "@types/node": "^24.10.1",
+    "axe-core": "^4.13.0",
     "prettier": "^3.6.2",
     "turbo": "^2.10.12",
     "typescript": "6.0.3",

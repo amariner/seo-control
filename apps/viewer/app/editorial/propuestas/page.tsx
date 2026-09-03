@@ -35,7 +35,7 @@ export default async function ProposalsPage({ searchParams }: { searchParams: Pr
             <DataPanel as="article" className="slot-card" key={slot.id} aria-labelledby={`slot-${slot.id}`}>
               <div className="slot-head">
                 <span className="brand-cell" style={{ "--brand-color": brandColor(slot.brand.slug) } as React.CSSProperties}>{brandName(slot.brand.slug, slot.brand.literal)}{slot.brand.line ? <span className="ds-meta"> · {slot.brand.line}</span> : null}</span>
-                <h3 id={`slot-${slot.id}`}>{slot.slotLiteral}</h3>
+                <h2 id={`slot-${slot.id}`} className="ds-h3">{slot.slotLiteral}</h2>
                 <span className="slot-meta">{slot.month.month ? MONTH_NAMES_ES[slot.month.month] : "Sin mes"} · {slot.market ?? (slot.marketLiteral || "—")} · {slot.theme ?? "sin bloque"}</span>
                 <StatusBadge tone="outline">{slot.proposals.length} alternativas</StatusBadge>
                 {slot.selectedProposalId ? <StatusBadge tone="good">Seleccionada</StatusBadge> : <StatusBadge tone="neutral">Pendiente de elección</StatusBadge>}
@@ -45,7 +45,7 @@ export default async function ProposalsPage({ searchParams }: { searchParams: Pr
                 {slot.proposals.map((proposal) => (
                   <div className="proposal" key={proposal.id}>
                     <div className="proposal-head"><StatusBadge tone={proposal.format === "rework" ? "info" : "neutral"} title="Origen de la alternativa">{proposal.format === "rework" ? "Reutilizar" : proposal.format === "nuevo" ? "Crear" : proposal.formatLiteral || "Formato desconocido"}</StatusBadge><StatusBadge tone="outline" title={`Tipo en V1: ${proposal.typeLiteral || "sin tipo"}`}>{EDITORIAL_TYPE_LABELS[proposal.type]}</StatusBadge>{proposal.selected ? <StatusBadge tone="good">Elegida</StatusBadge> : null}</div>
-                    <h4>{proposal.titles[0] ?? proposal.subtheme ?? "Sin título propuesto"}</h4>
+                    <h3 className="ds-h3">{proposal.titles[0] ?? proposal.subtheme ?? "Sin título propuesto"}</h3>
                     {proposal.titles.slice(1).map((title) => <p key={title}>Alternativa: {title}</p>)}
                     {proposal.angle ? <p>{proposal.angle}</p> : null}
                     <dl>

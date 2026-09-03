@@ -111,6 +111,7 @@ export const editorialProvenanceSchema = z.object({
 
 export const editorialLinkKindSchema = z.enum(["insight", "action", "query", "page", "cluster", "report", "result"]);
 export const editorialLinkSchema = z.object({ kind: editorialLinkKindSchema, id: z.string() });
+export type EditorialLinkKind = z.infer<typeof editorialLinkKindSchema>;
 export type EditorialLink = z.infer<typeof editorialLinkSchema>;
 
 export const editorialPieceSchema = z.object({
@@ -303,6 +304,16 @@ export const EDITORIAL_STATUS_LABELS: Record<EditorialStatus, string> = {
   publicado: "Publicado",
   descartado: "Descartado",
   desconocido: "Sin estado",
+};
+
+export const EDITORIAL_LINK_KIND_LABELS: Record<EditorialLinkKind, string> = {
+  insight: "Insight",
+  action: "Acción",
+  query: "Query",
+  page: "Página",
+  cluster: "Cluster",
+  report: "Informe",
+  result: "Resultado",
 };
 
 export const EDITORIAL_TYPE_LABELS: Record<EditorialPieceType, string> = {
