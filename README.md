@@ -50,6 +50,13 @@ revisor y versionar cada cambio).
 - Los crawls permanecen locales; solo se publica un paquete curado, versionado, limitado y firmado.
 - Si falla una fuente se conserva el último snapshot válido y se muestra su antigüedad.
 
+## Informes adicionales
+
+Con el workbench en local, pedir un "informe adicional" (análisis puntual, csv
+ad-hoc, cruce de datos) genera contenido en `informes-adicionales/`, que
+**nunca se commitea**: ver [`informes-adicionales/README.md`](informes-adicionales/README.md)
+para la convención completa.
+
 ## Calidad
 
 ```bash

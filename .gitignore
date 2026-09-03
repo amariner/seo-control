@@ -15,3 +15,8 @@ data/local/**
 !data/local/.gitkeep
 artifacts/**
 !artifacts/.gitkeep
+
+# Informes adicionales: análisis puntuales pedidos ad-hoc (ver informes-adicionales/README.md).
+# Se quedan siempre en local, nunca se commitean; solo el README de la convención se versiona.
+informes-adicionales/**
+!informes-adicionales/README.md

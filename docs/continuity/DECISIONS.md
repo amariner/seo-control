@@ -180,3 +180,30 @@ No se reescriben decisiones antiguas. Si una cambia, se añade una nueva entrada
   quedan fuera del repositorio por diseño; cualquier sesión que clone debe
   ejecutar `pnpm install` antes de `pnpm dev`/`pnpm build`. El bloqueo
   `git-history` se retira de `docs/continuity/PROJECT_STATE.json`.
+
+## D-014 · `informes-adicionales/`: análisis puntuales, siempre locales
+
+- Fecha: 2026-09-03.
+- Estado: vigente.
+- Decisión: se replica en V2 la convención `informes-adicionales/` que ya
+  existía en el proyecto original (`seo-dashboard/informes-adicionales/`,
+  activada con la frase "informe adicional"): una carpeta en la raíz del
+  monorepo, con subcarpetas `<proyecto>/<YYYY-MM-DD>-<tema-corto>/` y un
+  `README.md` de contexto por informe, para análisis puntuales pedidos con el
+  workbench en local que no forman parte del flujo regular del producto.
+  Documentado en `informes-adicionales/README.md` y activado en `AGENTS.md`
+  ("Activador de informes adicionales").
+- Diferencia deliberada frente a V1: allí el `README.md` original decía que
+  los informes se commiteaban por defecto (histórico útil), pero el
+  `.gitignore` del proyecto se actualizó después para excluir toda la carpeta
+  sin volver a escribir esa sección — quedó una política inconsistente entre
+  ambos ficheros. En V2 la política es una sola desde el principio: **nada
+  dentro de `informes-adicionales/*/` se commitea nunca**; solo el `README.md`
+  de la convención queda versionado (`.gitignore`:
+  `informes-adicionales/** ` + `!informes-adicionales/README.md`).
+- Motivo: estos informes pueden mezclar cifras de cliente sin depurar; no
+  vale la pena arrastrar la misma ambigüedad que en V1 cuando se puede evitar
+  desde el primer commit.
+- Consecuencia: cualquier informe que deba conservarse como histórico de
+  producto se traslada, depurado, al lugar que corresponda (p. ej. un informe
+  ejecutivo real de P7) — no se fuerza su entrada aquí.

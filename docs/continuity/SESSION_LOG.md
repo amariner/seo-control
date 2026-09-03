@@ -101,3 +101,11 @@
   producto, no secretos.
 - Se retiró el bloqueo `git-history` de `PROJECT_STATE.json` y se añadió el
   campo `repository`.
+- Se replicó la convención `informes-adicionales/` del proyecto original
+  (D-014), encontrada revisando `seo-dashboard/informes-adicionales/` y
+  `seo-dashboard/docs/claude-seo-integracion.md` a petición del usuario: con
+  el workbench en local, la frase "informe adicional" activa análisis
+  puntuales que se guardan en `<proyecto>/<YYYY-MM-DD>-<tema-corto>/` y nunca
+  se commitean. Activador añadido a `AGENTS.md`; convención documentada en
+  `informes-adicionales/README.md`; `.gitignore` excluye toda la carpeta
+  salvo ese README.

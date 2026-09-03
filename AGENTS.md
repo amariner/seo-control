@@ -19,6 +19,15 @@ Cuando el usuario diga «vamos a seguir con el desarrollo de este proyecto», «
 4. Continúa la primera tarea incompleta de la fase activa, salvo que el usuario cambie explícitamente la prioridad.
 5. Entrega un vertical funcional y verificable; no avances varias fases dejando esqueletos vacíos.
 
+## Activador de informes adicionales
+
+Cuando el usuario diga «informe adicional», «saca un informe», «necesito un informe extra», «saca un csv con…» o equivalente, mientras el workbench está levantado en local:
+
+1. Es trabajo puntual, fuera del flujo regular del producto: no lo mezcles con `packages/editorial/data/`, con las rutas del visor ni con el dataset normalizado.
+2. Sigue la convención de `informes-adicionales/README.md`: subcarpeta `<proyecto>/<YYYY-MM-DD>-<tema-corto>/` con un `README.md` propio (fuente, periodo, pregunta de negocio, ficheros) y los outputs junto a él.
+3. Indica siempre si el dato usado es real (dataset editorial, APIs locales) o sintético (`SyntheticConnector` mientras P3 no conecte GA4/GSC/SEMrush reales) — nunca lo mezcles sin decirlo.
+4. Esta carpeta **nunca se commitea** (`.gitignore` la excluye salvo el README de la convención). No la incluyas en un `git add`/commit aunque el usuario esté en medio de una sesión de subir cambios al repositorio.
+
 ## Prioridades permanentes
 
 1. Decisiones trazables para gerente y equipo SEO.
