@@ -1,0 +1,17 @@
+node_modules
+.next
+.turbo
+.pnpm-store
+dist
+coverage
+.env
+.env.*
+!.env.example
+.vercel
+*.log
+*.tsbuildinfo
+.DS_Store
+data/local/**
+!data/local/.gitkeep
+artifacts/**
+!artifacts/.gitkeep

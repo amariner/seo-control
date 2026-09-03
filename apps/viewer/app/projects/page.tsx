@@ -1,0 +1,12 @@
+import Link from "next/link";
+import { Badge, Card } from "@seo/ui";
+import { PageFrame } from "@/components/page-frame";
+import { getDashboard, parseFilters } from "@/lib/data";
+
+export default async function ProjectsPage({ searchParams }: { searchParams: Promise<Record<string, string | string[] | undefined>> }) {
+  const data = await getDashboard(parseFilters(await searchParams));
+  return <PageFrame eyebrow="Portfolio" title="Proyectos del piloto" description="Lectura comparada sin convertir marcas con contextos distintos en una competición. El score solo existe cuando negocio, visibilidad y técnica tienen cobertura suficiente." generatedAt={data.generatedAt}>
+    <div className="two-col">{data.projects.map((project) => <Card className="subpage-card" key={project.slug}><div className="insight-detail-head"><div><p className="eyebrow">{project.domain}</p><h2>{project.name}</h2></div><Badge tone={project.attention === "actuar" ? "bad" : project.attention === "observar" ? "warn" : "good"}>{project.attention}</Badge></div><div className="geo-score"><strong>{project.score ?? "—"}</strong><span>score compuesto<br />{project.delta > 0 ? "+" : ""}{project.delta} pts</span></div><div className="insight-grid"><div className="info-box"><small>Negocio · 40%</small><strong>{project.businessScore}/100</strong></div><div className="info-box"><small>Visibilidad · 30%</small><strong>{project.visibilityScore}/100</strong></div><div className="info-box"><small>Técnica · 30%</small><strong>{project.technicalScore}/100</strong></div></div><div className="two-col" style={{ marginTop: 14 }}><div className="info-box"><small>Riesgo</small><strong>{project.primaryRisk}</strong></div><div className="info-box"><small>Oportunidad</small><strong>{project.primaryOpportunity}</strong></div></div><Link className="button" style={{ display: "inline-block", marginTop: 18 }} href={`/projects/${project.slug}`}>Abrir proyecto →</Link></Card>)}</div>
+    <section className="section"><div className="section-heading"><div><p className="eyebrow">Expansión</p><h2>Siguiente secuencia acordada</h2></div></div><Card className="subpage-card"><ol className="bullet-list"><li>Ecommerce + Butech.</li><li>L&apos;Antic Colonial + Krion.</li><li>XTONE + Gamadecor.</li></ol><p className="lede">Cada pareja se incorpora solo después de que el piloto cumpla reconciliación, trazabilidad, rendimiento, accesibilidad y comprensión ejecutiva.</p></Card></section>
+  </PageFrame>;
+}

@@ -1,0 +1,51 @@
+import Link from "next/link";
+import { notFound } from "next/navigation";
+import { Badge, Card, MetricStrip } from "@seo/ui";
+import { PROJECT_CHAPTERS, projectSlugSchema } from "@seo/contracts";
+import { AppShell } from "@/components/app-shell";
+import { TrendChart } from "@/components/trend-chart";
+import { getDashboard, parseFilters } from "@/lib/data";
+
+const chapterCopy = {
+  resumen: { title: "Resumen ejecutivo", intro: "Objetivos, score, conclusiones, riesgos, cobertura y una lectura prudente del forecast.", bullets: ["Cinco conclusiones como máximo, elegidas por una persona.", "Score ausente si falta una dimensión.", "Forecast solo con histórico suficiente e intervalo visible."] },
+  negocio: { title: "Negocio y conversiones", intro: "Sesiones, adquisición inicial, macro y microconversiones, embudos, landings, dispositivos y buscador interno.", bullets: ["Atribución en sesión separada de adquisición original.", "Embudos de cita/tienda, contacto y catálogo/producto.", "Términos internos, cero resultados y conversión posterior."] },
+  demanda: { title: "Demanda y visibilidad", intro: "GSC, non-branded, intención, rankings, competidores, curva de CTR y features de SERP.", bullets: ["Marca propia, paraguas Porcelanosa y non-branded.", "Set estable versionado separado de descubrimientos.", "Paid Search aparece solo como contexto de solapamiento."] },
+  contenido: { title: "Contenido", intro: "Inventario, clusters, rendimiento a 28/90/180 días, decay, gaps y canibalización multiseñal.", bullets: ["Estados editoriales y overrides locales.", "Quick wins con tráfico, posición, CTR y conversiones.", "Briefs completos permanecen en el workbench."] },
+  tecnica: { title: "Salud técnica", intro: "Prioridad según severidad, alcance, demanda, template, persistencia y esfuerzo estimado.", bullets: ["Indexabilidad, canonicals, robots, sitemap y hreflang.", "Enlazado, huérfanas, PageRank interno y rutas estratégicas.", "CrUX real, muestra PageSpeed y cobertura Schema."] },
+  mercados: { title: "Mercados Tier 1", intro: "Contribución, crecimiento y cobertura comparable de España, Reino Unido, Estados Unidos, Francia y Alemania.", bullets: ["Directorio internacional y matriz hreflang.", "Objetivos definidos por proyecto y mercado.", "Alertas solo con cambios materiales y persistentes."] },
+  geo: { title: "GEO", intro: "30 prompts por proyecto y mercado, ejecutados semanalmente de forma estable y versionada.", bullets: ["ChatGPT, Gemini, Copilot y Perplexity.", "Citación, sentimiento básico, competidores y fuentes.", "Tráfico IA y conversiones sin inferir causalidad."] },
+  cronologia: { title: "Cronología e informes", intro: "Anotaciones, cierres mensuales, revisiones trimestrales, especiales y versiones inmutables.", bullets: ["Publicaciones, migraciones, releases e incidencias.", "Autor y revisor diferentes.", "Correcciones mediante nueva versión y fe de erratas."] },
+} as const;
+
+export default async function ProjectPage({ params, searchParams }: { params: Promise<{ slug: string }>; searchParams: Promise<Record<string, string | string[] | undefined>> }) {
+  const { slug: rawSlug } = await params;
+  const slugResult = projectSlugSchema.safeParse(rawSlug);
+  if (!slugResult.success) notFound();
+  const rawFilters = await searchParams;
+  const chapterRaw = Array.isArray(rawFilters.chapter) ? rawFilters.chapter[0] : rawFilters.chapter;
+  const chapter = PROJECT_CHAPTERS.some((item) => item.key === chapterRaw) ? chapterRaw as keyof typeof chapterCopy : "resumen";
+  const filters = { ...parseFilters(rawFilters), project: slugResult.data };
+  const data = await getDashboard(filters);
+  const project = data.projects[0];
+  if (!project) notFound();
+  const query = new URLSearchParams({ project: slugResult.data, market: filters.market, period: filters.period });
+  const copy = chapterCopy[chapter];
+
+  return <AppShell generatedAt={data.generatedAt}><nav className="project-tabs" aria-label="Capítulos del proyecto">{PROJECT_CHAPTERS.map((item) => <Link className={`project-tab ${chapter === item.key ? "project-tab-active" : ""}`} key={item.key} href={`/projects/${slugResult.data}?${query.toString()}&chapter=${item.key}`}>{item.label}</Link>)}</nav><main className="page" id="contenido"><header className="page-heading"><div><p className="eyebrow">Proyecto · {project.domain}</p><h1>{project.name}</h1><p className="lede">{copy.intro}</p></div><div className="date-context"><Badge tone={project.attention === "actuar" ? "bad" : "warn"}>{project.attention}</Badge><br /><br />Score <strong>{project.score}/100</strong><br />{project.delta > 0 ? "+" : ""}{project.delta} pts vs. periodo</div></header>
+    {chapter === "resumen" ? <><MetricStrip metrics={data.metrics} /><section className="section analytics-grid"><Card className="chart-card"><div className="section-heading"><div><p className="eyebrow">Evolución</p><h3>Sesiones orgánicas</h3></div></div><TrendChart points={data.series.organic_sessions ?? []} annotations={data.annotations} /></Card><Card className="chapter-card"><p className="eyebrow">Lectura del capítulo</p><h2>{copy.title}</h2><ul className="bullet-list">{copy.bullets.map((item) => <li key={item}>{item}</li>)}</ul></Card></section></> : <ChapterContent chapter={chapter} data={data} copy={copy} />}
+  </main></AppShell>;
+}
+
+function ChapterContent({ chapter, data, copy }: { chapter: keyof typeof chapterCopy; data: Awaited<ReturnType<typeof getDashboard>>; copy: (typeof chapterCopy)[keyof typeof chapterCopy] }) {
+  return <><div className="chapter-grid"><Card className="chapter-card"><p className="eyebrow">Alcance</p><h2>{copy.title}</h2><p>{copy.intro}</p><ul className="bullet-list">{copy.bullets.map((item) => <li key={item}>{item}</li>)}</ul></Card><Card className="chapter-card"><p className="eyebrow">Conclusión destacada</p><h2>{data.executiveInsights[0]?.title ?? "Sin conclusión aprobada"}</h2><p>{data.executiveInsights[0]?.executiveSummary ?? "No hay evidencia suficiente en este corte."}</p>{data.executiveInsights[0] ? <Link className="section-link" href={`/insights#${data.executiveInsights[0].id}`}>Abrir evidencia →</Link> : null}</Card></div>
+    {chapter === "tecnica" ? <section className="section"><div className="section-heading"><div><p className="eyebrow">Priorización</p><h2>Incidencias técnicas</h2></div></div><IssuesTable issues={data.technicalIssues} /></section> : null}
+    {chapter === "contenido" || chapter === "demanda" ? <section className="section"><div className="section-heading"><div><p className="eyebrow">Oportunidades</p><h2>URLs con margen demostrado</h2></div></div><OpportunitiesTable pages={data.opportunities} /></section> : null}
+    {chapter === "mercados" ? <section className="section"><div className="section-heading"><div><p className="eyebrow">Tier 1</p><h2>Contribución por mercado</h2></div></div><MarketsTable markets={data.markets} /></section> : null}
+    {chapter === "cronologia" ? <section className="section"><div className="section-heading"><div><p className="eyebrow">Publicaciones</p><h2>Versiones disponibles</h2></div></div><ReportsTable reports={data.reports} /></section> : null}
+  </>;
+}
+
+function IssuesTable({ issues }: { issues: Awaited<ReturnType<typeof getDashboard>>["technicalIssues"] }) { return <Card className="matrix"><table className="data-table"><thead><tr><th>Incidencia</th><th>Severidad</th><th>URLs</th><th>Tráfico en riesgo</th><th>Persistencia</th><th>Prioridad</th></tr></thead><tbody>{issues.map((issue) => <tr key={issue.id}><td><Link href={`/issues/${issue.id}`}><span className="cell-primary">{issue.title}</span><span className="cell-secondary">{issue.template} · {issue.category}</span></Link></td><td><Badge tone={issue.severity === "critica" ? "bad" : issue.severity === "alta" ? "warn" : "neutral"}>{issue.severity}</Badge></td><td>{issue.affectedUrls}</td><td>{issue.trafficAtRisk.toLocaleString("es-ES")}</td><td>{issue.persistenceRuns} crawls</td><td className="score">{issue.priorityScore}</td></tr>)}</tbody></table></Card>; }
+function OpportunitiesTable({ pages }: { pages: Awaited<ReturnType<typeof getDashboard>>["opportunities"] }) { return <Card className="matrix"><table className="data-table"><thead><tr><th>URL</th><th>Estado</th><th>Clics</th><th>Posición</th><th>CTR / esperado</th><th>Oportunidad</th></tr></thead><tbody>{pages.map((page) => <tr key={page.id}><td><Link href={`/pages/${page.id}`}><span className="cell-primary">{page.title}</span><span className="cell-secondary">{page.url}</span></Link></td><td><Badge tone={page.status === "decay" ? "warn" : "info"}>{page.status}</Badge></td><td>{page.clicks.toLocaleString("es-ES")}</td><td>{page.position}</td><td>{page.ctr}% / {page.expectedCtr}%</td><td className="score">{page.opportunityScore}</td></tr>)}</tbody></table></Card>; }
+function MarketsTable({ markets }: { markets: Awaited<ReturnType<typeof getDashboard>>["markets"] }) { return <Card className="matrix"><table className="data-table"><thead><tr><th>Mercado</th><th>Sesiones</th><th>Clics</th><th>Macroconv.</th><th>Cambio</th><th>Visibilidad</th></tr></thead><tbody>{markets.map((market) => <tr key={market.code}><td><span className="cell-primary">{market.name}</span></td><td>{market.sessions.toLocaleString("es-ES")}</td><td>{market.clicks.toLocaleString("es-ES")}</td><td>{market.conversions.toLocaleString("es-ES")}</td><td className={market.change >= 0 ? "delta-good" : "delta-bad"}>{market.change}%</td><td>{market.visibility}%</td></tr>)}</tbody></table></Card>; }
+function ReportsTable({ reports }: { reports: Awaited<ReturnType<typeof getDashboard>>["reports"] }) { return <Card className="matrix"><table className="data-table"><thead><tr><th>Informe</th><th>Periodo</th><th>Versión</th><th>Estado</th><th>Revisión</th></tr></thead><tbody>{reports.map((report) => <tr key={report.id}><td><Link href={`/reports/${report.id}`}><span className="cell-primary">{report.title}</span><span className="cell-secondary">{report.type}</span></Link></td><td>{report.period}</td><td>v{report.version}</td><td><Badge tone={report.status === "publicado" ? "good" : "warn"}>{report.status}</Badge></td><td>{report.author} → {report.reviewer ?? "Pendiente"}</td></tr>)}</tbody></table></Card>; }

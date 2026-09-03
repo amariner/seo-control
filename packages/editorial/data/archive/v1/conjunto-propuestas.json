@@ -1,0 +1,1226 @@
+[
+ {
+  "estado": "Backlog",
+  "fechaPublicacion": "",
+  "marca": "Butech",
+  "slot": "Cerramientos para ampliar espacios en exterior",
+  "pais": "ES",
+  "mesEstimado": "07 Julio",
+  "tematica": "Inspiración estival - 1",
+  "tipo": "",
+  "propuestas": [
+   {
+    "subtema": "Cerramientos para ampliar espacios en exterior",
+    "keywordPrincipal": "gres porcelánico 20 mm",
+    "searchVolume": null,
+    "titulos": [
+     "Exteriores elegantes y naturales con el gres porcelánico 20 mm"
+    ],
+    "angulo": "El porcelánico 20 mm como cerramiento de pavimento que prolonga el interior hacia la terraza.",
+    "formato": "rework",
+    "tipo": "Migrar",
+    "url": "https://www.porcelanosa.com/trendbook/exteriores-gres-porcelanico-butech"
+   },
+   {
+    "subtema": "Cerramientos para ampliar espacios en exterior",
+    "keywordPrincipal": "suelo tecnico elevado terraza",
+    "searchVolume": null,
+    "titulos": [
+     "Suelo técnico elevado para terrazas y porches: cómo ampliar el espacio exterior"
+    ],
+    "angulo": "El suelo técnico elevado de Butech para crear continuidad y ganar superficie habitable en el exterior.",
+    "formato": "nuevo",
+    "tipo": "Nuevo",
+    "url": ""
+   }
+  ]
+ },
+ {
+  "estado": "Backlog",
+  "fechaPublicacion": "",
+  "marca": "Ecommerce",
+  "slot": "Baños wellness",
+  "pais": "UK",
+  "mesEstimado": "07 Julio",
+  "tematica": "Inspiración estival - 1",
+  "tipo": "",
+  "propuestas": [
+   {
+    "subtema": "Baños wellness",
+    "keywordPrincipal": "porcelanosa bathroom tiles",
+    "searchVolume": null,
+    "titulos": [
+     "How To Tile Bathroom"
+    ],
+    "angulo": "Tiling a wellness bathroom: tile choices that create a calm, spa-like summer retreat.",
+    "formato": "rework",
+    "tipo": "Importar de Trendbook",
+    "url": "https://www.porcelanosa.com/trendbook/uk/how-to-tile-bathroom/"
+   },
+   {
+    "subtema": "Baños wellness",
+    "keywordPrincipal": "wellness bathroom ideas",
+    "searchVolume": null,
+    "titulos": [
+     "Wellness Bathroom Ideas: Creating a Spa at Home"
+    ],
+    "angulo": "Designing a home spa with serene tiles, walk-in showers and natural materials.",
+    "formato": "nuevo",
+    "tipo": "Nuevo",
+    "url": ""
+   }
+  ]
+ },
+ {
+  "estado": "Backlog",
+  "fechaPublicacion": "",
+  "marca": "Gamadecor",
+  "slot": "Cocinas y cenadores exteriores",
+  "pais": "ES",
+  "mesEstimado": "07 Julio",
+  "tematica": "Inspiración estival - 1",
+  "tipo": "",
+  "propuestas": [
+   {
+    "subtema": "Cocinas y cenadores exteriores",
+    "keywordPrincipal": "planificar una cocina",
+    "searchVolume": null,
+    "titulos": [
+     "Plan de cocina 2026: del boceto a tu casa sin sobresaltos"
+    ],
+    "angulo": "Planificar una cocina abierta al exterior o un office de verano sin sobresaltos en obra.",
+    "formato": "rework",
+    "tipo": "Reedición",
+    "url": "https://www.gama-decor.com/blog/2026/01/plan-de-cocina-2026-del-boceto-a-tu-casa-sin-sobresaltos/"
+   },
+   {
+    "subtema": "Cocinas y cenadores exteriores",
+    "keywordPrincipal": "cocina de verano exterior",
+    "searchVolume": null,
+    "titulos": [
+     "Cocinas de verano y office exterior: muebles que resisten el uso al aire libre"
+    ],
+    "angulo": "Islas y muebles de cocina pensados para cenadores y espacios de verano de alta gama.",
+    "formato": "nuevo",
+    "tipo": "Nuevo",
+    "url": ""
+   }
+  ]
+ },
+ {
+  "estado": "Backlog",
+  "fechaPublicacion": "",
+  "marca": "Noken",
+  "slot": "Baños wellness",
+  "pais": "ES",
+  "mesEstimado": "07 Julio",
+  "tematica": "Inspiración estival - 1",
+  "tipo": "",
+  "propuestas": [
+   {
+    "subtema": "Baños wellness",
+    "keywordPrincipal": "ducha empotrada vs a vista",
+    "searchVolume": null,
+    "titulos": [
+     "Ducha empotrada vs. a vista: ventajas e inconvenientes"
+    ],
+    "angulo": "La ducha como pieza central de un baño wellness estival: empotrada para una estética spa.",
+    "formato": "rework",
+    "tipo": "Reedición",
+    "url": "https://www.noken.com/es/blog/ducha-empotrada-elementos-externos-ventajas"
+   },
+   {
+    "subtema": "Baños wellness",
+    "keywordPrincipal": "baños wellness",
+    "searchVolume": null,
+    "titulos": [
+     "Baños wellness: cómo crear un spa en casa con grifería y duchas de diseño"
+    ],
+    "angulo": "Convertir el baño en un refugio wellness con grifería termostática, rociadores y sanitarios Noken.",
+    "formato": "nuevo",
+    "tipo": "Nuevo",
+    "url": ""
+   }
+  ]
+ },
+ {
+  "estado": "Backlog",
+  "fechaPublicacion": "",
+  "marca": "Porcelanosa - Trendbook",
+  "slot": "Tendencias en diseño hotelero",
+  "pais": "ES",
+  "mesEstimado": "07 Julio",
+  "tematica": "Inspiración estival - 1",
+  "tipo": "",
+  "propuestas": [
+   {
+    "subtema": "Tendencias en diseño hotelero",
+    "keywordPrincipal": "decoracion baños",
+    "searchVolume": null,
+    "titulos": [
+     "Decoración de baños: ideas, estilos y materiales"
+    ],
+    "angulo": "Baños con acabado hotelero: materiales y estilos que aportan sensación de hotel de lujo.",
+    "formato": "rework",
+    "tipo": "Reedición",
+    "url": "https://www.porcelanosa.com/trendbook/decoracion-banos"
+   },
+   {
+    "subtema": "Tendencias en diseño hotelero",
+    "keywordPrincipal": "diseño hotelero",
+    "searchVolume": null,
+    "titulos": [
+     "Tendencias en diseño hotelero: cómo llevar el estilo de hotel a tu hogar"
+    ],
+    "angulo": "Claves del interiorismo hotelero (cerámica, mármol, baños envolventes) aplicadas a la vivienda.",
+    "formato": "nuevo",
+    "tipo": "Nuevo",
+    "url": ""
+   }
+  ]
+ },
+ {
+  "estado": "Backlog",
+  "fechaPublicacion": "",
+  "marca": "Xtone",
+  "slot": "Cocinas y cenadores exteriores",
+  "pais": "ES",
+  "mesEstimado": "07 Julio",
+  "tematica": "Inspiración estival - 1",
+  "tipo": "",
+  "propuestas": [
+   {
+    "subtema": "Cocinas y cenadores exteriores",
+    "keywordPrincipal": "tendencias en fregaderos",
+    "searchVolume": null,
+    "titulos": [
+     "Tendencias en fregaderos de cocina"
+    ],
+    "angulo": "Fregaderos integrados en encimera de gran formato para cocinas de exterior duraderas.",
+    "formato": "rework",
+    "tipo": "Reedición",
+    "url": "https://www.xtone-surface.com/blog/Fregaderos_Tendencias%202024_XTONE"
+   },
+   {
+    "subtema": "Cocinas y cenadores exteriores",
+    "keywordPrincipal": "encimera porcelanico exterior",
+    "searchVolume": null,
+    "titulos": [
+     "Encimeras de porcelánico para cocinas exteriores: resistencia y diseño"
+    ],
+    "angulo": "El gran formato XTONE como superficie de cocina exterior resistente al sol, agua y manchas.",
+    "formato": "nuevo",
+    "tipo": "Nuevo",
+    "url": ""
+   }
+  ]
+ },
+ {
+  "estado": "Backlog",
+  "fechaPublicacion": "",
+  "marca": "Butech",
+  "slot": "Proyectos singulares (casas con piscinas)",
+  "pais": "ES",
+  "mesEstimado": "08 Agosto",
+  "tematica": "Inspiración estival - 2",
+  "tipo": "",
+  "propuestas": [
+   {
+    "subtema": "Proyectos singulares (casas con piscinas)",
+    "keywordPrincipal": "suelo tecnico exterior",
+    "searchVolume": null,
+    "titulos": [
+     "Terrazas acogedoras"
+    ],
+    "angulo": "Suelo técnico elevado para crear pool decks y terrazas acogedoras junto a la piscina.",
+    "formato": "rework",
+    "tipo": "Migrar",
+    "url": "https://www.porcelanosa.com/trendbook/terrazas-acogedoras-suelo-tecnico-elevado-butech"
+   },
+   {
+    "subtema": "Proyectos singulares (casas con piscinas)",
+    "keywordPrincipal": "pool deck piscina",
+    "searchVolume": null,
+    "titulos": [
+     "Pool deck: soluciones técnicas para el borde de piscina"
+    ],
+    "angulo": "Sistemas Butech de pavimento elevado y antideslizante para bordes de piscina seguros y elegantes.",
+    "formato": "nuevo",
+    "tipo": "Nuevo",
+    "url": ""
+   }
+  ]
+ },
+ {
+  "estado": "Backlog",
+  "fechaPublicacion": "",
+  "marca": "Gamadecor",
+  "slot": "Espacios flexibles para teletrabajo en verano",
+  "pais": "ES",
+  "mesEstimado": "08 Agosto",
+  "tematica": "Inspiración estival - 2",
+  "tipo": "",
+  "propuestas": [
+   {
+    "subtema": "Espacios flexibles para teletrabajo en verano",
+    "keywordPrincipal": "cocina para dos",
+    "searchVolume": null,
+    "titulos": [
+     "Cocina para dos: diseño que fluye"
+    ],
+    "angulo": "Cocina-office que fluye y se adapta a teletrabajar en verano sin perder funcionalidad.",
+    "formato": "rework",
+    "tipo": "Reedición",
+    "url": "https://www.gama-decor.com/blog/2026/03/cocina-para-dos-diseno-que-fluye/"
+   },
+   {
+    "subtema": "Espacios flexibles para teletrabajo en verano",
+    "keywordPrincipal": "mueble teletrabajo segunda residencia",
+    "searchVolume": null,
+    "titulos": [
+     "Muebles flexibles para teletrabajar en la segunda residencia"
+    ],
+    "angulo": "Soluciones de mobiliario a medida que integran zona de trabajo en cocina o vestidor.",
+    "formato": "nuevo",
+    "tipo": "Nuevo",
+    "url": ""
+   }
+  ]
+ },
+ {
+  "estado": "Backlog",
+  "fechaPublicacion": "",
+  "marca": "Noken",
+  "slot": "Mobiliario en segundas residencias",
+  "pais": "ES",
+  "mesEstimado": "08 Agosto",
+  "tematica": "Inspiración estival - 2",
+  "tipo": "",
+  "propuestas": [
+   {
+    "subtema": "Mobiliario en segundas residencias",
+    "keywordPrincipal": "medidas de un baño / cómo distribuir un baño",
+    "searchVolume": null,
+    "titulos": [
+     "Cómo distribuir un baño: 5 Planos y Medidas para ganar espacio"
+    ],
+    "angulo": "Distribuir el baño de una segunda residencia para optimizar cada metro con mobiliario adecuado.",
+    "formato": "rework",
+    "tipo": "Reedición",
+    "url": "https://www.noken.com/es/blog/distribucion-planos-banos"
+   },
+   {
+    "subtema": "Mobiliario en segundas residencias",
+    "keywordPrincipal": "baño segunda residencia",
+    "searchVolume": null,
+    "titulos": [
+     "Equipar el baño de una segunda residencia: mobiliario práctico y resistente"
+    ],
+    "angulo": "Lavabos, muebles y sanitarios fáciles de mantener para casas de uso estacional.",
+    "formato": "nuevo",
+    "tipo": "Nuevo",
+    "url": ""
+   }
+  ]
+ },
+ {
+  "estado": "Backlog",
+  "fechaPublicacion": "",
+  "marca": "Porcelanosa - Trendbook",
+  "slot": "Diseño mediterráneo",
+  "pais": "ES",
+  "mesEstimado": "08 Agosto",
+  "tematica": "Inspiración estival - 2",
+  "tipo": "",
+  "propuestas": [
+   {
+    "subtema": "Diseño mediterráneo",
+    "keywordPrincipal": "azulejo turquesa",
+    "searchVolume": null,
+    "titulos": [
+     "Azulejos turquesa y verde azulado: ideas para baño y cocina"
+    ],
+    "angulo": "La paleta turquesa y verde azulado como sello del diseño mediterráneo en baño y cocina.",
+    "formato": "rework",
+    "tipo": "Reedición",
+    "url": "https://www.porcelanosa.com/trendbook/azulejos-piedra-azul-turquesa"
+   },
+   {
+    "subtema": "Diseño mediterráneo",
+    "keywordPrincipal": "estilo mediterraneo decoracion",
+    "searchVolume": null,
+    "titulos": [
+     "Estilo mediterráneo en casa: materiales, colores y texturas"
+    ],
+    "angulo": "Claves del diseño mediterráneo con cerámica, cal y tonos tierra para un hogar luminoso.",
+    "formato": "nuevo",
+    "tipo": "Nuevo",
+    "url": ""
+   }
+  ]
+ },
+ {
+  "estado": "Backlog",
+  "fechaPublicacion": "",
+  "marca": "Xtone",
+  "slot": "Materiales resistentes para exterior",
+  "pais": "ES",
+  "mesEstimado": "08 Agosto",
+  "tematica": "Inspiración estival - 2",
+  "tipo": "",
+  "propuestas": [
+   {
+    "subtema": "Materiales resistentes para exterior",
+    "keywordPrincipal": "tendencias de verano en superficies",
+    "searchVolume": null,
+    "titulos": [
+     "Summer Essentials: tendencias de verano en gran formato"
+    ],
+    "angulo": "Superficies de gran formato como material estrella para revestir exteriores en verano.",
+    "formato": "rework",
+    "tipo": "Reedición",
+    "url": "https://www.xtone-surface.com/blog/Tendencias-de-verano-xtone-porcel%C3%A1nico"
+   },
+   {
+    "subtema": "Materiales resistentes para exterior",
+    "keywordPrincipal": "materiales resistentes exterior",
+    "searchVolume": null,
+    "titulos": [
+     "Materiales resistentes para exterior: por qué elegir porcelánico de gran formato"
+    ],
+    "angulo": "El porcelánico XTONE frente a la intemperie: durabilidad, bajo mantenimiento y diseño.",
+    "formato": "nuevo",
+    "tipo": "Nuevo",
+    "url": ""
+   }
+  ]
+ },
+ {
+  "estado": "Backlog",
+  "fechaPublicacion": "",
+  "marca": "Antic Colonial",
+  "slot": "Pavimentos y revestimientos",
+  "pais": "ES",
+  "mesEstimado": "09 Septiembre",
+  "tematica": "Rehabilitación y reformas",
+  "tipo": "",
+  "propuestas": [
+   {
+    "subtema": "Pavimentos y revestimientos",
+    "keywordPrincipal": "suelo vinilico o porcelanico",
+    "searchVolume": null,
+    "titulos": [
+     "Suelo vinílico o porcelánico: cuál elegir"
+    ],
+    "angulo": "Elegir pavimento en una reforma: vinílico Linkfloor o porcelánico, pros y contras.",
+    "formato": "rework",
+    "tipo": "Reedición",
+    "url": "https://www.anticcolonial.com/suelo-vinilico-o-porcelanico/"
+   },
+   {
+    "subtema": "Pavimentos y revestimientos",
+    "keywordPrincipal": "revestimientos piedra natural",
+    "searchVolume": null,
+    "titulos": [
+     "Revestimientos de piedra natural para reformas: cómo renovar suelos y paredes"
+    ],
+    "angulo": "Piedra, mármol y mosaico para renovar pavimentos y paredes con materiales nobles.",
+    "formato": "nuevo",
+    "tipo": "Nuevo",
+    "url": ""
+   }
+  ]
+ },
+ {
+  "estado": "Backlog",
+  "fechaPublicacion": "",
+  "marca": "Butech",
+  "slot": "Reformas integrales",
+  "pais": "ES",
+  "mesEstimado": "09 Septiembre",
+  "tematica": "Rehabilitación y reformas",
+  "tipo": "",
+  "propuestas": [
+   {
+    "subtema": "Reformas integrales",
+    "keywordPrincipal": "crucetas autonivelantes",
+    "searchVolume": null,
+    "titulos": [
+     "Superficies lisas con las crucetas autonivelantes de Butech"
+    ],
+    "angulo": "Reformar con acabados lisos y perfectos gracias a las crucetas autonivelantes en obra.",
+    "formato": "rework",
+    "tipo": "Migrar",
+    "url": "https://www.porcelanosa.com/trendbook/superficies-lisas-con-las-crucetas-autonivelantes-de-butech"
+   },
+   {
+    "subtema": "Reformas integrales",
+    "keywordPrincipal": "reforma integral sistemas",
+    "searchVolume": null,
+    "titulos": [
+     "Reforma integral: sistemas constructivos que evitan problemas a futuro"
+    ],
+    "angulo": "Impermeabilización, perfilería y morteros Butech como base técnica de una reforma duradera.",
+    "formato": "nuevo",
+    "tipo": "Nuevo",
+    "url": ""
+   }
+  ]
+ },
+ {
+  "estado": "Backlog",
+  "fechaPublicacion": "",
+  "marca": "Ecommerce",
+  "slot": "Tendencias en baños",
+  "pais": "UK",
+  "mesEstimado": "09 Septiembre",
+  "tematica": "Rehabilitación y reformas",
+  "tipo": "",
+  "propuestas": [
+   {
+    "subtema": "Tendencias en baños",
+    "keywordPrincipal": "porcelanosa bathroom tiles",
+    "searchVolume": null,
+    "titulos": [
+     "How To Tile Bathroom"
+    ],
+    "angulo": "Bathroom renovation: how to tile a bathroom following the latest design trends.",
+    "formato": "rework",
+    "tipo": "Importar de Trendbook",
+    "url": "https://www.porcelanosa.com/trendbook/uk/how-to-tile-bathroom/"
+   },
+   {
+    "subtema": "Tendencias en baños",
+    "keywordPrincipal": "bathroom trends 2027",
+    "searchVolume": null,
+    "titulos": [
+     "Bathroom Trends 2027: Tiles, Layouts and Finishes for Your Renovation"
+    ],
+    "angulo": "The renovation trends shaping UK bathrooms: large-format tiles, colour and texture.",
+    "formato": "nuevo",
+    "tipo": "Nuevo",
+    "url": ""
+   }
+  ]
+ },
+ {
+  "estado": "Backlog",
+  "fechaPublicacion": "",
+  "marca": "Gamadecor",
+  "slot": "Equipamiento de cocina",
+  "pais": "ES",
+  "mesEstimado": "09 Septiembre",
+  "tematica": "Rehabilitación y reformas",
+  "tipo": "",
+  "propuestas": [
+   {
+    "subtema": "Equipamiento de cocina",
+    "keywordPrincipal": "cocina segura niños y mascotas",
+    "searchVolume": null,
+    "titulos": [
+     "Cómo crear una cocina segura para niños y mascotas"
+    ],
+    "angulo": "Equipar la cocina reformada con soluciones seguras para niños y mascotas.",
+    "formato": "rework",
+    "tipo": "Reedición",
+    "url": "https://www.gama-decor.com/blog/2025/09/como-crear-una-cocina-segura-para-ninos-y-mascotas/"
+   },
+   {
+    "subtema": "Equipamiento de cocina",
+    "keywordPrincipal": "equipamiento de cocina",
+    "searchVolume": null,
+    "titulos": [
+     "Equipamiento de cocina: islas, herrajes y almacenaje para tu reforma"
+    ],
+    "angulo": "Cómo elegir el equipamiento interior de los muebles de cocina en una reforma de alta gama.",
+    "formato": "nuevo",
+    "tipo": "Nuevo",
+    "url": ""
+   }
+  ]
+ },
+ {
+  "estado": "Backlog",
+  "fechaPublicacion": "",
+  "marca": "Noken",
+  "slot": "Tendencias en baños",
+  "pais": "ES",
+  "mesEstimado": "09 Septiembre",
+  "tematica": "Rehabilitación y reformas",
+  "tipo": "",
+  "propuestas": [
+   {
+    "subtema": "Tendencias en baños",
+    "keywordPrincipal": "ducha empotrada vs a vista",
+    "searchVolume": null,
+    "titulos": [
+     "Ducha empotrada vs. a vista: ventajas e inconvenientes"
+    ],
+    "angulo": "Tendencia en reforma de baño: la ducha empotrada de líneas limpias como protagonista.",
+    "formato": "rework",
+    "tipo": "Reedición",
+    "url": "https://www.noken.com/es/blog/ducha-empotrada-elementos-externos-ventajas"
+   },
+   {
+    "subtema": "Tendencias en baños",
+    "keywordPrincipal": "tendencias en baños",
+    "searchVolume": null,
+    "titulos": [
+     "Tendencias en baños 2027: grifería, sanitarios y duchas que marcan la reforma"
+    ],
+    "angulo": "Las tendencias que definen la reforma de baño: colores, formatos y grifería de diseño.",
+    "formato": "nuevo",
+    "tipo": "Nuevo",
+    "url": ""
+   }
+  ]
+ },
+ {
+  "estado": "Backlog",
+  "fechaPublicacion": "",
+  "marca": "Porcelanosa - Trendbook",
+  "slot": "Organización y orden en el hogar",
+  "pais": "ES",
+  "mesEstimado": "09 Septiembre",
+  "tematica": "Rehabilitación y reformas",
+  "tipo": "",
+  "propuestas": [
+   {
+    "subtema": "Organización y orden en el hogar",
+    "keywordPrincipal": "paneles decorativos pared",
+    "searchVolume": null,
+    "titulos": [
+     "Paneles decorativos de pared: tipos, materiales e instalación"
+    ],
+    "angulo": "Paneles decorativos que ordenan visualmente y ocultan almacenaje en la reforma.",
+    "formato": "rework",
+    "tipo": "Reedición",
+    "url": "https://www.porcelanosa.com/trendbook/paneles-decorativos-pared"
+   },
+   {
+    "subtema": "Organización y orden en el hogar",
+    "keywordPrincipal": "orden en el hogar",
+    "searchVolume": null,
+    "titulos": [
+     "Organización y orden en el hogar: soluciones de almacenaje integradas en la reforma"
+    ],
+    "angulo": "Ideas para integrar almacenaje y mantener el orden aprovechando una reforma.",
+    "formato": "nuevo",
+    "tipo": "Nuevo",
+    "url": ""
+   }
+  ]
+ },
+ {
+  "estado": "Backlog",
+  "fechaPublicacion": "",
+  "marca": "Xtone",
+  "slot": "Soluciones para ganar espacio",
+  "pais": "ES",
+  "mesEstimado": "09 Septiembre",
+  "tematica": "Rehabilitación y reformas",
+  "tipo": "",
+  "propuestas": [
+   {
+    "subtema": "Soluciones para ganar espacio",
+    "keywordPrincipal": "tendencias en baños",
+    "searchVolume": null,
+    "titulos": [
+     "Las apuestas de XTONE que marcan tendencia en baños"
+    ],
+    "angulo": "Gran formato con pocas juntas para ampliar visualmente baños pequeños en reforma.",
+    "formato": "rework",
+    "tipo": "Reedición",
+    "url": "https://www.xtone-surface.com/blog/XTONE-summer-trend-bathroom"
+   },
+   {
+    "subtema": "Soluciones para ganar espacio",
+    "keywordPrincipal": "gran formato ganar espacio",
+    "searchVolume": null,
+    "titulos": [
+     "Ganar espacio con gran formato: menos juntas, más amplitud"
+    ],
+    "angulo": "El porcelánico de gran formato XTONE como recurso para que las estancias parezcan mayores.",
+    "formato": "nuevo",
+    "tipo": "Nuevo",
+    "url": ""
+   }
+  ]
+ },
+ {
+  "estado": "Backlog",
+  "fechaPublicacion": "",
+  "marca": "Antic Colonial",
+  "slot": "Tendencias en mobiliario",
+  "pais": "ES",
+  "mesEstimado": "10 Octubre",
+  "tematica": "Diseño funcional",
+  "tipo": "",
+  "propuestas": [
+   {
+    "subtema": "Tendencias en mobiliario",
+    "keywordPrincipal": "granito marmol diferencias",
+    "searchVolume": null,
+    "titulos": [
+     "Mármol vs. granito: diferencias y cómo elegir"
+    ],
+    "angulo": "Encimeras y muebles en piedra natural: mármol o granito según el uso.",
+    "formato": "rework",
+    "tipo": "Reedición",
+    "url": "https://www.anticcolonial.com/granito-marmol-diferencias/"
+   },
+   {
+    "subtema": "Tendencias en mobiliario",
+    "keywordPrincipal": "mobiliario piedra natural",
+    "searchVolume": null,
+    "titulos": [
+     "Mobiliario con piedra natural: tendencia en mesas y encimeras"
+    ],
+    "angulo": "La piedra natural como protagonista en mesas, lavabos y encimeras de diseño.",
+    "formato": "nuevo",
+    "tipo": "Nuevo",
+    "url": ""
+   }
+  ]
+ },
+ {
+  "estado": "Backlog",
+  "fechaPublicacion": "",
+  "marca": "Butech",
+  "slot": "Contract y espacios de trabajo",
+  "pais": "ES",
+  "mesEstimado": "10 Octubre",
+  "tematica": "Diseño funcional",
+  "tipo": "",
+  "propuestas": [
+   {
+    "subtema": "Contract y espacios de trabajo",
+    "keywordPrincipal": "perfiles decorativos",
+    "searchVolume": null,
+    "titulos": [
+     "Los perfiles decorativos para la cerámica más sofisticada"
+    ],
+    "angulo": "Perfilería técnica para acabados impecables en proyectos contract y oficinas.",
+    "formato": "rework",
+    "tipo": "Migrar",
+    "url": "https://www.porcelanosa.com/trendbook/perfiles-decorativos-butech"
+   },
+   {
+    "subtema": "Contract y espacios de trabajo",
+    "keywordPrincipal": "suelo tecnico oficinas",
+    "searchVolume": null,
+    "titulos": [
+     "Suelo técnico elevado en oficinas: instalaciones registrables y diseño contract"
+    ],
+    "angulo": "El suelo técnico elevado Butech para espacios de trabajo flexibles con cableado oculto.",
+    "formato": "nuevo",
+    "tipo": "Nuevo",
+    "url": ""
+   }
+  ]
+ },
+ {
+  "estado": "Backlog",
+  "fechaPublicacion": "",
+  "marca": "Ecommerce",
+  "slot": "Cocinas eficientes y conectadas",
+  "pais": "UK",
+  "mesEstimado": "10 Octubre",
+  "tematica": "Diseño funcional",
+  "tipo": "",
+  "propuestas": [
+   {
+    "subtema": "Cocinas eficientes y conectadas",
+    "keywordPrincipal": "countertop with stools",
+    "searchVolume": null,
+    "titulos": [
+     "Kitchen Island Stools"
+    ],
+    "angulo": "Functional kitchen islands: choosing stools and worktops for an efficient layout.",
+    "formato": "rework",
+    "tipo": "Importar de Trendbook",
+    "url": "https://www.porcelanosa.com/trendbook/uk/kitchen-island-stools/"
+   },
+   {
+    "subtema": "Cocinas eficientes y conectadas",
+    "keywordPrincipal": "efficient kitchen layout",
+    "searchVolume": null,
+    "titulos": [
+     "Efficient Kitchen Layouts: Smart, Connected Design Ideas"
+    ],
+    "angulo": "Designing a functional, connected kitchen that makes the most of every metre.",
+    "formato": "nuevo",
+    "tipo": "Nuevo",
+    "url": ""
+   }
+  ]
+ },
+ {
+  "estado": "Backlog",
+  "fechaPublicacion": "",
+  "marca": "Gamadecor",
+  "slot": "Cocinas eficientes y conectadas",
+  "pais": "ES",
+  "mesEstimado": "10 Octubre",
+  "tematica": "Diseño funcional",
+  "tipo": "",
+  "propuestas": [
+   {
+    "subtema": "Cocinas eficientes y conectadas",
+    "keywordPrincipal": "planificar una cocina",
+    "searchVolume": null,
+    "titulos": [
+     "Plan de cocina 2026: del boceto a tu casa sin sobresaltos"
+    ],
+    "angulo": "Planificar una cocina eficiente y conectada desde el boceto hasta la instalación.",
+    "formato": "rework",
+    "tipo": "Reedición",
+    "url": "https://www.gama-decor.com/blog/2026/01/plan-de-cocina-2026-del-boceto-a-tu-casa-sin-sobresaltos/"
+   },
+   {
+    "subtema": "Cocinas eficientes y conectadas",
+    "keywordPrincipal": "cocina eficiente conectada",
+    "searchVolume": null,
+    "titulos": [
+     "Cocinas eficientes y conectadas: domótica y diseño funcional"
+    ],
+    "angulo": "Cómo integrar electrodomésticos conectados y ergonomía en una cocina de alta gama.",
+    "formato": "nuevo",
+    "tipo": "Nuevo",
+    "url": ""
+   }
+  ]
+ },
+ {
+  "estado": "Backlog",
+  "fechaPublicacion": "",
+  "marca": "Noken",
+  "slot": "Espacios educativos y culturales",
+  "pais": "ES",
+  "mesEstimado": "10 Octubre",
+  "tematica": "Diseño funcional",
+  "tipo": "",
+  "propuestas": [
+   {
+    "subtema": "Espacios educativos y culturales",
+    "keywordPrincipal": "cómo equipar baños públicos",
+    "searchVolume": null,
+    "titulos": [
+     "Cómo equipar baños públicos"
+    ],
+    "angulo": "Equipar baños de colegios, museos y centros culturales con sanitarios resistentes.",
+    "formato": "rework",
+    "tipo": "Reedición",
+    "url": "https://www.noken.com/es/blog/como-disenar-banos-publicos"
+   },
+   {
+    "subtema": "Espacios educativos y culturales",
+    "keywordPrincipal": "baños accesibles publicos",
+    "searchVolume": null,
+    "titulos": [
+     "Baños accesibles en espacios públicos y educativos: diseño funcional"
+    ],
+    "angulo": "Soluciones de grifería y sanitarios accesibles y duraderos para uso intensivo.",
+    "formato": "nuevo",
+    "tipo": "Nuevo",
+    "url": ""
+   }
+  ]
+ },
+ {
+  "estado": "Backlog",
+  "fechaPublicacion": "",
+  "marca": "Porcelanosa - Trendbook",
+  "slot": "Dormitorios y vestidores",
+  "pais": "ES",
+  "mesEstimado": "10 Octubre",
+  "tematica": "Diseño funcional",
+  "tipo": "",
+  "propuestas": [
+   {
+    "subtema": "Dormitorios y vestidores",
+    "keywordPrincipal": "tendencias dormitorios de matrimonio",
+    "searchVolume": null,
+    "titulos": [
+     "Últimas tendencias en dormitorios de matrimonio"
+    ],
+    "angulo": "Dormitorios funcionales: tendencias en materiales y revestimientos para descansar mejor.",
+    "formato": "rework",
+    "tipo": "Reedición",
+    "url": "https://www.porcelanosa.com/trendbook/tendencias-dormitorios"
+   },
+   {
+    "subtema": "Dormitorios y vestidores",
+    "keywordPrincipal": "vestidores funcionales",
+    "searchVolume": null,
+    "titulos": [
+     "Vestidores funcionales: distribución, materiales y revestimientos"
+    ],
+    "angulo": "Cómo diseñar un vestidor práctico con revestimientos cálidos y buena iluminación.",
+    "formato": "nuevo",
+    "tipo": "Nuevo",
+    "url": ""
+   }
+  ]
+ },
+ {
+  "estado": "Backlog",
+  "fechaPublicacion": "",
+  "marca": "Xtone",
+  "slot": "Fachadas y envolventes arquitectónicas",
+  "pais": "ES",
+  "mesEstimado": "10 Octubre",
+  "tematica": "Diseño funcional",
+  "tipo": "",
+  "propuestas": [
+   {
+    "subtema": "Fachadas y envolventes arquitectónicas",
+    "keywordPrincipal": "tendencias de verano en superficies",
+    "searchVolume": null,
+    "titulos": [
+     "Summer Essentials: tendencias de verano en gran formato"
+    ],
+    "angulo": "El gran formato como piel de fachada: ligereza y continuidad en la envolvente.",
+    "formato": "rework",
+    "tipo": "Reedición",
+    "url": "https://www.xtone-surface.com/blog/Tendencias-de-verano-xtone-porcel%C3%A1nico"
+   },
+   {
+    "subtema": "Fachadas y envolventes arquitectónicas",
+    "keywordPrincipal": "fachada gran formato",
+    "searchVolume": null,
+    "titulos": [
+     "Fachadas ventiladas en gran formato: estética y eficiencia en la envolvente"
+    ],
+    "angulo": "Placas XTONE como revestimiento de fachada ventilada con grandes superficies sin juntas.",
+    "formato": "nuevo",
+    "tipo": "Nuevo",
+    "url": ""
+   }
+  ]
+ },
+ {
+  "estado": "Backlog",
+  "fechaPublicacion": "",
+  "marca": "Antic Colonial",
+  "slot": "Salones",
+  "pais": "ES",
+  "mesEstimado": "11 Noviembre",
+  "tematica": "Confort, eficiencia y bienestar en interiores",
+  "tipo": "",
+  "propuestas": [
+   {
+    "subtema": "Salones",
+    "keywordPrincipal": "suelo continuo en casa",
+    "searchVolume": null,
+    "titulos": [
+     "¿Tener todo el suelo de casa igual? Pros y contras"
+    ],
+    "angulo": "Suelo continuo del salón al resto de la casa: confort visual y sensación de amplitud.",
+    "formato": "rework",
+    "tipo": "Reedición",
+    "url": "https://www.anticcolonial.com/tener-todo-suelo-casa-igual/"
+   },
+   {
+    "subtema": "Salones",
+    "keywordPrincipal": "salon piedra madera natural",
+    "searchVolume": null,
+    "titulos": [
+     "Salones cálidos con piedra y madera natural: confort y bienestar"
+    ],
+    "angulo": "Materiales naturales para un salón acogedor que invita al bienestar en invierno.",
+    "formato": "nuevo",
+    "tipo": "Nuevo",
+    "url": ""
+   }
+  ]
+ },
+ {
+  "estado": "Backlog",
+  "fechaPublicacion": "",
+  "marca": "Butech",
+  "slot": "Aislamiento térmico e impermeabilización",
+  "pais": "ES",
+  "mesEstimado": "11 Noviembre",
+  "tematica": "Confort, eficiencia y bienestar en interiores",
+  "tipo": "",
+  "propuestas": [
+   {
+    "subtema": "Aislamiento térmico e impermeabilización",
+    "keywordPrincipal": "plato de ducha invisible",
+    "searchVolume": null,
+    "titulos": [
+     "Platos de ducha invisibles: Shower Deck de Butech"
+    ],
+    "angulo": "Impermeabilización del baño con el plato de ducha invisible Shower Deck a ras de suelo.",
+    "formato": "rework",
+    "tipo": "Migrar",
+    "url": "https://www.porcelanosa.com/trendbook/platos-de-ducha-invisibles-libertad-elegancia-y-diseno-con-shower-deck-de-butech"
+   },
+   {
+    "subtema": "Aislamiento térmico e impermeabilización",
+    "keywordPrincipal": "aislamiento termico impermeabilizacion",
+    "searchVolume": null,
+    "titulos": [
+     "Aislamiento térmico e impermeabilización: claves para un hogar confortable"
+    ],
+    "angulo": "Sistemas Butech de impermeabilización y fachada ventilada para mejorar el confort térmico.",
+    "formato": "nuevo",
+    "tipo": "Nuevo",
+    "url": ""
+   }
+  ]
+ },
+ {
+  "estado": "Backlog",
+  "fechaPublicacion": "",
+  "marca": "Gamadecor",
+  "slot": "Diseño de espacios gastronómicos",
+  "pais": "ES",
+  "mesEstimado": "11 Noviembre",
+  "tematica": "Confort, eficiencia y bienestar en interiores",
+  "tipo": "",
+  "propuestas": [
+   {
+    "subtema": "Diseño de espacios gastronómicos",
+    "keywordPrincipal": "cocina para dos",
+    "searchVolume": null,
+    "titulos": [
+     "Cocina para dos: diseño que fluye"
+    ],
+    "angulo": "Cocina-comedor que fluye como espacio gastronómico para disfrutar y recibir.",
+    "formato": "rework",
+    "tipo": "Reedición",
+    "url": "https://www.gama-decor.com/blog/2026/03/cocina-para-dos-diseno-que-fluye/"
+   },
+   {
+    "subtema": "Diseño de espacios gastronómicos",
+    "keywordPrincipal": "espacio gastronomico casa",
+    "searchVolume": null,
+    "titulos": [
+     "Espacios gastronómicos en casa: cocinas abiertas para cocinar y compartir"
+    ],
+    "angulo": "Diseñar la cocina como centro gastronómico del hogar con islas y zonas de office.",
+    "formato": "nuevo",
+    "tipo": "Nuevo",
+    "url": ""
+   }
+  ]
+ },
+ {
+  "estado": "Backlog",
+  "fechaPublicacion": "",
+  "marca": "Noken",
+  "slot": "Grifería y equipamiento de baño",
+  "pais": "ES",
+  "mesEstimado": "11 Noviembre",
+  "tematica": "Confort, eficiencia y bienestar en interiores",
+  "tipo": "",
+  "propuestas": [
+   {
+    "subtema": "Grifería y equipamiento de baño",
+    "keywordPrincipal": "medidas de un baño / cómo distribuir un baño",
+    "searchVolume": null,
+    "titulos": [
+     "Cómo distribuir un baño: 5 Planos y Medidas para ganar espacio"
+    ],
+    "angulo": "Distribuir el baño para que la grifería y el equipamiento aporten máximo confort.",
+    "formato": "rework",
+    "tipo": "Reedición",
+    "url": "https://www.noken.com/es/blog/distribucion-planos-banos"
+   },
+   {
+    "subtema": "Grifería y equipamiento de baño",
+    "keywordPrincipal": "griferia eficiente ahorro agua",
+    "searchVolume": null,
+    "titulos": [
+     "Grifería eficiente: cómo ahorrar agua y energía sin perder confort"
+    ],
+    "angulo": "Grifería termostática y de bajo consumo Noken para un baño confortable y sostenible.",
+    "formato": "nuevo",
+    "tipo": "Nuevo",
+    "url": ""
+   }
+  ]
+ },
+ {
+  "estado": "Backlog",
+  "fechaPublicacion": "",
+  "marca": "Porcelanosa - Trendbook",
+  "slot": "Calefacción y confort climático",
+  "pais": "ES",
+  "mesEstimado": "11 Noviembre",
+  "tematica": "Confort, eficiencia y bienestar en interiores",
+  "tipo": "",
+  "propuestas": [
+   {
+    "subtema": "Calefacción y confort climático",
+    "keywordPrincipal": "chimeneas revestimiento",
+    "searchVolume": null,
+    "titulos": [
+     "Revestimientos para chimeneas: ideas para salones modernos y rústicos"
+    ],
+    "angulo": "La chimenea como fuente de calor y foco decorativo del salón en invierno.",
+    "formato": "rework",
+    "tipo": "Reedición",
+    "url": "https://www.porcelanosa.com/trendbook/revestimientos-para-chimeneas-diseno"
+   },
+   {
+    "subtema": "Calefacción y confort climático",
+    "keywordPrincipal": "confort climatico hogar",
+    "searchVolume": null,
+    "titulos": [
+     "Confort climático en casa: revestimientos y soluciones que abrigan"
+    ],
+    "angulo": "Materiales y revestimientos que ayudan a mantener el calor y el confort en interiores.",
+    "formato": "nuevo",
+    "tipo": "Nuevo",
+    "url": ""
+   }
+  ]
+ },
+ {
+  "estado": "Backlog",
+  "fechaPublicacion": "",
+  "marca": "Antic Colonial",
+  "slot": "Decoración navideña",
+  "pais": "ES",
+  "mesEstimado": "12 Diciembre",
+  "tematica": "Navidad y tendencias 2027",
+  "tipo": "",
+  "propuestas": [
+   {
+    "subtema": "Decoración navideña",
+    "keywordPrincipal": "granito marmol diferencias",
+    "searchVolume": null,
+    "titulos": [
+     "Mármol vs. granito: diferencias y cómo elegir"
+    ],
+    "angulo": "Una mesa de Navidad sobre piedra natural: mármol o granito como superficie protagonista.",
+    "formato": "rework",
+    "tipo": "Reedición",
+    "url": "https://www.anticcolonial.com/granito-marmol-diferencias/"
+   },
+   {
+    "subtema": "Decoración navideña",
+    "keywordPrincipal": "mesa navidad piedra natural",
+    "searchVolume": null,
+    "titulos": [
+     "Mesa de Navidad con piedra natural: mármol, travertino y mosaico"
+    ],
+    "angulo": "Decorar la mesa y el comedor navideño con materiales naturales cálidos y atemporales.",
+    "formato": "nuevo",
+    "tipo": "Nuevo",
+    "url": ""
+   }
+  ]
+ },
+ {
+  "estado": "Backlog",
+  "fechaPublicacion": "",
+  "marca": "Butech",
+  "slot": "Tendencias de diseño para el próximo año",
+  "pais": "ES",
+  "mesEstimado": "12 Diciembre",
+  "tematica": "Navidad y tendencias 2027",
+  "tipo": "",
+  "propuestas": [
+   {
+    "subtema": "Tendencias de diseño para el próximo año",
+    "keywordPrincipal": "plato de ducha invisible",
+    "searchVolume": null,
+    "titulos": [
+     "Novedades en duchas de obra y construcción industrializada en Butech"
+    ],
+    "angulo": "Las novedades en duchas de obra y construcción industrializada que marcarán 2027.",
+    "formato": "rework",
+    "tipo": "Migrar",
+    "url": "https://www.porcelanosa.com/trendbook/novedades-butech-muestra-internacional"
+   },
+   {
+    "subtema": "Tendencias de diseño para el próximo año",
+    "keywordPrincipal": "tendencias construccion 2027",
+    "searchVolume": null,
+    "titulos": [
+     "Tendencias en construcción 2027: sistemas técnicos y soluciones industrializadas"
+    ],
+    "angulo": "Hacia dónde van los sistemas constructivos: industrialización, suelo técnico y fachadas.",
+    "formato": "nuevo",
+    "tipo": "Nuevo",
+    "url": ""
+   }
+  ]
+ },
+ {
+  "estado": "Backlog",
+  "fechaPublicacion": "",
+  "marca": "Noken",
+  "slot": "Tendencias de diseño para el próximo año",
+  "pais": "ES",
+  "mesEstimado": "12 Diciembre",
+  "tematica": "Navidad y tendencias 2027",
+  "tipo": "",
+  "propuestas": [
+   {
+    "subtema": "Tendencias de diseño para el próximo año",
+    "keywordPrincipal": "ducha empotrada vs a vista",
+    "searchVolume": null,
+    "titulos": [
+     "Ducha empotrada vs. a vista: ventajas e inconvenientes"
+    ],
+    "angulo": "Las tendencias de ducha que veremos en los baños del próximo año.",
+    "formato": "rework",
+    "tipo": "Reedición",
+    "url": "https://www.noken.com/es/blog/ducha-empotrada-elementos-externos-ventajas"
+   },
+   {
+    "subtema": "Tendencias de diseño para el próximo año",
+    "keywordPrincipal": "tendencias baños 2027",
+    "searchVolume": null,
+    "titulos": [
+     "Tendencias en baños 2027: grifería, color y diseño que vienen"
+    ],
+    "angulo": "Lo que marcará el diseño de baños en 2027: grifería de color, formas orgánicas y sostenibilidad.",
+    "formato": "nuevo",
+    "tipo": "Nuevo",
+    "url": ""
+   }
+  ]
+ },
+ {
+  "estado": "Backlog",
+  "fechaPublicacion": "",
+  "marca": "Porcelanosa - Trendbook",
+  "slot": "Decoración navideña",
+  "pais": "ES",
+  "mesEstimado": "12 Diciembre",
+  "tematica": "Navidad y tendencias 2027",
+  "tipo": "",
+  "propuestas": [
+   {
+    "subtema": "Decoración navideña",
+    "keywordPrincipal": "marmol blanco",
+    "searchVolume": null,
+    "titulos": [
+     "Mármol blanco: tipos, usos en baño y cocina y cómo limpiarlo"
+    ],
+    "angulo": "Mesas de Navidad sobre encimera de mármol blanco: elegancia para las fiestas.",
+    "formato": "rework",
+    "tipo": "Reedición",
+    "url": "https://www.porcelanosa.com/trendbook/marmol-blanco"
+   },
+   {
+    "subtema": "Decoración navideña",
+    "keywordPrincipal": "decoracion navideña",
+    "searchVolume": null,
+    "titulos": [
+     "Decoración navideña con cerámica y mármol: mesas y detalles con estilo"
+    ],
+    "angulo": "Ideas para vestir mesas y rincones de Navidad con cerámica, mármol y piedra.",
+    "formato": "nuevo",
+    "tipo": "Nuevo",
+    "url": ""
+   }
+  ]
+ }
+]

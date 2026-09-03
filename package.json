@@ -1,0 +1,31 @@
+{
+  "name": "seo-dashboard-v2",
+  "private": true,
+  "packageManager": "pnpm@11.10.0",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "build": "turbo build",
+    "dev": "turbo dev",
+    "dev:viewer": "pnpm --filter @seo/viewer dev",
+    "dev:workbench": "pnpm --filter @seo/workbench dev",
+    "lint": "turbo lint",
+    "test": "turbo test",
+    "typecheck": "turbo typecheck",
+    "format": "prettier --write .",
+    "status": "node scripts/project-status.mjs",
+    "continuity:check": "node scripts/continuity-check.mjs",
+    "db:generate": "pnpm --filter @seo/db generate",
+    "db:migrate": "pnpm --filter @seo/db migrate",
+    "editorial:import": "pnpm --filter @seo/editorial import:v1",
+    "screenshots": "node scripts/capture-screenshots.mjs"
+  },
+  "devDependencies": {
+    "@types/node": "^24.10.1",
+    "prettier": "^3.6.2",
+    "turbo": "^2.10.12",
+    "typescript": "6.0.3",
+    "vitest": "^4.1.11"
+  }
+}

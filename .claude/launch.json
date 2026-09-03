@@ -1,0 +1,7 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    { "name": "viewer", "runtimeExecutable": "pnpm", "runtimeArgs": ["--filter", "@seo/viewer", "dev"], "port": 3000 },
+    { "name": "workbench", "runtimeExecutable": "pnpm", "runtimeArgs": ["--filter", "@seo/workbench", "dev"], "port": 3001 }
+  ]
+}

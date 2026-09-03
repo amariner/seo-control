@@ -1,0 +1,45 @@
+{
+  "schemaVersion": "editorial.v1",
+  "importedAt": "2026-09-02T14:33:01.784Z",
+  "inputFingerprint": "d7d3b5fc8c8ee1cf9c9d9bf364f99ad514231c82caf536d2b93e0e88c12206d0",
+  "origin": "SEO Dashboard V1 · src/data/plan-editorial",
+  "note": "Copias literales de los snapshots V1. Solo procedencia: nunca se sirven al navegador ni se editan.",
+  "files": [
+    {
+      "key": "calendario-2026",
+      "fileName": "calendario-2026.json",
+      "sha256": "7255c673bdaee766a6c74d302f902969b4b226c250cf1e966ca31e24bcbb0187",
+      "byteLength": 6959,
+      "expectedCount": 39,
+      "importedCount": 39,
+      "status": "ok"
+    },
+    {
+      "key": "conjunto-backlog",
+      "fileName": "conjunto-backlog.json",
+      "sha256": "4b1edd3c9cf061630901d26c512a39e0227a67556a64d509168ea18cb887c330",
+      "byteLength": 351895,
+      "expectedCount": 115,
+      "importedCount": 115,
+      "status": "ok"
+    },
+    {
+      "key": "conjunto",
+      "fileName": "conjunto.json",
+      "sha256": "673b29e593ff6f6a6a0a19f1b96111d971f21e824c0e2cc02130b3596213dfab",
+      "byteLength": 364534,
+      "expectedCount": 146,
+      "importedCount": 146,
+      "status": "ok"
+    },
+    {
+      "key": "conjunto-propuestas",
+      "fileName": "conjunto-propuestas.json",
+      "sha256": "3c627a31d5c979b6733275f0cda7f14b0cb14dc65c03eff82191d68a73bd256c",
+      "byteLength": 37859,
+      "expectedCount": 34,
+      "importedCount": 34,
+      "status": "ok"
+    }
+  ]
+}

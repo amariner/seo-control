@@ -1,0 +1,176 @@
+{
+  "schemaVersion": "editorial.v1",
+  "importedAt": "2026-09-02T14:33:01.784Z",
+  "inputFingerprint": "d7d3b5fc8c8ee1cf9c9d9bf364f99ad514231c82caf536d2b93e0e88c12206d0",
+  "archives": [
+    {
+      "key": "calendario-2026",
+      "fileName": "calendario-2026.json",
+      "sha256": "7255c673bdaee766a6c74d302f902969b4b226c250cf1e966ca31e24bcbb0187",
+      "byteLength": 6959,
+      "schema": "v1.calendario{months[].events[],themes[]}",
+      "importedAt": "2026-09-02T14:33:01.784Z",
+      "expectedCount": 39,
+      "importedCount": 39,
+      "rejectedCount": 0,
+      "status": "ok"
+    },
+    {
+      "key": "conjunto-backlog",
+      "fileName": "conjunto-backlog.json",
+      "sha256": "4b1edd3c9cf061630901d26c512a39e0227a67556a64d509168ea18cb887c330",
+      "byteLength": 351895,
+      "schema": "v1.planEditorialRow[13]",
+      "importedAt": "2026-09-02T14:33:01.784Z",
+      "expectedCount": 115,
+      "importedCount": 115,
+      "rejectedCount": 0,
+      "status": "ok"
+    },
+    {
+      "key": "conjunto",
+      "fileName": "conjunto.json",
+      "sha256": "673b29e593ff6f6a6a0a19f1b96111d971f21e824c0e2cc02130b3596213dfab",
+      "byteLength": 364534,
+      "schema": "v1.planEditorialRow[13]",
+      "importedAt": "2026-09-02T14:33:01.784Z",
+      "expectedCount": 146,
+      "importedCount": 146,
+      "rejectedCount": 0,
+      "status": "ok"
+    },
+    {
+      "key": "conjunto-propuestas",
+      "fileName": "conjunto-propuestas.json",
+      "sha256": "3c627a31d5c979b6733275f0cda7f14b0cb14dc65c03eff82191d68a73bd256c",
+      "byteLength": 37859,
+      "schema": "v1.planEditorialSlot{propuestas[]}",
+      "importedAt": "2026-09-02T14:33:01.784Z",
+      "expectedCount": 34,
+      "importedCount": 34,
+      "rejectedCount": 0,
+      "status": "ok"
+    }
+  ],
+  "rejections": [],
+  "warnings": [
+    "El literal \"slot\" no es único: 28 valores para 34 huecos. Se usan IDs derivados, nunca el literal.",
+    "Marcas sin evento en el calendario: krion."
+  ],
+  "brandAliases": [
+    {
+      "literal": "Antic Colonial",
+      "slug": "antic-colonial",
+      "line": null,
+      "occurrences": 26
+    },
+    {
+      "literal": "Butech",
+      "slug": "butech",
+      "line": null,
+      "occurrences": 48
+    },
+    {
+      "literal": "Ecommerce",
+      "slug": "ecommerce",
+      "line": null,
+      "occurrences": 38
+    },
+    {
+      "literal": "Gamadecor",
+      "slug": "gamadecor",
+      "line": null,
+      "occurrences": 26
+    },
+    {
+      "literal": "Noken",
+      "slug": "noken",
+      "line": null,
+      "occurrences": 41
+    },
+    {
+      "literal": "Porcelanosa",
+      "slug": "porcelanosa",
+      "line": null,
+      "occurrences": 11
+    },
+    {
+      "literal": "Porcelanosa - Categorías",
+      "slug": "porcelanosa",
+      "line": "Categorías",
+      "occurrences": 45
+    },
+    {
+      "literal": "Porcelanosa - Trendbook",
+      "slug": "porcelanosa",
+      "line": "Trendbook",
+      "occurrences": 73
+    },
+    {
+      "literal": "Xtone",
+      "slug": "xtone",
+      "line": null,
+      "occurrences": 26
+    }
+  ],
+  "brandsWithoutEvents": [
+    "krion"
+  ],
+  "emptyFields": {
+    "conjunto-backlog": {
+      "estado": 0,
+      "fechaRedaccion": 95,
+      "fechaPublicacion": 96,
+      "tipo": 0,
+      "marca": 0,
+      "pais": 0,
+      "mesEstimado": 0,
+      "tematica": 20,
+      "subtematica": 20,
+      "keywordPrincipal": 0,
+      "titulo": 0,
+      "url": 75,
+      "notas": 0
+    },
+    "conjunto": {
+      "estado": 0,
+      "fechaRedaccion": 144,
+      "fechaPublicacion": 108,
+      "tipo": 0,
+      "marca": 0,
+      "pais": 0,
+      "mesEstimado": 0,
+      "tematica": 0,
+      "subtematica": 0,
+      "keywordPrincipal": 0,
+      "titulo": 0,
+      "url": 48,
+      "notas": 0
+    }
+  },
+  "duplicates": {
+    "conjunto-backlog": {
+      "keywords": 2,
+      "titles": 1,
+      "urls": 1
+    },
+    "conjunto": {
+      "keywords": 4,
+      "titles": 0,
+      "urls": 18
+    }
+  },
+  "briefs": {
+    "conjunto-backlog": {
+      "count": 115,
+      "totalChars": 288635,
+      "totalNormalizedChars": 288635
+    },
+    "conjunto": {
+      "count": 146,
+      "totalChars": 281433,
+      "totalNormalizedChars": 281432
+    }
+  },
+  "identityCollisions": 0
+}

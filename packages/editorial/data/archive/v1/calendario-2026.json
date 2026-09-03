@@ -1,0 +1,385 @@
+{
+ "months": [
+  {
+   "year": 2026,
+   "month": 7,
+   "events": [
+    {
+     "type": "POST",
+     "brand": "Ecommerce",
+     "num": "",
+     "label": "POST ECOMERCE",
+     "day": 2
+    },
+    {
+     "type": "POST",
+     "brand": "Xtone",
+     "num": "",
+     "label": "POST XTONE",
+     "day": 7
+    },
+    {
+     "type": "POST",
+     "brand": "Porcelanosa",
+     "num": "1",
+     "label": "POST PORCE 1",
+     "day": 9
+    },
+    {
+     "type": "POST",
+     "brand": "Noken",
+     "num": "",
+     "label": "POST NOKEN",
+     "day": 14
+    },
+    {
+     "type": "POST",
+     "brand": "Gamadecor",
+     "num": "",
+     "label": "POST GD",
+     "day": 21
+    },
+    {
+     "type": "POST",
+     "brand": "Porcelanosa",
+     "num": "2",
+     "label": "POST PORCE 2",
+     "day": 23
+    },
+    {
+     "type": "POST",
+     "brand": "Butech",
+     "num": "",
+     "label": "POST BUTECH",
+     "day": 28
+    }
+   ]
+  },
+  {
+   "year": 2026,
+   "month": 8,
+   "events": [
+    {
+     "type": "POST",
+     "brand": "Xtone",
+     "num": "",
+     "label": "POST XTONE",
+     "day": 11
+    },
+    {
+     "type": "POST",
+     "brand": "Porcelanosa",
+     "num": "1",
+     "label": "POST PORCE 1",
+     "day": 13
+    },
+    {
+     "type": "POST",
+     "brand": "Noken",
+     "num": "",
+     "label": "POST NOKEN",
+     "day": 18
+    },
+    {
+     "type": "POST",
+     "brand": "Gamadecor",
+     "num": "",
+     "label": "POST GD",
+     "day": 25
+    },
+    {
+     "type": "POST",
+     "brand": "Porcelanosa",
+     "num": "2",
+     "label": "POST PORCE 2",
+     "day": 26
+    },
+    {
+     "type": "POST",
+     "brand": "Butech",
+     "num": "",
+     "label": "POST BUTECH",
+     "day": 27
+    }
+   ]
+  },
+  {
+   "year": 2026,
+   "month": 9,
+   "events": [
+    {
+     "type": "POST",
+     "brand": "Ecommerce",
+     "num": "",
+     "label": "POST ECOMERCE",
+     "day": 3
+    },
+    {
+     "type": "POST",
+     "brand": "Xtone",
+     "num": "",
+     "label": "POST XTONE",
+     "day": 8
+    },
+    {
+     "type": "POST",
+     "brand": "Porcelanosa",
+     "num": "1",
+     "label": "POST PORCE 1",
+     "day": 10
+    },
+    {
+     "type": "POST",
+     "brand": "Noken",
+     "num": "",
+     "label": "POST NOKEN",
+     "day": 15
+    },
+    {
+     "type": "POST",
+     "brand": "Gamadecor",
+     "num": "",
+     "label": "POST GD",
+     "day": 22
+    },
+    {
+     "type": "POST",
+     "brand": "Porcelanosa",
+     "num": "2",
+     "label": "POST PORCE 2",
+     "day": 24
+    },
+    {
+     "type": "POST",
+     "brand": "Butech",
+     "num": "",
+     "label": "POST BUTECH",
+     "day": 28
+    },
+    {
+     "type": "POST",
+     "brand": "Antic Colonial",
+     "num": "",
+     "label": "POST AC",
+     "day": 30
+    }
+   ]
+  },
+  {
+   "year": 2026,
+   "month": 10,
+   "events": [
+    {
+     "type": "POST",
+     "brand": "Xtone",
+     "num": "",
+     "label": "POST XTONE",
+     "day": 6
+    },
+    {
+     "type": "POST",
+     "brand": "Porcelanosa",
+     "num": "1",
+     "label": "POST PORCE 1",
+     "day": 8
+    },
+    {
+     "type": "POST",
+     "brand": "Noken",
+     "num": "",
+     "label": "POST NOKEN",
+     "day": 13
+    },
+    {
+     "type": "POST",
+     "brand": "Ecommerce",
+     "num": "",
+     "label": "POST ECOMERCE",
+     "day": 15
+    },
+    {
+     "type": "POST",
+     "brand": "Gamadecor",
+     "num": "",
+     "label": "POST GD",
+     "day": 20
+    },
+    {
+     "type": "POST",
+     "brand": "Porcelanosa",
+     "num": "2",
+     "label": "POST PORCE 2",
+     "day": 22
+    },
+    {
+     "type": "POST",
+     "brand": "Butech",
+     "num": "",
+     "label": "POST BUTECH",
+     "day": 27
+    },
+    {
+     "type": "POST",
+     "brand": "Antic Colonial",
+     "num": "",
+     "label": "POST AC",
+     "day": 29
+    }
+   ]
+  },
+  {
+   "year": 2026,
+   "month": 11,
+   "events": [
+    {
+     "type": "POST",
+     "brand": "Noken",
+     "num": "",
+     "label": "POST NOKEN",
+     "day": 10
+    },
+    {
+     "type": "POST",
+     "brand": "Porcelanosa",
+     "num": "1",
+     "label": "POST PORCE 1",
+     "day": 12
+    },
+    {
+     "type": "POST",
+     "brand": "Gamadecor",
+     "num": "",
+     "label": "POST GD",
+     "day": 17
+    },
+    {
+     "type": "POST",
+     "brand": "Butech",
+     "num": "",
+     "label": "POST BUTECH",
+     "day": 24
+    },
+    {
+     "type": "POST",
+     "brand": "Antic Colonial",
+     "num": "",
+     "label": "POST AC",
+     "day": 25
+    },
+    {
+     "type": "POST",
+     "brand": "Porcelanosa",
+     "num": "2",
+     "label": "POST PORCE 2",
+     "day": 26
+    }
+   ]
+  },
+  {
+   "year": 2026,
+   "month": 12,
+   "events": [
+    {
+     "type": "POST",
+     "brand": "Noken",
+     "num": "",
+     "label": "POST NOKEN",
+     "day": 8
+    },
+    {
+     "type": "POST",
+     "brand": "Porcelanosa",
+     "num": "2",
+     "label": "POST PORCE 2",
+     "day": 17
+    },
+    {
+     "type": "POST",
+     "brand": "Butech",
+     "num": "",
+     "label": "POST BUTECH",
+     "day": 21
+    },
+    {
+     "type": "POST",
+     "brand": "Antic Colonial",
+     "num": "",
+     "label": "POST AC",
+     "day": 28
+    }
+   ]
+  }
+ ],
+ "themes": [
+  {
+   "month": 7,
+   "mesNombre": "Julio",
+   "tematica": "Inspiración estival - 1",
+   "subtemas": [
+    "Cocinas y cenadores exteriores",
+    "Cerramientos para ampliar espacios en exterior",
+    "Baños wellness",
+    "Tendencias en diseño hotelero"
+   ]
+  },
+  {
+   "month": 8,
+   "mesNombre": "Agosto",
+   "tematica": "Inspiración estival - 2",
+   "subtemas": [
+    "Mobiliario en segundas residencias",
+    "Diseño mediterráneo",
+    "Recopilación de proyectos singulares (casas con piscinas)",
+    "Materiales resistentes para exterior",
+    "Espacios flexibles para teletrabajo en verano"
+   ]
+  },
+  {
+   "month": 9,
+   "mesNombre": "Septiembre",
+   "tematica": "Rehabilitación y reformas - La renovación del hogar",
+   "subtemas": [
+    "Reformas integrales",
+    "Tendencias en baños",
+    "Pavimentos y revestimientos",
+    "Soluciones para ganar espacio",
+    "Organización y orden en el hogar",
+    "Equipamiento de cocina"
+   ]
+  },
+  {
+   "month": 10,
+   "mesNombre": "Octubre",
+   "tematica": "Diseño funcional",
+   "subtemas": [
+    "Cocinas eficientes y conectadas",
+    "Tendencias de diseño en espacios educativos y culturales",
+    "Fachadas y envolventes arquitectónicas",
+    "Tendencias en mobiliario",
+    "Dormitorios y vestidores",
+    "Contract y espacios de trabajo"
+   ]
+  },
+  {
+   "month": 11,
+   "mesNombre": "Noviembre",
+   "tematica": "Confort, eficiencia y bienestar en interiores",
+   "subtemas": [
+    "Aislamiento térmico e impermeabilización",
+    "Salones",
+    "Calefacción y confort climático",
+    "Grifería y equipamiento de baño",
+    "Diseño de espacios gastronómicos"
+   ]
+  },
+  {
+   "month": 12,
+   "mesNombre": "Diciembre",
+   "tematica": "Navidad y tendencias 2027",
+   "subtemas": [
+    "Tendencias de diseño para el próximo año",
+    "Contenidos específicos de Navidad y decoración navideña"
+   ]
+  }
+ ]
+}

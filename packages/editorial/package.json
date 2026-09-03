@@ -1,0 +1,30 @@
+{
+  "name": "@seo/editorial",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "sideEffects": false,
+  "exports": {
+    ".": "./src/index.ts",
+    "./dataset": "./src/dataset.ts",
+    "./normalize": "./src/normalize.ts",
+    "./curation-store": "./src/curation-store.ts"
+  },
+  "scripts": {
+    "build": "tsc --noEmit",
+    "lint": "tsc --noEmit",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "import:v1": "tsx scripts/import-v1.ts"
+  },
+  "dependencies": {
+    "@seo/contracts": "workspace:*",
+    "zod": "^4.5.4"
+  },
+  "devDependencies": {
+    "@types/node": "^24.10.1",
+    "tsx": "^4.23.13",
+    "typescript": "6.0.3",
+    "vitest": "^4.1.11"
+  }
+}

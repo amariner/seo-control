@@ -1,0 +1,91 @@
+{
+  "schemaVersion": 1,
+  "project": "SEO Dashboard V2",
+  "updatedAt": "2026-09-03T08:55:00+02:00",
+  "objective": "Construir la plataforma SEO más útil y desarrollada del sector para convertir grandes volúmenes de datos en decisiones trazables, responsables y resultados medibles.",
+  "currentPhase": {
+    "id": "P1",
+    "name": "Sistema de diseño y calendario editorial general",
+    "status": "active",
+    "progressPercent": 84
+  },
+  "lastCompletedPhase": {
+    "id": "P0",
+    "name": "Fundación ejecutable y protocolo de continuidad"
+  },
+  "nextAction": "Completar P1.4 y P1.5: vista recíproca de links desde insight/query/página/informe (hoy solo se ve y edita desde la pieza), primitivas DecisionThread, InsightStack y ChartFrame en @seo/ui, pruebas automatizadas de permisos (visor sin escritura, workbench con escritura) y ejecutar Axe como herramienta externa además del script propio.",
+  "pilot": [
+    "porcelanosa",
+    "noken"
+  ],
+  "portfolio": [
+    "porcelanosa",
+    "noken",
+    "ecommerce",
+    "butech",
+    "antic-colonial",
+    "krion",
+    "xtone",
+    "gamadecor"
+  ],
+  "invariants": [
+    "El visor es de solo lectura y el workbench concentra las escrituras.",
+    "El navegador nunca llama directamente a proveedores SEO.",
+    "Cada conclusión mantiene evidencia, confianza, corte y cobertura.",
+    "El calendario editorial general conserva las ocho marcas desde P1.",
+    "La marca sigue siendo SEO Intelligence/Porcelanosa; Glosa es solo referencia visual.",
+    "No se afirma que un conector sintético sea una integración real."
+  ],
+  "blockers": [
+    {
+      "id": "local-disk",
+      "scope": "crawls",
+      "status": "active",
+      "detail": "El preflight del workbench mide aproximadamente 6,2 GiB libres (antes 7,9). Se exigen 50 GiB para habilitar crawls de hasta 50.000 URLs; el margen se sigue reduciendo."
+    },
+    {
+      "id": "cloud-credentials",
+      "scope": "phase-2-cloud",
+      "status": "expected",
+      "detail": "GA4, GSC, SEMrush, Entra, Neon y Azure permanecen sin activar hasta disponer de presupuesto y credenciales."
+    },
+    {
+      "id": "git-history",
+      "scope": "continuity",
+      "status": "warning",
+      "detail": "El directorio seo-dasboard-v2 no es todavía un repositorio Git. Los checkpoints persisten entre chats, pero no existe historial, rollback ni base para el flujo de aprobación GitHub hasta inicializar o vincular el repositorio."
+    },
+    {
+      "id": "before-screenshots-narrow",
+      "scope": "design-qa",
+      "status": "accepted",
+      "detail": "Las capturas 'before' de 390 y 375 px se tomaron con Chrome headless, que fuerza un ancho mínimo de ventana de 500 px, por lo que no reflejan el layout anterior. El conjunto 'after' sí es fiable en los cuatro viewports mediante scripts/capture-screenshots.mjs. El estado anterior no se puede volver a capturar."
+    }
+  ],
+  "lastValidation": {
+    "date": "2026-09-03",
+    "continuity": "passed: active phase, roadmap and required checkpoint files",
+    "typecheck": "passed: 8 packages",
+    "tests": "passed: 60 tests (33 editorial incl. 11 curation, 14 viewer, 13 contracts+local-data+sync)",
+    "productionBuild": "passed: viewer + workbench (incluye la nueva ruta /editorial del workbench)",
+    "browserQa": "passed: workbench /editorial (piezas, propuestas, eventos, crear pieza) verificado en navegador con dos procesos reales (workbench :3001 escribe, visor :3000 lee); ciclo completo pieza->curación->visor confirmado con el JSON de curación en disco; datos de prueba limpiados al cerrar",
+    "apiQa": "passed: rutas editoriales 200 sin cambios; /api/v1/editorial/pieces/[id] confirmado sirviendo campos curados (status, owner, month.yearSource) fusionados con la procedencia V1",
+    "accessibilityQa": "partial: workbench /editorial comprobado sin desbordamiento horizontal a 375 px (script ad hoc, no el barrido completo de las nueve rutas); no se repitió Axe ni el barrido completo de contraste/foco de la sesión anterior porque esas páginas no cambiaron"
+  },
+  "editorialImport": {
+    "schemaVersion": "editorial.v1",
+    "mode": "v1-import",
+    "inputFingerprint": "d7d3b5fc8c8ee1cf9c9d9bf364f99ad514231c82caf536d2b93e0e88c12206d0",
+    "counts": {
+      "calendarEvents": 39,
+      "backlog": 115,
+      "plan": 146,
+      "slots": 34,
+      "proposals": 68,
+      "themeBlocks": 6
+    },
+    "rejections": 0,
+    "identityCollisions": 0,
+    "note": "Los cuatro snapshots V1 se archivan con hash y se mantienen como fuentes separadas (D-006). La importación es idempotente por huella de entradas."
+  }
+}
