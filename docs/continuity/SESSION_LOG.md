@@ -85,3 +85,19 @@
   automatizadas de permisos (hoy la propiedad "visor de solo lectura" es
   estructural, no verificada por test) y ejecución de Axe como herramienta
   externa.
+
+## 2026-09-03 · Repositorio Git inicializado y publicado en GitHub
+
+- A petición del usuario, se inicializó `.git` (no existía hasta ahora) y se
+  vinculó a `https://github.com/amariner/seo-control.git` (D-013).
+- Antes de subir nada se auditó el árbol de trabajo buscando secretos y
+  ficheros `.env*` reales: solo apareció `apps/viewer/.env.local` con un
+  `AUTH_SECRET` de desarrollo placeholder, ya cubierto por `.gitignore`. Se
+  amplió `.gitignore` (`.env.*` con excepción de `.env.example`, más
+  `.pnpm-store`).
+- Primer commit (`fd734fd`, 213 ficheros, ~7,6 MB) con el estado íntegro del
+  repositorio y empujado a `main`. El dataset editorial importado/curado y las
+  capturas de diseño se subieron deliberadamente por ser contenido de
+  producto, no secretos.
+- Se retiró el bloqueo `git-history` de `PROJECT_STATE.json` y se añadió el
+  campo `repository`.

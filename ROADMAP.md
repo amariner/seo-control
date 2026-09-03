@@ -428,7 +428,7 @@ acción, sin automatizar decisiones antes de poder auditarlas.
 | Bloqueo en CI | Periodo en modo aviso con tasa de falsos positivos aceptable. |
 | Automatización web | Preview, aprobación, rollback y atribución experimental funcionando. |
 | Retirada V1 | Paridad firmada, convivencia de tres meses y credenciales inventariadas. |
-| Aprobación/versionado | Inicializar o vincular Git antes de depender de commits, previews y GitHub Environments. |
+| Aprobación/versionado | ~~Inicializar o vincular Git~~ Cruzada 2026-09-03 (D-013): repositorio en `https://github.com/amariner/seo-control`. Falta CI, previews y GitHub Environments (P7). |
 
 ## Métricas de producto
 

@@ -3,6 +3,7 @@
   "project": "SEO Dashboard V2",
   "updatedAt": "2026-09-03T08:55:00+02:00",
   "objective": "Construir la plataforma SEO más útil y desarrollada del sector para convertir grandes volúmenes de datos en decisiones trazables, responsables y resultados medibles.",
+  "repository": "https://github.com/amariner/seo-control",
   "currentPhase": {
     "id": "P1",
     "name": "Sistema de diseño y calendario editorial general",
@@ -48,12 +49,6 @@
       "scope": "phase-2-cloud",
       "status": "expected",
       "detail": "GA4, GSC, SEMrush, Entra, Neon y Azure permanecen sin activar hasta disponer de presupuesto y credenciales."
-    },
-    {
-      "id": "git-history",
-      "scope": "continuity",
-      "status": "warning",
-      "detail": "El directorio seo-dasboard-v2 no es todavía un repositorio Git. Los checkpoints persisten entre chats, pero no existe historial, rollback ni base para el flujo de aprobación GitHub hasta inicializar o vincular el repositorio."
     },
     {
       "id": "before-screenshots-narrow",

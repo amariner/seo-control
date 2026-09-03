@@ -153,3 +153,30 @@ No se reescriben decisiones antiguas. Si una cambia, se añade una nueva entrada
   refleja el cambio en la siguiente petición sin reiniciar). `pnpm editorial:import`
   sigue devolviendo "Sin cambios" tras curar, confirmando que ambos ficheros
   son independientes.
+
+## D-013 · Repositorio Git inicializado y vinculado a GitHub
+
+- Fecha: 2026-09-03.
+- Estado: vigente.
+- Decisión: se inicializó `.git` en la raíz del monorepo y se vinculó como
+  remoto `origin` a `https://github.com/amariner/seo-control.git`. Primer
+  commit (`fd734fd`) con el estado íntegro del repositorio (P0 completa, P1 al
+  84%) empujado a `main`.
+- Motivo: cruza la puerta de decisión "Aprobación/versionado" de `ROADMAP.md`,
+  bloqueo pendiente desde P0. Da rollback, historial y base para previews y
+  GitHub Environments cuando lleguen (P7).
+- Verificación de seguridad antes de subir (petición explícita del usuario):
+  sin `.git` previo, se auditó el árbol de trabajo completo buscando secretos
+  (patrones de claves AWS/OpenAI/GitHub/Google, `.pem`/`.key`, credenciales) y
+  ficheros `.env*` reales — solo existía `apps/viewer/.env.local` con un
+  `AUTH_SECRET` de desarrollo placeholder y el resto de variables vacías, ya
+  cubierto por `.gitignore`. `.env.example` solo contiene plantillas vacías.
+  Se amplió `.gitignore` de `.env`/`.env.local` a `.env.*` con excepción
+  explícita de `.env.example`, y se añadió `.pnpm-store`. El dataset editorial
+  importado/curado (`packages/editorial/data/**`) y las capturas de
+  `docs/design/screenshots` se subieron deliberadamente: son contenido de
+  producto (briefs de marketing, sin PII ni credenciales), no secretos.
+- Consecuencia: `node_modules`, `.next`, `.turbo` y `.pnpm-store` (varios GB)
+  quedan fuera del repositorio por diseño; cualquier sesión que clone debe
+  ejecutar `pnpm install` antes de `pnpm dev`/`pnpm build`. El bloqueo
+  `git-history` se retira de `docs/continuity/PROJECT_STATE.json`.

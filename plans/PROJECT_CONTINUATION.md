@@ -119,15 +119,19 @@ ha pasado el barrido completo de contraste/foco ni Axe.
   envío del formulario: causó el fallo real de esta sesión (año/mes se fijaban como
   curados en cualquier guardado). Usa `placeholder` o una pista en la etiqueta.
 
-## Advertencia de continuidad
+## Control de versiones
 
-El directorio todavía no contiene `.git`. Los documentos permiten reanudar entre chats,
-pero no hay historial ni rollback hasta inicializar o vincular un repositorio.
+El repositorio vive en `https://github.com/amariner/seo-control` (D-013, rama
+`main`). Antes de subir nada se audita el árbol de trabajo en busca de secretos;
+`.gitignore` excluye `node_modules`, `.next`, `.turbo`, `.pnpm-store` y
+cualquier `.env*` real (solo `.env.example` se versiona). Revisa `git status` y
+el diff antes de cada commit; no está configurado ningún hook de CI todavía.
 
 ## Comando de reanudación
 
 ```bash
 pnpm status
+git status
 ```
 
 Después se trabaja la primera tarea pendiente de `P1.4`/`P1.5` de la lista de arriba.
