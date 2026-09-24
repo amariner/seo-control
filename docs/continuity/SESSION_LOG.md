@@ -862,3 +862,12 @@
 - Ajuste: gráfico de evolución alineado con el interruptor.
 - Ajuste: desplegable de métrica con logo de Google e interruptor de iconos.
 - Ajuste: leyenda de evolución junto al selector.
+
+## 2026-09-24 · Fusión y despliegue de D-044/045/046
+
+- `feat/shadcn-dashboard` fusionada en `main` por avance rápido (b415ede) y
+  subida a GitHub; la rama también queda en el remoto.
+- Producción desplegada con `vercel deploy --prod` (fra1). Comprobado en
+  https://seo-dashboard-viewer.vercel.app: portada, ficha XTONE y tiempo real.
+- Recordatorio: el visor sigue siendo público (D-035) y ahora enseña también
+  tráfico directo inflado en XTONE (bots probables): revisar con el equipo.
