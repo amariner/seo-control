@@ -1,23 +1,58 @@
 {
   "$schema": "https://turbo.build/schema.json",
+  "globalPassThroughEnv": [
+    "SEO_DATA_SOURCE",
+    "PUBLIC_ACCESS",
+    "AUTH_SECRET",
+    "AUTH_TRUST_HOST",
+    "AUTH_MICROSOFT_ENTRA_ID_*",
+    "ALLOWED_ENTRA_OBJECT_IDS",
+    "DEV_AUTH_BYPASS",
+    "DATABASE_URL",
+    "SERVICE_TOKEN",
+    "CRON_SECRET",
+    "PUBLISHING_PUBLIC_KEY",
+    "GA4_SERVICE_ACCOUNT_JSON",
+    "GA4_PROPERTY_ID_*",
+    "GSC_SITE_URL_*",
+    "GOOGLE_CLIENT_ID",
+    "GOOGLE_CLIENT_SECRET",
+    "GOOGLE_REFRESH_TOKEN",
+    "SEMRUSH_API_KEY",
+    "EDITORIAL_CURATION_PATH"
+  ],
   "tasks": {
     "build": {
-      "dependsOn": ["^build"],
-      "outputs": [".next/**", "!.next/cache/**", "dist/**"]
+      "dependsOn": [
+        "^build"
+      ],
+      "outputs": [
+        ".next/**",
+        "!.next/cache/**",
+        "dist/**"
+      ]
     },
     "dev": {
       "cache": false,
       "persistent": true
     },
     "lint": {
-      "dependsOn": ["^lint"]
+      "dependsOn": [
+        "^lint"
+      ]
     },
     "typecheck": {
-      "dependsOn": ["^typecheck"]
+      "dependsOn": [
+        "^typecheck"
+      ]
     },
     "test": {
-      "dependsOn": ["^build"],
-      "outputs": ["coverage/**"]
+      "dependsOn": [
+        "^build"
+      ],
+      "outputs": [
+        "coverage/**"
+      ]
     }
   }
 }

@@ -1,5 +1,6 @@
 import { z } from "zod";
 import { intentSchema, marketCodeSchema } from "./schemas";
+import { BRANDS, BRAND_SLUGS } from "./taxonomy";
 
 /**
  * Contrato editorial V2 (P1.2).
@@ -12,27 +13,15 @@ import { intentSchema, marketCodeSchema } from "./schemas";
 
 export const EDITORIAL_SCHEMA_VERSION = "editorial.v1" as const;
 
-export const editorialBrandSlugSchema = z.enum([
-  "porcelanosa",
-  "noken",
-  "ecommerce",
-  "butech",
-  "antic-colonial",
-  "krion",
-  "xtone",
-  "gamadecor",
-]);
+/**
+ * Las ocho marcas del calendario editorial son la taxonomía canónica del grupo
+ * (`BRANDS` en `taxonomy.ts`). Aquí solo se reexpone con el nombre histórico del
+ * contrato editorial para no duplicar la lista (P2.2).
+ */
+export const editorialBrandSlugSchema = z.enum(BRAND_SLUGS);
 
-export const EDITORIAL_BRANDS = [
-  { slug: "porcelanosa", name: "Porcelanosa", code: "PORCE", pilot: true },
-  { slug: "noken", name: "Noken", code: "NOKEN", pilot: true },
-  { slug: "ecommerce", name: "Ecommerce", code: "ECOM", pilot: false },
-  { slug: "butech", name: "Butech", code: "BUTECH", pilot: false },
-  { slug: "antic-colonial", name: "Antic Colonial", code: "AC", pilot: false },
-  { slug: "krion", name: "Krion", code: "KRION", pilot: false },
-  { slug: "xtone", name: "XTONE", code: "XTONE", pilot: false },
-  { slug: "gamadecor", name: "Gamadecor", code: "GD", pilot: false },
-] as const satisfies ReadonlyArray<{ slug: z.infer<typeof editorialBrandSlugSchema>; name: string; code: string; pilot: boolean }>;
+export const EDITORIAL_BRANDS: ReadonlyArray<{ slug: z.infer<typeof editorialBrandSlugSchema>; name: string; code: string; pilot: boolean }> =
+  BRANDS.map(({ slug, name, code, pilot }) => ({ slug, name, code, pilot }));
 
 /** Fuentes V1 preservadas. La clave es estable y aparece en cada registro. */
 export const editorialSourceKeySchema = z.enum(["calendario-2026", "conjunto-backlog", "conjunto", "conjunto-propuestas"]);

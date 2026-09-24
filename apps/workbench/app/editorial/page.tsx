@@ -16,7 +16,9 @@ import {
   type EditorialPiece,
   type EditorialPieceCurationRevision,
 } from "@seo/contracts";
-import { DataPanel, EmptyState, Notice, StatusBadge } from "@seo/ui";
+import { DataPanel, Notice, StatusBadge } from "@seo/ui";
+import { ReportDataTable, type ReportDataRow } from "@seo/ui/data-table";
+import { WorkbenchNav } from "@/components/workbench-frame";
 import { brandLabel, candidatesForEvent, findPiece, getDataset, listPieces, pieceCurationRecord, type PieceListFilters } from "@/lib/editorial";
 import { createPiece, linkEvent, selectProposal, savePieceCuration } from "./actions";
 
@@ -42,24 +44,22 @@ export default async function EditorialCurationPage({ searchParams }: { searchPa
 
   return (
     <div className="wb-shell">
+      <a href="#contenido" className="ds-skip-link">Ir al contenido</a>
       <header className="wb-top">
         <div className="wb-brand"><span className="wb-mark">P</span><div><strong>SEO Workbench</strong><span>Curación editorial</span></div></div>
-        <nav style={{ marginLeft: 28, display: "flex", gap: 16 }}>
-          <Link href="/" style={{ color: "rgb(255 255 255 / 75%)", font: "600 13px/1 var(--ds-font-sans)" }}>Preparación y aprobación</Link>
-          <Link href="/editorial" style={{ color: "#fff", font: "600 13px/1 var(--ds-font-sans)" }}>Editorial</Link>
-        </nav>
-        <span className="local-pill">● Solo este equipo · 127.0.0.1</span>
+        <WorkbenchNav current="/editorial" />
+        <span className="local-pill">Entorno local</span>
       </header>
-      <main className="wb-main">
+      <main className="wb-main" id="contenido">
         <header className="wb-heading">
           <div>
-            <p className="eyebrow">Workbench · Curación editorial (P1.4)</p>
-            <h1>Editar, priorizar y vincular el calendario</h1>
-            <p className="lede">Crea y edita piezas, elige la propuesta ganadora de cada hueco y sustituye la relación heurística evento → pieza por un vínculo real. Cada cambio queda versionado; el visor solo lee el resultado.</p>
+            <p className="eyebrow">Workbench · Editorial</p>
+            <h1>Curación editorial</h1>
+            <p className="lede">Edita piezas, selecciona propuestas y vincula publicaciones. Cada cambio guarda una versión.</p>
           </div>
         </header>
 
-        {saved ? <Notice tone="info">Guardado. La versión ha quedado registrada en el historial y el visor la mostrará en su próxima carga.</Notice> : null}
+        {saved ? <Notice tone="info">Versión guardada. Disponible en la próxima carga del visor.</Notice> : null}
 
         <nav className="ed-tabs" aria-label="Secciones de curación">
           <Link href="/editorial?section=piezas" className={section === "piezas" ? "ed-tab-active" : ""} aria-current={section === "piezas" ? "page" : undefined}>Piezas ({dataset.backlog.length + dataset.plan.length})</Link>
@@ -110,26 +110,38 @@ function PiezasSection({ input }: { input: SearchInput }) {
         editingPiece ? <EditPieceForm piece={editingPiece} record={pieceCurationRecord(editingPiece.id)} /> : <Notice tone="warn">No se encontró la pieza «{editParam}».</Notice>
       ) : null}
 
-      <DataPanel style={{ padding: 0, overflowX: "auto" }}>
-        <table className="ds-table" style={{ minWidth: 720 }}>
-          <thead><tr><th>Estado</th><th>Marca</th><th>Mes</th><th>Título / keyword</th><th>Prioridad</th><th aria-hidden /></tr></thead>
-          <tbody>
-            {items.length === 0 ? <tr><td colSpan={6}><EmptyState title="Ninguna pieza coincide con los filtros" /></td></tr> : items.map((piece) => {
-              const priority = editorialPiecePriority(piece);
-              return (
-                <tr key={piece.id}>
-                  <td><StatusBadge tone="outline">{EDITORIAL_STATUS_LABELS[piece.status]}</StatusBadge></td>
-                  <td>{brandDisplay(piece.brand)}</td>
-                  <td style={{ whiteSpace: "nowrap" }}>{piece.month.month ? `${MONTH_NAMES_ES[piece.month.month]?.slice(0, 3)} ${piece.month.year ?? ""}` : "—"}</td>
-                  <td>{piece.title ?? piece.keyword ?? <span className="pending">Sin título</span>}</td>
-                  <td>{priority ? priority.score : "—"}</td>
-                  <td><Link className="button" href={`/editorial?section=piezas&edit=${encodeURIComponent(piece.id)}`}>Editar</Link></td>
-                </tr>
-              );
-            })}
-          </tbody>
-        </table>
-      </DataPanel>
+      <ReportDataTable
+        key={`${brand}-${kind}-${q}`}
+        id="curation-pieces"
+        showSearch={false}
+        caption="Piezas editoriales"
+        searchPlaceholder="Buscar título, keyword o URL…"
+        columns={[
+          { key: "title", label: "Título / keyword" },
+          { key: "brand", label: "Marca" },
+          { key: "status", label: "Estado" },
+          { key: "month", label: "Mes" },
+          { key: "priority", label: "Prioridad", numeric: true },
+          { key: "edit", label: "Editar", sortable: false },
+        ]}
+        rows={items.map((piece): ReportDataRow => ({
+          id: piece.id,
+          searchText: [piece.title, piece.keyword, piece.url, piece.theme, piece.brief?.text].filter(Boolean).join(" "),
+          values: {
+            title: piece.title ?? piece.keyword ?? "Sin título",
+            brand: brandDisplay(piece.brand),
+            status: EDITORIAL_STATUS_LABELS[piece.status],
+            month: piece.month.month ? (piece.month.year ?? 0) * 100 + piece.month.month : null,
+            priority: editorialPiecePriority(piece)?.score ?? null,
+          },
+          cells: {
+            title: <span className="wb-table-title">{piece.title ?? piece.keyword ?? "Sin título"}{piece.title && piece.keyword ? <small>{piece.keyword}</small> : null}</span>,
+            status: <StatusBadge tone="outline">{EDITORIAL_STATUS_LABELS[piece.status]}</StatusBadge>,
+            month: piece.month.month ? `${MONTH_NAMES_ES[piece.month.month]?.slice(0, 3)} ${piece.month.year ?? ""}` : "—",
+            edit: <Link className="button" href={`/editorial?section=piezas&brand=${brand}&kind=${kind}&q=${encodeURIComponent(q)}&edit=${encodeURIComponent(piece.id)}`}>Editar</Link>,
+          },
+        }))}
+      />
       <p className="ds-meta" style={{ marginTop: 8, color: "var(--ds-muted)" }}>{items.length} de {total} filas · fuente: {kind === "backlog" ? "backlog" : kind === "plan" ? "plan histórico" : "backlog + plan"}.</p>
     </>
   );
@@ -286,54 +298,66 @@ function EditPieceForm({ piece, record }: { piece: EditorialPiece; record: Retur
 }
 
 function PropuestasSection({ dataset }: { dataset: EditorialDataset }) {
-  return (
-    <div className="ed-list">
-      {dataset.slots.length === 0 ? <EmptyState title="Sin huecos con propuestas" /> : dataset.slots.map((slot) => (
-        <DataPanel key={slot.id} style={{ padding: 16 }}>
-          <div style={{ display: "flex", justifyContent: "space-between", flexWrap: "wrap", gap: 8, alignItems: "flex-start" }}>
-            <div>
-              <strong>{brandDisplay(slot.brand)} · {slot.slotLiteral}</strong>
-              <div style={{ color: "var(--ds-muted)", fontSize: 12, marginTop: 3 }}>{slot.month.month ? MONTH_NAMES_ES[slot.month.month] : "sin mes"} · {slot.theme ?? "sin bloque"} · {slot.proposals.length} alternativas</div>
-            </div>
-            {slot.selectedProposalId ? <StatusBadge tone="good">Seleccionada</StatusBadge> : <StatusBadge tone="warn">Pendiente</StatusBadge>}
-          </div>
-          <form action={selectProposal.bind(null, slot.id)} style={{ display: "flex", gap: 8, marginTop: 10, flexWrap: "wrap", alignItems: "center" }}>
-            <select className="input" name="selectedProposalId" defaultValue={slot.selectedProposalId ?? ""} style={{ maxWidth: 460, flex: "1 1 320px" }}>
-              <option value="">Sin seleccionar</option>
-              {slot.proposals.map((proposal) => <option key={proposal.id} value={proposal.id}>{proposal.titles[0] ?? proposal.subtheme ?? proposal.id} ({proposal.format === "rework" ? "Reutilizar" : "Nuevo"})</option>)}
-            </select>
-            <button type="submit" className="button button-primary">Guardar selección</button>
-          </form>
-        </DataPanel>
-      ))}
-    </div>
-  );
+  return <ReportDataTable
+    id="curation-proposals"
+    caption="Propuestas editoriales"
+    searchPlaceholder="Buscar marca, publicación o keyword…"
+    columns={[
+      { key: "slot", label: "Publicación" },
+      { key: "brand", label: "Marca" },
+      { key: "month", label: "Mes" },
+      { key: "status", label: "Estado" },
+      { key: "selection", label: "Propuesta", sortable: false },
+    ]}
+    rows={dataset.slots.map((slot): ReportDataRow => ({
+      id: slot.id,
+      searchText: [slot.slotLiteral, slot.theme, ...slot.proposals.flatMap((proposal) => [...proposal.titles, proposal.keyword, proposal.url])].filter(Boolean).join(" "),
+      values: { slot: slot.slotLiteral, brand: brandDisplay(slot.brand), month: slot.month.month, status: slot.selectedProposalId ? "Seleccionada" : "Pendiente" },
+      cells: {
+        slot: <span className="wb-table-title">{slot.slotLiteral}<small>{slot.theme ?? "Sin bloque"} · {slot.proposals.length} alternativas</small></span>,
+        month: slot.month.month ? MONTH_NAMES_ES[slot.month.month] : "—",
+        status: <StatusBadge tone={slot.selectedProposalId ? "good" : "outline"}>{slot.selectedProposalId ? "Seleccionada" : "Pendiente"}</StatusBadge>,
+        selection: <form action={selectProposal.bind(null, slot.id)} className="wb-table-form">
+          <label className="ds-sr-only" htmlFor={`proposal-${slot.id}`}>Propuesta para {slot.slotLiteral}</label>
+          <select id={`proposal-${slot.id}`} className="input" name="selectedProposalId" defaultValue={slot.selectedProposalId ?? ""}>
+            <option value="">Sin seleccionar</option>
+            {slot.proposals.map((proposal) => <option key={proposal.id} value={proposal.id}>{proposal.titles[0] ?? proposal.subtheme ?? proposal.id} ({proposal.format === "rework" ? "Reutilizar" : "Nuevo"})</option>)}
+          </select>
+          <button type="submit" className="button button-primary">Guardar</button>
+        </form>,
+      },
+    }))}
+  />;
 }
 
 function EventosSection({ dataset }: { dataset: EditorialDataset }) {
-  return (
-    <div className="ed-list">
-      {dataset.calendar.events.map((event) => {
-        const candidates = candidatesForEvent(event);
-        return (
-          <DataPanel key={event.id} style={{ padding: 16 }}>
-            <div style={{ display: "flex", justifyContent: "space-between", flexWrap: "wrap", gap: 8, alignItems: "flex-start" }}>
-              <div>
-                <strong>{brandDisplay(event.brand)}{event.sequence ? ` · ${event.sequence}` : ""}</strong>
-                <div style={{ color: "var(--ds-muted)", fontSize: 12, marginTop: 3 }}>{event.date} · {event.label}</div>
-              </div>
-              {event.pieceId ? <StatusBadge tone="good">Vínculo real</StatusBadge> : <StatusBadge tone="outline">Heurístico</StatusBadge>}
-            </div>
-            <form action={linkEvent.bind(null, event.id)} style={{ display: "flex", gap: 8, marginTop: 10, flexWrap: "wrap" }}>
-              <select className="input" name="pieceId" defaultValue={event.pieceId ?? ""} style={{ maxWidth: 460, flex: "1 1 320px" }}>
-                <option value="">Sin vincular</option>
-                {candidates.map((piece) => <option key={piece.id} value={piece.id}>{piece.title ?? piece.keyword ?? piece.id} · {piece.month.month ? MONTH_NAMES_ES[piece.month.month] : "s/mes"}</option>)}
-              </select>
-              <button type="submit" className="button">Vincular</button>
-            </form>
-          </DataPanel>
-        );
-      })}
-    </div>
-  );
+  return <ReportDataTable
+    id="curation-events"
+    caption="Eventos del calendario"
+    searchPlaceholder="Buscar marca, publicación o fecha…"
+    columns={[
+      { key: "event", label: "Publicación" },
+      { key: "brand", label: "Marca" },
+      { key: "date", label: "Fecha" },
+      { key: "status", label: "Vínculo" },
+      { key: "piece", label: "Pieza editorial", sortable: false },
+    ]}
+    rows={dataset.calendar.events.map((event): ReportDataRow => ({
+      id: event.id,
+      searchText: `${event.label} ${event.date} ${event.sequence ?? ""}`,
+      values: { event: event.label, brand: brandDisplay(event.brand), date: event.date, status: event.pieceId ? "Curado" : "Heurístico" },
+      cells: {
+        event: <span className="wb-table-title">{event.label}{event.sequence ? <small>Publicación {event.sequence}</small> : null}</span>,
+        status: <StatusBadge tone={event.pieceId ? "good" : "outline"}>{event.pieceId ? "Curado" : "Heurístico"}</StatusBadge>,
+        piece: <form action={linkEvent.bind(null, event.id)} className="wb-table-form">
+          <label className="ds-sr-only" htmlFor={`event-${event.id}`}>Pieza para {event.label}</label>
+          <select id={`event-${event.id}`} className="input" name="pieceId" defaultValue={event.pieceId ?? ""}>
+            <option value="">Sin vincular</option>
+            {candidatesForEvent(event).map((piece) => <option key={piece.id} value={piece.id}>{piece.title ?? piece.keyword ?? piece.id} · {piece.month.month ? MONTH_NAMES_ES[piece.month.month] : "s/mes"}</option>)}
+          </select>
+          <button type="submit" className="button">Vincular</button>
+        </form>,
+      },
+    }))}
+  />;
 }

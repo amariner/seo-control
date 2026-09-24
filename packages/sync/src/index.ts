@@ -1,10 +1,18 @@
 import { createHash, verify } from "node:crypto";
 import {
+  findSource,
   publicationPackageSchema,
   syncRequestSchema,
   type ProjectSlug,
   type PublicationPackage,
 } from "@seo/contracts";
+import { REPROCESS_DAYS, isDailyIngestionSource } from "./plan";
+
+export * from "./plan";
+export * from "./ledger";
+export * from "./ingest";
+export * from "./policy";
+export * from "./run";
 
 export type CloudSource = "ga4" | "gsc" | "semrush" | "geo" | "crux" | "pagespeed";
 
@@ -35,14 +43,42 @@ function isoDate(date: Date) {
   return date.toISOString().slice(0, 10);
 }
 
+/**
+ * Ventana de una fuente cualquiera, derivada del catálogo (P3.2).
+ *
+ * Antes fijaba `D-3` para todas las fuentes y una cola de siete días para GA4 y
+ * Search Console. Las dos constantes estaban escritas aquí, y el desfase real de
+ * cada fuente también estaba declarado en `SOURCE_CATALOG` (D-029): dos sitios
+ * para el mismo hecho, que es precisamente lo que el catálogo existe para
+ * evitar. Ahora el desfase sale de la fuente —Search Console publica con tres
+ * días, GA4 con uno, SEMrush y CrUX con siete— y la cola de reprocesado es la
+ * misma constante que usa el planificador diario.
+ *
+ * Corrección de semántica: la cola anterior producía **ocho** días
+ * (`cutoff - 7 .. cutoff` inclusive) para un criterio que pide siete. La ventana
+ * es ahora `start..cutoff` con `REPROCESS_DAYS` días contando el corte.
+ */
 export function syncWindow(source: CloudSource, now = new Date()) {
-  const cutoff = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate() - 3));
-  const rollingDays = source === "ga4" || source === "gsc" ? 7 : 0;
+  const definition = findSource(source);
+  if (!definition) throw new Error(`Fuente «${source}» no declarada en el catálogo`);
+
+  const cutoff = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate() - definition.lagDays));
+  const rollingDays = isDailyIngestionSource(source) ? REPROCESS_DAYS - 1 : 0;
   const start = new Date(cutoff);
   start.setUTCDate(start.getUTCDate() - rollingDays);
   return { cutoff: isoDate(cutoff), start: isoDate(start) };
 }
 
+/**
+ * Orquestador por ventana (P0).
+ *
+ * Sigue siendo el camino de las fuentes semanales y de la publicación, pero para
+ * las diarias queda superado por la ingesta por día de `ingest.ts`: su clave de
+ * idempotencia es `proyecto:fuente:corte`, así que la misma ventana ingerida en
+ * dos días distintos produce dos claves y puede escribir el mismo día dos veces.
+ * No se elimina —P3.3 lo necesita para SEMrush, CrUX y PageSpeed— y no se le
+ * añade la lógica diaria para no tener dos implementaciones de lo mismo.
+ */
 export class SyncOrchestrator {
   constructor(
     private readonly connectors: ReadonlyMap<CloudSource, SourceConnector>,

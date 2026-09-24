@@ -1,0 +1,169 @@
+.page {
+  max-width: 1408px;
+  margin: 0 auto;
+  padding: 42px 48px 48px;
+  color: var(--ds-text);
+}
+
+.header {
+  padding-bottom: 30px;
+}
+
+.eyebrow {
+  margin: 0 0 22px;
+  color: var(--ds-muted);
+  font-size: 13px;
+}
+
+.page h1 {
+  margin: 0;
+  color: var(--ds-ink);
+  font: 500 clamp(30px, 4vw, 44px) / 1.15 var(--ds-font-sans);
+  letter-spacing: -0.045em;
+  overflow-wrap: anywhere;
+}
+
+.status {
+  margin: 12px 0 0;
+  color: var(--ds-muted);
+  font-size: 14px;
+}
+
+.filters {
+  display: grid;
+  grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr);
+  gap: 24px;
+  padding: 18px 20px;
+  border: 1px solid var(--ds-line);
+  border-radius: var(--ds-radius-md);
+  background: var(--ds-surface);
+}
+
+.filters .filter {
+  width: 100%;
+  height: 58px;
+}
+
+.tabs {
+  display: flex;
+  gap: 30px;
+  padding: 18px 0;
+  margin-top: 22px;
+  overflow: hidden;
+  border-bottom: 1px solid var(--ds-line);
+}
+
+.tabs > * {
+  flex-shrink: 0;
+}
+
+.metrics {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  margin-top: 36px;
+}
+
+.metric {
+  min-width: 0;
+  padding: 0 26px;
+  border-left: 1px solid var(--ds-line);
+}
+
+.metric:first-child {
+  padding-left: 0;
+  border-left: 0;
+}
+
+.metric:last-child {
+  padding-right: 0;
+}
+
+.chart {
+  margin-top: 48px;
+}
+
+.error {
+  max-width: 640px;
+  padding: 48px 0;
+}
+
+.error h1 {
+  font-size: clamp(28px, 4vw, 36px);
+}
+
+.error p {
+  margin-top: 16px;
+  color: var(--ds-muted);
+  line-height: 1.6;
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 28px;
+}
+
+.actions > * {
+  min-height: 44px;
+}
+
+@media (max-width: 1100px) {
+  .page {
+    padding: 32px 28px 40px;
+  }
+
+  .metric {
+    padding-inline: 18px;
+  }
+}
+
+@media (max-width: 760px) {
+  .page {
+    padding: 24px 20px 32px;
+  }
+
+  .header {
+    padding-bottom: 24px;
+  }
+
+  .eyebrow {
+    margin-bottom: 18px;
+  }
+
+  .filters {
+    grid-template-columns: minmax(0, 1fr);
+    padding: 16px;
+    gap: 14px;
+  }
+
+  .tabs {
+    gap: 24px;
+    margin-top: 14px;
+  }
+
+  .metrics {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 26px 0;
+    margin-top: 26px;
+  }
+
+  .metric:nth-child(odd) {
+    padding-left: 0;
+    padding-right: 18px;
+    border-left: 0;
+  }
+
+  .metric:nth-child(even) {
+    padding-left: 18px;
+    padding-right: 0;
+  }
+
+  .chart {
+    margin-top: 36px;
+  }
+
+  .error {
+    padding-top: 28px;
+  }
+}

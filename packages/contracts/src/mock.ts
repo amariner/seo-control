@@ -1,5 +1,8 @@
 import type { DashboardPayload, MarketCode, PeriodKey, ProjectSlug } from "./schemas";
-import { dashboardPayloadSchema } from "./schemas";
+import { buildPeriodWindow, dashboardPayloadSchema } from "./schemas";
+import { MARKETS, findBrand, isPilotProject, type BrandSlug } from "./taxonomy";
+import { aggregatePortfolio, type BrandAnalytics, type BrandEditorialActivity, type PortfolioFilters, type PortfolioPayload } from "./portfolio";
+import { REPORT_CHAPTERS, buildReportArchive, type ReportArchive, type ReportArchiveEntry, type ReportFilters } from "./reports";
 
 type Filters = { project: ProjectSlug | "all"; market: MarketCode | "all"; period: PeriodKey };
 
@@ -161,7 +164,78 @@ function makeSeries(seed: number, slope: number, amplitude: number) {
   return points;
 }
 
+/** Las siete fuentes de la portada, con su etiqueta visible. */
+const SOURCE_STATUS_KEYS = [
+  { key: "ga4" as const, label: "Google Analytics 4" },
+  { key: "gsc" as const, label: "Search Console" },
+  { key: "semrush" as const, label: "SEMrush" },
+  { key: "geo" as const, label: "GEO" },
+  { key: "crux" as const, label: "CrUX" },
+  { key: "pagespeed" as const, label: "PageSpeed" },
+  { key: "crawl" as const, label: "Crawl aprobado" },
+];
+
+/**
+ * Portada de una marca que todavía no se mide (D-033).
+ *
+ * No devuelve ceros: un cero es una medición que dio cero, y aquí no hay
+ * medición. Devuelve las colecciones vacías y las fuentes en `no_configurado`,
+ * que es el estado que el contrato ya tenía previsto para esto. La pantalla lo
+ * lee y explica qué falta, en vez de dibujar un panel de métricas en blanco.
+ */
+function unmeasuredDashboard(filters: Filters): DashboardPayload {
+  const brand = findBrand(filters.project);
+  const note = !brand
+    ? "Marca sin serie analítica en V2."
+    : brand.pilot
+      ? `${brand.name} se mide con GA4 y Search Console reales (origen live); el conector sintético no la simula.`
+      : `${brand.name} se incorpora en la ola ${brand.wave} de la expansión.`;
+  return dashboardPayloadSchema.parse({
+    generatedAt: "2026-09-02T08:15:00.000Z",
+    mode: "synthetic",
+    window: buildPeriodWindow(filters.period, "2026-08-30"),
+    filters,
+    metrics: [],
+    projects: [],
+    markets: [],
+    executiveInsights: [],
+    /* GEO se mide por proyecto y mercado: sin proyecto medido no hay ejecuciones
+       que contar, y `totalPrompts: 0` es lo único cierto que se puede decir. */
+    geo: { citationShare: 0, previousCitationShare: 0, citedPrompts: 0, totalPrompts: 0, aiSessions: 0, aiConversions: 0, leadingAssistant: "—", topCitedDomain: "—" },
+    actions: [],
+    sources: SOURCE_STATUS_KEYS.map((source) => ({
+      source: source.key,
+      label: source.label,
+      status: "no_configurado" as const,
+      lastValidSnapshot: null,
+      cutoff: null,
+      coverage: 0,
+      note,
+    })),
+    series: {},
+    annotations: [],
+    technicalIssues: [],
+    opportunities: [],
+    queryOpportunities: [],
+    reports: [],
+  });
+}
+
 export function getMockDashboard(filters: Filters = { project: "all", market: "all", period: "28d" }): DashboardPayload {
+  /**
+   * El reparto del piloto. Antes esta línea era
+   * `filters.project === "porcelanosa" ? 0.64 : 0.36`, y con solo dos marcas
+   * elegibles funcionaba. Al abrir la selección a las ocho (D-033) ese `else`
+   * habría repartido un 36% de la serie del piloto a Krion o a Gamadecor:
+   * cifras inventadas para marcas que nadie mide, indistinguibles de las
+   * reales. Una marca sin piloto no escala el dato del piloto: no tiene dato.
+   */
+  if (filters.project !== "all" && !isPilotProject(filters.project)) return unmeasuredDashboard(filters);
+  /* Xtone entra en el piloto con dato real (D-036), pero el conector sintético
+     solo sabe simular Porcelanosa y Noken. Sin esta línea caería en el `else`
+     del reparto y recibiría el 36% de la serie de Noken: el fallo de D-033 con
+     otra marca. En modo sintético, una marca que no simula no tiene dato. */
+  if (filters.project !== "all" && !(filters.project in PILOT_MIX)) return unmeasuredDashboard(filters);
   const projectFactor = filters.project === "all" ? 1 : filters.project === "porcelanosa" ? 0.64 : 0.36;
   const marketFactor = filters.market === "all" ? 1 : ({ ES: 0.38, UK: 0.2, US: 0.18, FR: 0.14, DE: 0.1 } as const)[filters.market];
   const periodFactor = ({ "28d": 1, "90d": 3.08, "180d": 5.95, "12m": 11.7, "24m": 22.3 } as const)[filters.period];
@@ -177,6 +251,8 @@ export function getMockDashboard(filters: Filters = { project: "all", market: "a
   const payload: DashboardPayload = {
     generatedAt: "2026-09-02T08:15:00.000Z",
     mode: "synthetic",
+    // El corte del dato es el de la cobertura declarada, no la fecha de generación.
+    window: buildPeriodWindow(filters.period, "2026-08-30"),
     filters,
     metrics: [
       { key: "organic_sessions", label: "Sesiones orgánicas", value: scale(184320), unit: "number", previous: scale(173110), previousYear: scale(161900), target: scale(190000), trend: "up", goodDirection: "up", coverage: sourceCoverage },
@@ -228,6 +304,7 @@ export function getMockDashboard(filters: Filters = { project: "all", market: "a
       { id: "page-3", project: "noken", url: "/uk/taps/basin", title: "Basin taps", type: "categoria", status: "actualizado", clicks: 6240, impressions: 69800, position: 3.2, ctr: 8.9, expectedCtr: 10.5, conversions: 74, opportunityScore: 84 },
       { id: "page-4", project: "noken", url: "/us/collections/forma", title: "Forma collection", type: "producto_coleccion", status: "consolidar", clicks: 1740, impressions: 41500, position: 6.4, ctr: 4.2, expectedCtr: 5.0, conversions: 21, opportunityScore: 66 },
     ].filter((page) => filters.project === "all" || page.project === filters.project) as DashboardPayload["opportunities"],
+    queryOpportunities: [],
     reports: [
       { id: "report-2026-08", project: null, title: "Cierre ejecutivo · Agosto 2026", type: "mensual", period: "1–31 agosto 2026", version: 1, status: "publicado", author: "María SEO", reviewer: "Carlos Digital", publishedAt: "2026-09-01", executiveSummary: "Crecimiento orgánico sostenido con una incidencia técnica prioritaria en Francia.", blocks: 18 },
       { id: "report-noken-q2", project: "noken", title: "Noken · Revisión profunda Q2", type: "trimestral", period: "abril–junio 2026", version: 2, status: "publicado", author: "Carlos Digital", reviewer: "María SEO", publishedAt: "2026-07-08", executiveSummary: "La expansión non-branded valida el nuevo mapa de categorías en UK.", blocks: 34 },
@@ -236,4 +313,217 @@ export function getMockDashboard(filters: Filters = { project: "all", market: "a
   };
 
   return dashboardPayloadSchema.parse(payload);
+}
+
+// ---------------------------------------------------------------------------
+// Conector sintético de la visión transversal (P2.2)
+// ---------------------------------------------------------------------------
+
+/**
+ * Reparto de mercado y ritmo de cambio del piloto. Son los mismos valores que
+ * usa la portada de proyecto, para que las dos superficies no se contradigan.
+ * `change` es la variación frente al periodo anterior y `yoy` frente al año
+ * anterior, en porcentaje.
+ */
+const MARKET_MIX = {
+  ES: { share: 0.38, change: 6.2, yoy: 11.4, visibility: 48.1 },
+  UK: { share: 0.2, change: 14.8, yoy: 22.6, visibility: 43.7 },
+  US: { share: 0.18, change: -4.6, yoy: 3.2, visibility: 35.2 },
+  FR: { share: 0.14, change: -8.9, yoy: -12.5, visibility: 37.4 },
+  DE: { share: 0.1, change: 2.1, yoy: 8.8, visibility: 39.8 },
+} as const satisfies Record<MarketCode, { share: number; change: number; yoy: number; visibility: number }>;
+
+/**
+ * Peso de cada marca del piloto sobre el total del grupo medido y su ritmo
+ * propio. `paceOffset`/`yoyOffset` desplazan en puntos porcentuales el cambio de
+ * cada mercado para esa marca: sin ellos las dos marcas se moverían exactamente
+ * igual y la comparación entre marcas no diría nada. El signo reproduce la
+ * historia que ya cuentan los insights del piloto: Noken crece en demanda
+ * non-branded y Porcelanosa arrastra la incidencia de Francia.
+ */
+const PILOT_MIX = {
+  porcelanosa: { weight: 0.64, visibilityOffset: 0, attention: "actuar", paceOffset: -2.4, yoyOffset: -1.6 },
+  noken: { weight: 0.36, visibilityOffset: -3.4, attention: "observar", paceOffset: 4.1, yoyOffset: 7.8 },
+} as const;
+
+const GROUP_SESSIONS_28D = 184320;
+const CLICKS_PER_SESSION = 226480 / GROUP_SESSIONS_28D;
+const CONVERSIONS_PER_SESSION = 2964 / GROUP_SESSIONS_28D;
+
+/** Objetivo del periodo: interanual más el crecimiento planificado por KPI. */
+const PLAN_UPLIFT = { sessions: 1.12, clicks: 1.1, conversions: 1.18 } as const;
+
+const PERIOD_FACTOR = { "28d": 1, "90d": 3.08, "180d": 5.95, "12m": 11.7, "24m": 22.3 } as const;
+
+/**
+ * Serie sintética por marca y mercado. Las cifras de la marca se derivan de sus
+ * filas de mercado (no al revés), así que la suma por mercados y el total de la
+ * marca coinciden siempre, con cualquier filtro.
+ */
+function mockBrandAnalytics(slug: keyof typeof PILOT_MIX, filters: PortfolioFilters): BrandAnalytics {
+  const brand = PILOT_MIX[slug];
+  const periodFactor = PERIOD_FACTOR[filters.period];
+  const codes = (filters.market === "all" ? (Object.keys(MARKET_MIX) as MarketCode[]) : [filters.market]);
+
+  const markets = codes.map((code) => {
+    const mix = MARKET_MIX[code];
+    const sessions = Math.round(GROUP_SESSIONS_28D * brand.weight * mix.share * periodFactor);
+    return {
+      code,
+      name: MARKETS.find((market) => market.code === code)?.name ?? code,
+      sessions,
+      clicks: Math.round(sessions * CLICKS_PER_SESSION),
+      conversions: Math.round(sessions * CONVERSIONS_PER_SESSION),
+      previousSessions: Math.round(sessions / (1 + (mix.change + brand.paceOffset) / 100)),
+      previousYearSessions: Math.round(sessions / (1 + (mix.yoy + brand.yoyOffset) / 100)),
+      visibility: Math.round((mix.visibility + brand.visibilityOffset) * 10) / 10,
+      contributingBrands: 1,
+    };
+  });
+
+  const sum = (key: "sessions" | "clicks" | "conversions" | "previousSessions" | "previousYearSessions") =>
+    markets.reduce((total, market) => total + market[key], 0);
+  const sessions = sum("sessions");
+  const previousSessions = sum("previousSessions");
+  const previousYearSessions = sum("previousYearSessions");
+
+  return {
+    sessions,
+    clicks: sum("clicks"),
+    conversions: sum("conversions"),
+    previousSessions,
+    previousYearSessions,
+    // El conector sintético asume clics y conversiones por sesión constantes en
+    // el tiempo. La suposición vive aquí, en el generador, y no en la
+    // agregación: `aggregatePortfolio` solo suma lo que recibe.
+    previousClicks: Math.round(previousSessions * CLICKS_PER_SESSION),
+    previousYearClicks: Math.round(previousYearSessions * CLICKS_PER_SESSION),
+    previousConversions: Math.round(previousSessions * CONVERSIONS_PER_SESSION),
+    previousYearConversions: Math.round(previousYearSessions * CONVERSIONS_PER_SESSION),
+    targetSessions: Math.round(previousYearSessions * PLAN_UPLIFT.sessions),
+    targetClicks: Math.round(previousYearSessions * CLICKS_PER_SESSION * PLAN_UPLIFT.clicks),
+    targetConversions: Math.round(previousYearSessions * CONVERSIONS_PER_SESSION * PLAN_UPLIFT.conversions),
+    visibility: sessions === 0 ? 0 : Math.round((markets.reduce((total, market) => total + market.visibility * market.sessions, 0) / sessions) * 10) / 10,
+    attention: brand.attention,
+    coverage: coverage(filters.market === "all" ? "5/5 mercados Tier 1" : `Mercado ${filters.market}`),
+    markets,
+  };
+}
+
+const isPilotSlug = (slug: BrandSlug): slug is keyof typeof PILOT_MIX => slug in PILOT_MIX;
+
+/**
+ * Visión transversal sintética. La actividad editorial **no** se genera aquí:
+ * llega como argumento porque es dato real importado de V1 y cubre las ocho
+ * marcas, mientras la analítica solo cubre el piloto.
+ */
+export function getMockPortfolio(
+  filters: PortfolioFilters,
+  editorial: Record<BrandSlug, BrandEditorialActivity>,
+  options: { planningYear?: number; generatedAt?: string } = {},
+): PortfolioPayload {
+  return aggregatePortfolio({
+    generatedAt: options.generatedAt ?? "2026-09-02T08:15:00.000Z",
+    mode: "synthetic",
+    filters,
+    editorialPlanningYear: options.planningYear ?? 2026,
+    rows: filters.brands.map((slug) => ({
+      slug,
+      analytics: isPilotSlug(slug) ? mockBrandAnalytics(slug, filters) : null,
+      editorial: editorial[slug],
+    })),
+  });
+}
+
+// ---------------------------------------------------------------------------
+// Archivo histórico de informes (P2.3)
+// ---------------------------------------------------------------------------
+
+/**
+ * Capítulos que un informe incluye hoy. No son los deseables: son los que ya
+ * tienen superficie en V2 (`publicado` o `parcial` en `REPORT_CHAPTERS`). Un
+ * informe no puede declarar un capítulo que el producto todavía no sabe rendir.
+ */
+const AVAILABLE_CHAPTERS = REPORT_CHAPTERS.filter((chapter) => chapter.state !== "pendiente").map((chapter) => chapter.key);
+
+const version = (
+  version: number,
+  status: DashboardPayload["reports"][number]["status"],
+  author: string,
+  reviewer: string | null,
+  publishedAt: string | null,
+  changeNote: string | null,
+) => ({ version, status, author, reviewer, publishedAt, changeNote });
+
+/**
+ * Archivo histórico sintético. Extiende los tres informes de la portada con
+ * cierres anteriores para que el archivo sea navegable de verdad: sin varios
+ * periodos y varios años, «archivo histórico» sería una palabra sin superficie.
+ *
+ * Las cadenas de versiones no son decorativas: `report-2026-06` tiene fe de
+ * erratas y `report-noken-q2` una segunda versión con revisor distinto, que es
+ * exactamente el caso que obliga a no reescribir una versión publicada.
+ */
+export function getMockReportArchive(filters: ReportFilters = { project: "all", type: "all", status: "all", year: "all" }): ReportArchive {
+  const entries: ReportArchiveEntry[] = [
+    {
+      id: "report-2026-08", project: null, title: "Cierre ejecutivo · Agosto 2026", type: "mensual", period: "1–31 agosto 2026",
+      version: 1, status: "publicado", author: "María SEO", reviewer: "Carlos Digital", publishedAt: "2026-09-01",
+      executiveSummary: "Crecimiento orgánico sostenido con una incidencia técnica prioritaria en Francia.", blocks: 18, year: 2026,
+      chapters: [...AVAILABLE_CHAPTERS],
+      versions: [version(1, "publicado", "María SEO", "Carlos Digital", "2026-09-01", null)],
+    },
+    {
+      id: "report-canonical", project: "porcelanosa", title: "Especial · Canonicals y sitemap FR", type: "especial", period: "agosto 2026",
+      version: 1, status: "aprobado", author: "María SEO", reviewer: "Lucía Web", publishedAt: null,
+      executiveSummary: "Diagnóstico y plan de verificación para la incidencia de colecciones.", blocks: 12, year: 2026,
+      chapters: ["resumen", "salud-tecnica", "plan-accion", "metodologia"],
+      versions: [version(1, "aprobado", "María SEO", "Lucía Web", null, null)],
+    },
+    {
+      id: "report-2026-07", project: null, title: "Cierre ejecutivo · Julio 2026", type: "mensual", period: "1–31 julio 2026",
+      version: 1, status: "publicado", author: "María SEO", reviewer: "Carlos Digital", publishedAt: "2026-08-03",
+      executiveSummary: "Primer mes con el calendario editorial general de las ocho marcas en marcha.", blocks: 17, year: 2026,
+      chapters: ["resumen", "mercados", "programacion-editorial", "plan-accion", "metodologia"],
+      versions: [version(1, "publicado", "María SEO", "Carlos Digital", "2026-08-03", null)],
+    },
+    {
+      id: "report-2026-06", project: null, title: "Cierre ejecutivo · Junio 2026", type: "mensual", period: "1–30 junio 2026",
+      version: 2, status: "publicado", author: "María SEO", reviewer: "Carlos Digital", publishedAt: "2026-07-06",
+      executiveSummary: "Cierre de primer semestre. La v2 corrige el recuento de macroconversiones de Noken US.",
+      blocks: 16, year: 2026,
+      chapters: ["resumen", "mercados", "plan-accion", "metodologia"],
+      versions: [
+        version(1, "publicado", "María SEO", "Carlos Digital", "2026-07-02", null),
+        version(2, "publicado", "María SEO", "Carlos Digital", "2026-07-06", "Fe de erratas: las macroconversiones de Noken US duplicaban el evento de contacto. Se corrige el capítulo de resumen; el resto del informe no cambia."),
+      ],
+    },
+    {
+      id: "report-noken-q2", project: "noken", title: "Noken · Revisión profunda Q2", type: "trimestral", period: "abril–junio 2026",
+      version: 2, status: "publicado", author: "Carlos Digital", reviewer: "María SEO", publishedAt: "2026-07-08",
+      executiveSummary: "La expansión non-branded valida el nuevo mapa de categorías en UK.", blocks: 34, year: 2026,
+      chapters: ["resumen", "mercados", "busquedas", "contenidos", "plan-accion", "metodologia"],
+      versions: [
+        version(1, "publicado", "Carlos Digital", "Lucía Web", "2026-07-07", null),
+        version(2, "publicado", "Carlos Digital", "María SEO", "2026-07-08", "Revisión firmada por la responsable SEO tras ampliar el apartado de mercados."),
+      ],
+    },
+    {
+      id: "report-porcelanosa-q1", project: "porcelanosa", title: "Porcelanosa · Revisión profunda Q1", type: "trimestral", period: "enero–marzo 2026",
+      version: 1, status: "publicado", author: "María SEO", reviewer: "Carlos Digital", publishedAt: "2026-04-09",
+      executiveSummary: "Primer trimestre medido con el criterio de cobertura declarada en cada indicador.", blocks: 31, year: 2026,
+      chapters: ["resumen", "mercados", "plan-accion", "metodologia"],
+      versions: [version(1, "publicado", "María SEO", "Carlos Digital", "2026-04-09", null)],
+    },
+    {
+      id: "report-2025-cierre", project: null, title: "Cierre anual · 2025", type: "especial", period: "enero–diciembre 2025",
+      version: 1, status: "publicado", author: "Carlos Digital", reviewer: "María SEO", publishedAt: "2026-01-22",
+      executiveSummary: "Línea base del grupo antes de la migración a V2. Se conserva como referencia, no se reedita.",
+      blocks: 26, year: 2025,
+      chapters: ["resumen", "mercados", "metodologia"],
+      versions: [version(1, "publicado", "Carlos Digital", "María SEO", "2026-01-22", null)],
+    },
+  ];
+
+  return buildReportArchive({ generatedAt: "2026-09-02T08:15:00.000Z", mode: "synthetic", filters, entries });
 }

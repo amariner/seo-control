@@ -1,0 +1,309 @@
+{
+  "schemaVersion": 1,
+  "capturedAt": "2026-09-04T09:51:24.138Z",
+  "v1Source": "Desktop/Proyectos/seo-dashboard",
+  "note": "Baseline congelado de las muestras V1 (P2.4). Se versiona para que la reconciliación sea comprobable sin la V1 delante y para que la migración de P3/P5/P6/P8 se valide contra un número registrado con hash, no contra un V1 que puede haber cambiado. Se reescribe solo con `pnpm reconcile:capture`, nunca de forma automática.",
+  "datasets": [
+    {
+      "id": "editorial-snapshots",
+      "dataset": "Cuatro snapshots editoriales V1",
+      "phase": "P1",
+      "state": "reconciled",
+      "blockedReason": null,
+      "v1": {
+        "files": [
+          {
+            "path": "src/data/plan-editorial/calendario-2026.json",
+            "sha256": "7255c673bdaee766a6c74d302f902969b4b226c250cf1e966ca31e24bcbb0187",
+            "bytes": 6959
+          },
+          {
+            "path": "src/data/plan-editorial/conjunto-backlog.json",
+            "sha256": "4b1edd3c9cf061630901d26c512a39e0227a67556a64d509168ea18cb887c330",
+            "bytes": 351895
+          },
+          {
+            "path": "src/data/plan-editorial/conjunto.json",
+            "sha256": "673b29e593ff6f6a6a0a19f1b96111d971f21e824c0e2cc02130b3596213dfab",
+            "bytes": 364534
+          },
+          {
+            "path": "src/data/plan-editorial/conjunto-propuestas.json",
+            "sha256": "3c627a31d5c979b6733275f0cda7f14b0cb14dc65c03eff82191d68a73bd256c",
+            "bytes": 37859
+          }
+        ],
+        "measures": {
+          "calendarEvents": 39,
+          "themeBlocks": 6,
+          "backlog": 115,
+          "plan": 146,
+          "slots": 34,
+          "proposals": 68
+        }
+      },
+      "v2": {
+        "source": "packages/editorial/data/normalized/editorial-dataset.json",
+        "measures": {
+          "calendarEvents": 39,
+          "themeBlocks": 6,
+          "backlog": 115,
+          "plan": 146,
+          "slots": 34,
+          "proposals": 68
+        },
+        "archiveHashes": {
+          "calendario-2026": "7255c673bdaee766a6c74d302f902969b4b226c250cf1e966ca31e24bcbb0187",
+          "conjunto-backlog": "4b1edd3c9cf061630901d26c512a39e0227a67556a64d509168ea18cb887c330",
+          "conjunto": "673b29e593ff6f6a6a0a19f1b96111d971f21e824c0e2cc02130b3596213dfab",
+          "conjunto-propuestas": "3c627a31d5c979b6733275f0cda7f14b0cb14dc65c03eff82191d68a73bd256c"
+        }
+      }
+    },
+    {
+      "id": "ga4-daily",
+      "dataset": "Series diarias de GA4 por proyecto y mercado",
+      "phase": "P3",
+      "state": "blocked",
+      "blockedReason": "La fuente V1 es una consulta en vivo a la GA4 Data API, no un fichero. No hay nada que congelar hasta que P3 tenga credenciales y almacén propio; entonces la comparación es día a día con tolerancia relativa del 1%.",
+      "v1": {
+        "files": [],
+        "measures": {}
+      },
+      "v2": null
+    },
+    {
+      "id": "gsc-daily",
+      "dataset": "Series diarias de Search Console por query y página",
+      "phase": "P3",
+      "state": "blocked",
+      "blockedReason": "La fuente V1 es una consulta en vivo a la Search Console API. Igual que GA4: la reconciliación exacta de clics solo puede ejecutarse cuando P3 conecte la fuente y guarde la misma ventana con el mismo desfase de tres días.",
+      "v1": {
+        "files": [],
+        "measures": {}
+      },
+      "v2": null
+    },
+    {
+      "id": "semrush-cache",
+      "dataset": "Caché de posiciones y volúmenes de SEMrush",
+      "phase": "P3",
+      "state": "baseline-frozen",
+      "blockedReason": null,
+      "v1": {
+        "files": [
+          {
+            "path": "src/data/tracking-pilar/semrush-butech-en.json",
+            "sha256": "b37317f1c67682dcbaa2d9fd05071d7ec6a69eafe8ab6e8496f13e62d5d3e443",
+            "bytes": 841
+          },
+          {
+            "path": "src/data/tracking-pilar/semrush-butech-es.json",
+            "sha256": "35b70c9667f07401ff594f0f99a744745b104fa2521cc30ecfb0554bd7486451",
+            "bytes": 11257
+          },
+          {
+            "path": "src/data/tracking-pilar/semrush-ecommerce-es.json",
+            "sha256": "73c3cb8b41e732657e278eff8c99a6e93fc49b8474c6daf3b8a554ef63ad6f4f",
+            "bytes": 396
+          },
+          {
+            "path": "src/data/tracking-pilar/semrush-ecommerce-fr.json",
+            "sha256": "effefd3d9e58392919a91d5307fece6cf7b1271ceb2a8f5e00a4ec1b0b7b1e98",
+            "bytes": 1044
+          },
+          {
+            "path": "src/data/tracking-pilar/semrush-ecommerce-uk.json",
+            "sha256": "f42476d5356baa9ca4cd62bd7afa70eeebc7d514578b4d9fe4be41472dac516e",
+            "bytes": 5207
+          },
+          {
+            "path": "src/data/tracking-pilar/semrush-ecommerce-us.json",
+            "sha256": "eb19759f02939a81af0dfba846ec38658874305492534b1dddf9ec1bec58d5ac",
+            "bytes": 1000
+          },
+          {
+            "path": "src/data/tracking-pilar/semrush-noken-de.json",
+            "sha256": "339323765ea79b6ec0235bd1033da940aa422c9ac052f53678599c1f5bac7657",
+            "bytes": 710
+          },
+          {
+            "path": "src/data/tracking-pilar/semrush-noken-es.json",
+            "sha256": "14a70cfa54f6883ce28c9104c82239a0bca0ede0682c15e95822db384b5ac41f",
+            "bytes": 14267
+          },
+          {
+            "path": "src/data/tracking-pilar/semrush-noken-fr.json",
+            "sha256": "de256521c527f99312bb209887ca1a0e5606ff6881aeab3711d248134170ea80",
+            "bytes": 1471
+          },
+          {
+            "path": "src/data/tracking-pilar/semrush-noken-ru.json",
+            "sha256": "bff0007787c61a0a7eaffbcfbbc57af5934ecff90c89b3ba06ea6ce1b62ccb81",
+            "bytes": 1802
+          },
+          {
+            "path": "src/data/tracking-pilar/semrush-noken-uk.json",
+            "sha256": "eaa4f22f2a7e962dc0bb9109557c71e74f10cab68bff32d4796781d6f6c1c478",
+            "bytes": 1181
+          },
+          {
+            "path": "src/data/tracking-pilar/semrush-noken-us.json",
+            "sha256": "8ae06f5826984e782a742bec990e18d77cd00354f25e0f6496654f697a49dbb5",
+            "bytes": 992
+          },
+          {
+            "path": "src/data/tracking-pilar/semrush-porcelanosa-de.json",
+            "sha256": "2cc9a4bd4353bae18b926eac2f6156601a109cc4702ac1ccb28fa002ccc78b91",
+            "bytes": 262
+          },
+          {
+            "path": "src/data/tracking-pilar/semrush-porcelanosa-es.json",
+            "sha256": "dacbc07d2d3fbcfab62f1adb440f399beed4ebfa24199d00cb33837b77851fff",
+            "bytes": 7623
+          },
+          {
+            "path": "src/data/tracking-pilar/semrush-porcelanosa-fr.json",
+            "sha256": "cb2fc9bd3146aabc3238f8f0030d81723c2aa444eb3279653becc39e763ed88e",
+            "bytes": 3932
+          }
+        ],
+        "measures": {
+          "butech-en": 5,
+          "butech-es": 74,
+          "ecommerce-es": 2,
+          "ecommerce-fr": 6,
+          "ecommerce-uk": 33,
+          "ecommerce-us": 6,
+          "noken-de": 4,
+          "noken-es": 92,
+          "noken-fr": 9,
+          "noken-ru": 10,
+          "noken-uk": 7,
+          "noken-us": 6,
+          "porcelanosa-de": 1,
+          "porcelanosa-es": 48,
+          "porcelanosa-fr": 25,
+          "__total": 328
+        }
+      },
+      "v2": null
+    },
+    {
+      "id": "crawl-snapshots",
+      "dataset": "Snapshots históricos de crawl y sus issues",
+      "phase": "P5",
+      "state": "baseline-frozen",
+      "blockedReason": null,
+      "v1": {
+        "files": [
+          {
+            "path": "src/data/audits/antic-colonial/history/2026-08-06_6ac4d506/summary.json",
+            "sha256": "1a288ac593a38b09fdaed892d1af9333696ab9df2790d6310cf38a38973aa709",
+            "bytes": 2396
+          },
+          {
+            "path": "src/data/audits/butech/history/2026-06-04_2e037c08/summary.json",
+            "sha256": "3904f95533930afe9ce616deabc72013da7c159ec78ddb0c81df907110cbbc0b",
+            "bytes": 2516
+          },
+          {
+            "path": "src/data/audits/ecommerce/history/2026-05-08_f615952e/summary.json",
+            "sha256": "103eb4f95081bb362809a17a57aebcaf7c76bf109dcf2fc233470086f7b174e1",
+            "bytes": 2210
+          },
+          {
+            "path": "src/data/audits/krion/history/2026-08-07_4d07e7fd/summary.json",
+            "sha256": "ff7d58b69fdb1b9e6323a4852bace9a1432b80ce3803a4cd316155349456412c",
+            "bytes": 3563
+          },
+          {
+            "path": "src/data/audits/noken/history/2026-05-14_32c63899/summary.json",
+            "sha256": "35ddd80f74f5b84a05632369f9d33f6a91381c253692452ea94f60c6dc1d1251",
+            "bytes": 3209
+          },
+          {
+            "path": "src/data/audits/noken/history/2026-05-14_e4143782/summary.json",
+            "sha256": "e3835c4b3672cd0dc269ee681e5a67b070e05a3ff5e187c0f80add202d248b70",
+            "bytes": 2886
+          }
+        ],
+        "measures": {
+          "antic-colonial/2026-08-06_6ac4d506": 2395,
+          "butech/2026-06-04_2e037c08": 2258,
+          "ecommerce/2026-05-08_f615952e": 7055,
+          "krion/2026-08-07_4d07e7fd": 4424,
+          "noken/2026-05-14_32c63899": 916,
+          "noken/2026-05-14_e4143782": 10471
+        }
+      },
+      "v2": null
+    },
+    {
+      "id": "canibalizaciones-snapshot",
+      "dataset": "Snapshot de canibalización del conjunto",
+      "phase": "P6",
+      "state": "baseline-frozen",
+      "blockedReason": null,
+      "v1": {
+        "files": [
+          {
+            "path": "src/data/canibalizaciones/conjunto.json",
+            "sha256": "d780710f44b57ea687af860c7bbefbbe9bb039d5e763768ab054d00e9bf6dc04",
+            "bytes": 5455481
+          },
+          {
+            "path": "src/data/canibalizaciones/sites-overview.json",
+            "sha256": "d522cd2c629d4dbbbe8445146df66c0920ff5811e47172358a6e98b7e44b4e96",
+            "bytes": 174544
+          }
+        ],
+        "measures": {
+          "sitios": 7,
+          "mercados": 7,
+          "paresCanibalizacion": 21,
+          "sites-overview.sitios": 7,
+          "sites-overview.mercados": 6,
+          "rango": "? a ?"
+        }
+      },
+      "v2": null
+    },
+    {
+      "id": "prompts-geo-inventory",
+      "dataset": "Inventario de prompts GEO",
+      "phase": "P8",
+      "state": "baseline-frozen",
+      "blockedReason": null,
+      "v1": {
+        "files": [
+          {
+            "path": "src/data/prompts-geo.json",
+            "sha256": "03104fb50d9275b2235bfafe8a7b6c7c015347b8737023494235d7051891ad6b",
+            "bytes": 14474
+          }
+        ],
+        "measures": {
+          "us": 8,
+          "uk": 6,
+          "fr": 5,
+          "es": 5,
+          "__total": 24
+        }
+      },
+      "v2": null
+    },
+    {
+      "id": "tasks-local-state",
+      "dataset": "Estado de tareas guardado en el navegador",
+      "phase": "P4",
+      "state": "not-comparable",
+      "blockedReason": "El estado vivía en el localStorage del navegador de cada persona y no existe copia en servidor. El propio contrato lo declara `not-comparable`: en P4 las tareas se regeneran y se avisa de que el estado marcado en V1 no viaja.",
+      "v1": {
+        "files": [],
+        "measures": {}
+      },
+      "v2": null
+    }
+  ]
+}

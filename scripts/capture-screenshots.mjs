@@ -30,6 +30,7 @@ const VIEWPORTS = [
 
 const ROUTES = [
   { name: "home", path: "/" },
+  { name: "portfolio", path: "/portfolio" },
   { name: "cal-year", path: "/editorial/calendario" },
   { name: "cal-month", path: "/editorial/calendario?view=month&month=9" },
   { name: "cal-detail", path: "/editorial/calendario?event=ed-ev-c240af98c0a7916d" },
@@ -44,6 +45,12 @@ const ROUTES = [
   { name: "page-detail", path: "/pages/page-3" },
   { name: "query-detail", path: "/queries/noken-taps-uk" },
   { name: "actions", path: "/actions" },
+  // Superficie añadida en P2.2: visión transversal con selección parcial de marcas.
+  { name: "portfolio-filtrado", path: "/portfolio?brands=noken,krion&market=FR&compare=previousYear" },
+  // Superficies añadidas en P2.3: archivo histórico y cadena de versiones.
+  { name: "reports-archivo", path: "/reports?year=2026" },
+  { name: "report-versionado", path: "/reports/report-2026-06" },
+  { name: "cronologia", path: "/cronologia" },
 ];
 
 const args = process.argv.slice(2);

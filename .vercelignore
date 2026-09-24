@@ -1,0 +1,17 @@
+# Qué NO sube `vercel deploy` desde la CLI (D-035). El despliegue por CLI envía
+# el árbol local, no el de git: sin esta lista viajarían secretos y material local.
+**/node_modules
+**/.next
+**/.turbo
+.pnpm-store
+**/.env
+**/.env.*
+!.env.example
+.vercel
+.claude
+**/*.log
+**/*.tsbuildinfo
+**/.DS_Store
+data/local
+artifacts
+informes-adicionales

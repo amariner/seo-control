@@ -1,0 +1,99 @@
+.report-update-status {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  min-height: 44px;
+  color: var(--ds-muted);
+  font: 13px/20px var(--ds-font-sans);
+}
+.report-update-status > span {
+  min-width: 0;
+}
+.report-update-status small {
+  display: block;
+  font: inherit;
+}
+.report-update-icon {
+  color: var(--ds-accent);
+  flex-shrink: 0;
+}
+.report-pending-zone {
+  position: relative;
+  min-width: 0;
+}
+.report-pending-content {
+  min-width: 0;
+}
+.report-pending-zone[data-pending="waiting"] > .report-pending-content {
+  opacity: 0.35;
+}
+.report-pending-zone[data-pending="skeleton"] > .report-pending-content {
+  visibility: hidden;
+}
+.report-pending-placeholder {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+.report-pending-placeholder .ds-data-skeleton-chart {
+  height: 100%;
+}
+.report-pending-content {
+  display: flow-root;
+}
+.report-applied-print-market {
+  display: none;
+}
+.report-update-status + .brand-print-context + .brand-tabs {
+  margin-top: 0;
+}
+.report-pending-meta {
+  position: relative;
+  display: inline-block;
+  max-width: 100%;
+}
+.report-pending-meta[data-pending] > span:first-child {
+  visibility: hidden;
+}
+.report-pending-meta-line {
+  position: absolute;
+  left: 0;
+  top: 4px;
+  width: min(100%, 280px);
+  height: 12px;
+}
+.brand-tabs a {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+}
+.report-retry {
+  margin-left: 12px;
+}
+@media (prefers-reduced-motion: no-preference) {
+  .report-update-icon {
+    animation: report-loading-spin 1.3s linear infinite;
+  }
+  @keyframes report-loading-spin {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+}
+@media print {
+  .report-applied-print-market {
+    display: inline;
+  }
+  .report-pending-zone[data-pending] > .report-pending-content {
+    opacity: 1;
+    visibility: visible;
+  }
+  .report-pending-placeholder,
+  .report-pending-meta-line {
+    display: none;
+  }
+  .report-pending-meta[data-pending] > span:first-child {
+    visibility: visible;
+  }
+}

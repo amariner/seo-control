@@ -1,6 +1,6 @@
 # SEO Dashboard V2 — roadmap vivo de desarrollo
 
-Última actualización: 3 de septiembre de 2026.
+Última actualización: 7 de septiembre de 2026.
 
 ## Norte de producto
 
@@ -44,8 +44,8 @@ resultado de criterios terminados, nunca una estimación subjetiva.
 | --- | --- | --- |
 | P0 | Fundación ejecutable y continuidad entre chats | **complete** |
 | P1 | Sistema visual compartido + calendario editorial general | **complete** |
-| P2 | Paridad crítica verificada con SEO Dashboard V1 | **active** |
-| P3 | Datos reales fiables para Porcelanosa + Noken | planned |
+| P2 | Paridad crítica verificada con SEO Dashboard V1 | **blocked** |
+| P3 | Datos reales fiables para Porcelanosa + Noken | **active** |
 | P4 | Sistema operativo de decisiones y acciones | planned |
 | P5 | Inteligencia técnica, monitorización y prevención | planned |
 | P6 | Demanda, contenido, competencia y enlazado editorial | planned |
@@ -181,35 +181,118 @@ Leyenda: `[x]` cumplido y verificado, `[~]` entregado en parte con el resto acot
 
 ## P2 · Paridad crítica con SEO Dashboard V1
 
-Estado: **active** (0%). Primera tarea pendiente: `P2.1`.
+Estado: **blocked** (79%). Se bloquea, no se cierra: los tres criterios que
+faltan no son desarrollo pendiente, sino dos decisiones del responsable SEO y
+dependencias ya acotadas de `P3`, `P5`, `P6` y `P8` (D-027). Vuelve a `active` en
+cuanto haya sesión de aceptación o cuando una de esas fases entregue el destino
+que falta. `P2.1`, `P2.2` y `P2.3` completadas: 11 de los 14
+criterios de la fase están terminados (3 de 4 en P2.1, 3 de 3 en P2.2, 4 de 4 en
+P2.3 y 1 de 3 en P2.4, más uno entregado en parte). El porcentaje es ese
+recuento, no una estimación.
+
+Lo que falta ya no es trabajo de desarrollo pendiente de hacer, sino de dos
+clases distintas:
+
+1. **Decisiones del responsable**, que el desarrollo no puede tomar: aprobar las
+   dos retiradas propuestas (`P2.1`) y validar los cinco flujos del guion de
+   [`P2_ACCEPTANCE.md`](docs/continuity/P2_ACCEPTANCE.md) (`P2.4`).
+2. **Dependencias de fase**, ya acotadas: la reconciliación de GA4 y GSC exige
+   credenciales y el almacén de `P3`, y las de crawl, canibalización y prompts
+   exigen sus destinos en `P5`, `P6` y `P8`. Sus muestras V1 ya están medidas y
+   congeladas con hash, así que la comparación está preparada de antemano (D-026).
 
 Objetivo: conservar el valor operativo de V1 antes de ampliar el producto. La matriz
-detallada y sus evidencias viven en `docs/continuity/V1_PARITY.md`.
+detallada y sus evidencias viven en `docs/continuity/V1_PARITY.md`; el inventario de
+migración y sus contratos de reconciliación, en `docs/continuity/V1_MIGRATION_INVENTORY.md`
+(generado desde `docs/continuity/v1-migration-inventory.json`).
 
 ### P2.1 · Inventario y contratos de migración
 
-- [ ] Catalogar rutas, fuentes, transformaciones, filtros, exportaciones y dependencias.
-- [ ] Clasificar cada capacidad como `retain`, `redesign`, `merge`, `defer` o `retire`.
-- [ ] Definir reconciliación y tolerancia para cada dataset migrado.
+- [x] Catalogar rutas, fuentes, transformaciones, filtros, exportaciones y dependencias.
+      23 superficies auditadas sobre el código real de V1 (18 páginas y 34 endpoints).
+- [x] Clasificar cada capacidad como `retain`, `redesign`, `merge`, `defer` o `retire`.
+      4 retain, 10 redesign, 6 merge, 1 defer y 2 retire, cada una con motivo escrito.
+- [x] Definir reconciliación y tolerancia para cada dataset migrado.
+      8 datasets con muestra, comparación, métricas, tolerancia motivada y salida ante desviación.
+- [ ] Aprobar o rechazar las 2 retiradas propuestas (`/api/cita-tienda-flow.json`,
+      `/api/cita-tienda-es.json`). Es decisión del responsable, no del equipo de desarrollo.
 
 ### P2.2 · Portada y visión transversal
 
-- [ ] Portada agregada Conjunto y selector de las ocho marcas.
-- [ ] Comparativa temporal, mercados, objetivos, cobertura y explicaciones ejecutivas.
-- [ ] Preservar enlaces profundos y estado compartible de filtros.
+- [x] Portada agregada Conjunto y selector de las ocho marcas. Ruta `/portfolio`
+      del visor, con redirección 308 desde `/conjunto` de V1. El selector alterna
+      cualquier subconjunto de las ocho marcas; las seis que no están en el piloto
+      analítico aparecen sin cifra y con motivo escrito (D-020), nunca a cero.
+- [x] Comparativa temporal, mercados, objetivos, cobertura y explicaciones
+      ejecutivas. Comparativa conmutable periodo anterior / interanual, mercados
+      con visibilidad ponderada y marcas que aportan, objetivos con progreso
+      valor ÷ objetivo, cobertura declarada en cada KPI y cinco notas derivadas
+      con reglas fijas y evidencia. Todo sale de `aggregatePortfolio`, que es pura.
+- [x] Preservar enlaces profundos y estado compartible de filtros. `brands`,
+      `market`, `period` y `compare` viajan en la query string; el orden de marcas
+      se normaliza al canónico, una marca desconocida se descarta sin romper el
+      enlace y `/api/v1/portfolio` lee exactamente el mismo estado que la pantalla.
+      Cada control es un enlace real: la vista funciona sin JavaScript.
 
 ### P2.3 · Capacidades operativas V1
 
-- [ ] Informes y archivo histórico.
-- [ ] Planes de acción, seguimiento de iniciativas y cronología.
-- [ ] Herramientas/importadores locales que sigan aportando valor.
-- [ ] Navegación compatible o redirecciones documentadas.
+- [x] Informes y archivo histórico. `/reports` es el archivo: 7 informes de dos
+      años, filtros compartibles por proyecto, tipo, estado y año, cadena de
+      versiones visible (una versión publicada no se reescribe: la corrección es
+      otra versión con su fe de erratas) y equivalencia capítulo a capítulo con
+      los **dos** informes de V1, fusionados en 16 capítulos a partir de sus 19
+      secciones reales (D-021). El archivo es la única fuente de pantalla, API y
+      exportación.
+- [x] Planes de acción, seguimiento de iniciativas y cronología. `/actions` añade
+      seguimiento de plazo derivado de `dueDate` **contra el corte del dato**, no
+      contra el reloj, con reparto por estado y enlace a la conclusión que origina
+      cada acción. `/cronologia` funde en un solo hilo las anotaciones, las
+      versiones publicadas de informe (incluidas las correcciones), los eventos
+      del calendario editorial y las acciones comprometidas, con carriles
+      filtrables y dos horizontes separados por el corte: lo ocurrido explica el
+      KPI, lo previsto lo compromete. El carril de contexto externo —el radar de
+      V1— se declara vacío con su fase, según decidió P2.1.
+- [x] Herramientas/importadores locales que sigan aportando valor. Catálogo de 12
+      utilidades en `/herramientas` del workbench: 4 disponibles hoy con su punto
+      de entrada, 1 bloqueada con su motivo, 6 pendientes con su fase y 1 retirada
+      propuesta sin aprobar. Los orígenes de V1 y las fases salen del inventario
+      auditado en P2.1 y una prueba falla si una herramienta inventa un origen o
+      adelanta su fase (D-023).
+- [x] Navegación compatible o redirecciones documentadas. Cinco redirecciones
+      declaradas en `next.config.ts` y explicadas en
+      `apps/viewer/lib/legacy-routes.ts`, con una prueba que falla si las dos
+      listas divergen. Las dos que no tienen equivalente todavía
+      (`/tracking/pilar-contenidos` → P6, `/insights/llm` → P8) redirigen a la
+      superficie más cercana **y** el destino declara en pantalla qué falta y en
+      qué fase llega: ni enlace muerto ni redirección silenciosa a algo que no es
+      lo mismo.
 
 ### P2.4 · Aceptación de paridad
 
-- [ ] Reconciliar muestras de V1 y V2 con tolerancia documentada.
+Preparación del desarrollo terminada en P2.3:
+[`docs/continuity/P2_ACCEPTANCE.md`](docs/continuity/P2_ACCEPTANCE.md) trae el
+procedimiento de reconciliación con lo que bloquea a cada dataset, el guion de
+validación de cinco flujos y qué se registra al terminar. La ejecución exige al
+responsable SEO.
+
+- [~] Reconciliar muestras de V1 y V2 con tolerancia documentada. Ejecutado con
+      `pnpm reconcile` sobre los ocho contratos, con el resultado congelado y
+      hasheado en `docs/continuity/v1-reconciliation-baseline.json` y rendido en
+      [`V1_RECONCILIATION.md`](docs/continuity/V1_RECONCILIATION.md) (D-026):
+      **1 reconciliado** (los cuatro snapshots editoriales, V1 medido contra V2
+      medido y hash del importador verificado), **4 con baseline congelado**
+      (SEMrush 15 ficheros y 328 queries, 6 crawls, canibalización 7/7/21 y 24
+      prompts GEO), **2 bloqueados** (GA4 y GSC solo existen como consulta en
+      vivo) y **1 no comparable** (el estado de tareas nunca salió del
+      navegador). Lo que falta no es medir: es que existan los destinos de `P3`,
+      `P5`, `P6` y `P8`. `pnpm reconcile:check` falla si algo se desvía.
 - [ ] Validar los flujos con el responsable SEO, no solo pantalla por pantalla.
-- [ ] Registrar explícitamente cualquier retirada, motivo y alternativa.
+      El guion de cinco flujos está escrito; la ejecución es suya.
+- [x] Registrar explícitamente cualquier retirada, motivo y alternativa. Las 2
+      retiradas y el 1 aplazamiento constan en el inventario con motivo y
+      alternativa, y ni el esquema ni `pnpm migration:check` admiten una sin
+      ellas. Su **aprobación** sigue abierta como criterio de `P2.1`: registrar y
+      aprobar son cosas distintas y se cuentan por separado.
 
 #### Criterios de salida P2
 
@@ -219,19 +302,69 @@ detallada y sus evidencias viven en `docs/continuity/V1_PARITY.md`.
 
 ## P3 · Plataforma de datos reales del piloto
 
+Estado: **active** (25%). Se activó porque `P2` agotó su trabajo de desarrollo y
+porque `P3` es, además, lo que desbloquea dos de sus criterios: la reconciliación
+de GA4 y GSC exige este almacén (D-027). 4 de los 16 criterios de la fase están
+terminados, los cuatro que **no** dependían de credenciales: el adapter de
+repositorio (D-028), el catálogo de métricas (D-029), el reparto idempotente de
+la ingesta diaria (D-030) y las reglas de ejecución —cuota, reintento, lock y
+parcialidad declarada— por `SyncRun` (D-031).
+
+Lo que queda de `P3` depende de tener presupuesto y credenciales de Neon, GA4,
+Search Console y SEMrush: la instancia, las identidades de servicio y la lectura
+real. Lo que sí se puede escribir sin ellas son las **reglas** que la lectura
+tendrá que respetar, y es lo que se ha hecho: agregación (D-029), origen
+declarado (D-028), idempotencia por día (D-030) y control de gasto, reintento y
+exclusión mutua (D-031). Estrenar reglas de deduplicación contra dato real es el
+peor momento para descubrir que dedupican mal, y estrenar una política de
+reintentos contra la cuota real del grupo es el peor momento para descubrir que
+reintenta lo que no debe.
+
 Objetivo: sustituir progresivamente adaptadores sintéticos por datos propios, estables,
 reconciliados y consultables con baja latencia para Porcelanosa + Noken.
 
 ### P3.1 · Repositorio cloud y contratos
 
 - [ ] Neon PostgreSQL Frankfurt, migraciones, índices, partición lógica y pooling.
-- [ ] Repository adapter común para sintético/local/cloud sin bifurcar la UI.
-- [ ] Catálogo de métricas, fuentes, zonas horarias, moneda y periodos.
+      **Bloqueado por credenciales y presupuesto.** El esquema Drizzle y las
+      migraciones iniciales existen desde P0; falta la instancia.
+- [x] Repository adapter común para sintético/local/cloud sin bifurcar la UI.
+      `@seo/repository` (D-028): interfaz `MetricsRepository`, dos orígenes
+      implementados (`synthetic` operativo y `database` que falla declarándolo),
+      uno declarado para P5 (`local`) y un único selector `SEO_DATA_SOURCE` leído
+      en un solo sitio. El visor lee por el adapter y **el aviso de procedencia
+      sale de `describe()`, no del JSX**, así que P3.2 no toca ninguna pantalla.
+      Un origen no disponible lanza `RepositoryUnavailableError` con remedio;
+      nunca cae al sintético, ni con una errata en la variable. 15 pruebas.
+- [x] Catálogo de métricas, fuentes, zonas horarias, moneda y periodos.
+      `packages/contracts/src/catalog.ts` (D-029): 6 métricas con su fuente,
+      regla de agregación, desfase, ventana mínima, definición y salvedad; 7
+      fuentes con cadencia y fase que las conecta; `Europe/Madrid` y `EUR`.
+      `aggregateMetric` es la única función que agrega en el monorepo y
+      `/portfolio` ya la usa, así que el SQL de P3.2 agregará igual que el
+      sintético en vez de mover los números al conectar el dato real. El contrato
+      prohíbe sumar porcentajes. 23 pruebas.
 
 ### P3.2 · GA4 y GSC diarios
 
 - [ ] OAuth/identidades de servicio y secretos fuera del navegador.
-- [ ] Jobs `proyecto x fuente`, D-3, reprocesado de siete días e idempotencia.
+      **Parcial (2026-09-23)**: las credenciales de V1 (cuenta de servicio GA4 y
+      OAuth de GSC) ya funcionan desde el servidor en el origen `live` (D-034),
+      como secretos de Vercel. Sigue abierto porque el criterio pide identidades
+      de servicio propias de V2 y el lector de ingesta, no la lectura directa.
+- [x] Jobs `proyecto x fuente`, D-3, reprocesado de siete días e idempotencia.
+      `packages/sync/src/{plan,ledger,ingest}.ts` (D-030): la unidad de trabajo
+      es el día, no la ventana, y la clave `proyecto:fuente:día` no depende del
+      reloj. El desfase sale del catálogo —GA4 `D-1`, GSC `D-3`— en vez de un
+      `D-3` global, y la cola son siete días contando el corte (antes eran ocho).
+      Reingerir el mismo contenido es `unchanged`; con contenido distinto es
+      `revised` con huella anterior y contador. Un job que falla no aborta el
+      ciclo y conserva su último snapshot válido; `snapshotStaleness` publica la
+      antigüedad y distingue el retraso del **hueco** dentro de la ventana.
+      `pnpm ingest:dry-run` ejecuta cuatro ciclos y sale con código 1 si aparece
+      un duplicado, una deriva o un hueco. 20 pruebas. Lo que falta para cerrar
+      P3.2 es el lector real, que es el primer criterio de esta lista: los
+      lectores actuales declaran `realData: false`.
 - [ ] Agregados de 24 meses, segmentación de marca/intención/página y buscador interno.
 - [ ] Reconciliación <=1 %, cobertura, corte, lag y último snapshot válido.
 
@@ -239,7 +372,23 @@ reconciliados y consultables con baja latencia para Porcelanosa + Noken.
 
 - [ ] Ranking estable, descubrimientos, competidores, SOV y features SERP semanales.
 - [ ] CrUX de campo y PageSpeed sobre muestras versionadas de templates.
-- [ ] Cuotas, reintentos, locks, datos parciales y observabilidad por `SyncRun`.
+- [x] Cuotas, reintentos, locks, datos parciales y observabilidad por `SyncRun`.
+      `packages/sync/src/{policy,run}.ts` (D-031), provider-agnósticas y ya en
+      uso por el ciclo diario de D-030. La cuota se **reserva antes** de llamar
+      —contarla después es contar lo ya gastado— y cada reintento se cobra al
+      mismo presupuesto. El reintento clasifica el fallo por tipo o por código,
+      no por el texto del mensaje: lo permanente sale a la primera, lo
+      desconocido tiene menos intentos que lo transitorio, la espera crece con
+      dispersión para que veintiocho jobs no vuelvan a la vez y la fuente manda
+      cuando pide esperar más. El lock lleva **ficha creciente**: el TTL caduca
+      el permiso, no el proceso, así que sin ficha un ciclo atascado seguiría
+      escribiendo encima del que le sustituyó. Un `SyncRun` no puede declararse
+      completo si algún día quedó fuera, y distingue el fallo (avería) del
+      aplazamiento (sin cuota o con el lock ocupado, sin avería). 19 pruebas,
+      las cinco reglas verificadas por mutación, y `pnpm ingest:dry-run` ejecuta
+      además tres escenarios: lock ocupado, presupuesto agotado y fuente
+      intermitente. Falta aplicarlas a los lectores semanales, que son los dos
+      criterios anteriores de esta lista y dependen de credenciales.
 
 ### P3.4 · Rendimiento de consulta
 
@@ -269,7 +418,15 @@ reinterpretan: se cumplen aquí con el mismo alcance con que se escribieron.
 - Porcelanosa y Noken muestran 24 meses de datos reales reconciliados.
 - Ningún secreto o respuesta cruda llega al cliente o al repositorio público.
 - Un fallo conserva el último snapshot válido y hace visible su antigüedad.
+  **Cumplido para las fuentes diarias** (D-030): el libro solo se escribe en el
+  éxito y `snapshotStaleness` publica antigüedad y huecos. Desde D-031 el
+  `SyncRun` añade la otra mitad: un ciclo a medias se declara `partial`, nunca
+  completo, y separa la avería del aplazamiento. Queda comprobarlo contra el
+  almacén real y para las semanales de P3.3.
 - Cuatro ciclos de sincronización de prueba terminan sin duplicados ni deriva.
+  **Ejecutado** con `pnpm ingest:dry-run` sobre lectores declaradamente
+  sintéticos: 4 ciclos, 28 jobs por ciclo, 28 días en el libro. Se repite con
+  los lectores reales en cuanto existan; el ensayo no se tira.
 
 ## P4 · Sistema operativo de decisiones
 
@@ -486,3 +643,18 @@ Cuando el usuario diga «vamos a seguir con el desarrollo de este proyecto», se
 ejecuta `pnpm status`, se abre el checkpoint y se implementa el primer criterio
 incompleto de la fase activa. Al cerrar, se actualizan estado, roadmap, paridad,
 decisiones y log para que el siguiente chat reanude exactamente desde ahí.
+
+## Ajuste de prioridad · 2026-09-23 (D-040)
+
+Entregado en local el rediseño UX/UI de Xtone solicitado por el usuario: datos
+esenciales sin conclusiones, exploradores GSC con búsqueda/orden/paginación y
+responsive. Es una mejora de la superficie existente; no cierra criterios P3
+ni modifica el bloqueo de P2. Reanudación exacta en el checkpoint operativo.
+
+
+## Extensión de diseño · 2026-09-23 (D-041)
+
+El usuario aprueba Xtone y solicita extenderlo a todo el proyecto. Aplicado en
+local a viewer y workbench: informes compartidos por marca, tipografía sans,
+resúmenes de datos, tablas con búsqueda/orden/paginación y controles responsive.
+Los criterios y porcentajes de fase permanecen iguales; siguiente tarea P3.1.

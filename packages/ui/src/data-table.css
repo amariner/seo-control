@@ -1,0 +1,380 @@
+.report-data {
+  min-width: 0;
+  font: 14px/1.55 var(--ds-font-sans);
+  color: var(--ds-text);
+}
+
+.report-data-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: var(--ds-space-3);
+  margin-bottom: var(--ds-space-4);
+}
+
+.report-data-search {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: min(100%, 390px);
+  min-height: 44px;
+  padding: 0 var(--ds-space-3);
+  border: 1px solid var(--ds-line-strong);
+  border-radius: var(--ds-radius-sm);
+  background: var(--ds-surface-raised);
+  color: var(--ds-muted);
+}
+
+.report-data-search:focus-within {
+  border-color: var(--ds-accent);
+  box-shadow: var(--ds-focus-ring);
+}
+
+.report-data-search > svg {
+  flex: 0 0 auto;
+}
+.report-data-search input {
+  min-width: 0;
+  width: 100%;
+  min-height: 42px;
+  padding: 0;
+  border: 0;
+  outline: 0;
+  background: transparent;
+  color: var(--ds-ink);
+  font: inherit;
+}
+.report-data-search input:focus-visible {
+  outline: 0;
+}
+.report-data-search input::placeholder {
+  color: var(--ds-muted);
+  opacity: 1;
+}
+.report-data-search input::-webkit-search-cancel-button {
+  display: none;
+}
+.report-data-clear {
+  display: grid;
+  place-items: center;
+  flex: 0 0 32px;
+  min-height: 36px;
+  margin-right: -6px;
+  padding: 0;
+  border: 0;
+  border-radius: var(--ds-radius-xs);
+  background: transparent;
+  color: var(--ds-muted);
+}
+.report-data-clear:hover {
+  background: var(--ds-surface);
+  color: var(--ds-ink);
+}
+
+.report-data-size {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--ds-muted);
+}
+.report-data-size select {
+  min-height: 44px;
+  min-width: 74px;
+  padding: 0 var(--ds-space-3);
+  border: 1px solid var(--ds-line-strong);
+  border-radius: var(--ds-radius-sm);
+  background: var(--ds-surface-raised);
+  color: var(--ds-ink);
+  font: inherit;
+  cursor: pointer;
+}
+
+.report-data-scroll {
+  max-width: 100%;
+  max-height: 660px;
+  overflow: auto;
+  overscroll-behavior-x: contain;
+  border: 1px solid var(--ds-line);
+  border-radius: var(--ds-radius-sm);
+  scrollbar-width: thin;
+  scrollbar-color: var(--ds-line-strong) var(--ds-surface);
+}
+
+.report-data-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  font: inherit;
+}
+.report-data-table th,
+.report-data-table td {
+  padding: 15px 18px;
+  text-align: left;
+  vertical-align: middle;
+}
+.report-data-table th {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  border-bottom: 1px solid var(--ds-line);
+  background: var(--ds-surface);
+  color: var(--ds-text);
+  font-size: 14px;
+  font-weight: 500;
+  white-space: nowrap;
+}
+.report-data-table td {
+  border-bottom: 1px solid var(--ds-line);
+  background: var(--ds-surface-raised);
+  color: var(--ds-ink);
+}
+.report-data-table tbody tr:last-child td {
+  border-bottom: 0;
+}
+.report-data-table tbody tr:hover td {
+  background: var(--ds-accent-band);
+}
+.report-data-table th:first-child,
+.report-data-table td:first-child {
+  position: sticky;
+  left: 0;
+}
+.report-data-table th:first-child {
+  z-index: 3;
+}
+.report-data-table td:first-child {
+  z-index: 1;
+  min-width: 180px;
+  max-width: 350px;
+}
+.report-data-table td:not(.report-data-numeric) {
+  min-width: 145px;
+  overflow-wrap: anywhere;
+}
+.report-data-table .report-data-numeric {
+  text-align: right;
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+.report-data-table .report-data-numeric .report-data-sort {
+  justify-content: flex-end;
+}
+.report-data-table .cell-secondary,
+.report-data-table .report-url {
+  font-size: 14px;
+  line-height: 1.6;
+}
+.report-data-table .report-url {
+  display: block;
+  max-width: 350px;
+  overflow-wrap: anywhere;
+}
+.report-data-table a {
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+}
+.report-data-table a:hover {
+  color: var(--ds-accent);
+  text-decoration-line: underline;
+}
+
+.report-data-sort {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  min-height: 32px;
+  margin: -5px 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  text-align: inherit;
+}
+.report-data-sort svg {
+  flex: 0 0 auto;
+  color: var(--ds-muted);
+}
+.report-data-sort:hover,
+.report-data-table th[aria-sort] .report-data-sort,
+.report-data-table th[aria-sort] .report-data-sort svg {
+  color: var(--ds-accent);
+}
+
+.report-data-footer {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--ds-space-3);
+  padding-top: var(--ds-space-4);
+}
+.report-data-count {
+  margin: 0;
+  color: var(--ds-text);
+  font-size: 14px;
+}
+.report-data-count span {
+  color: var(--ds-muted);
+}
+.report-data-pagination {
+  display: flex;
+  align-items: center;
+  gap: var(--ds-space-1);
+}
+.report-data-pagination button {
+  display: grid;
+  place-items: center;
+  min-width: 40px;
+  min-height: 40px;
+  padding: 0;
+  border: 1px solid var(--ds-line);
+  border-radius: var(--ds-radius-sm);
+  background: var(--ds-surface-raised);
+  color: var(--ds-text);
+}
+.report-data-pagination button:hover:not(:disabled) {
+  border-color: var(--ds-accent);
+  color: var(--ds-accent);
+  background: var(--ds-accent-band);
+}
+.report-data-pagination button:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+.report-data-pagination > span {
+  min-width: 72px;
+  padding: 0 10px;
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+}
+.report-data-note {
+  margin-top: var(--ds-space-3);
+  color: var(--ds-muted);
+  font-size: 14px;
+  line-height: 1.6;
+}
+.report-data-note p {
+  margin: 0;
+}
+.report-data-table .report-data-empty {
+  position: static;
+  padding: var(--ds-space-12) var(--ds-space-4);
+  text-align: center;
+}
+.report-data-empty strong,
+.report-data-empty span {
+  display: block;
+}
+.report-data-empty strong {
+  font-weight: 500;
+}
+.report-data-empty span {
+  margin-top: var(--ds-space-1);
+  color: var(--ds-muted);
+}
+.report-data-empty button {
+  min-height: 40px;
+  margin-top: var(--ds-space-3);
+  padding: 0 var(--ds-space-3);
+  border: 1px solid var(--ds-line-strong);
+  border-radius: var(--ds-radius-sm);
+  background: var(--ds-surface-raised);
+  color: var(--ds-accent);
+  font: inherit;
+}
+.report-data-print-filter {
+  display: none;
+}
+
+@media (max-width: 640px) {
+  .report-data-search {
+    width: 100%;
+  }
+  .report-data-search input {
+    font-size: 16px;
+  }
+  .report-data-size {
+    margin-left: auto;
+  }
+  .report-data-table th,
+  .report-data-table td {
+    padding: 14px 12px;
+  }
+  .report-data-table td:first-child {
+    min-width: 156px;
+    max-width: 210px;
+  }
+  .report-data-table .report-url {
+    max-width: 210px;
+  }
+  .report-data-footer {
+    align-items: flex-start;
+  }
+  .report-data-pagination {
+    width: 100%;
+    justify-content: flex-end;
+  }
+  .report-data-pagination button {
+    min-width: 44px;
+    min-height: 44px;
+  }
+}
+
+@media print {
+  .report-data-toolbar,
+  .report-data-footer {
+    display: none !important;
+  }
+  .report-data-scroll {
+    max-height: none;
+    overflow: visible;
+    border: 0;
+  }
+  .report-data-table {
+    table-layout: fixed;
+    font-size: 10px;
+  }
+  .report-data-table th,
+  .report-data-table td,
+  .report-data-table th:first-child,
+  .report-data-table td:first-child {
+    position: static;
+    min-width: 0;
+    max-width: none;
+    padding: 8px 6px;
+    font-size: 10px;
+    white-space: normal;
+    overflow-wrap: anywhere;
+  }
+  .report-data-table thead {
+    display: table-header-group;
+  }
+  .report-data-table tr {
+    break-inside: avoid;
+  }
+  .report-data-table .cell-secondary,
+  .report-data-table .report-url {
+    font-size: 10px;
+  }
+  .report-data-table a::after {
+    content: none;
+  }
+  .report-data-sort {
+    display: block;
+    min-height: 0;
+    margin: 0;
+    text-align: inherit;
+  }
+  .report-data-sort svg {
+    display: none;
+  }
+  .report-data-note,
+  .report-data-print-filter {
+    display: block;
+    font-size: 10px;
+  }
+}

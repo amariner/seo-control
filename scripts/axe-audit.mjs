@@ -27,23 +27,37 @@ const require = createRequire(import.meta.url);
 const CHROME = "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome";
 const PORT = 9334;
 
-/** Las nueve rutas del visor más la sección editorial del workbench. */
+/** Rutas del visor auditadas más la sección editorial del workbench. */
 const APPS = {
   viewer: {
     base: "http://localhost:3000",
     routes: [
       { name: "home", path: "/" },
+      { name: "portfolio", path: "/portfolio" },
+      { name: "projects", path: "/projects" },
+      { name: "marca-sin-serie", path: "/?project=krion" },
+      { name: "proyecto-sin-serie", path: "/projects/gamadecor" },
+      { name: "portfolio-filtrado", path: "/portfolio?brands=noken,krion&market=FR&compare=previousYear" },
       { name: "cal-year", path: "/editorial/calendario" },
       { name: "cal-month", path: "/editorial/calendario?view=month&month=9" },
       { name: "backlog", path: "/editorial/backlog?kind=backlog" },
       { name: "propuestas", path: "/editorial/propuestas" },
       { name: "insights", path: "/insights" },
       { name: "actions", path: "/actions" },
+      { name: "cronologia", path: "/cronologia" },
+      { name: "cronologia-carril", path: "/cronologia?lane=informe&project=noken" },
+      { name: "cronologia-vacia", path: "/cronologia?lane=contexto-externo" },
       { name: "reports", path: "/reports" },
+      { name: "reports-filtrado", path: "/reports?year=2025&type=especial" },
+      { name: "reports-vacio", path: "/reports?status=borrador" },
       { name: "report-detail", path: "/reports/report-2026-08" },
+      { name: "report-versionado", path: "/reports/report-2026-06" },
+      { name: "legacy-geo", path: "/insights?from=insights-llm" },
       { name: "page-detail", path: "/pages/page-1" },
       { name: "query-detail", path: "/queries/noken-taps-uk" },
       { name: "projects", path: "/projects" },
+      { name: "marca-sin-serie", path: "/?project=krion" },
+      { name: "proyecto-sin-serie", path: "/projects/gamadecor" },
       { name: "project", path: "/projects/porcelanosa" },
       { name: "data", path: "/data" },
     ],
@@ -55,6 +69,7 @@ const APPS = {
       { name: "editorial-piezas", path: "/editorial" },
       { name: "editorial-propuestas", path: "/editorial?tab=slots" },
       { name: "editorial-eventos", path: "/editorial?tab=events" },
+      { name: "herramientas", path: "/herramientas" },
     ],
   },
 };

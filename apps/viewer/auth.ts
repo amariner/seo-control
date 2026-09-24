@@ -2,6 +2,15 @@ import NextAuth from "next-auth";
 import MicrosoftEntraID from "next-auth/providers/microsoft-entra-id";
 
 const devBypass = process.env.NODE_ENV !== "production" && process.env.DEV_AUTH_BYPASS === "true";
+
+/**
+ * Acceso público TEMPORAL del visor desplegado (D-035). Mientras no se registre
+ * la aplicación en Microsoft Entra, el visor se publica sin login para validar
+ * el despliegue con dato real. Es una decisión explícita, por entorno: nunca se
+ * activa sola, y la cabecera `X-Robots-Tag: noindex` sigue impidiendo que se
+ * indexe. Quitar la variable devuelve el login obligatorio sin tocar código.
+ */
+export const publicAccess = process.env.PUBLIC_ACCESS === "true";
 const allowlist = new Set((process.env.ALLOWED_ENTRA_OBJECT_IDS ?? "").split(",").map((value) => value.trim()).filter(Boolean));
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
@@ -14,7 +23,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
   pages: { signIn: "/login" },
   callbacks: {
     authorized({ auth: session }) {
-      return devBypass || Boolean(session?.user);
+      return publicAccess || devBypass || Boolean(session?.user);
     },
     signIn({ profile }) {
       if (devBypass) return true;

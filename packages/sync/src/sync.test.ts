@@ -14,8 +14,14 @@ class MemoryStore implements SyncStore {
 }
 
 describe("sync orchestration", () => {
-  it("reprocesses seven days and applies D-3", () => {
-    expect(syncWindow("gsc", new Date("2026-09-02T10:00:00Z"))).toEqual({ cutoff: "2026-08-30", start: "2026-08-23" });
+  it("reprocesa siete días y toma el desfase de cada fuente del catálogo", () => {
+    // Search Console publica con tres días: D-3. La cola son siete días
+    // contando el corte (antes eran ocho por contar `cutoff - 7`).
+    expect(syncWindow("gsc", new Date("2026-09-02T10:00:00Z"))).toEqual({ cutoff: "2026-08-30", start: "2026-08-24" });
+    // GA4 publica con uno; fijar D-3 también aquí cerraba su día dos días tarde.
+    expect(syncWindow("ga4", new Date("2026-09-02T10:00:00Z"))).toEqual({ cutoff: "2026-09-01", start: "2026-08-26" });
+    // Una fuente semanal no arrastra cola diaria: su corte es su desfase.
+    expect(syncWindow("semrush", new Date("2026-09-02T10:00:00Z"))).toEqual({ cutoff: "2026-08-26", start: "2026-08-26" });
   });
 
   it("is idempotent", async () => {

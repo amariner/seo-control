@@ -27,8 +27,8 @@ export default async function CalendarPage({ searchParams }: { searchParams: Pro
   const agenda = buildAgenda(view === "month" ? events.filter((event) => event.month === month) : events);
 
   return (
-    <EditorialFrame dataset={dataset} current={BASE} title="Calendario editorial general" description={`Cadencia de publicación de las ocho marcas y bloques temáticos de ${year}. Cada evento enlaza con la pieza curada en el workbench cuando existe; mientras tanto muestra candidatas heurísticas de su marca y mes.`}>
-      {dataset.report.brandsWithoutEvents.length ? <Notice tone="info" className="ds-no-print" >Marcas sin evento en el calendario importado: {dataset.report.brandsWithoutEvents.map((slug) => brandName(slug, slug)).join(", ")}. Aparecen en la leyenda con recuento cero para no ocultar el alcance del grupo.</Notice> : null}
+    <EditorialFrame dataset={dataset} current={BASE} title="Calendario editorial general" description={`Publicaciones y temas de ${year}. Filtra por marca y consulta cada pieza.`}>
+      {dataset.report.brandsWithoutEvents.length ? <Notice tone="info" className="ds-no-print" >Marcas sin evento en el calendario importado: {dataset.report.brandsWithoutEvents.map((slug) => brandName(slug, slug)).join(", ")}.</Notice> : null}
 
       <div className="editorial-toolbar" role="group" aria-label="Vista del calendario">
         <div className="field"><span>Vista</span><div className="segmented"><Link className={view === "year" ? "segment-active" : ""} href={hrefWith(BASE, input, { view: "year", month: null })} aria-current={view === "year" ? "true" : undefined}>Anual</Link><Link className={view === "month" ? "segment-active" : ""} href={hrefWith(BASE, input, { view: "month", month: month ?? months[0]?.month ?? null })} aria-current={view === "month" ? "true" : undefined}>Mensual</Link></div></div>

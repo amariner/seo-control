@@ -1,6 +1,17 @@
 import { z } from "zod";
+import { BRAND_SLUGS } from "./taxonomy";
 
-export const projectSlugSchema = z.enum(["porcelanosa", "noken"]);
+/**
+ * Las ocho marcas del grupo pueden seleccionarse. Antes esto era
+ * `["porcelanosa", "noken"]`: el piloto analítico estaba escrito en el contrato,
+ * de modo que las otras seis no eran elegibles en ninguna pantalla aunque V1 las
+ * midiera y el calendario editorial las cubriera desde P1 (D-033).
+ *
+ * Que una marca sea seleccionable NO significa que tenga serie analítica. Esa
+ * distinción la marca `brand.pilot`, y quien no la tiene lo declara en pantalla
+ * en vez de recibir cifras inventadas.
+ */
+export const projectSlugSchema = z.enum(BRAND_SLUGS);
 export const marketCodeSchema = z.enum(["ES", "UK", "US", "FR", "DE"]);
 export const periodKeySchema = z.enum(["28d", "90d", "180d", "12m", "24m"]);
 export const sourceKeySchema = z.enum(["ga4", "gsc", "semrush", "geo", "crux", "pagespeed", "crawl"]);
@@ -172,6 +183,27 @@ export const pageOpportunitySchema = z.object({
   opportunityScore: z.number(),
 });
 
+/**
+ * Consulta non-branded con margen de captación (D-036). Sale de Search Console:
+ * demanda real (impresiones), posición media y CTR frente a la curva esperada
+ * del propio sitio. `potentialClicks` es lo que la curva dice que se deja de
+ * ganar a la posición actual o, fuera del top 3, lo que daría llegar al top 3.
+ * No es una previsión: es la magnitud que ordena la lista.
+ */
+export const queryOpportunitySchema = z.object({
+  id: z.string(),
+  project: projectSlugSchema,
+  query: z.string(),
+  clicks: z.number(),
+  impressions: z.number(),
+  position: z.number(),
+  ctr: z.number(),
+  expectedCtr: z.number(),
+  potentialClicks: z.number(),
+  /** URL que más impresiones recibe para la consulta. `null` si GSC no la declara. */
+  page: z.string().nullable(),
+});
+
 export const reportSchema = z.object({
   id: z.string(),
   project: projectSlugSchema.nullable(),
@@ -187,9 +219,30 @@ export const reportSchema = z.object({
   blocks: z.number().int().nonnegative(),
 });
 
+/**
+ * Ventana temporal real del periodo seleccionado, con sus dos comparaciones.
+ *
+ * Está en el contrato porque la portada la enseña, y mientras no lo estuvo la
+ * enseñaba escrita a mano: cambiar el periodo a 24 meses seguía mostrando un
+ * rango de 28 días. Un encabezado que miente sobre su propia ventana invalida
+ * todo lo que hay debajo.
+ */
+export const periodWindowSchema = z.object({
+  days: z.number().int().positive(),
+  start: z.string().date(),
+  end: z.string().date(),
+  previousStart: z.string().date(),
+  previousEnd: z.string().date(),
+  previousYearStart: z.string().date(),
+  previousYearEnd: z.string().date(),
+});
+
 export const dashboardPayloadSchema = z.object({
   generatedAt: z.string().datetime(),
-  mode: z.enum(["synthetic", "database"]),
+  /** `live`: lectura directa de GA4/GSC desde el servidor, sin almacén propio (D-034). */
+  mode: z.enum(["synthetic", "live", "database"]),
+  /** Ventana del periodo activo. La portada la muestra en vez de suponerla. */
+  window: periodWindowSchema,
   filters: z.object({
     project: z.union([projectSlugSchema, z.literal("all")]),
     market: z.union([marketCodeSchema, z.literal("all")]),
@@ -206,6 +259,8 @@ export const dashboardPayloadSchema = z.object({
   annotations: z.array(annotationSchema),
   technicalIssues: z.array(technicalIssueSchema),
   opportunities: z.array(pageOpportunitySchema),
+  /** Solo lo rellena un origen con GSC real. El sintético no inventa demanda. */
+  queryOpportunities: z.array(queryOpportunitySchema).default([]),
   reports: z.array(reportSchema),
 });
 
@@ -229,9 +284,57 @@ export const publicationPackageSchema = z.object({
 });
 
 export type DashboardPayload = z.infer<typeof dashboardPayloadSchema>;
+/** Estado de filtros de la portada. Vive en el contrato porque el adapter de
+ *  repositorio (P3.1) y las dos apps necesitan el mismo tipo. */
+export type DashboardFilters = DashboardPayload["filters"];
+/** Clave de fuente de datos. El catálogo (P3.1) la usa para tipar sus definiciones. */
+export type SourceKey = z.infer<typeof sourceKeySchema>;
 export type Insight = z.infer<typeof insightSchema>;
+export type QueryOpportunity = z.infer<typeof queryOpportunitySchema>;
 export type Action = z.infer<typeof actionSchema>;
 export type ProjectSlug = z.infer<typeof projectSlugSchema>;
 export type MarketCode = z.infer<typeof marketCodeSchema>;
 export type PeriodKey = z.infer<typeof periodKeySchema>;
 export type PublicationPackage = z.infer<typeof publicationPackageSchema>;
+export type PeriodWindow = z.infer<typeof periodWindowSchema>;
+
+const MONTHS_ES_SHORT = ["ene", "feb", "mar", "abr", "may", "jun", "jul", "ago", "sep", "oct", "nov", "dic"];
+const MONTHS_ES_LONG = ["enero", "febrero", "marzo", "abril", "mayo", "junio", "julio", "agosto", "septiembre", "octubre", "noviembre", "diciembre"];
+
+/**
+ * Rango legible en español. Colapsa lo que se repite: dentro del mismo mes
+ * queda «3–30 agosto 2026», y si cruza meses o años se abrevia lo justo para
+ * que no quepa duda del año.
+ */
+export function formatPeriodRange(start: string, end: string): string {
+  const [ys, ms, ds] = start.split("-").map(Number) as [number, number, number];
+  const [ye, me, de] = end.split("-").map(Number) as [number, number, number];
+  if (ys === ye && ms === me) return `${ds}–${de} ${MONTHS_ES_LONG[ms - 1]} ${ye}`;
+  if (ys === ye) return `${ds} ${MONTHS_ES_SHORT[ms - 1]} – ${de} ${MONTHS_ES_SHORT[me - 1]} ${ye}`;
+  return `${ds} ${MONTHS_ES_SHORT[ms - 1]} ${ys} – ${de} ${MONTHS_ES_SHORT[me - 1]} ${ye}`;
+}
+
+const DAY_MS = 86_400_000;
+const iso = (time: number) => new Date(time).toISOString().slice(0, 10);
+
+/** Días que cubre cada periodo. 12m y 24m se cuentan en días para no depender del calendario. */
+export const PERIOD_DAYS: Record<PeriodKey, number> = { "28d": 28, "90d": 90, "180d": 180, "12m": 365, "24m": 730 };
+
+/**
+ * Construye la ventana a partir del corte del dato, no del reloj: dos peticiones
+ * del mismo snapshot deben describir el mismo periodo.
+ */
+export function buildPeriodWindow(period: PeriodKey, cutoff: string): PeriodWindow {
+  const days = PERIOD_DAYS[period];
+  const end = Date.parse(cutoff);
+  const start = end - (days - 1) * DAY_MS;
+  return {
+    days,
+    start: iso(start),
+    end: iso(end),
+    previousStart: iso(start - days * DAY_MS),
+    previousEnd: iso(end - days * DAY_MS),
+    previousYearStart: iso(start - 365 * DAY_MS),
+    previousYearEnd: iso(end - 365 * DAY_MS),
+  };
+}

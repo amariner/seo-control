@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { EDITORIAL_BRANDS, EDITORIAL_TYPE_LABELS, MONTH_NAMES_ES } from "@seo/contracts";
 import { DataPanel, EmptyState, StatusBadge } from "@seo/ui";
 import { ExternalLink } from "lucide-react";
+import { EditorialPagination } from "@/components/editorial/editorial-pagination";
+import { editorialPagination } from "@/components/editorial/pagination";
 import { EditorialFrame } from "@/components/editorial/editorial-frame";
 import { EditorialToolbar } from "@/components/editorial/editorial-toolbar";
 import { brandColor, brandName, querySlots, type SearchInput } from "@/lib/editorial";
@@ -11,12 +13,13 @@ export const metadata: Metadata = { title: "Propuestas editoriales" };
 export default async function ProposalsPage({ searchParams }: { searchParams: Promise<SearchInput> }) {
   const input = await searchParams;
   const { dataset, filters, items, total, options } = querySlots(input);
+  const pagination = editorialPagination(input, items.length);
   const exportParams = new URLSearchParams();
   for (const [key, value] of Object.entries(input)) { const single = Array.isArray(value) ? value[0] : value; if (single) exportParams.set(key, single); }
   const proposalCount = items.reduce((sum, slot) => sum + slot.proposals.length, 0);
 
   return (
-    <EditorialFrame dataset={dataset} current="/editorial/propuestas" title="Propuestas por hueco" description="Cada hueco del calendario de prensa reúne sus alternativas editoriales (reutilizar o crear). El número real de alternativas es dinámico; prensa y SEO eligen una y la selección se registrará desde el workbench.">
+    <EditorialFrame dataset={dataset} current="/editorial/propuestas" title="Propuestas por hueco" description="Alternativas por publicación. Consulta la propuesta elegida y sus keywords.">
       <EditorialToolbar
         search={{ value: filters.q, placeholder: "Buscar hueco, keyword, subtema o título…" }}
         exportHref={`/api/v1/editorial/export/plan-editorial-propuestas.csv${exportParams.toString() ? `?${exportParams.toString()}` : ""}`}
@@ -29,10 +32,11 @@ export default async function ProposalsPage({ searchParams }: { searchParams: Pr
         <span className="result-count"><strong>{items.length}</strong> de {total} huecos · {proposalCount} alternativas</span>
       </EditorialToolbar>
 
+      <EditorialPagination total={items.length} {...pagination} label="huecos" />
       {items.length === 0 ? <EmptyState title="Ningún hueco coincide con los filtros" /> : (
         <div className="slot-list">
-          {items.map((slot) => (
-            <DataPanel as="article" className="slot-card" key={slot.id} aria-labelledby={`slot-${slot.id}`}>
+          {items.map((slot, index) => (
+            <DataPanel as="article" className={`slot-card ${index < pagination.start || index >= pagination.end ? "editorial-off-page" : ""}`} key={slot.id} aria-labelledby={`slot-${slot.id}`}>
               <div className="slot-head">
                 <span className="brand-cell" style={{ "--brand-color": brandColor(slot.brand.slug) } as React.CSSProperties}>{brandName(slot.brand.slug, slot.brand.literal)}{slot.brand.line ? <span className="ds-meta"> · {slot.brand.line}</span> : null}</span>
                 <h2 id={`slot-${slot.id}`} className="ds-h3">{slot.slotLiteral}</h2>

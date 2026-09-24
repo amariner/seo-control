@@ -1,13 +1,131 @@
-import { Badge, Card, DataTablePanel } from "@seo/ui";
+import { Badge, Card } from "@seo/ui";
+import { ReportDataTable } from "@seo/ui/data-table";
 import { PageFrame } from "@/components/page-frame";
 import { getDashboard, parseFilters } from "@/lib/data";
 
-export default async function DataPage({ searchParams }: { searchParams: Promise<Record<string, string | string[] | undefined>> }) {
+const number = (value: number | null | undefined) =>
+  value?.toLocaleString("es-ES", {
+    useGrouping: "always" as unknown as boolean,
+  }) ?? "—";
+
+export default async function DataPage({
+  searchParams,
+}: {
+  searchParams: Promise<Record<string, string | string[] | undefined>>;
+}) {
   const data = await getDashboard(parseFilters(await searchParams));
-  return <PageFrame eyebrow="Trazabilidad" title="Estado y calidad de datos" description="Cada cifra expone corte, cobertura y última versión válida. Una sincronización fallida nunca sustituye un snapshot correcto por datos incompletos." generatedAt={data.generatedAt}>
-    <section aria-labelledby="fuentes"><div className="section-heading"><div><p className="eyebrow">Fuentes</p><h2 id="fuentes">Estado y cobertura por fuente</h2><p>Cada tarjeta declara cobertura, corte y último snapshot válido; una fuente parcial nunca se presenta como completa.</p></div></div>
-    <div className="source-grid">{data.sources.map((source) => <Card className="source-card" key={source.source}><div className="source-head"><h3>{source.label}</h3><Badge tone={source.status === "correcto" ? "good" : source.status === "parcial" ? "warn" : "bad"}>{source.status}</Badge></div><div className="geo-score" style={{ margin: "20px 0 12px" }}><strong style={{ fontSize: 30 }}>{Math.round(source.coverage * 100)}%</strong><span>cobertura<br />corte {source.cutoff ?? "—"}</span></div><p>{source.note}</p><div className="source-meta"><span>Último snapshot válido</span><span>{source.lastValidSnapshot ? new Date(source.lastValidSnapshot).toLocaleString("es-ES", { dateStyle: "short", timeStyle: "short" }) : "—"}</span></div></Card>)}</div></section>
-    <section className="section chapter-grid"><Card className="chapter-card"><p className="eyebrow">Reglas de conservación</p><h2>Agregación y retención</h2><ul className="bullet-list"><li>Series diarias agregadas: 24 meses.</li><li>Detalle curado semanal: máximo 500 filas por segmento.</li><li>Respuestas crudas de API: transformación en memoria, sin persistencia.</li><li>Crawls crudos: 12 meses exclusivamente en local.</li></ul></Card><Card className="chapter-card"><p className="eyebrow">Definición del score</p><h2>40 / 30 / 30</h2><ul className="bullet-list"><li>Negocio: 40%.</li><li>Visibilidad: 30%.</li><li>Técnica: 30%.</li><li>Si falta una dimensión, el score global no se calcula.</li></ul></Card></section>
-    <section className="section"><div className="section-heading"><div><p className="eyebrow">Alternativa accesible</p><h2>Serie tabular de sesiones</h2></div></div><DataTablePanel label="Serie diaria de sesiones orgánicas con interanual y bandas"><table className="data-table"><thead><tr><th>Fecha</th><th>Valor actual</th><th>Interanual</th><th>Banda inferior</th><th>Banda superior</th></tr></thead><tbody>{(data.series.organic_sessions ?? []).map((point) => <tr key={point.date}><td>{point.date}</td><td>{point.value.toLocaleString("es-ES")}</td><td>{point.previousYear?.toLocaleString("es-ES") ?? "—"}</td><td>{point.lowerBand?.toLocaleString("es-ES") ?? "—"}</td><td>{point.upperBand?.toLocaleString("es-ES") ?? "—"}</td></tr>)}</tbody></table></DataTablePanel></section>
-  </PageFrame>;
+  return (
+    <PageFrame
+      eyebrow="Trazabilidad"
+      title="Fuentes y calidad"
+      description="Cobertura, fechas de corte y disponibilidad de los datos."
+      generatedAt={data.generatedAt}
+    >
+      <section aria-labelledby="fuentes">
+        <div className="section-heading">
+          <h2 id="fuentes">Fuentes</h2>
+          <span className="result-count">{data.sources.length} fuentes</span>
+        </div>
+        <div className="source-grid">
+          {data.sources.map((source) => (
+            <Card className="source-card" key={source.source}>
+              <div className="source-head">
+                <h3>{source.label}</h3>
+                <Badge
+                  tone={
+                    source.status === "correcto"
+                      ? "good"
+                      : source.status === "parcial"
+                        ? "warn"
+                        : "bad"
+                  }
+                >
+                  {source.status}
+                </Badge>
+              </div>
+              <div className="geo-score" style={{ margin: "24px 0 16px" }}>
+                <strong style={{ fontSize: 32 }}>
+                  {Math.round(source.coverage * 100)}%
+                </strong>
+                <span>
+                  cobertura
+                  <br />
+                  corte {source.cutoff ?? "—"}
+                </span>
+              </div>
+              <p>{source.note}</p>
+              <div className="source-meta">
+                <span>Último dato válido</span>
+                <span>
+                  {source.lastValidSnapshot
+                    ? new Date(source.lastValidSnapshot).toLocaleString(
+                        "es-ES",
+                        { dateStyle: "short", timeStyle: "short" },
+                      )
+                    : "—"}
+                </span>
+              </div>
+            </Card>
+          ))}
+        </div>
+      </section>
+      <section className="section" aria-labelledby="serie-sesiones">
+        <div className="section-heading">
+          <h2 id="serie-sesiones">Sesiones por día</h2>
+        </div>
+        <ReportDataTable
+          id="daily-sessions"
+          caption="Sesiones orgánicas por día"
+          searchPlaceholder="Buscar fecha…"
+          columns={[
+            { key: "date", label: "Fecha" },
+            { key: "current", label: "Sesiones", numeric: true },
+            { key: "year", label: "Año anterior", numeric: true },
+            { key: "lower", label: "Banda inferior", numeric: true },
+            { key: "upper", label: "Banda superior", numeric: true },
+          ]}
+          rows={(data.series.organic_sessions ?? []).map((point) => ({
+            id: point.date,
+            searchText: point.date,
+            values: {
+              date: point.date,
+              current: point.value,
+              year: point.previousYear ?? null,
+              lower: point.lowerBand ?? null,
+              upper: point.upperBand ?? null,
+            },
+            cells: {
+              current: number(point.value),
+              year: number(point.previousYear),
+              lower: number(point.lowerBand),
+              upper: number(point.upperBand),
+            },
+          }))}
+        />
+      </section>
+      <details className="section">
+        <summary className="section-link">Metodología y conservación</summary>
+        <div className="chapter-grid" style={{ marginTop: 20 }}>
+          <Card className="chapter-card">
+            <h2>Retención</h2>
+            <ul className="bullet-list">
+              <li>Series diarias: 24 meses.</li>
+              <li>Detalle semanal: hasta 500 filas por segmento.</li>
+              <li>Respuestas de API: sin persistencia.</li>
+              <li>Crawls: 12 meses, solo en local.</li>
+            </ul>
+          </Card>
+          <Card className="chapter-card">
+            <h2>Score global</h2>
+            <ul className="bullet-list">
+              <li>Negocio: 40%.</li>
+              <li>Visibilidad: 30%.</li>
+              <li>Técnica: 30%.</li>
+              <li>Sin las tres dimensiones, no se calcula.</li>
+            </ul>
+          </Card>
+        </div>
+      </details>
+    </PageFrame>
+  );
 }

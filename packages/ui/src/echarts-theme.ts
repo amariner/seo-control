@@ -15,7 +15,7 @@ export const CHART_COLORS = {
   graphiteSoft: "#d9ddda",
   ink: "#101516",
   text: "#46504e",
-  muted: "#68726f",
+  muted: "#5f6a67",
   line: "#dcdedb",
   positive: "#176044",
   warning: "#805600",

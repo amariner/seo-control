@@ -1,0 +1,1142 @@
+{
+  "schemaVersion": "v1-migration.1",
+  "auditedAt": "2026-09-03",
+  "v1Source": {
+    "repository": "~/Desktop/Proyectos/seo-dashboard",
+    "stack": "Astro 5 SSR + Svelte 5 + Tailwind 4, better-sqlite3, googleapis, cheerio",
+    "pages": 18,
+    "endpoints": 34
+  },
+  "surfaces": [
+    {
+      "id": "home-ga4-global",
+      "v1Route": "/",
+      "kind": "page",
+      "capability": "Portada GA4 por proyecto, mercado y periodo: KPIs, previa, YoY, tendencias, canales, alertas, divergencia GSC/GA4, movers, tráfico IA y contexto SEMrush.",
+      "sources": [
+        "/api/ga4.json",
+        "/api/gsc.json",
+        "/api/semrush/consultas.json"
+      ],
+      "transformations": [
+        "lib/ga4.ts",
+        "lib/dashboard-formatters.ts",
+        "lib/api/query-params.ts",
+        "lib/utils.ts"
+      ],
+      "filters": [
+        "proyecto",
+        "mercado",
+        "rango de fechas con presets",
+        "comparativa previa/YoY",
+        "estado en query string"
+      ],
+      "exports": [],
+      "dependencies": [
+        "GA4 Data API",
+        "Search Console API",
+        "SEMrush API",
+        "lib/config/projects.ts"
+      ],
+      "disposition": "redesign",
+      "dispositionReason": "El valor es la lectura ejecutiva multiproyecto, no la implementación: V2 la rehace sobre contratos y datos reales con procedencia, cobertura y drill-down. El contador aleatorio de usuarios en directo no se traslada.",
+      "approval": "approved",
+      "alternative": null,
+      "parityState": "partial-synthetic",
+      "targetPhase": "P2",
+      "v2Target": "/ (visor) con datos reales desde P3"
+    },
+    {
+      "id": "tracking-gsc-ga4",
+      "v1Route": "/tracking",
+      "kind": "page",
+      "capability": "Rendimiento GSC + GA4 con rangos predefinidos y personalizados: clics, impresiones, CTR, posición, usuarios, engagement, conversiones, queries, páginas, mercados, branded/non-branded y sugerencias.",
+      "sources": [
+        "/api/gsc.json",
+        "/api/semrush/consultas.json",
+        "/api/tracking/suggestions.json"
+      ],
+      "transformations": [
+        "lib/searchConsole.ts",
+        "lib/tracking/suggestions.ts",
+        "lib/dashboard-formatters.ts",
+        "lib/config/brandTerms.ts"
+      ],
+      "filters": [
+        "proyecto",
+        "mercado",
+        "rango con presets",
+        "branded/non-branded",
+        "búsqueda en query y URL",
+        "orden por columna",
+        "estado en query string"
+      ],
+      "exports": [],
+      "dependencies": [
+        "Search Console API",
+        "GA4 Data API",
+        "SEMrush API",
+        "localStorage (set estable de queries)"
+      ],
+      "disposition": "redesign",
+      "dispositionReason": "Es el núcleo analítico diario y debe conservarse entero, pero depende de series reales y de una entidad query que hoy no existe en el contrato V2; se rehace sobre el almacén de P3.",
+      "approval": "approved",
+      "alternative": null,
+      "parityState": "partial-synthetic",
+      "targetPhase": "P3",
+      "v2Target": "/queries y /queries/[id] (la ficha ya existe desde P1.4, sin serie propia)"
+    },
+    {
+      "id": "crawl",
+      "v1Route": "/optimizacion/crawl",
+      "kind": "page",
+      "capability": "Crawler local configurable con robots/sitemap, inicio y parada, streaming de progreso, filtros, exportación, snapshots y repetición de configuración.",
+      "sources": [
+        "/api/site-audit-v2/crawl",
+        "/api/site-audit-v2/crawls",
+        "/api/site-audit-v2/crawls/[id]",
+        "/api/site-audit-v2/save",
+        "/api/site-audit-v2/snapshot"
+      ],
+      "transformations": [
+        "lib/site-audit-v2/crawler.ts",
+        "lib/site-audit-v2/robots.ts",
+        "lib/site-audit-v2/sitemap.ts",
+        "lib/site-audit-v2/proxy.ts"
+      ],
+      "filters": [
+        "proyecto",
+        "límites de URLs y profundidad",
+        "inclusión/exclusión de patrones",
+        "filtros sobre el resultado en curso"
+      ],
+      "exports": [
+        "CSV del resultado del crawl (components/CrawlPage.svelte)"
+      ],
+      "dependencies": [
+        "SQLite better-sqlite3",
+        "disco local",
+        "red saliente",
+        "localStorage (configuración recordada)"
+      ],
+      "disposition": "redesign",
+      "dispositionReason": "El crawler debe vivir en el workbench sobre DuckDB/Parquet con publicación firmada; V2 conserva la experiencia y los límites operativos, no el almacenamiento SQLite ni la configuración en localStorage.",
+      "approval": "approved",
+      "alternative": null,
+      "parityState": "foundation",
+      "targetPhase": "P5",
+      "v2Target": "workbench · crawl (packages/local-data)"
+    },
+    {
+      "id": "estado-del-sitio",
+      "v1Route": "/optimizacion/estado-del-sitio",
+      "kind": "page",
+      "capability": "Salud técnica: score, 43 tipos de issue con severidad, histórico, movimientos, detalle, muestras de URL, pestaña de páginas, estadísticas, comprobación del sitemap de producto y comparación entre crawls.",
+      "sources": [
+        "/api/site-audit-v2/crawls",
+        "/api/site-audit-v2/crawls/[id]",
+        "/api/site-audit-v2/compare",
+        "/api/site-audit-v2/issue-history",
+        "/api/site-audit-v2/issue-urls",
+        "/api/products-status.json",
+        "src/data/audits/<marca>/history/<crawl>/{summary.json,issues.csv.gz,pages.csv.gz,links.csv.gz}"
+      ],
+      "transformations": [
+        "lib/site-audit-v2/health-score.ts",
+        "lib/site-audit-v2/issues.ts",
+        "lib/site-audit-v2/markets.ts",
+        "lib/site-audit-v2/partitions.ts",
+        "lib/site-audit-v2/storage.ts"
+      ],
+      "filters": [
+        "proyecto",
+        "mercado",
+        "crawl seleccionado",
+        "tipo de issue",
+        "severidad",
+        "búsqueda de URL",
+        "ventana del histórico"
+      ],
+      "exports": [
+        "CSV de issues",
+        "CSV de páginas",
+        "CSV del chequeo de sitemap de producto"
+      ],
+      "dependencies": [
+        "SQLite",
+        "snapshots comprimidos en src/data/audits",
+        "sitemaps de producto en vivo"
+      ],
+      "disposition": "redesign",
+      "dispositionReason": "El inventario de issues, el histórico y el diff entre crawls son valor directo y se conservan; el score se recalibra contra el catálogo V2 en lugar de copiarse, por lo que no es reconciliable dígito a dígito.",
+      "approval": "approved",
+      "alternative": null,
+      "parityState": "partial-synthetic",
+      "targetPhase": "P5",
+      "v2Target": "visor · salud técnica + workbench · auditoría"
+    },
+    {
+      "id": "tareas",
+      "v1Route": "/vision-general/tareas",
+      "kind": "page",
+      "capability": "Generación de tareas desde crawl, sitemap, GSC e inbound links, con búsqueda, agrupación, severidad, expansión, exportación y enlaces a la evidencia.",
+      "sources": [
+        "/api/tasks-v2.json"
+      ],
+      "transformations": [
+        "lib/site-audit-v2/tasks-v2.ts",
+        "lib/site-audit-v2/issues.ts"
+      ],
+      "filters": [
+        "proyecto",
+        "búsqueda",
+        "agrupación",
+        "severidad",
+        "estado local",
+        "estado en query string"
+      ],
+      "exports": [
+        "CSV de tareas (components/TasksV2Dashboard.svelte)"
+      ],
+      "dependencies": [
+        "SQLite de crawls",
+        "Search Console API",
+        "localStorage (estado de las tareas)"
+      ],
+      "disposition": "redesign",
+      "dispositionReason": "Las tareas son el puente entre diagnóstico y ejecución y deben persistirse de verdad, con origen, plantilla, prioridad, responsable, estado y resultado. El estado en localStorage no se migra: no es compartible ni auditable.",
+      "approval": "approved",
+      "alternative": null,
+      "parityState": "foundation",
+      "targetPhase": "P4",
+      "v2Target": "visor · acciones + workbench · decisiones"
+    },
+    {
+      "id": "autoridad-tematica",
+      "v1Route": "/tracking/autoridad-tematica",
+      "kind": "page",
+      "capability": "Árbol comercial y editorial con pilares, clusters, posts, gaps, quick wins y acciones defender/refrescar/crear/podar, con exportaciones por bloque.",
+      "sources": [
+        "/api/pilar.json",
+        "/api/pilar-editorial.json",
+        "/api/pilar-ecommerce-editorial.json",
+        "/api/tracking-pilar.json",
+        "/api/tracking-pilar/post-detail.json",
+        "src/data/tracking-pilar/{fr,uk,us}.json",
+        "src/data/pilar-porcelanosa/*.json"
+      ],
+      "transformations": [
+        "lib/pilar/aggregator.ts",
+        "lib/pilar/porcelanosa.ts",
+        "lib/pilar/porcelanosa-editorial.ts",
+        "lib/pilar/ecommerce-editorial.ts",
+        "lib/tracking-pilar/builder.ts",
+        "lib/tracking-pilar/semrush-cache.ts"
+      ],
+      "filters": [
+        "proyecto",
+        "mercado",
+        "pilar y cluster",
+        "tipo de acción",
+        "búsqueda",
+        "estado en query string"
+      ],
+      "exports": [
+        "CSV por cada uno de los cuatro cuadros de mando de pilares"
+      ],
+      "dependencies": [
+        "Search Console API",
+        "caché SEMrush en src/data/tracking-pilar",
+        "localStorage"
+      ],
+      "disposition": "merge",
+      "dispositionReason": "V1 mantiene cuatro cuadros de mando paralelos (genérico, Porcelanosa, editorial Porcelanosa y editorial Ecommerce) sobre el mismo concepto. V2 los funde en un único árbol conectado con calendario, query, URL, acción y resultado.",
+      "approval": "approved",
+      "alternative": null,
+      "parityState": "missing",
+      "targetPhase": "P6",
+      "v2Target": "visor · autoridad temática (árbol único)"
+    },
+    {
+      "id": "informe-trimestral",
+      "v1Route": "/tracking/informe",
+      "kind": "page",
+      "capability": "Informe trimestral profundo: resumen, descubrimiento, captación, conversiones, técnica, autoridad, acción, siguiente periodo, metodología, briefs, objetivos y CSV.",
+      "sources": [
+        "/api/informe-trimestral.json"
+      ],
+      "transformations": [
+        "lib/informe-trimestral/builder.ts",
+        "lib/informe-trimestral/gsc-fetchers.ts",
+        "lib/informe-trimestral/keyword-groups.ts",
+        "lib/informe-trimestral/salud-tecnica.ts"
+      ],
+      "filters": [
+        "proyecto",
+        "trimestre",
+        "mercado",
+        "navegación por capítulos",
+        "estado en query string"
+      ],
+      "exports": [
+        "CSV por capítulo (components/InformeTrimestral.svelte)"
+      ],
+      "dependencies": [
+        "Search Console API",
+        "GA4 Data API",
+        "SQLite de crawls (salud técnica)"
+      ],
+      "disposition": "merge",
+      "dispositionReason": "V1 tiene dos generadores de informes con solapamiento material. V2 los funde en un único modelo de informes versionados; la paridad se exige por capítulo y evidencia, no por plantilla.",
+      "approval": "approved",
+      "alternative": null,
+      "parityState": "partial-synthetic",
+      "targetPhase": "P7",
+      "v2Target": "visor · informes versionados"
+    },
+    {
+      "id": "informe-v2",
+      "v1Route": "/tracking/informe-v2",
+      "kind": "page",
+      "capability": "Informe por fechas con scorecard, hasta cuatro años de histórico, canales, IA/GEO, mercados, contenidos, marca, conversiones, funnels, plan, movers y salud; impresión/PDF y HTML offline.",
+      "sources": [
+        "/api/informe-v2.json",
+        "src/data/informe-v2/conclusiones.json"
+      ],
+      "transformations": [
+        "lib/informe-v2/builder.ts",
+        "lib/informe-v2/periods.ts",
+        "lib/dashboard-formatters.ts"
+      ],
+      "filters": [
+        "proyecto",
+        "rango de fechas libre",
+        "mercado",
+        "capítulos visibles",
+        "estado en query string"
+      ],
+      "exports": [
+        "impresión/PDF",
+        "HTML offline autocontenido"
+      ],
+      "dependencies": [
+        "Search Console API",
+        "GA4 Data API",
+        "conclusiones editadas a mano en src/data/informe-v2/conclusiones.json"
+      ],
+      "disposition": "merge",
+      "dispositionReason": "Se funde con el informe trimestral en el modelo único de P7. Su cobertura por fechas libres y la exportación offline se evalúan como requisitos del modelo fusionado, no como una segunda plantilla.",
+      "approval": "approved",
+      "alternative": null,
+      "parityState": "partial-synthetic",
+      "targetPhase": "P7",
+      "v2Target": "visor · informes versionados"
+    },
+    {
+      "id": "geo-traffic",
+      "v1Route": "/canales/geo",
+      "kind": "page",
+      "capability": "Tráfico referido por asistente de IA: sesiones, share sobre orgánico, conversiones, landings y comparativas, con la visibilidad posclic marcada como proxy.",
+      "sources": [
+        "/api/llm-traffic.json"
+      ],
+      "transformations": [
+        "lib/ga4.ts",
+        "lib/dashboard-formatters.ts",
+        "lib/api/query-params.ts"
+      ],
+      "filters": [
+        "proyecto",
+        "mercado",
+        "rango de fechas",
+        "asistente",
+        "estado en query string"
+      ],
+      "exports": [],
+      "dependencies": [
+        "GA4 Data API"
+      ],
+      "disposition": "redesign",
+      "dispositionReason": "Se conserva la lectura de referral por asistente, pero V2 separa de forma estricta el referral observado de la citación medida, que V1 mezcla bajo el rótulo de visibilidad.",
+      "approval": "approved",
+      "alternative": null,
+      "parityState": "partial-synthetic",
+      "targetPhase": "P8",
+      "v2Target": "visor · GEO/AEO"
+    },
+    {
+      "id": "prompts-geo",
+      "v1Route": "/tracking/prompts-geo",
+      "kind": "page",
+      "capability": "Inventario manual de prompts por mercado, categoría y funnel con estado citado/parcial/ausente/no probado, evidencia, filtros y CSV.",
+      "sources": [
+        "src/data/prompts-geo.json"
+      ],
+      "transformations": [
+        "lectura directa del JSON del repositorio, sin capa de agregación"
+      ],
+      "filters": [
+        "mercado",
+        "categoría",
+        "funnel",
+        "estado",
+        "búsqueda",
+        "estado en query string"
+      ],
+      "exports": [
+        "CSV del inventario filtrado"
+      ],
+      "dependencies": [
+        "fichero versionado a mano; sin proveedor ni automatismo"
+      ],
+      "disposition": "redesign",
+      "dispositionReason": "El concepto se conserva y se amplía a un set semanal versionado de 30 prompts por proyecto y mercado Tier 1. Los 24 prompts de V1 son punto de partida y referencia histórica, no el universo final.",
+      "approval": "approved",
+      "alternative": null,
+      "parityState": "missing",
+      "targetPhase": "P8",
+      "v2Target": "visor · GEO/AEO (set de prompts versionado)"
+    },
+    {
+      "id": "sem",
+      "v1Route": "/canales/sem",
+      "kind": "page",
+      "capability": "Paid Search como contexto: sesiones, usuarios, engagement, eventos, coste, impresiones, clics, ROAS/CPA, campañas, fuentes y mercados.",
+      "sources": [
+        "/api/sem.json"
+      ],
+      "transformations": [
+        "lib/ga4.ts",
+        "lib/dashboard-formatters.ts",
+        "lib/utils.ts"
+      ],
+      "filters": [
+        "proyecto",
+        "mercado",
+        "rango de fechas",
+        "campaña",
+        "estado en query string"
+      ],
+      "exports": [],
+      "dependencies": [
+        "GA4 Data API con dimensiones de campaña"
+      ],
+      "disposition": "defer",
+      "dispositionReason": "No es núcleo orgánico. Se conserva como contexto de sinergia y solapamiento entre pago y orgánico, pero después de cerrar demanda y contenido.",
+      "approval": "approved",
+      "alternative": "Capítulo de contexto SEM dentro de P6, una vez cerrado el núcleo orgánico; hasta entonces la lectura de pago sigue disponible en V1.",
+      "parityState": "missing",
+      "targetPhase": "P6",
+      "v2Target": null
+    },
+    {
+      "id": "conjunto-overview",
+      "v1Route": "/conjunto",
+      "kind": "page",
+      "capability": "Visión transversal de las webs del grupo y sus mercados: GA4/GSC agregados, configuración, tráfico por marca y mercado, fuentes y top URL.",
+      "sources": [
+        "/api/conjunto-ga4.json",
+        "/api/conjunto-ga4-markets.json",
+        "/api/conjunto-gsc.json",
+        "/api/sites-overview.json"
+      ],
+      "transformations": [
+        "lib/ga4.ts",
+        "lib/canibalizaciones/build.ts (sites-overview)",
+        "lib/api/query-params.ts"
+      ],
+      "filters": [
+        "mercado",
+        "rango de fechas",
+        "marca",
+        "orden de tablas",
+        "estado en query string"
+      ],
+      "exports": [],
+      "dependencies": [
+        "GA4 Data API (8 propiedades)",
+        "Search Console API",
+        "snapshot src/data/canibalizaciones/sites-overview.json"
+      ],
+      "disposition": "redesign",
+      "dispositionReason": "Es la vista que usa gerencia y se conserva entera, con agregaciones matemáticamente compatibles y cobertura declarada. No se traslada el ranking absoluto entre marcas, que compara negocios de tamaño distinto sin normalizar.",
+      "approval": "approved",
+      "alternative": null,
+      "parityState": "partial-synthetic",
+      "targetPhase": "P2",
+      "v2Target": "/ y /portfolio (visor)"
+    },
+    {
+      "id": "plan-editorial",
+      "v1Route": "/conjunto/plan-editorial",
+      "kind": "page",
+      "capability": "Calendario editorial Jul–Dic 2026 con cadencia, temas, backlog, briefs, filtros, orden y CSV; más plan histórico y propuestas presentes en la fachada pero no montados.",
+      "sources": [
+        "src/data/plan-editorial/calendario-2026.json",
+        "src/data/plan-editorial/conjunto-backlog.json",
+        "src/data/plan-editorial/conjunto.json",
+        "src/data/plan-editorial/conjunto-propuestas.json"
+      ],
+      "transformations": [
+        "lib/plan-editorial.ts (fachada de las cuatro fuentes)"
+      ],
+      "filters": [
+        "marca",
+        "tipo",
+        "estado",
+        "país/mercado",
+        "mes",
+        "temática",
+        "búsqueda en título, keyword, temática, brief y URL",
+        "orden por columnas"
+      ],
+      "exports": [
+        "CSV de la vista filtrada y ordenada, BOM UTF-8, separador ';', once columnas"
+      ],
+      "dependencies": [
+        "ninguna externa: cuatro ficheros JSON versionados"
+      ],
+      "disposition": "retain",
+      "dispositionReason": "Migrado íntegro en P1 con los recuentos verificados y las cuatro fuentes archivadas por separado (D-006). La ruta V1 conserva compatibilidad mediante redirección 308.",
+      "approval": "approved",
+      "alternative": null,
+      "parityState": "implemented",
+      "targetPhase": "P1",
+      "v2Target": "/editorial/calendario, /editorial/backlog, /editorial/propuestas"
+    },
+    {
+      "id": "radar",
+      "v1Route": "/conjunto/radar",
+      "kind": "page",
+      "capability": "Radar de hitos de Google, GEO, SEO y producto con búsqueda, filtros, orden, detalle y fuente.",
+      "sources": [
+        "src/data/radar/conjunto.json"
+      ],
+      "transformations": [
+        "lib/radar.ts"
+      ],
+      "filters": [
+        "tipo",
+        "búsqueda",
+        "orden por fecha"
+      ],
+      "exports": [],
+      "dependencies": [
+        "fichero versionado a mano; cuatro entradas, sin automatismo"
+      ],
+      "disposition": "merge",
+      "dispositionReason": "Como vertical aislado y mantenido a mano aporta poco: cuatro entradas manuales. Su valor real es anotar la cronología, así que se funde en las anotaciones que explican los movimientos de las series.",
+      "approval": "approved",
+      "alternative": null,
+      "parityState": "missing",
+      "targetPhase": "P4",
+      "v2Target": "cronología y anotaciones del sistema de decisiones"
+    },
+    {
+      "id": "canibalizaciones",
+      "v1Route": "/conjunto/canibalizaciones",
+      "kind": "page",
+      "capability": "Canibalización entre marcas y URLs: grafo, pares, riesgo, líder y secundaria, mercados, keywords, posiciones, tráfico, detalle y acciones.",
+      "sources": [
+        "/api/canibalizaciones.json",
+        "src/data/canibalizaciones/conjunto.json"
+      ],
+      "transformations": [
+        "lib/canibalizaciones/build.ts",
+        "lib/canibalizaciones/gather.ts"
+      ],
+      "filters": [
+        "mercado",
+        "marca",
+        "riesgo",
+        "búsqueda de keyword o URL",
+        "selección en el grafo"
+      ],
+      "exports": [],
+      "dependencies": [
+        "snapshot de 5,4 MB generado en dev",
+        "Search Console API (5 marcas)",
+        "CSV de SEMrush para Krion y Gamadecor"
+      ],
+      "disposition": "redesign",
+      "dispositionReason": "El solapamiento entre marcas es un problema real del grupo y se conserva, pero como análisis multiseñal conectado con entidades y calendario, no como un snapshot monolítico regenerado a mano desde un endpoint de desarrollo.",
+      "approval": "approved",
+      "alternative": null,
+      "parityState": "missing",
+      "targetPhase": "P6",
+      "v2Target": "visor · solapamiento entre marcas"
+    },
+    {
+      "id": "redirect-pilar-contenidos",
+      "v1Route": "/tracking/pilar-contenidos",
+      "kind": "redirect",
+      "capability": "Redirección 301 a /tracking/autoridad-tematica conservando el query string, para no romper enlaces guardados.",
+      "sources": [
+        "ninguna: redirección en el servidor"
+      ],
+      "transformations": [],
+      "filters": [
+        "conserva los parámetros de consulta, por ejemplo ?project=ecommerce"
+      ],
+      "exports": [],
+      "dependencies": [],
+      "disposition": "retain",
+      "dispositionReason": "Una redirección conservada cuesta poco y protege enlaces que el equipo tiene guardados desde hace meses. Se reproduce en V2 en cuanto exista el capítulo destino de autoridad temática.",
+      "approval": "approved",
+      "alternative": null,
+      "parityState": "missing",
+      "targetPhase": "P6",
+      "v2Target": "redirección al capítulo de autoridad temática V2"
+    },
+    {
+      "id": "redirect-insights-llm",
+      "v1Route": "/insights/llm",
+      "kind": "redirect",
+      "capability": "Redirección 301 a /canales/geo conservando el query string.",
+      "sources": [
+        "ninguna: redirección en el servidor"
+      ],
+      "transformations": [],
+      "filters": [
+        "conserva los parámetros de consulta"
+      ],
+      "exports": [],
+      "dependencies": [],
+      "disposition": "retain",
+      "dispositionReason": "Mismo criterio que la redirección de pilares: se conserva el enlace histórico y se apunta al capítulo GEO de V2 cuando exista.",
+      "approval": "approved",
+      "alternative": null,
+      "parityState": "missing",
+      "targetPhase": "P8",
+      "v2Target": "redirección al capítulo GEO/AEO V2"
+    },
+    {
+      "id": "dev-canibalizaciones-build",
+      "v1Route": "/api/canibalizaciones-build.json",
+      "kind": "dev-endpoint",
+      "capability": "Generador en desarrollo de los snapshots del conjunto: 5 marcas desde GSC (query × página, 12 meses) más Krion y Gamadecor desde SEMrush; escribe conjunto.json y sites-overview.json.",
+      "sources": [
+        "Search Console API",
+        "CSV de SEMrush del repositorio"
+      ],
+      "transformations": [
+        "lib/canibalizaciones/build.ts",
+        "lib/canibalizaciones/gather.ts"
+      ],
+      "filters": [
+        "proyecto",
+        "ventana de 12 meses"
+      ],
+      "exports": [
+        "escribe src/data/canibalizaciones/conjunto.json y sites-overview.json"
+      ],
+      "dependencies": [
+        "credenciales GSC",
+        "escritura en el repositorio",
+        "reinicio manual del servidor tras generar"
+      ],
+      "disposition": "redesign",
+      "dispositionReason": "La lógica de recolección es útil y se conserva, pero como trabajo del workbench con salida versionada y firmada, no como un endpoint que escribe dentro de src/data y obliga a reiniciar a mano.",
+      "approval": "approved",
+      "alternative": null,
+      "parityState": "missing",
+      "targetPhase": "P6",
+      "v2Target": "workbench · generación de solapamiento"
+    },
+    {
+      "id": "dev-url-keywords",
+      "v1Route": "/api/url-keywords.json",
+      "kind": "dev-endpoint",
+      "capability": "Para cada URL de reedición del plan editorial, las keywords que esa URL ya posiciona, combinando GSC y los CSV de SEMrush de Krion y Gamadecor.",
+      "sources": [
+        "src/data/plan-editorial/conjunto-backlog.json",
+        "Search Console API",
+        "CSV de SEMrush del repositorio"
+      ],
+      "transformations": [
+        "lib/canibalizaciones/build.ts (normalizeUrlKey)",
+        "lib/canibalizaciones/gather.ts"
+      ],
+      "filters": [
+        "solo filas de tipo reedición"
+      ],
+      "exports": [
+        "JSON de respuesta"
+      ],
+      "dependencies": [
+        "credenciales GSC"
+      ],
+      "disposition": "retain",
+      "dispositionReason": "Responde a la pregunta que abre toda reedición: por qué ya rankea esta URL. Es evidencia directa para la pieza editorial y se conserva como enriquecimiento de la ficha, no como endpoint suelto de desarrollo.",
+      "approval": "approved",
+      "alternative": null,
+      "parityState": "missing",
+      "targetPhase": "P6",
+      "v2Target": "evidencia de keywords en la ficha de pieza editorial"
+    },
+    {
+      "id": "dev-trendbook-report",
+      "v1Route": "/api/trendbook-report.json",
+      "kind": "dev-endpoint",
+      "capability": "Listado de posts del Trendbook de Porcelanosa con clics e impresiones de los últimos 12 meses, separando el trendbook en español de sus traducciones.",
+      "sources": [
+        "Search Console API"
+      ],
+      "transformations": [
+        "detección de idioma por segmento de ruta",
+        "agregación por post"
+      ],
+      "filters": [
+        "ventana de 12 meses",
+        "solo trendbook en español"
+      ],
+      "exports": [
+        "JSON de respuesta"
+      ],
+      "dependencies": [
+        "credenciales GSC"
+      ],
+      "disposition": "merge",
+      "dispositionReason": "Es un análisis de rendimiento de contenido acotado a una colección concreta. En V2 lo cubre el capítulo de contenido cuando la colección se modele como cluster editorial, sin endpoint dedicado.",
+      "approval": "approved",
+      "alternative": null,
+      "parityState": "missing",
+      "targetPhase": "P6",
+      "v2Target": "rendimiento por cluster de contenido"
+    },
+    {
+      "id": "dev-trendbook-query",
+      "v1Route": "/api/trendbook-query.json",
+      "kind": "dev-endpoint",
+      "capability": "Posts del Trendbook que rankean por queries que casan una expresión regular RE2.",
+      "sources": [
+        "Search Console API"
+      ],
+      "transformations": [
+        "filtro RE2 sobre queries de GSC"
+      ],
+      "filters": [
+        "expresión regular libre",
+        "ventana de fechas"
+      ],
+      "exports": [
+        "JSON de respuesta"
+      ],
+      "dependencies": [
+        "credenciales GSC"
+      ],
+      "disposition": "merge",
+      "dispositionReason": "Es una consulta ad hoc sobre GSC con filtro de expresión regular; se cubre con la exploración de queries de P3 y con la convención de informes adicionales (D-014) mientras tanto.",
+      "approval": "approved",
+      "alternative": null,
+      "parityState": "missing",
+      "targetPhase": "P3",
+      "v2Target": "exploración de queries con filtro sobre el almacén GSC"
+    },
+    {
+      "id": "dev-cita-tienda-flow",
+      "v1Route": "/api/cita-tienda-flow.json",
+      "kind": "dev-endpoint",
+      "capability": "Flujo GA4 de Porcelanosa desde la home hasta /cita-tienda/.",
+      "sources": [
+        "GA4 Data API"
+      ],
+      "transformations": [
+        "construcción del flujo a partir de eventos GA4"
+      ],
+      "filters": [
+        "proyecto Porcelanosa",
+        "ventana de fechas"
+      ],
+      "exports": [
+        "JSON de respuesta"
+      ],
+      "dependencies": [
+        "credenciales GA4"
+      ],
+      "disposition": "retire",
+      "dispositionReason": "Endpoint puntual de desarrollo, sin UI montada, atado a un evento y una marca concretos de una campaña ya pasada. Reimplementarlo tal cual fijaría en el producto un análisis de un solo uso.",
+      "approval": "proposed",
+      "alternative": "Convención de informes adicionales (D-014) para repetirlo cuando haga falta, y el capítulo de embudos de conversión de P4 para hacerlo genérico por evento y marca.",
+      "parityState": "missing",
+      "targetPhase": "P4",
+      "v2Target": null
+    },
+    {
+      "id": "dev-cita-tienda-es",
+      "v1Route": "/api/cita-tienda-es.json",
+      "kind": "dev-endpoint",
+      "capability": "Embudo de cita en tienda filtrado a España, sobre cinco eventos GA4 concretos.",
+      "sources": [
+        "GA4 Data API"
+      ],
+      "transformations": [
+        "embudo sobre click_appointment, 1_store, 2_confirm_store, 4_complete_the_form, 5_make_appointment_success"
+      ],
+      "filters": [
+        "país España",
+        "ventana de fechas"
+      ],
+      "exports": [
+        "JSON de respuesta"
+      ],
+      "dependencies": [
+        "credenciales GA4",
+        "nombres de evento cableados"
+      ],
+      "disposition": "retire",
+      "dispositionReason": "Misma naturaleza que el flujo de cita en tienda: eventos y país cableados en el código, sin UI y sin uso fuera de desarrollo. El embudo genérico de P4 lo cubre sin fijar cinco nombres de evento en el producto.",
+      "approval": "proposed",
+      "alternative": "Embudos de conversión configurables por evento y mercado en P4; informe adicional puntual (D-014) si se necesita antes.",
+      "parityState": "missing",
+      "targetPhase": "P4",
+      "v2Target": null
+    }
+  ],
+  "reconciliations": [
+    {
+      "id": "editorial-snapshots",
+      "dataset": "Cuatro snapshots editoriales V1",
+      "v1Origin": "src/data/plan-editorial/{calendario-2026,conjunto-backlog,conjunto,conjunto-propuestas}.json",
+      "v2Target": "data/normalized/editorial-dataset.json vía pnpm editorial:import",
+      "sample": "El universo completo de las cuatro fuentes, no una muestra: recuentos por fuente, longitud y hash de cada brief normalizado.",
+      "comparedAgainst": "Los ficheros originales archivados con hash en packages/editorial/data/archive/v1",
+      "metrics": [
+        {
+          "name": "eventos de calendario",
+          "v1Baseline": 39,
+          "tolerance": {
+            "kind": "exact",
+            "value": null,
+            "unit": null,
+            "rationale": "Son ficheros estáticos versionados: cualquier diferencia es un fallo de importación, no una variación de origen."
+          }
+        },
+        {
+          "name": "filas de backlog",
+          "v1Baseline": 115,
+          "tolerance": {
+            "kind": "exact",
+            "value": null,
+            "unit": null,
+            "rationale": "Mismo criterio: la importación es idempotente por huella de entradas."
+          }
+        },
+        {
+          "name": "filas de plan histórico",
+          "v1Baseline": 146,
+          "tolerance": {
+            "kind": "exact",
+            "value": null,
+            "unit": null,
+            "rationale": "Plan y backlog se mantienen como fuentes distintas; el recuento no puede fusionarse ni deduplicarse."
+          }
+        },
+        {
+          "name": "huecos temáticos",
+          "v1Baseline": 34,
+          "tolerance": {
+            "kind": "exact",
+            "value": null,
+            "unit": null,
+            "rationale": "El número de huecos define la relación hueco -> propuestas y no admite margen."
+          }
+        },
+        {
+          "name": "propuestas",
+          "v1Baseline": 68,
+          "tolerance": {
+            "kind": "exact",
+            "value": null,
+            "unit": null,
+            "rationale": "Exactamente dos por hueco; una desviación indicaría pérdida o duplicación."
+          }
+        },
+        {
+          "name": "caracteres de brief preservados",
+          "v1Baseline": "≈288.635 en backlog y ≈281.433 en plan",
+          "tolerance": {
+            "kind": "exact",
+            "value": null,
+            "unit": null,
+            "rationale": "Los briefs son material crítico y se verifican por longitud y hash: no se truncan ni se resumen."
+          }
+        }
+      ],
+      "onMismatch": "Bloquear la importación y no publicar el dataset. La normalización es pura y determinista, así que una diferencia señala un error de código o una fuente modificada, y en ambos casos hay que resolverlo antes de escribir.",
+      "phase": "P1",
+      "status": "reconciled"
+    },
+    {
+      "id": "ga4-daily",
+      "dataset": "Series diarias de GA4 por proyecto y mercado",
+      "v1Origin": "/api/ga4.json, /api/conjunto-ga4.json y /api/conjunto-ga4-markets.json (consulta en vivo a GA4)",
+      "v2Target": "Almacén de métricas de P3 servido por la API propia",
+      "sample": "Ventana de 28 días cerrada, para Porcelanosa y Noken, en los mercados ES y UK, comparando día a día y el agregado del periodo.",
+      "comparedAgainst": "La respuesta de la API V1 para la misma propiedad, ventana y segmento, capturada el mismo día",
+      "metrics": [
+        {
+          "name": "sesiones",
+          "v1Baseline": null,
+          "tolerance": {
+            "kind": "relative",
+            "value": 1,
+            "unit": "%",
+            "rationale": "GA4 aplica umbrales de privacidad y consolida datos hasta 48 horas; dos consultas legítimas pueden diferir ligeramente aunque el cálculo sea idéntico."
+          }
+        },
+        {
+          "name": "usuarios activos",
+          "v1Baseline": null,
+          "tolerance": {
+            "kind": "relative",
+            "value": 2,
+            "unit": "%",
+            "rationale": "El recuento de usuarios usa estimación HyperLogLog y es menos estable que las sesiones."
+          }
+        },
+        {
+          "name": "conversiones",
+          "v1Baseline": null,
+          "tolerance": {
+            "kind": "exact",
+            "value": null,
+            "unit": null,
+            "rationale": "Los eventos de conversión son recuentos enteros sin muestreo: una diferencia indica un filtro o una definición de evento distinta."
+          }
+        }
+      ],
+      "onMismatch": "Registrar la diferencia con propiedad, ventana y segmento, revisar primero la definición del filtro y solo después el dato. Si excede la tolerancia, no se publica el capítulo dependiente y se declara la cobertura como parcial.",
+      "phase": "P3",
+      "status": "pending"
+    },
+    {
+      "id": "gsc-daily",
+      "dataset": "Series diarias de Search Console por query y página",
+      "v1Origin": "/api/gsc.json y /api/conjunto-gsc.json (consulta en vivo a GSC)",
+      "v2Target": "Almacén de métricas de P3 servido por la API propia",
+      "sample": "Ventana de 28 días cerrada con desfase de 3 días, para Porcelanosa y Noken en ES y UK, con las 100 queries y las 100 páginas de más clics.",
+      "comparedAgainst": "La respuesta de la API V1 para la misma propiedad, ventana y dimensiones",
+      "metrics": [
+        {
+          "name": "clics",
+          "v1Baseline": null,
+          "tolerance": {
+            "kind": "exact",
+            "value": null,
+            "unit": null,
+            "rationale": "Con la misma ventana y el mismo desfase, los clics de GSC son estables y deben coincidir; si no, hay un problema de agregación."
+          }
+        },
+        {
+          "name": "impresiones",
+          "v1Baseline": null,
+          "tolerance": {
+            "kind": "relative",
+            "value": 0.5,
+            "unit": "%",
+            "rationale": "GSC reprocesa impresiones durante unos días y anonimiza queries de bajo volumen, lo que introduce una diferencia pequeña pero real entre dos descargas."
+          }
+        },
+        {
+          "name": "posición media",
+          "v1Baseline": null,
+          "tolerance": {
+            "kind": "absolute",
+            "value": 0.1,
+            "unit": "posiciones",
+            "rationale": "Es una media ponderada por impresiones: el redondeo y el orden de agregación producen diferencias en la primera decimal."
+          }
+        },
+        {
+          "name": "CTR",
+          "v1Baseline": null,
+          "tolerance": {
+            "kind": "not-comparable",
+            "value": null,
+            "unit": null,
+            "rationale": "No se reconcilia por separado porque es una métrica derivada; si clics e impresiones cuadran, el CTR cuadra por construcción."
+          }
+        }
+      ],
+      "onMismatch": "Comparar primero la definición de la ventana y el desfase, después el conjunto de filas anonimizadas. Una diferencia de clics por encima de cero bloquea la publicación del capítulo de búsqueda.",
+      "phase": "P3",
+      "status": "pending"
+    },
+    {
+      "id": "semrush-cache",
+      "dataset": "Caché de posiciones y volúmenes de SEMrush",
+      "v1Origin": "src/data/tracking-pilar/semrush-*.json y CSV del repositorio",
+      "v2Target": "Ingesta de SEMrush de P3.3",
+      "sample": "Los quince ficheros cacheados que existen realmente en V1, no una muestra: butech (en, es), ecommerce (es, fr, uk, us), noken (de, es, fr, ru, uk, us) y porcelanosa (de, es, fr), con 328 queries en total. La muestra descrita en P2.1 —Porcelanosa y Noken en ES y UK— era incorrecta: semrush-porcelanosa-uk.json no existe ni ha existido, y compararse contra un fichero ausente habría pasado por bueno en silencio (D-026).",
+      "comparedAgainst": "El propio fichero cacheado, no una llamada nueva a la API, medido y hasheado por pnpm reconcile en docs/continuity/v1-reconciliation-baseline.json",
+      "metrics": [
+        {
+          "name": "keywords por fichero",
+          "v1Baseline": "328 queries en 15 ficheros; por fichero en docs/continuity/v1-reconciliation-baseline.json",
+          "tolerance": {
+            "kind": "exact",
+            "value": null,
+            "unit": null,
+            "rationale": "Contra un fichero estático el recuento debe coincidir; comparar contra la API en vivo no probaría nada porque SEMrush actualiza sus índices."
+          }
+        },
+        {
+          "name": "volumen de búsqueda",
+          "v1Baseline": null,
+          "tolerance": {
+            "kind": "not-comparable",
+            "value": null,
+            "unit": null,
+            "rationale": "SEMrush recalcula volúmenes mensualmente: una llamada nueva devuelve valores distintos por diseño, así que solo se reconcilia contra la caché archivada."
+          }
+        }
+      ],
+      "onMismatch": "Si el recuento contra la caché no cuadra, es un fallo del parser. Si la diferencia aparece contra la API en vivo, se documenta como actualización del proveedor y se registra la fecha de corte, nunca como error de migración.",
+      "phase": "P3",
+      "status": "pending"
+    },
+    {
+      "id": "crawl-snapshots",
+      "dataset": "Snapshots históricos de crawl y sus issues",
+      "v1Origin": "src/data/audits/<marca>/history/<crawl>/{summary.json,issues.csv.gz,pages.csv.gz,links.csv.gz} y SQLite",
+      "v2Target": "Almacén DuckDB/Parquet del workbench (P5)",
+      "sample": "Los seis crawls archivados en V1: Ecommerce 7.055 URLs, Noken 10.471 y 916, Krion 4.424, Antic Colonial 2.395 y Butech 2.258.",
+      "comparedAgainst": "Los ficheros comprimidos archivados, releídos sin volver a rastrear, verificado por pnpm reconcile contra el baseline congelado",
+      "metrics": [
+        {
+          "name": "URLs por crawl",
+          "v1Baseline": "7055 / 10471 / 916 / 4424 / 2395 / 2258",
+          "tolerance": {
+            "kind": "exact",
+            "value": null,
+            "unit": null,
+            "rationale": "Reimportar un snapshot archivado es determinista: cualquier diferencia es pérdida de filas."
+          }
+        },
+        {
+          "name": "issues por tipo",
+          "v1Baseline": null,
+          "tolerance": {
+            "kind": "exact",
+            "value": null,
+            "unit": null,
+            "rationale": "Los 43 tipos de issue de V1 se reimportan tal cual desde el CSV archivado; el recuento por tipo no admite margen."
+          }
+        },
+        {
+          "name": "health score",
+          "v1Baseline": null,
+          "tolerance": {
+            "kind": "not-comparable",
+            "value": null,
+            "unit": null,
+            "rationale": "El score se recalibra en V2 en lugar de copiarse, así que comparar los dos números carecería de sentido: se compara el inventario de issues, que es el dato, no la puntuación, que es la opinión."
+          }
+        }
+      ],
+      "onMismatch": "Conservar el snapshot V1 intacto y no sustituirlo. Si el recuento de URLs o de issues no cuadra, se corrige el importador; la divergencia del score se documenta con la fórmula nueva y la antigua, una al lado de la otra.",
+      "phase": "P5",
+      "status": "pending"
+    },
+    {
+      "id": "canibalizaciones-snapshot",
+      "dataset": "Snapshot de canibalización del conjunto",
+      "v1Origin": "src/data/canibalizaciones/conjunto.json (5,4 MB) y sites-overview.json",
+      "v2Target": "Análisis de solapamiento entre marcas (P6)",
+      "sample": "El snapshot completo del rango 2025-07-06 a 2026-07-06: 7 sitios, 7 mercados y 21 pares de canibalización.",
+      "comparedAgainst": "El snapshot archivado, no una regeneración desde GSC, verificado por pnpm reconcile contra el baseline congelado",
+      "metrics": [
+        {
+          "name": "sitios",
+          "v1Baseline": 7,
+          "tolerance": {
+            "kind": "exact",
+            "value": null,
+            "unit": null,
+            "rationale": "Es un fichero estático: los sitios y sus claves deben reimportarse sin pérdida."
+          }
+        },
+        {
+          "name": "pares de canibalización",
+          "v1Baseline": 21,
+          "tolerance": {
+            "kind": "exact",
+            "value": null,
+            "unit": null,
+            "rationale": "El recuento de pares define la conclusión de la pantalla y se conserva como control de la reimportación."
+          }
+        },
+        {
+          "name": "pares recalculados desde GSC",
+          "v1Baseline": null,
+          "tolerance": {
+            "kind": "not-comparable",
+            "value": null,
+            "unit": null,
+            "rationale": "V2 recalcula el solapamiento con un criterio multiseñal distinto y sobre otra ventana: el número de pares cambiará por diseño y se justifica con la regla nueva, no se fuerza a coincidir."
+          }
+        }
+      ],
+      "onMismatch": "Si falla la reimportación del snapshot, se corrige el parser. Si el recálculo devuelve un número distinto de pares, se documenta la regla de detección y se muestran las dos lecturas antes de retirar la de V1.",
+      "phase": "P6",
+      "status": "pending"
+    },
+    {
+      "id": "prompts-geo-inventory",
+      "dataset": "Inventario de prompts GEO",
+      "v1Origin": "src/data/prompts-geo.json",
+      "v2Target": "Set de prompts versionado de P8",
+      "sample": "Los 24 prompts de V1: US 8, UK 6, FR 5 y ES 5, con su estado y su evidencia.",
+      "comparedAgainst": "El fichero JSON versionado en V1, verificado por pnpm reconcile contra el baseline congelado",
+      "metrics": [
+        {
+          "name": "prompts por mercado",
+          "v1Baseline": "us:8, uk:6, fr:5, es:5",
+          "tolerance": {
+            "kind": "exact",
+            "value": null,
+            "unit": null,
+            "rationale": "La migración del histórico debe conservar los 24 prompts con su estado; el crecimiento hasta 30 por mercado es trabajo nuevo y se cuenta aparte."
+          }
+        },
+        {
+          "name": "estado citado/parcial/ausente/no probado",
+          "v1Baseline": null,
+          "tolerance": {
+            "kind": "exact",
+            "value": null,
+            "unit": null,
+            "rationale": "El estado es una observación fechada: se importa tal cual, con su fecha, y nunca se recalcula al importarlo."
+          }
+        }
+      ],
+      "onMismatch": "No completar automáticamente un prompt que llegue sin estado: se importa como 'no probado' con la fecha del snapshot y se anota la diferencia en el informe de importación.",
+      "phase": "P8",
+      "status": "pending"
+    },
+    {
+      "id": "tasks-local-state",
+      "dataset": "Estado de tareas guardado en el navegador",
+      "v1Origin": "localStorage del navegador de cada usuario (components/TasksV2Dashboard.svelte)",
+      "v2Target": "Tareas persistentes de P4",
+      "sample": "No hay muestra: el estado vive en el navegador de cada persona y no es accesible desde el repositorio.",
+      "comparedAgainst": "Nada comparable en el servidor",
+      "metrics": [
+        {
+          "name": "tareas con estado propio",
+          "v1Baseline": null,
+          "tolerance": {
+            "kind": "not-comparable",
+            "value": null,
+            "unit": null,
+            "rationale": "El estado nunca salió del navegador: no existe copia en servidor contra la que reconciliar, y cada usuario tiene la suya."
+          }
+        }
+      ],
+      "onMismatch": "No se declara paridad de estado. Las tareas se regeneran desde crawl, sitemap y GSC en P4 y se avisa al equipo de que el estado marcado en V1 no viaja, para que lo rehagan sobre el almacén nuevo antes de retirar V1.",
+      "phase": "P4",
+      "status": "not-comparable"
+    }
+  ]
+}

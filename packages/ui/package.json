@@ -6,7 +6,9 @@
   "exports": {
     ".": "./src/index.tsx",
     "./tokens.css": "./src/tokens.css",
-    "./echarts-theme": "./src/echarts-theme.ts"
+    "./echarts-theme": "./src/echarts-theme.ts",
+    "./data-table": "./src/data-table.tsx",
+    "./skeleton": "./src/skeleton.tsx"
   },
   "scripts": {
     "build": "tsc --noEmit",
@@ -17,11 +19,14 @@
   "dependencies": {
     "@seo/contracts": "workspace:*",
     "lucide-react": "^1.39.0",
-    "react": "^19.2.8"
+    "react": "^19.2.8",
+    "@tanstack/react-table": "^9.2.4",
+    "react-dom": "^19.2.8"
   },
   "devDependencies": {
     "@types/react": "^19.2.14",
     "typescript": "6.0.3",
-    "vitest": "^4.1.11"
+    "vitest": "^4.1.11",
+    "@types/react-dom": "^19.2.3"
   }
 }

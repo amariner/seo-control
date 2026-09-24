@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
-import type { EditorialCalendarEvent, EditorialPiece, EditorialSlot } from "@seo/contracts";
-import { buildAgenda, buildMonthCells, csvCell, filterPieces, filterSlots, parsePieceFilters, piecesToCsv, slotsToCsv, sortPieces } from "./query";
+import type { EditorialBrandSlug, EditorialCalendarEvent, EditorialPiece, EditorialSlot } from "@seo/contracts";
+import { brandEditorialActivity, buildAgenda, buildMonthCells, csvCell, filterPieces, filterSlots, parsePieceFilters, piecesToCsv, slotsToCsv, sortPieces } from "./query";
 
 const provenance = (sourceIndex: number) => ({ source: "conjunto-backlog" as const, sourceIndex, sourceSha256: "a".repeat(64), importedAt: "2026-09-02T14:00:00.000Z", identityOrdinal: 1 });
 
@@ -149,5 +149,41 @@ describe("calendario", () => {
     const agenda = buildAgenda(events);
     expect(agenda.map((day) => day.date)).toEqual(["2026-07-02", "2026-07-09"]);
     expect(agenda[1]!.events).toHaveLength(2);
+  });
+});
+
+describe("actividad editorial por marca (P2.2)", () => {
+  const summary = (slug: EditorialBrandSlug, counts: { calendarEvents?: number; backlogPieces?: number; planPieces?: number; slots?: number } = {}) => ({
+    slug,
+    name: slug,
+    code: slug.slice(0, 4).toUpperCase(),
+    pilot: slug === "porcelanosa" || slug === "noken",
+    calendarEvents: counts.calendarEvents ?? 0,
+    backlogPieces: counts.backlogPieces ?? 0,
+    planPieces: counts.planPieces ?? 0,
+    slots: counts.slots ?? 0,
+  });
+
+  const dataset = {
+    brands: [summary("porcelanosa", { calendarEvents: 5, planPieces: 3 }), summary("krion", { backlogPieces: 2 })],
+    backlog: [
+      piece({ id: "ed-bk-0000000000000001", brand: { slug: "krion", line: null, literal: "Krion" }, status: "redactando" }),
+      piece({ id: "ed-bk-0000000000000002", brand: { slug: "krion", line: null, literal: "Krion" }, status: "revision" }),
+    ],
+    plan: [
+      piece({ id: "ed-pl-0000000000000001", kind: "plan", brand: { slug: "porcelanosa", line: null, literal: "Porcelanosa" }, status: "publicado" }),
+      piece({ id: "ed-pl-0000000000000002", kind: "plan", brand: { slug: "porcelanosa", line: null, literal: "Porcelanosa" }, status: "programado" }),
+      piece({ id: "ed-pl-0000000000000003", kind: "plan", brand: { slug: "porcelanosa", line: null, literal: "Porcelanosa" }, status: "publicado" }),
+    ],
+  };
+
+  it("cuenta el plan y los estados en curso por marca, incluidas las que no son piloto", () => {
+    const activity = brandEditorialActivity(dataset);
+    expect(activity.porcelanosa).toMatchObject({ calendarEvents: 5, planPieces: 3, published: 2, scheduled: 1, inProgress: 0 });
+    expect(activity.krion).toMatchObject({ backlogPieces: 2, published: 0, scheduled: 0, inProgress: 2 });
+  });
+
+  it("solo devuelve las marcas declaradas en el dataset", () => {
+    expect(Object.keys(brandEditorialActivity(dataset))).toEqual(["porcelanosa", "krion"]);
   });
 });

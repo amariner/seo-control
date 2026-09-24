@@ -9,6 +9,7 @@ import {
   type EditorialPieceType,
   type EditorialSlot,
   type EditorialStatus,
+  type BrandEditorialActivity,
 } from "@seo/contracts";
 
 /**
@@ -249,4 +250,32 @@ export function calendarMonths(dataset: EditorialDataset) {
 
 export function distinctValues<T>(items: T[], pick: (item: T) => string | null | undefined) {
   return [...new Set(items.map(pick).filter((value): value is string => Boolean(value)))].sort(collator.compare);
+}
+
+/**
+ * Actividad editorial por marca para la visión transversal (P2.2).
+ *
+ * Es el único cruce del grupo que hoy cubre las ocho marcas con dato real: la
+ * analítica sigue limitada al piloto. Se calcula sobre el año de planificación
+ * del dataset, no sobre el periodo analítico, porque el plan es mensual y
+ * mapear 28/90/180 días a meses inventaría una precisión que el dato no tiene.
+ */
+export function brandEditorialActivity(dataset: Pick<EditorialDataset, "brands" | "backlog" | "plan">): Record<EditorialBrandSlug, BrandEditorialActivity> {
+  const pieces = [...dataset.backlog, ...dataset.plan];
+  const entries = dataset.brands.map((brand) => {
+    const own = pieces.filter((piece) => piece.brand.slug === brand.slug);
+    return [
+      brand.slug,
+      {
+        calendarEvents: brand.calendarEvents,
+        backlogPieces: brand.backlogPieces,
+        planPieces: brand.planPieces,
+        slots: brand.slots,
+        published: own.filter((piece) => piece.status === "publicado").length,
+        scheduled: own.filter((piece) => piece.status === "programado").length,
+        inProgress: own.filter((piece) => piece.status === "redactando" || piece.status === "revision").length,
+      } satisfies BrandEditorialActivity,
+    ] as const;
+  });
+  return Object.fromEntries(entries) as Record<EditorialBrandSlug, BrandEditorialActivity>;
 }

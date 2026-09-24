@@ -1,6 +1,7 @@
 # Matriz de paridad — SEO Dashboard V1 -> V2
 
 Última auditoría: 2 de septiembre de 2026.
+Auditoría del código de V1 superficie por superficie: 3 de septiembre de 2026 (P2.1).
 Última actualización de paridad editorial: 3 de septiembre de 2026 (P1.4 y P1.5 cerradas: curación, reciprocidad de enlaces y `/queries/[id]` publicada).
 
 ## Dictamen
@@ -21,27 +22,35 @@ La regla de migración es:
 Estados válidos: `missing`, `foundation`, `partial-synthetic`, `implemented`,
 `verified`, `redirected`, `retired-approved`.
 
+Estos estados dicen **dónde está** cada capacidad en V2. Qué se va a hacer con ella
+(`retain`, `redesign`, `merge`, `defer`, `retire`), con qué fuentes, transformaciones,
+filtros, exportaciones y dependencias, y con qué tolerancia se acepta cada dataset
+migrado, vive desde P2.1 en `V1_MIGRATION_INVENTORY.md`, generado desde
+`v1-migration-inventory.json`. Son dos ejes distintos y se mantienen separados a
+propósito; `pnpm migration:check` falla si una ruta de esta matriz no está catalogada
+allí.
+
 ## Matriz de superficies
 
 | Ruta V1 | Capacidad que se debe conservar | Estado V2 | Fase / criterio de paridad |
 | --- | --- | --- | --- |
-| `/` | GA4 por proyecto/mercado/periodo; KPIs, previa, YoY, tendencias, canales, alertas, divergencia GSC/GA4, movers, tráfico IA y contexto SEMrush. | `partial-synthetic` | P2/P3. Datos reales, cobertura, comparativas, segmentos y drill-down. Se retira el contador aleatorio de usuarios en directo. |
+| `/` | GA4 por proyecto/mercado/periodo; KPIs, previa, YoY, tendencias, canales, alertas, divergencia GSC/GA4, movers, tráfico IA y contexto SEMrush. | `partial-synthetic` | P2/P3. Superficie ejecutiva publicada en `/` y la lectura multiproyecto en `/portfolio` (P2.2). Faltan los datos reales, que llegan con P3; el drill-down por canal y la divergencia GSC/GA4 dependen de esas fuentes. Se retira el contador aleatorio de usuarios en directo. |
 | `/tracking` | GSC + GA4; rangos predefinidos/personalizados; clics, impresiones, CTR, posición, usuarios, engagement, conversiones, queries, páginas, mercados, branded/non-branded, sugerencias y set estable. | `partial-synthetic` | P3/P4. Series reales, tablas query/URL, movers, CTR esperado y sugerencias trazables. La ruta `/queries/[id]` ya existe (P1.4, D-015) con la evidencia del insight que la cita y su reciprocidad editorial; le falta la serie propia, que llega con GSC real en P3. |
-| `/optimizacion/crawl` | Crawler local configurable; robots/sitemap, inicio/parada, streaming, filtros, exportación, snapshots, carga y repetición de configuración. | `foundation` | P5. Experiencia completa en workbench, DuckDB/Parquet y publicación firmada de hasta 50.000 URLs. |
+| `/optimizacion/crawl` | Crawler local configurable; robots/sitemap, inicio/parada, streaming, filtros, exportación, snapshots, carga y repetición de configuración. | `foundation` | P5. Experiencia completa en workbench, DuckDB/Parquet y publicación firmada de hasta 50.000 URLs. Desde **P2.3** figura en el catálogo de herramientas locales (`/herramientas` del workbench) como `bloqueada`, con el motivo medido: el preflight da ~6,2 GiB libres y se exigen 50 GiB. |
 | `/optimizacion/estado-del-sitio` | Score, 43 tipos de issue, severidad, histórico, movimientos, detalle, muestras URL, páginas, estadísticas, sitemap de producto y comparación de crawls. | `partial-synthetic` | P5. Inventario/detalle/histórico/diff completos y enlaces a acciones. El score se recalibra, no se copia a ciegas. |
-| `/vision-general/tareas` | Generación de tareas desde crawl, sitemap, GSC e inbound links; búsqueda, agrupación, severidad, expansión, exportación y enlaces de evidencia. | `foundation` | P4/P5. Tareas reales y persistentes con origen, template, prioridad, owner, estado y resultado. No usar `localStorage` compartido. |
+| `/vision-general/tareas` | Generación de tareas desde crawl, sitemap, GSC e inbound links; búsqueda, agrupación, severidad, expansión, exportación y enlaces de evidencia. | `partial-synthetic` | **P2.3** para el seguimiento, P4/P5 para la generación. `/actions` publica prioridad explicable, responsable, estado, criterio de éxito, enlace a la conclusión que la origina, reciprocidad con la pieza editorial y seguimiento de plazo medido contra el corte del dato; `/cronologia?lane=accion` las sitúa en el tiempo. Falta la **generación** desde crawl, sitemap, GSC e inbound links (P4/P5) y el resultado medido (P4/P9). El estado que V1 guardaba en `localStorage` es no comparable y no se migra (P2.1). |
 | `/tracking/autoridad-tematica` | Árbol comercial, pilares, clusters, posts, gaps, quick wins, defender/refrescar/crear/podar y exportaciones. | `missing` | P6. Árbol comercial/editorial relacionado con calendario, query, URL, acción y resultado. |
-| `/tracking/informe` | Informe trimestral profundo: resumen, descubrimiento, captación, conversiones, técnica, autoridad, acción, siguiente periodo, metodología, briefs, objetivos y CSV. | `partial-synthetic` | P7. Paridad semántica por capítulos, evidencia, comparativas, método, navegación fija, plan siguiente y exportación. |
-| `/tracking/informe-v2` | Informe por fechas con scorecard, hasta cuatro años, canales, IA/GEO, mercados, contenidos, marca, conversiones, funnels, plan, movers y salud; impresión/PDF y HTML offline. | `partial-synthetic` | P7. Se fusiona en un solo modelo de informes versionados; conservar cobertura y evaluar exportación offline. |
+| `/tracking/informe` | Informe trimestral profundo: resumen, descubrimiento, captación, conversiones, técnica, autoridad, acción, siguiente periodo, metodología, briefs, objetivos y CSV. | `partial-synthetic` | **P2.3** para el catálogo y el archivo, P7 para el contenido. Sus 8 secciones más el apéndice están catalogadas en `REPORT_CHAPTERS` (leídas de `InformeTrimestral.svelte`, no de memoria) y fusionadas con el otro informe en 16 capítulos, cada uno con estado, fase y qué falta. Publicados hoy: resumen, programación editorial y metodología; parciales: mercados, búsquedas, contenidos, salud técnica y plan de acción. La paridad semántica completa por capítulo es P7. |
+| `/tracking/informe-v2` | Informe por fechas con scorecard, hasta cuatro años, canales, IA/GEO, mercados, contenidos, marca, conversiones, funnels, plan, movers y salud; impresión/PDF y HTML offline. | `partial-synthetic` | **P2.3** para el catálogo y el archivo, P7 para el contenido. Sus 10 secciones (leídas de `InformeV2.svelte`) entran en el mismo catálogo fusionado; tres capítulos son comunes a los dos informes de V1 (resumen, salud técnica y próximo periodo) y por eso se fusionan en vez de duplicarse (D-021). El archivo histórico con cadena de versiones inmutable ya está publicado en `/reports`. Queda evaluar la exportación offline en P7. |
 | `/canales/geo` | Tráfico referido por asistente: sesiones, share orgánico, conversiones, landings y comparativas; visibilidad posclic marcada como proxy. | `partial-synthetic` | P8. Detalle por asistente/landing/mercado/conversión y separación estricta entre referral observado y citación medida. |
 | `/tracking/prompts-geo` | Inventario de prompts por mercado/categoría/funnel; citado/parcial/ausente/no probado; evidencia, filtros y CSV. | `missing` | P8. Set semanal versionado de 30 prompts por proyecto y mercado Tier 1. Los 24 prompts V1 son referencia, no universo final. |
 | `/canales/sem` | Paid Search como contexto: sesiones, usuarios, engagement, eventos, coste, impresiones, clics, ROAS/CPA, campañas, fuentes y mercados. | `missing` | P6. Solo contexto de sinergia/solapamiento; posterior al núcleo orgánico. |
-| `/conjunto` | Visión de webs/mercados, GA4/GSC, configuración, tráfico por marca/mercado, fuentes y top URL. | `partial-synthetic` | P2/P3. Datos reales, cobertura y agregaciones matemáticamente compatibles; sin ranking absoluto de marcas. |
+| `/conjunto` | Visión de webs/mercados, GA4/GSC, configuración, tráfico por marca/mercado, fuentes y top URL. | `redirected` + `partial-synthetic` | **P2.2** para la superficie, P3 para el dato. Redirección 308 a `/portfolio`, que conserva la query string. Publicados: selector de las ocho marcas, agregado con cobertura declarada, comparativa periodo anterior/interanual, mercados con visibilidad ponderada, objetivos con progreso, explicaciones derivadas y comparación de fuentes V1 frente a V2 marca a marca. Las agregaciones son matemáticamente compatibles por construcción (un total es la suma de sus filas por marca) y no hay ranking absoluto de marcas (P2.1). Falta el dato real: la analítica sigue siendo el conector sintético del piloto y las seis marcas restantes se declaran sin serie (D-020). El top URL por marca depende de GSC real (P3). |
 | `/conjunto/plan-editorial` | Calendario Jul–Dic 2026, cadencia, temas, backlog, briefs, filtros, orden y CSV; más plan/propuestas no montados. | `redirected` + `implemented` | **P1**. Redirección 308 a `/editorial/calendario`. Calendario, backlog, plan histórico y propuestas publicados en solo lectura con procedencia. Edición, selección de propuestas y vínculo evento-pieza se curan desde `/editorial` en el workbench (P1.4), y el enlace con insight/acción/query/página/informe es recíproco en las dos direcciones (D-015). Queda solo la medición a 28/90/180 días, que depende de P3. |
-| `/conjunto/radar` | Hitos Google/GEO/SEO/producto, búsqueda, filtros, orden, detalle y fuente. | `missing` | P4/P5. Integrar en cronología/anotaciones; no conservar como vertical aislado hasta automatizarlo. |
+| `/conjunto/radar` | Hitos Google/GEO/SEO/producto, búsqueda, filtros, orden, detalle y fuente. | `partial-synthetic` | **P2.3** para el destino, P4 para el contenido. La cronología que lo absorbe está publicada en `/cronologia` con carriles filtrables y dos horizontes (ocurrido / previsto). Su carril de **contexto externo** se declara vacío con su fase, en cumplimiento de la decisión de P2.1 de no conservar el radar como vertical aislado hasta automatizar su recogida: las cuatro noticias curadas de V1 no se migran a mano para no quedar congeladas. La búsqueda dentro del radar no se traslada; los filtros por carril, proyecto y año sí. |
 | `/conjunto/canibalizaciones` | Análisis entre marcas/URLs, grafo, pares, riesgo, líder/secundaria, mercados, keywords, posiciones, tráfico, detalle y acciones. | `missing` | P6. Recuperar como solapamiento multiseñal conectado con entidades y calendario. |
-| `/tracking/pilar-contenidos` | Redirección 301 a autoridad temática conservando query string. | `missing` | P2/P6. Redirigir al capítulo V2 equivalente cuando exista. |
-| `/insights/llm` | Redirección 301 a GEO conservando query string. | `missing` | P2/P8. Redirigir al capítulo V2 equivalente. |
+| `/tracking/pilar-contenidos` | Redirección 301 a autoridad temática conservando query string. | `redirected` | **P2.3** para la navegación, P6 para el capítulo. Redirección 308 a `/editorial/backlog?from=pilar-contenidos`, conservando la query string original. El destino no es el equivalente —el árbol de autoridad temática llega en P6— y lo declara en pantalla con lo que falta. |
+| `/insights/llm` | Redirección 301 a GEO conservando query string. | `redirected` | **P2.3** para la navegación, P8 para el capítulo. Redirección 308 a `/insights?from=insights-llm`, conservando la query string original. El capítulo GEO/AEO completo llega en P8 y el destino lo declara en pantalla. |
 
 ## Calendario editorial: inventario forense
 
@@ -224,3 +233,19 @@ refresco al visor.
    editorial.
 4. **P9-P12:** SEM/contexto, radar automatizado, experimentación, logs y capacidades
    diferenciales controladas.
+
+## Actualización local · 2026-09-23 (D-040)
+
+Xtone incorpora exploración real de muestras GSC de keywords sin marca × URL
+(hasta 3000) y páginas (hasta 5000), con búsqueda, orden, paginado y selección
+de filas. No declara cerrado `/tracking`: siguen pendientes el almacén,
+reconciliación y el resto de sus dimensiones. La vista local retira las
+conclusiones por petición del usuario, conservando procedencia y calidad.
+
+
+## Extensión local · 2026-09-23 (D-041)
+
+La UX aprobada se extiende a las vistas del viewer y al workbench. Conserva
+rutas, evidencias archivadas, filtros, CSV y acciones de edición. El componente
+de exploración se comparte entre ambas apps. Esto mejora las superficies ya
+implementadas; no declara recuperadas nuevas capacidades ni cierra deuda V1.

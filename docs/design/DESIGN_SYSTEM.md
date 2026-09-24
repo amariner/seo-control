@@ -2,7 +2,7 @@
 
 ## Status and scope
 
-Status: **approved direction, implementation pending in phase P1**.
+Status: **implemented in P1; data-first refinement approved and extended across viewer and workbench in D-041 (2026-09-23)**.
 
 Reference reviewed: `/Users/es00500546/Desktop/Proyectos/logic2b-note/src/themes/glosa/design.md`.
 Its own status is pending review; this V2 contract, not the reference file, governs implementation.
@@ -75,7 +75,7 @@ It must be useful navigation and provenance, never decoration.
   --ds-space-16: 64px;
   --ds-space-24: 96px;
 
-  --ds-ease: cubic-bezier(.16, 1, .3, 1);
+  --ds-ease: cubic-bezier(0.16, 1, 0.3, 1);
   --ds-duration-fast: 180ms;
   --ds-duration-context: 500ms;
   --ds-shadow-overlay: 0 26px 90px rgb(16 21 22 / 16%);
@@ -91,23 +91,22 @@ failed at 4.21:1 on `--ds-surface-subtle`, which the calendar chips use.
 
 ## Typography
 
-- Display, report title and major executive conclusion: `Iowan Old Style`,
-  `Baskerville`, `Times New Roman`, serif.
-- Product UI, headings below H1, tables and controls: `Inter`, `ui-sans-serif`,
-  `system-ui`, sans-serif.
+- Titles, product UI, tables and controls: `Inter`, `ui-sans-serif`,
+  `system-ui`, sans-serif. Use concise headings and restrained weights.
+- The serif token is retained for the corporate mark and compatibility only.
 - Do not fetch external webfonts. This protects privacy and first render.
 - Use tabular numerals for metrics.
-- Minimum metadata size is 12/16; tables and controls use at least 13/18.
+- Minimum metadata size is 12/16; tables and controls use at least 14/21.
 
-| Role | Size / line height |
-| --- | --- |
-| Display | 48 / 52 |
-| Page H1 | 40 / 44 |
-| H2 | 26 / 32 |
-| H3 | 18 / 24 |
-| Body | 15 / 24 |
-| UI and table | 13 / 18 |
-| Metadata | 12 / 16 |
+| Role         | Size / line height |
+| ------------ | ------------------ |
+| Display      | 48 / 54            |
+| Page H1      | 36 / 44            |
+| H2           | 22 / 30            |
+| H3           | 18 / 24            |
+| Body         | 15 / 24            |
+| UI and table | 14 / 21            |
+| Metadata     | 12 / 16            |
 
 The serif never appears in filters, badges, operational tables or the workbench.
 
@@ -122,24 +121,24 @@ The serif never appears in filters, badges, operational tables or the workbench.
 
 ## Component contract
 
-| Component | Purpose and visual rule |
-| --- | --- |
-| `BrandMark` | Original SEO Intelligence identity; never copies the reference mark. |
-| `SectionHeader` | Cobalt marker, index, title and optional method/action column. |
-| `MetricStrip` | Six KPIs separated by hairlines, not six floating cards. |
-| `DecisionThread` | Sticky vertical provenance/navigation rail; horizontal on mobile. |
-| `InsightStack` | Numbered editorial list with evidence, confidence and action. |
-| `PriorityPanel` | Ink surface with one cobalt action; semantic red remains available for critical state. |
-| `DataPanel` | White or mineral surface with border and no default shadow. |
-| `ChartFrame` | Current value, previous period, YoY, target, coverage and accessible table. |
-| `DataTable` | Sticky header, optional sticky first column, density control and tabular numerals. |
-| `DataTablePanel` | Scroll container for a dense table: named region, keyboard reachable. |
-| `StatusBadge` | Semantic colour plus text or icon; colour alone never conveys meaning. |
-| `EvidenceLink` | Compact provenance link marked in cobalt. |
-| `ReportIndex` | Fixed report navigation connected by the decision thread. |
-| `EditorialCalendar` | Mineral month grid; cobalt selection; semantic status markers; agenda on mobile. |
-| `WorkbenchPipeline` | One continuous five-stage flow instead of unrelated cards. |
-| `EditorSurface` | One of the few elevated surfaces because it is the active artefact. |
+| Component           | Purpose and visual rule                                                                |
+| ------------------- | -------------------------------------------------------------------------------------- |
+| `BrandMark`         | Original SEO Intelligence identity; never copies the reference mark.                   |
+| `SectionHeader`     | Cobalt marker, index, title and optional method/action column.                         |
+| `MetricStrip`       | Six KPIs separated by hairlines, not six floating cards.                               |
+| `DecisionThread`    | Sticky vertical provenance/navigation rail; horizontal on mobile.                      |
+| `InsightStack`      | Numbered editorial list with evidence, confidence and action.                          |
+| `PriorityPanel`     | Ink surface with one cobalt action; semantic red remains available for critical state. |
+| `DataPanel`         | White or mineral surface with border and no default shadow.                            |
+| `ChartFrame`        | Current value, previous period, YoY, target, coverage and accessible table.            |
+| `DataTable`         | Sticky header, optional sticky first column, density control and tabular numerals.     |
+| `DataTablePanel`    | Scroll container for a dense table: named region, keyboard reachable.                  |
+| `StatusBadge`       | Semantic colour plus text or icon; colour alone never conveys meaning.                 |
+| `EvidenceLink`      | Compact provenance link marked in cobalt.                                              |
+| `ReportIndex`       | Fixed report navigation connected by the decision thread.                              |
+| `EditorialCalendar` | Mineral month grid; cobalt selection; semantic status markers; agenda on mobile.       |
+| `WorkbenchPipeline` | One continuous five-stage flow instead of unrelated cards.                             |
+| `EditorSurface`     | One of the few elevated surfaces because it is the active artefact.                    |
 
 ## Charts
 
@@ -152,9 +151,9 @@ The serif never appears in filters, badges, operational tables or the workbench.
 
 ## Responsive and accessibility
 
-- 1024 px: compact navigation and fewer simultaneous columns.
+- Below 1440 px: compact navigation and fewer simultaneous columns.
 - 768 px: real accessible menu with a target of at least 40 px; filters move to a
-  second horizontally scrollable bar.
+  second row; filters wrap on small phones.
 - 640 px: KPIs use two columns; reports and insights use one; tables scroll or expose
   an intentional summary view.
 - 390/375 px: the calendar becomes an agenda and the decision thread becomes horizontal.
@@ -190,3 +189,57 @@ The serif never appears in filters, badges, operational tables or the workbench.
 - Reference screenshots exist for all four target viewports before P1 is closed.
   Met on 2026-09-03: 13 routes x 4 viewports in `docs/design/screenshots/after`,
   regenerated after the P1.5 primitives landed.
+
+## Xtone data view · D-040 (2026-09-23)
+
+User-approved direction for `/projects/xtone`: clear, minimal, spacious,
+data-focused. This view uses a sans-serif H1, four primary metrics, one main
+interactive trend, and dedicated exploration tabs. Automated conclusions and
+recommendations are omitted. Provenance and measurement caveats remain.
+Existing shared tokens govern colours, focus, surfaces and type families.
+Tables support search, numeric sorting and selectable pagination; horizontal
+scroll stays inside a labelled keyboard-accessible region. Tested widths:
+1440, 1024, 768, 390 and 375 px. This was initially scoped to Xtone; D-041 promotes it to the whole product.
+
+## Shared data-first UI · D-041 (2026-09-23)
+
+- Apply the approved Xtone approach across the viewer and workbench: sans-serif
+  headings, short labels, generous spacing and factual summaries.
+- `BrandReportView` is shared by every brand with a real analytical report.
+  Migration is a conditional tab. Brands without a connection retain an honest
+  coverage view with links to their editorial plan.
+- Remove generated conclusions from analytical summaries. Archived reports and
+  editorial evidence remain available on demand in their dedicated views.
+- `@seo/ui/data-table` owns the TanStack table, styling and raw-value sorting.
+  Search, 10/25/50/100 rows, pagination, empty states, print and direct record
+  anchors work consistently across both apps. No external provider calls occur
+  in the client. URL-filtered editorial lists preserve their CSV semantics.
+- Match KPI layout to the number of available metrics; do not leave empty slots.
+- Mobile editorial filters are disclosed on demand; search stays visible.
+  Tablet navigation collapses below 1440 px. Table overflow belongs to its region.
+- ECharts remains the visualization library, with the shared mineral/cobalt
+  theme and tabular alternatives. No new visualization framework is introduced.
+
+
+## Report loading · D-042 (2026-09-24)
+
+- Keep report headings and navigation stable while filters load. A shared live
+  status identifies the pending selection; skeletons replace affected values.
+- Reuse `@seo/ui/skeleton` and the existing tokens. Preserve each zone's height,
+  show skeletons after 160 ms, and mention slower updates after 6 seconds.
+- Mark pending regions busy, conceal stale data from assistive technology and
+  make old controls inert. Animate only without a reduced-motion preference.
+- Leave market-independent data visible on market changes. Global markets
+  still depend on dates; migration always has its own fixed scope.
+- Reflect pending filters immediately and preserve edits in an open calendar.
+  Printing uses the last applied report and matching labels.
+
+
+## Main navigation feedback · D-043 (2026-09-24)
+
+Use native Next Link pending state for the main viewer menu. Replace the link
+icon with a spinner without changing its width, show an indeterminate top
+line and announce the destination in a fixed, unobtrusive status. Mobile
+navigation closes on selection and restores focus to the menu trigger.
+Respect reduced motion, preserve prefetch and normal link interactions, and
+remove feedback on completion. Never display invented progress percentages.

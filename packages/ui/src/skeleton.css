@@ -1,0 +1,141 @@
+.ds-skeleton {
+  display: block;
+  width: 100%;
+  min-width: 0;
+  height: 14px;
+  border-radius: var(--ds-radius-xs);
+  background: var(--ds-surface-subtle);
+  pointer-events: none;
+  user-select: none;
+}
+
+.ds-data-skeleton {
+  width: 100%;
+  min-width: 0;
+  pointer-events: none;
+  user-select: none;
+}
+
+.ds-data-skeleton-metric {
+  display: grid;
+  gap: 10px;
+  padding: 15px 0 2px;
+}
+
+.ds-skeleton-value {
+  width: 65%;
+  max-width: 160px;
+  height: clamp(32px, 3vw, 43px);
+  margin-bottom: 8px;
+}
+
+.ds-skeleton-comparison {
+  width: 80%;
+  max-width: 180px;
+}
+
+.ds-skeleton-comparison-short {
+  width: 65%;
+}
+
+.ds-data-skeleton-chart {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  height: var(--ds-skeleton-chart-height, clamp(280px, 32vw, 370px));
+  padding: 16px 0;
+}
+
+.ds-skeleton-chart-legend,
+.ds-skeleton-chart-axis {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.ds-skeleton-chart-legend > .ds-skeleton {
+  width: 88px;
+  max-width: 25%;
+  height: 12px;
+}
+
+.ds-skeleton-chart-frame {
+  flex: 1;
+  min-height: 0;
+  border-bottom: 1px solid var(--ds-line);
+  border-left: 1px solid var(--ds-line);
+  padding: 0 0 10px 10px;
+}
+
+.ds-skeleton-chart-surface {
+  height: 100%;
+  background: var(--ds-surface);
+}
+
+.ds-skeleton-chart-axis {
+  justify-content: space-between;
+}
+
+.ds-skeleton-chart-axis > .ds-skeleton {
+  width: 48px;
+  height: 10px;
+}
+
+.ds-skeleton-table-heading,
+.ds-data-skeleton-table .ds-skeleton-data-row {
+  display: grid;
+  grid-template-columns: minmax(0, 3fr) repeat(2, minmax(0, 1fr));
+  gap: 24px;
+  align-items: center;
+  padding: 19px 18px;
+  border-bottom: 1px solid var(--ds-line);
+}
+
+.ds-skeleton-table-heading {
+  background: var(--ds-surface);
+}
+
+.ds-skeleton-table-heading > .ds-skeleton,
+.ds-skeleton-data-row > .ds-skeleton {
+  width: 75%;
+}
+
+.ds-skeleton-data-row > .ds-skeleton:not(:first-child),
+.ds-skeleton-table-heading > .ds-skeleton:not(:first-child) {
+  justify-self: end;
+  max-width: 72px;
+}
+
+.ds-data-skeleton-rows .ds-skeleton-data-row {
+  padding: 20px 0;
+  border-bottom: 1px solid var(--ds-line);
+}
+
+.ds-data-skeleton-rows .ds-skeleton-data-row > .ds-skeleton {
+  max-width: 560px;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .ds-skeleton {
+    animation: ds-skeleton-pulse 2.2s ease-in-out infinite;
+  }
+}
+
+@keyframes ds-skeleton-pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.58;
+  }
+}
+
+@media (max-width: 600px) {
+  .ds-skeleton-table-heading,
+  .ds-data-skeleton-table .ds-skeleton-data-row {
+    gap: 16px;
+    padding-right: 12px;
+    padding-left: 12px;
+  }
+}

@@ -24,9 +24,32 @@ export const DEFAULT_CURATION_PATH = resolve(PACKAGE_ROOT, "data/curation/editor
 
 export const sha256 = (input: string) => createHash("sha256").update(input, "utf8").digest("hex");
 
-export function readCurationStore(path: string = DEFAULT_CURATION_PATH): EditorialCurationStore {
-  if (!existsSync(path)) return emptyCurationStore(new Date(0).toISOString());
-  return editorialCurationStoreSchema.parse(JSON.parse(readFileSync(path, "utf8")));
+const CURATION_RELATIVE = "packages/editorial/data/curation/editorial-curation.json";
+
+/**
+ * Dónde buscar la curación al leer. En desarrollo basta la ruta relativa al
+ * paquete, pero en un build de producción Next empaqueta este módulo y
+ * `import.meta.url` apunta al chunk, no a `packages/editorial`: la lectura
+ * devolvía un almacén vacío sin avisar y el visor desplegado perdía toda la
+ * curación publicada. Se prueban, en orden, la variable explícita, la ruta del
+ * paquete y las dos raíces posibles desde el directorio de trabajo (monorepo o
+ * `apps/viewer`, que es donde arranca la función en Vercel).
+ */
+export function curationPathCandidates(): string[] {
+  return [
+    process.env.EDITORIAL_CURATION_PATH,
+    DEFAULT_CURATION_PATH,
+    resolve(process.cwd(), CURATION_RELATIVE),
+    resolve(process.cwd(), "../..", CURATION_RELATIVE),
+  ].filter((candidate): candidate is string => Boolean(candidate));
+}
+
+export function readCurationStore(explicitPath?: string): EditorialCurationStore {
+  // Rutas resueltas en ejecución: el fichero se incluye en el despliegue con
+  // `outputFileTracingIncludes` (apps/viewer/next.config.ts), no por trazado.
+  const path = explicitPath ?? curationPathCandidates().find((candidate) => existsSync(/*turbopackIgnore: true*/ candidate)) ?? DEFAULT_CURATION_PATH;
+  if (!existsSync(/*turbopackIgnore: true*/ path)) return emptyCurationStore(new Date(0).toISOString());
+  return editorialCurationStoreSchema.parse(JSON.parse(readFileSync(/*turbopackIgnore: true*/ path, "utf8")));
 }
 
 export function writeCurationStore(store: EditorialCurationStore, path: string = DEFAULT_CURATION_PATH): void {

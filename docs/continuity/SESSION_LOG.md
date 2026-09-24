@@ -164,3 +164,619 @@
 - Verificaciones: `pnpm continuity:check`, `pnpm typecheck` (8 paquetes),
   `pnpm test` (85), `pnpm build` (visor + workbench, con `/queries/[id]`),
   `pnpm editorial:import` y `pnpm axe` en verde.
+
+## 2026-09-03 · P2.1 · Inventario y contratos de migración V1
+
+- **Auditoría sobre el código real de V1**, no sobre la prosa de `V1_PARITY.md`.
+  V1 vive en `~/Desktop/Proyectos/seo-dashboard` (Astro 5 + Svelte 5): 18 páginas
+  y 34 endpoints. Se recorrió el grafo de imports de cada página —entre 73 y 155
+  ficheros por ruta— para extraer sus fuentes, transformaciones, filtros,
+  exportaciones y dependencias sin clasificar de memoria.
+- **Hallazgo con consecuencias.** Seis endpoints de V1 no tienen ninguna UI
+  montada: `canibalizaciones-build`, `url-keywords`, `trendbook-report`,
+  `trendbook-query`, `cita-tienda-flow` y `cita-tienda-es`. Es el mismo patrón que
+  D-006 encontró en el calendario, así que se catalogaron como superficies de
+  pleno derecho en lugar de darlos por muertos. Cuatro se conservan; solo dos se
+  proponen para retirada.
+- **Contrato en lugar de documento (D-018).** `packages/contracts/src/migration.ts`
+  define superficies, disposiciones, aprobación y tolerancias con zod;
+  `docs/continuity/v1-migration-inventory.json` es la fuente de datos;
+  `scripts/migration-report.mjs` renderiza el Markdown y, con `--check`, falla si
+  se desincroniza, si falta una ruta de `V1_PARITY.md`, si una fase de destino no
+  existe en el roadmap o si una retirada llega sin alternativa. El esquema hace
+  imposible por construcción una tolerancia sin motivo o un `retire` sin sustituto.
+- **Resultado.** 23 superficies: 4 `retain`, 10 `redesign`, 6 `merge`, 1 `defer` y
+  2 `retire` (ambas `proposed`). 8 datasets con reconciliación: el editorial ya
+  `reconciled` desde P1, cinco `pending`, el de SEMrush contra su caché archivada
+  y el estado de tareas en `localStorage` declarado `not-comparable` porque nunca
+  salió del navegador de cada persona.
+- **Decisiones de tolerancia que conviene no reabrir sin motivo.** Clics de GSC
+  exactos e impresiones a ±0,5% porque Google las reprocesa; GA4 a ±1% en sesiones
+  y ±2% en usuarios por el recuento aproximado, con conversiones exactas; el CTR no
+  se reconcilia por separado porque es derivado; el health score del crawler es no
+  comparable porque V2 lo recalibra, así que se compara el inventario de issues
+  —el dato— y no la puntuación —la opinión—.
+- **Los dos ejes se mantienen separados.** `V1_PARITY.md` dice dónde está cada
+  capacidad; el inventario dice qué se hace con ella.
+- Verificaciones: `pnpm continuity:check`, `pnpm migration:check` (23 superficies,
+  8 datasets, 17 rutas de paridad cubiertas), `pnpm typecheck` (8 paquetes),
+  `pnpm test` (92, siete nuevas) y `pnpm editorial:import` («Sin cambios»). Se
+  comprobó que la verificación falla de verdad: al quitar `/canales/sem` del JSON,
+  `migration:check` sale 1 con el motivo exacto. No se ejecutó `pnpm build` ni
+  `pnpm axe`: el incremento es de contratos y documentación, sin superficie nueva
+  en las apps.
+- **Aviso para la próxima sesión.** `pnpm format` reformatea unos 130 ficheros
+  ajenos al cambio: el árbol committeado no está formateado con la configuración
+  actual de Prettier. Se revirtió ese ruido; formatea solo lo que toques.
+- Abierto para el responsable: aprobar o rechazar las dos retiradas propuestas.
+  P2 no cierra mientras sigan en `proposed`.
+
+## 2026-09-04 · P2.2 · Portada y visión transversal del grupo
+
+- **Se cierra `P2.2`** con la ruta `/portfolio` del visor: selector de las ocho
+  marcas, agregado con cobertura declarada, comparativa periodo anterior /
+  interanual, mercados con visibilidad ponderada, objetivos con progreso
+  valor ÷ objetivo, cinco explicaciones derivadas con evidencia y comparación de
+  fuentes V1 frente a V2 marca a marca. `P2` pasa al 50%.
+- **La decisión de fondo (D-020): no inventar cifras para completar la pantalla.**
+  La V1 medía las ocho marcas con GA4 y el piloto de V2 son dos, así que lo
+  cómodo era generar ocho series sintéticas. En su lugar, las seis marcas fuera
+  del piloto llegan con `analytics: null` y un motivo escrito, y cada agregado
+  dice cuántas marcas lo sostienen («2 de 8 marcas con serie analítica»). La
+  pérdida temporal de cobertura frente a V1 queda visible y auditable en la
+  propia pantalla en vez de ser un silencio.
+- **Lo que hace útil la pantalla hoy** es cruzar dos fuentes con cobertura
+  distinta y decirlo: analítica sintética del piloto y **plan editorial real** de
+  las ocho marcas, importado de V1 desde P1. Sin ese cruce, seis de ocho filas
+  estarían vacías; con él, el selector de marcas informa desde el primer día.
+- **Un solo origen para los agregados.** `aggregatePortfolio` es pura y calcula
+  totales, mercados, objetivos, cuotas, cobertura y notas. No hay un segundo
+  cálculo del mismo número, así que un total no puede contradecir sus sumandos.
+  El generador sintético deriva las cifras de cada marca de sus filas de mercado
+  —no al revés—, y por eso la suma por mercados cuadra con el total bajo
+  cualquier filtro; hay pruebas que lo fijan.
+- **Explicaciones derivadas, no redactadas.** `buildPortfolioNarrative` aplica
+  cinco reglas fijas sobre los propios agregados (mayor caída y mayor avance por
+  mercado, concentración de cuota ≥50%, objetivo más rezagado y cobertura
+  incompleta), ordena por magnitud y adjunta evidencia. El mismo payload produce
+  siempre las mismas notas: hay una prueba de determinismo.
+- **Filtros compartibles sin JavaScript.** `brands`, `market`, `period` y
+  `compare` viajan en la query string y cada control es un `<Link>`. El orden de
+  marcas se normaliza al canónico (dos enlaces con las mismas marcas en distinto
+  orden dan el mismo resultado), una marca desconocida se descarta en vez de
+  romper el enlace, la selección nunca queda vacía y la query omite los valores
+  por defecto. `/api/v1/portfolio` lee exactamente el mismo estado.
+- **Se unificó la lista de marcas (D-019).** Había dos, con nombres distintos
+  para la misma marca. Ahora `BRANDS` en `taxonomy.ts` es la única, y
+  `EDITORIAL_BRANDS`/`PILOT_PROJECTS` se derivan conservando su nombre público:
+  ningún consumidor cambió. Se añadieron `domain` y `v1Sources`, este último
+  copiado de la configuración real de V1. El dominio de Gamadecor queda `null`
+  porque V1 no lo declaraba —no tenía Search Console—; inventarlo era más cómodo
+  que decirlo.
+- **Axe encontró dos defectos reales que la revisión propia no vio**, y por eso
+  se registraron las dos rutas nuevas en `scripts/axe-audit.mjs` y
+  `scripts/capture-screenshots.mjs` antes de auditar: `aria-pressed` no está
+  permitido en `role="link"` (crítico) y el chip de marca pendiente seleccionado
+  no llegaba a contraste AA con `--ds-graphite` (serio). Corregidos con
+  `aria-current` + nombre accesible que dice qué hará el enlace, y con
+  `--ds-ink`.
+- **Se repurpuso `/api/v1/portfolio`**, que hasta ahora devolvía el payload de la
+  portada y no tenía ningún consumidor: ahora sirve la visión transversal, que es
+  lo que su nombre decía.
+- Verificaciones: `pnpm continuity:check`, `pnpm migration:check` (23 superficies,
+  8 datasets), `pnpm typecheck` (8 paquetes), `pnpm test` (**132**, 40 nuevas),
+  `pnpm build` (viewer + workbench), `pnpm axe` (**40 combinaciones, 0
+  incumplimientos**), 0 px de desbordamiento a 375 px y las tres redirecciones 308
+  comprobadas con la query string intacta (`/conjunto` → `/portfolio`).
+- Deuda anotada: `/` y `/portfolio` difieren en 1 sesión por redondeo, porque
+  agregan por caminos distintos; desaparece en P3 cuando lean del mismo almacén.
+  Las seis marcas no piloto no tienen ficha `/projects/[slug]`.
+- Abierto para el responsable, sin cambios: aprobar o rechazar las dos retiradas
+  propuestas (`/api/cita-tienda-flow.json`, `/api/cita-tienda-es.json`). P2 no
+  cierra mientras sigan en `proposed`.
+
+## 2026-09-04 · P2.3 (mitad) · Informes con archivo histórico y rutas heredadas
+
+- **Se cierran dos de los cuatro criterios de `P2.3`**: informes con archivo
+  histórico y navegación compatible. `P2` pasa al 57%, que es el recuento de 8
+  criterios terminados sobre 14, no una estimación.
+- **Los capítulos de V1 se leyeron de su código, no del inventario.**
+  `InformeTrimestral.svelte` tiene 8 secciones más apéndice e `InformeV2.svelte`
+  10; son 19 secciones reales que se fusionan en 16 capítulos (D-021). Tres
+  existían en los dos informes a la vez —resumen, salud técnica y próximo
+  periodo—, y eso es lo que justifica fusionar en vez de duplicar. La
+  equivalencia que se revisará con el responsable es comprobable contra el
+  original, y una prueba fija que siguen siendo 19.
+- **Regla que impide la paridad de escaparate**: un informe no puede declarar un
+  capítulo cuyo estado sea `pendiente`. Sin ella, cualquier informe podría lucir
+  «16 de 16 capítulos» sin nada detrás. Hay prueba sobre todo el archivo.
+- **La cadena de versiones es la prueba de la inmutabilidad**, así que se muestra
+  entera. `report-2026-06` lleva fe de erratas real (macroconversiones de Noken
+  US duplicadas) y `report-noken-q2` una segunda versión con revisor distinto:
+  son los dos casos que obligan a no reescribir una versión publicada.
+- **Un error propio que la verificación destapó.** Al ampliar el archivo a siete
+  informes, `/api/v1/reports/[id]` y `/api/v1/exports/[id].csv` devolvían 404
+  para los cierres anteriores, porque seguían leyendo del payload de la portada,
+  que solo conoce los recientes. La pantalla mostraba informes que la API negaba.
+  Ahora el archivo es la única fuente de los cuatro consumidores.
+- **Rutas heredadas: redirigir y decirlo, no una de las dos cosas (D-022).** Las
+  dos rutas de V1 sin equivalente todavía (`/tracking/pilar-contenidos` → P6,
+  `/insights/llm` → P8) llevaban meses en la matriz como `missing`. Dejar el 404
+  rompe enlaces guardados; redirigir en silencio a algo que no es lo mismo finge
+  paridad. Redirigen a la superficie más cercana arrastrando `?from=` y el
+  destino declara en pantalla qué falta y en qué fase llega.
+- `apps/viewer/lib/legacy-routes.ts` cataloga las cinco redirecciones y
+  `legacy-routes.test.ts` lee `next.config.ts` como texto: falla si una lista
+  tiene una ruta que la otra no, si una redirección de V1 no es 308 o si un
+  destino parcial no arrastra su `?from=`. Antes esa correspondencia solo vivía
+  en un comentario del config.
+- Las seis superficies nuevas de P2.2 y P2.3 se registraron en
+  `scripts/axe-audit.mjs` **antes** de auditar, incluidos el archivo filtrado y
+  su estado vacío. Entraron limpias: 48 combinaciones, 0 incumplimientos.
+- Verificaciones: `pnpm continuity:check`, `pnpm migration:check`,
+  `pnpm typecheck` (8 paquetes), `pnpm test` (**155**, 23 nuevas), `pnpm build`,
+  `pnpm axe` (48 combinaciones, 0 incumplimientos) y las cinco redirecciones
+  comprobadas con curl conservando la query string.
+- Quedan abiertos los otros dos criterios de `P2.3`: planes de acción con
+  seguimiento y cronología —que absorbe `/conjunto/radar`— y herramientas e
+  importadores locales. Después, `P2.4`, que no se puede cerrar sin el
+  responsable SEO.
+
+## 2026-09-04 · P2.3 completa · Cronología, seguimiento y herramientas locales
+
+- **Se cierran los otros dos criterios de `P2.3`**, con lo que la subfase queda
+  completa y `P2` pasa al 71%: 10 de sus 14 criterios terminados.
+- **La cronología nació mal y la verificación lo destapó.** Al mezclar los cuatro
+  carriles en un solo hilo, el plan editorial —que se programa meses por
+  delante— sepultaba el diagnóstico: la incidencia de canonical del 16 de agosto
+  quedaba veinte hitos por debajo de posts de diciembre que aún no han pasado. Se
+  separó en **dos horizontes** por el corte del dato (D-023). Ahora agosto
+  muestra el core update del 24 y la incidencia del 16 junto a los eventos
+  editoriales de esos días, que es la mitad de un diagnóstico.
+- **Un carril se declara vacío a propósito.** El radar de V1 ya estaba decidido
+  en P2.1 como «no conservar como vertical aislado hasta automatizarlo» (P4).
+  Migrar a mano sus cuatro noticias curadas las habría dejado congeladas y habría
+  dado por resuelto un carril que no lo está. Vacío y fechado es información; su
+  ausencia se confundiría con «no pasó nada».
+- **El plazo se mide contra el corte del dato, nunca contra el reloj.**
+  `trackAction(action, asOf)` recibe el corte como argumento. Decir «vencida hoy»
+  sobre un snapshot de hace tres días es falso y además haría el render no
+  determinista. Hay prueba de las tres transiciones.
+- **Cada versión publicada de informe es su propio hito en la cronología**,
+  correcciones incluidas: una fe de erratas cambió lo que se leyó, y esconderla
+  tras la versión vigente falsearía la historia.
+- **Herramientas locales: el riesgo no era decidir mal, era no decidir (D-024).**
+  V1 tenía un crawler, un generador de snapshots y cuatro endpoints de desarrollo
+  que nunca fueron pantalla y aun así hacían trabajo real. Se catalogan 12
+  utilidades en `/herramientas` del workbench: 4 disponibles con punto de entrada,
+  1 bloqueada con motivo medido, 6 pendientes con fase y 1 retirada propuesta sin
+  aprobar. `disponible` significa ejecutable ahora, y hay pruebas que lo exigen.
+- Los orígenes de V1 y las fases del catálogo **no se escriben a mano**: salen del
+  inventario de P2.1 y una prueba falla si una herramienta apunta a un origen no
+  catalogado o adelanta su fase. El catálogo no puede prometer antes que el
+  roadmap.
+- **Axe volvió a encontrar lo que la revisión propia no vio**: dos landmarks con
+  el mismo nombre accesible («septiembre 2026») y dos `id` duplicados, porque el
+  corte cae a mitad de mes y septiembre aparece en los dos horizontes. Se corrigió
+  prefijando por horizonte y dejando de convertir cada mes en `section`: una
+  agrupación dentro de la cronología no es un landmark.
+- Se extrajo `WorkbenchNav` al llegar la tercera sección del workbench: con dos
+  páginas la lista duplicada era tolerable, con tres cada sección nueva obligaría
+  a tocar todos los ficheros.
+- Verificaciones: `pnpm continuity:check`, `pnpm migration:check`,
+  `pnpm typecheck` (8 paquetes), `pnpm test` (**180**, 88 nuevas en la sesión),
+  `pnpm build` (cinco rutas nuevas entre las dos apps) y `pnpm axe`
+  (**56 combinaciones, 0 incumplimientos y 0 avisos**).
+- **Aviso para la próxima sesión.** `P2.4` no se puede cerrar sin el responsable
+  SEO: sus tres criterios son reconciliación con tolerancia, validación de flujos
+  y registro de retiradas. Lo que sí corresponde al desarrollo es preparar el
+  guion de validación por flujo y el procedimiento de reconciliación, para que la
+  sesión no se improvise. Y al abrirla, recordar que **ninguna cifra analítica de
+  V2 es real todavía**: hoy solo se puede aceptar equivalencia de superficie,
+  filtros, navegación, trazabilidad y explicabilidad.
+
+## 2026-09-04 · Preparación de P2.4 (cierre de sesión)
+
+- `P2.3` queda completa y se prepara `P2.4` con lo único que corresponde al
+  desarrollo: [`docs/continuity/P2_ACCEPTANCE.md`](P2_ACCEPTANCE.md). No sustituye
+  a la validación con el responsable; la habilita.
+- **Hallazgo que cambia la conversación sobre la reconciliación.** «Pendiente» se
+  estaba leyendo como «esperando credenciales», y eso solo es cierto en dos de los
+  seis contratos abiertos. Los otros cuatro —`semrush-cache`, `crawl-snapshots`,
+  `canibalizaciones-snapshot` y `prompts-geo-inventory`— comparan contra ficheros
+  estáticos que están en el disco de V1, y están bloqueados porque **el lado de V2
+  no existe todavía** (P3.3, P5, P6, P8). La reconciliación de esos cuatro no es
+  una negociación de accesos: es trabajo de esas fases.
+- Las afirmaciones del documento se comprobaron contra el disco antes de
+  escribirlas, no de memoria: los cuatro ficheros de SEMrush del piloto están en
+  `src/data/tracking-pilar/`, `sites-overview.json` tiene los 7 sitios declarados,
+  `prompts-geo.json` tiene 24 prompts con el reparto exacto del contrato (us 8,
+  uk 6, fr 5, es 5) y `src/data/audits/` tiene 26 ficheros. Buscando el caché de
+  SEMrush apareció primero un directorio con solo Krion y Gamadecor, que habría
+  hecho parecer erróneo el contrato; los ficheros del piloto estaban en otra
+  carpeta y el contrato es correcto.
+- **Conflicto que se registra como bloqueo en vez de esconderlo.** El primer
+  criterio de salida de `P2` dice que ninguna capacidad **crítica** de V1 puede
+  quedar en `missing`, y quedan cuatro: `/tracking/autoridad-tematica` (P6),
+  `/tracking/prompts-geo` (P8), `/canales/sem` (P6) y
+  `/conjunto/canibalizaciones` (P6). Todas tienen fase y motivo, pero el criterio
+  no dice «con fase declarada». Si el responsable las considera críticas, `P2` no
+  cierra y su alcance se amplía; si no, hay que registrarlo como decisión con
+  nombre y fecha. El desarrollo no puede decidirlo, así que se añade el bloqueo
+  `p2-exit-missing` en lugar de dar el criterio por bueno.
+- El guion cubre cinco flujos completos —detectar→decidir, oportunidad→publicación,
+  informe y archivo, herramientas locales y rutas antiguas— con la pregunta que el
+  responsable debe poder contestar **desde la pantalla, en menos de un minuto**, y
+  los puntos de fallo a vigilar. El más importante: si interpreta las seis marcas
+  sin serie como «cero» en vez de «no medida», la declaración de cobertura no
+  funciona por correcta que sea.
+- Límites que el guion deja escritos para que nadie los dé por cerrados: el
+  recorrido editorial llega hasta «publicada», no hasta «funcionó» (el resultado
+  medido es `P3.5`), y ninguna cifra analítica de V2 es real todavía.
+
+## 2026-09-04 · Portada derivada del contrato (defecto detectado al verificar)
+
+- Al comprobar la portada con distintos filtros aparecieron **dos mentiras** que
+  llevaban ahí desde P1 y que ninguna prueba cubría (D-025):
+  1. El rango de fechas decía «03–30 agosto 2026» con **cualquier** periodo
+     seleccionado. Elegir «Últimos 24 meses» seguía anunciando 28 días sobre
+     cifras que sí habían cambiado.
+  2. La tarjeta de «Prioridad del periodo» anunciaba «Resolver indexabilidad en
+     Francia · Porcelanosa» **también al filtrar por Noken**: atribuía a una
+     marca el riesgo de otra.
+- La ventana temporal entra en el contrato (`periodWindowSchema`,
+  `buildPeriodWindow(period, cutoff)`), se calcula desde el corte del dato y no
+  desde el reloj, y su corte coincide con el `asOf` de la cobertura declarada.
+  La comparación anterior es contigua y de igual longitud, sin solaparse; el
+  interanual desplaza 365 días. Diez pruebas nuevas lo fijan, incluida la
+  coincidencia de cortes, porque es la clase de error que no se ve leyendo la
+  pantalla.
+- La prioridad se deriva con `rankInsight`, la **misma** fórmula que ordena
+  `/insights`: la portada no puede destacar algo distinto de lo que esa pantalla
+  considera más urgente. Con Noken seleccionado ahora muestra su propia
+  conclusión; sin ninguna conclusión que pase el umbral, lo dice en vez de
+  inventarla.
+- **El mismo defecto estaba en la ficha de informe**, multiplicado por siete al
+  ampliar el archivo en P2.3: resumen e índice escritos a mano e idénticos en
+  todos los informes. El cierre anual de 2025 anunciaba el resultado de agosto de
+  2026. Ahora el resumen es el del propio informe y los bloques son los capítulos
+  que declara, con su sección original de V1, su estado y la superficie que hoy lo
+  cubre; la barra lateral enumera también los que **no** incluye, con su fase.
+- **La portada del workbench era el caso más grave y también se corrigió.**
+  Anunciaba dos crawls «aprobados» con 2.020 y 11.387 URLs y un historial de
+  preparación completo, cuando no se ha ejecutado ni un crawl porque el preflight
+  lo impide, y la curación estaba vacía. Ahora lee el informe de importación, el
+  almacén de curación y la medición de disco: 261 filas editoriales bajo control,
+  crawl bloqueado con la cifra real (5,9 GiB de 50) y curación declarada vacía.
+  El historial solo admite hitos fechados en una fuente local.
+- Un barrido con `grep` sobre el JSX del visor confirmó que no queda ninguna cifra
+  con separador de miles escrita a mano. Sí aparecieron dos textos que ya habían
+  divergido de la taxonomía: la página de proyectos escribía las olas de
+  expansión a mano y llamaba «L'Antic Colonial» a lo que el contrato llama «Antic
+  Colonial». Ahora se derivan con `expansionWaves()`, con prueba.
+- **Incidente de disco durante la sesión.** El bloqueo `local-disk` llegó a cero:
+  `Bash` y `Write` empezaron a fallar con `ENOSPC` a mitad de la verificación. La
+  causa era el caché de Turborepo (`.turbo`), 6,4 GB de artefactos regenerables
+  excluidos por `.gitignore`. Al borrarlo se recuperaron de 117 MiB a 6,6 GiB
+  libres y se completaron las verificaciones pendientes. Sigue muy lejos de los
+  50 GiB que exige el preflight para habilitar crawls.
+- Verificaciones: `pnpm typecheck` (8 paquetes), `pnpm test` (**190**, 10 nuevas),
+  `pnpm build` y `pnpm axe` (56 combinaciones, 0 incumplimientos). Comprobado a
+  mano que la ventana cambia con los tres periodos y que la prioridad sigue al
+  proyecto.
+- **`pnpm status` mide el disco en vez de recitarlo.** El bloqueo `local-disk`
+  llevaba sesiones anunciando una cifra escrita a mano y el disco se llenó de
+  verdad mientras el estado decía «~6,2 GiB libres». Ahora el script mide al
+  abrir sesión, avisa de que 5,2 GiB bastan para desarrollar pero no para crawls,
+  y **sale con código 1 por debajo de 3 GiB** con el recurso de recuperación a la
+  vista. Comprobado que falla de verdad: con el umbral forzado sale 1; con el
+  estado real, 0. Es el mismo principio de D-025 aplicado a la propia continuidad:
+  un bloqueo cuyo número no se comprueba deja de ser un bloqueo.
+
+## 2026-09-04 · P2.4: los contratos de reconciliación se ejecutan
+
+- Se ejecutaron por primera vez los ocho contratos de reconciliación que `P2.1`
+  solo había escrito. `scripts/reconcile.mjs` mide el disco de V1, hashea cada
+  fuente y congela el resultado en
+  `docs/continuity/v1-reconciliation-baseline.json`, versionado en el repositorio.
+  Estados: **1 reconciliado** (los cuatro snapshots editoriales), **4 con baseline
+  congelado** (SEMrush, crawls, canibalización, prompts GEO), **2 bloqueados**
+  (GA4 y GSC solo existen como consulta en vivo) y **1 no comparable** (el estado
+  de tareas nunca salió del navegador). 28 ficheros de V1 medidos.
+- **La ejecución encontró un fallo real del inventario de P2.1**, que la
+  validación de la sesión anterior había repetido sin comprobar: el contrato
+  `semrush-cache` declaraba como muestra «Porcelanosa y Noken en ES y UK», y
+  `semrush-porcelanosa-uk.json` no existe ni ha existido —Porcelanosa cachea
+  `de`, `es` y `fr`—. Comparar contra un fichero ausente no habría fallado:
+  habría dado por bueno un dataset vacío en silencio. Corregido a los 15 ficheros
+  reales con 328 queries, ahora medidos y hasheados (D-026).
+- La reconciliación editorial compara **V1 medido contra V2 medido**, no cada lado
+  contra una constante del contrato, y exige además que el hash del fichero en
+  V1 siga siendo el que archivó el importador. Comprobado que falla de verdad por
+  tres vías: quitando una fila del dataset normalizado (V1 115 vs V2 114),
+  alterando el hash congelado y alterando una medida del baseline.
+- Se corrigió una aserción propia demasiado estricta: exigía tolerancia exacta en
+  **todas** las métricas y marcaba como error tres contratos correctos. Un
+  contrato puede mezclar lo verificable contra el fichero con lo que cambia por
+  diseño al migrar (SEMrush recalcula volúmenes, el health score se recalibra, la
+  canibalización se recalcula con otro criterio). Lo exigible es al menos una
+  métrica exacta por dataset ejecutable y motivo escrito en las no comparables.
+- Se corrigió también la primera versión de la sonda editorial, que medía claves
+  de nivel superior y ponía un «2» al lado de los 39 eventos de V2 sin comparar
+  nada: los eventos viven anidados en `months` y las propuestas dentro de cada
+  hueco.
+- Añadido `packages/contracts/src/reconciliation.ts` con el esquema del baseline y
+  15 pruebas; el esquema rechaza un `reconciled` sin lado V2, un `blocked` sin
+  motivo y un `baseline-frozen` sin ficheros medidos.
+- `pnpm continuity:check` exige ahora el baseline, su informe y el guion de
+  aceptación. Verificaciones: typecheck 8 paquetes, **206 pruebas** (191 antes),
+  `migration:check`, `reconcile:check` y `continuity:check` en verde.
+- `P2` pasa al **79%** (11 de 14 criterios). Lo que queda no es desarrollo: son
+  dos decisiones del responsable y las dependencias de P3/P5/P6/P8, con la
+  muestra V1 ya preparada para comparar. El siguiente incremento de desarrollo
+  con sentido es `P3.1`, que además desbloquea GA4 y GSC.
+- Aviso operativo: el disco bajó a **4,8 GiB** libres durante la sesión. `pnpm
+  status` lo mide y sale con código 1 por debajo de 3 GiB.
+
+## 2026-09-07 · P3.2: la unidad de ingesta pasa a ser el día
+
+- **Se encontró un defecto real en el orquestador de P0 al releer el criterio.**
+  `SyncOrchestrator` construía su clave de idempotencia como
+  `proyecto:fuente:corte` y trataba los siete días de reprocesado como un solo
+  commit. Consecuencia concreta: los mismos siete días ingeridos hoy y mañana
+  producen dos claves distintas, así que nada impedía que convivieran dos
+  versiones del mismo día. El criterio del roadmap pide idempotencia y
+  reprocesado de siete días; con la ventana como unidad, la idempotencia solo
+  protegía de repetir el ciclo el mismo día.
+- Se añadió el reparto por día: `packages/sync/src/plan.ts` expande
+  `proyecto x fuente x día` con clave `proyecto:fuente:día` que **no depende del
+  reloj**, `ledger.ts` guarda la huella de las filas de cada día e `ingest.ts`
+  ejecuta el ciclo. Reingerir contenido idéntico es `unchanged`; distinto es
+  `revised`, con huella anterior y contador de revisiones. Un número no puede
+  moverse en silencio (D-030).
+- **Dos constantes escritas a mano quedaron sustituidas por el catálogo (D-029).**
+  La ventana anterior aplicaba `D-3` a todas las fuentes cuando el catálogo ya
+  declaraba GA4 `D-1`, GSC `D-3`, SEMrush y CrUX `D-7`; y producía **ocho** días
+  (`cutoff - 7 .. cutoff`) para un criterio que pide siete. Ahora el desfase sale
+  de la fuente y la cola son siete días contando el corte. La prueba heredada se
+  actualizó con el motivo escrito y se amplió a tres fuentes.
+- **El fallo y su antigüedad son ahora dos cosas distintas.** El libro solo se
+  escribe en el éxito, así que un fallo conserva el último snapshot válido por
+  construcción. `snapshotStaleness` publica `behindDays` (el dato se quedó atrás)
+  y `missingDays` (falta un día **dentro** de la ventana). Sin la segunda, un
+  fallo a mitad de ventana se leía «al día» y el día ausente parecía una caída de
+  tráfico a cero: eso salió al ejecutar el ensayo, no al diseñarlo.
+- Se añadió `pnpm ingest:dry-run` (`--cycles`, `--at`, `--fail-day`): ejecuta los
+  ciclos completos y **sale con código 1** ante un duplicado, una deriva o un
+  hueco. Es el criterio de salida «cuatro ciclos de sincronización de prueba
+  terminan sin duplicados ni deriva» ejecutado, no enunciado. Resultado: 4
+  ciclos, 28 jobs por ciclo, 28 días en el libro, 0 duplicados y 0 derivas; con
+  `--fail-day=2026-09-02`, 4 jobs fallidos, 24 conservados y los registros del
+  día intactos.
+- **El ensayo falló de verdad en su primera ejecución y encontró un fallo propio**:
+  se le pasaba `PILOT_PROJECTS`, que son objetos `Brand` y no slugs. El plan no
+  se quejó: interpoló «[object Object]», las dos marcas colapsaron en la misma
+  clave y 28 jobs se convirtieron en 14 **sin un solo error**. Dos correcciones:
+  `planIngestion` valida proyectos y fuentes con los esquemas aunque el tipo ya
+  los declare, y `packages/sync/tsconfig.json` incluye `scripts/**`, que estaba
+  fuera del typecheck —el error vivía justo ahí—.
+- No se toca ninguna pantalla ni se declara ninguna integración: los lectores
+  exponen `describe()` con `realData: false` y el informe del ciclo lo repite.
+  Conectar GA4 o Search Console será implementar `DailySourceReader`, sin tocar
+  el planificador ni el libro.
+- `SyncOrchestrator` se conserva para las fuentes semanales de `P3.3` y la
+  publicación firmada, con la nota de por qué queda superado para las diarias.
+  No se le añadió la lógica diaria: dos implementaciones de la misma ingesta es
+  peor que una superada y declarada.
+- Verificaciones: `pnpm typecheck` (9 paquetes), `pnpm test` (**263**, 17
+  nuevas), `pnpm build`, `pnpm ingest:dry-run`, `pnpm continuity:check`,
+  `pnpm migration:check` y `pnpm reconcile:check` en verde. `pnpm axe` no se
+  reejecutó: la sesión no toca ninguna pantalla. `P3` pasa al **19%** (3 de 16).
+- Aviso de continuidad: al actualizar `lastValidation` en
+  `docs/continuity/PROJECT_STATE.json` se perdieron las claves que sesiones
+  anteriores habían dejado más allá de `editorialImport`; el fichero estaba sin
+  commitear, así que no había versión anterior en Git a la que volver. Lo que
+  figura ahora está reejecutado hoy y queda anotado en el propio bloque.
+- Sigue pendiente lo que el desarrollo no puede cerrar: credenciales de Neon,
+  GA4, GSC y SEMrush, y la sesión de aceptación de `P2` con el responsable.
+
+## 2026-09-07 · P3.3: cuota, reintento, lock y `SyncRun` observable (D-031)
+
+- Se cierra el tercer criterio de `P3.3` —«cuotas, reintentos, locks, datos
+  parciales y observabilidad por `SyncRun`»—, que llevaba desde P0 enunciado en
+  el roadmap y sin existir en ninguna parte del código. Como D-030, se puede
+  escribir sin credenciales porque son reglas, no fachada: `policy.ts` (cuota,
+  clasificación de fallos, backoff y lock con ficha) y `run.ts` (`SyncRun`).
+- Las reglas que cambian el comportamiento, no la documentación:
+  - La cuota se **reserva antes** de llamar. Contarla después es contar lo ya
+    gastado: cuando el contador ve el exceso, la petición ya salió.
+  - **Cada reintento se cobra al mismo presupuesto**, o el presupuesto es una
+    cifra decorativa que un día de 429 duplica sin que nadie se entere.
+  - El fallo se clasifica **por tipo o por código, nunca por el texto**. Lo
+    permanente sale a la primera; lo desconocido tiene menos intentos que lo
+    transitorio; un día vacío no se reintenta porque es una ausencia, no una
+    avería; perder el lock es permanente dentro del ciclo.
+  - La espera crece **con dispersión**: sin ella, 28 jobs con el mismo 429
+    esperan lo mismo y vuelven a la vez. Hay techo por intento y por job.
+  - El lock lleva **ficha creciente** y se comprueba **justo antes de escribir**.
+    El TTL caduca el permiso, no el proceso: sin ficha, un ciclo atascado que
+    despierta tarde escribe encima del que le sustituyó. Lo que hay que impedir
+    es la escritura tardía, no la lectura tardía.
+  - Un `SyncRun` con algún día fuera es `partial`, **nunca** `complete`. Sin esa
+    regla, un ciclo que escribió 20 de 28 días termina en verde por no haber
+    lanzado excepciones y la interfaz presenta una serie con agujeros como si
+    estuviera al día. Y `deferred` no es un fallo: agotar la cuota no puede
+    parecer una caída del proveedor.
+- `QUOTA_BUDGETS` declara el gasto que **V2 se impone**, no el límite del
+  proveedor, y lo dice con `verifiedAgainstProvider: false`: misma disciplina
+  que `realData` en los lectores.
+- El ciclo diario ya las usa. `runIngestionCycle` acepta `policy` opcional y sin
+  ella **activa cuota y lock por defecto**: la ausencia de configuración no
+  puede significar ausencia de reglas.
+- **Las cinco reglas centrales se verificaron por mutación antes de darlas por
+  buenas**: reintentar el permanente, quitar la comprobación de ficha antes de
+  escribir, declarar completo un run parcial, contar la cuota después de llamar
+  y no cobrar los reintentos. Las cinco rompen entre 1 y 3 pruebas; ninguna pasó
+  desapercibida. Una suite que no puede fallar no demuestra nada (D-025).
+- `pnpm ingest:dry-run` ejecuta ahora los 4 ciclos **con las reglas puestas** —un
+  ensayo que verifica un camino distinto del que correrá en producción no
+  verifica producción— y añade tres escenarios: lock ocupado (`blocked`, 28
+  aplazados, 0 de cuota, libro intacto), cuota recortada a 3 por fuente
+  (`partial`, 6 escritos, 22 aplazados, 0 fallos, huecos declarados) y fuente
+  intermitente (`complete`, 14 reintentos, 21 peticiones cobradas).
+- Efecto colateral corregido en la misma sesión: al activarse los reintentos por
+  defecto, dos pruebas de D-030 empezaron a dormir un segundo real cada una.
+  Ahora inyectan una espera que no duerme; el backoff se prueba donde le toca.
+- Verificaciones: `pnpm typecheck` (9 paquetes), `pnpm test` (**282**, 19
+  nuevas), `pnpm build` (9 tareas), `pnpm ingest:dry-run` con y sin
+  `--fail-day`, y `pnpm continuity:check` en verde. `pnpm axe` no se reejecuta:
+  el cambio vive entero en `@seo/sync` y no toca ninguna pantalla. `P3` pasa al
+  **25%** (4 de 16).
+- Sigue pendiente lo que el desarrollo no puede cerrar: credenciales de Neon,
+  GA4, GSC y SEMrush, y la sesión de aceptación de `P2` con el responsable. Lo
+  siguiente que sí admite trabajo previo es la invalidación de caché por
+  snapshot de `P3.4`.
+
+## 2026-09-23 · Visor en Vercel con dato real de GA4 y Search Console (D-034, D-035)
+
+- Cambio de prioridad pedido por el usuario: publicar ya el visor en Vercel,
+  sin login y con datos reales; el workbench se queda en local.
+- Nuevo origen `SEO_DATA_SOURCE=live` en `packages/repository/src/live/`
+  (`google.ts`, `brands.ts`, `figures.ts`, `repository.ts`): GA4 Data API y
+  Search Console API en directo desde el servidor, sin SDK, con las credenciales
+  de V1. Mercados por prefijo de ruta como en V1; non-branded sobre clics con
+  consulta visible; retención de 16 meses de GSC declarada; conclusiones,
+  acciones, incidencias, oportunidades y GEO vacías a propósito.
+- Visor: `PUBLIC_ACCESS` (D-035), textos por origen, «—» donde no hay fuente,
+  caché compartida de 6 h que no guarda resultados con fuentes caídas.
+  Contratos: modo `live` y `connectedSources` en `aggregatePortfolio`.
+- Despliegue: proyecto `seo-dashboard-viewer` (Hobby, `fra1`), 13 variables de
+  entorno (secretos de Google como `sensitive`), `.vercelignore`,
+  `globalPassThroughEnv` en turbo, `standalone` solo fuera de Vercel, curación
+  editorial incluida en el trazado (se perdía en silencio en producción) y crons
+  retirados hasta que exista `DATABASE_URL`.
+- Verificado con dato real: 28d conjunto 157.272 sesiones orgánicas y 160.489
+  clics (corte 2026-09-20); filtros de mercado, 90d y 24m correctos contra la
+  API; 9 rutas 200 en producción, región `fra1`, cabecera `noindex`.
+- Verificaciones: `pnpm typecheck` (9 paquetes), `pnpm test` (**358**, 6
+  nuevas), build de producción local y en Vercel. `pnpm axe` no se reejecuta.
+- Pendiente del responsable: autenticación Entra, plan de Vercel y revisar el
+  salto de `keyEvents` de Porcelanosa en el año previo a 24m.
+
+## 2026-09-23 · Xtone en el piloto con dato real y oportunidades de GSC (D-036)
+
+- Prioridad del usuario: cargar Xtone «al estilo Noken» con dato real para su
+  presentación. Xtone pasa a `pilot: true, wave 0`; el sintético no la simula.
+- Estructura del sitio detectada en GSC/GA4: ES en raíz, `/en` para UK y US
+  (separados por país), `/fr`, `/de`, `/pt`, `/it`, `/pl`, `/zh`.
+- Nuevo en el origen `live`: oportunidades de URL y de consultas non-branded
+  contra la curva de CTR del propio sitio, conversiones por landing de GA4,
+  exclusión de búsquedas de la embajadora y anotaciones fechadas por marca.
+  Contrato: `queryOpportunities` (vacío en el sintético). Ficha de URL con
+  diagnóstico derivado de sus cifras en lugar de texto fijo.
+- Hallazgo: migración de URLs de Xtone el 2026-07-23; clics semanales de ~5.500
+  a ~2.450 y 634 URL antiguas con >80 % de caída. 90d: −24,9 % sesiones,
+  −37,1 % clics, cuota non-branded 18,9 %. Mayores oportunidades genéricas:
+  calacatta viola, calacatta gold, verde alpi.
+- Verificaciones: `pnpm typecheck` (9), `pnpm test` (**363**), producción 200
+  en `/projects/xtone` y capítulos, `fra1`.
+
+## 2026-09-23 · Informe ejecutivo de marca para dirección (D-037)
+
+- A partir del informe PDF de Noken de la V1 y de la revisión de `/projects/xtone`
+  (8 pestañas, 5 vacías, jerga), el usuario aprobó el rediseño: sin emojis,
+  selector de periodo más rico, datos de todos los canales y barras frente a
+  periodos anteriores.
+- Nuevo contrato `brand-report.ts` (ventanas y presets de calendario, rango
+  libre, dos comparaciones siempre) y constructor `live/report.ts` con canales,
+  series por tramo, mes a mes, embudo, mercados, oportunidades, páginas que
+  convierten, contenidos que suben y bajan, auditoría de migración con HEAD,
+  plan editorial frente a Google, lecturas y próximos pasos por reglas, y
+  calidad del dato.
+- Vista `components/report/` con barras ECharts comparativas, selector,
+  modo presentación y estilos de impresión; 4 pestañas.
+- Corregido en producción: la cuota de carga de GSC en Porcelanosa (volcado
+  búsqueda × página y una consulta por pieza editorial); reintentos ante 429.
+- Verificaciones: `pnpm typecheck` (9), `pnpm test` (**372**), build, 375 px sin
+  desbordamiento, producción 200 en los 9 periodos y las 4 pestañas.
+
+## 2026-09-23 · Selector de periodo con calendario (D-038)
+
+- Panel con atajos rápidos y de calendario, calendario de dos meses con vista
+  previa al pasar el ratón, fechas escribibles, comparación con el periodo
+  anterior o uno elegido (misma duración) y año pasado por fecha o por día de la
+  semana. Todo en la URL y previsualizado con la misma función que el servidor.
+- Probado en el navegador de extremo a extremo (28 días frente a las 4 semanas
+  previas a la migración de Xtone) y en 375 px; producción 200 en los nuevos
+  atajos y comparaciones. `pnpm test`: **377**.
+
+## 2026-09-23 · Selector de mercado (D-039)
+
+- Panel de mercado con visitas, variación, peso y definición por sección;
+  buscador y teclado. Mercados adicionales de V1 en el informe (Porcelanosa 13,
+  Noken 5, Xtone 4). Tablas separadas en principales y otros.
+- Probado en el navegador (Xtone → Portugal) y en producción. `pnpm test`: **380**.
+- Porcelanosa en frío tarda ~25 s por el número de mercados y el tamaño del
+  sitio; después sale de la caché.
+
+## 2026-09-23 · UX/UI de Xtone centrada en datos (D-040)
+
+- Prioridad del usuario: claridad para gerencia, minimalismo, tipografía y
+  espacio, responsive, sin conclusiones y con búsqueda/paginación de datos.
+- Vista propia Xtone con 4 KPIs, gráfico ECharts interactivo y seis pestañas.
+  Tabla TanStack v9 reutilizable: búsqueda por keyword/URL, orden, contador,
+  10/25/50/100 filas y paginación. Conserva fuentes y avisos de medición.
+- Muestras reales de GSC ampliadas a la UI sin peticiones nuevas: 3000
+  combinaciones query×URL y hasta 5000 páginas; disponibilidad/cobertura
+  explícitas, null sin comparación y measured editorial. Caché `.12`.
+- Corregido el calendario móvil: el segundo mes estaba oculto y el botón
+  siguiente impedía alcanzar el mes de corte. Filtros compactos y menú tablet.
+- Validación: typecheck 9 paquetes, 390 pruebas y build viewer/workbench.
+  Navegador: 1440/1024/768/390/375 px, sin overflow global; seis pestañas,
+  búsquedas/orden/paginación, 28d, mercado ES y selector de métrica.
+  No se reejecutó Axe. Cambios locales, sin despliegue; dev sigue levantado.
+- Reanudación: feedback visual de Xtone; después P3.1 y decisiones D-035.
+
+
+## 2026-09-23 · Diseño de Xtone extendido al producto (D-041)
+
+- Petición: incorporar a todo el proyecto el diseño aprobado de Xtone.
+- Informes compartidos para marcas medidas; superficies generales, editorial,
+  archivo, datos, detalles y workbench con tipografía sans y datos esenciales.
+- Tabla TanStack compartida en @seo/ui: búsqueda, orden, filas/páginas, impresión
+  y enlaces directos a registros. Editorial conserva filtros/CSV en URL.
+- Filtros móviles plegables, menú tablet, distribución correcta de 3/4 KPIs y
+  foco de búsqueda global. Acciones del workbench y datos sin cambios.
+- Validado: typecheck 9 paquetes, 393 pruebas, build de ambas apps y QA manual
+  responsive/funcional. No se reejecutó Axe ni se enviaron formularios de escritura.
+- Solo local. Dev permanece levantado. P3 25%, P2 bloqueada 79%; retomar P3.1.
+
+
+## 2026-09-24 · Carga por zonas y verificación de dev (D-042)
+
+- Retomada la integración autorizada el 23, interrumpida antes de cerrar QA.
+  Dev activo en 3000/3001; workbench responde HTTP 200.
+- Skeletons compartidos y carga por ámbito en los informes de marca, selección
+  inmediata, estado accesible, mensaje de demora y recuperación ante error.
+- Corregidos Resumen desde enlaces V1 y borrador de fechas que una respuesta
+  pendiente podía sobrescribir. 33 pruebas nuevas de navegación y pestañas.
+- QA real Xtone: carga inicial, filtros individuales y simultáneos, coherencia
+  final, edición de fechas conservada, keywords, pestañas y enlaces antiguos.
+  Desktop 1440, tablet 768 y móvil 375 sin desbordamiento del documento.
+  Tabla keywords conserva su altura exacta durante carga y es inerte.
+- Typecheck 9 paquetes, suite actual 426 pruebas (global + viewer tras fixes),
+  build de ambas apps. No se reejecutó Axe ni se forzó un fallo de proveedor;
+  error/reintento revisados en código y compilación.
+- Sin despliegue. Las zonas esperan al informe completo; no se ha dividido la
+  lectura del servidor. P3 25%, P2 bloqueada 79%; retomar P3.1.
+
+
+## 2026-09-24 · Menú con respuesta inmediata (D-043)
+
+- Añadidos spinner en enlace, barra indeterminada superior y aviso accesible
+  de destino usando useLinkStatus. Sin dependencias nuevas ni esperas artificiales.
+- Menú móvil cierra al navegar, conserva foco accesible y deja el aviso visible.
+- QA navegador 1440/375: navegación lenta a Inicio, rutas cacheadas, teclado,
+  cierre/foco móvil y cambio a Editorial. Indicadores se retiran al terminar.
+- Typecheck 9 paquetes, 90 pruebas viewer, build y continuidad correctos.
+  Dev sigue activo; no desplegado. P3 25%, P2 bloqueada 79%.

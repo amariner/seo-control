@@ -1,6 +1,7 @@
 import { auth } from "@/auth";
 import { getDashboard } from "@/lib/data";
 import { createSimplePdf, csvCell } from "@/lib/export";
+import { findReport } from "@/lib/reports";
 
 export async function GET(_request: Request, { params }: { params: Promise<{ filename: string }> }) {
   const { filename } = await params;
@@ -9,7 +10,9 @@ export async function GET(_request: Request, { params }: { params: Promise<{ fil
   const [, id, format] = match;
   const session = await auth();
   const data = await getDashboard({ project: "all", market: "all", period: "28d" });
-  const report = data.reports.find((item) => item.id === id);
+  // El archivo histórico (P2.3) es la fuente del informe: incluye los cierres
+  // anteriores que el payload de la portada no lleva.
+  const report = findReport(id!);
   if (!report) return new Response("Informe no encontrado", { status: 404 });
   const actor = session?.user?.email ?? (process.env.NODE_ENV !== "production" ? "usuario-desarrollo" : "usuario-corporativo");
 
@@ -20,6 +23,8 @@ export async function GET(_request: Request, { params }: { params: Promise<{ fil
       ["Generado", new Date().toISOString()],
       ["Informe", report.title],
       ["Versión", report.version],
+      ["Versiones publicadas", report.versions.length],
+      ["Nota de la versión vigente", report.versions[report.versions.length - 1]?.changeNote ?? "primera versión"],
       [],
       ["Métrica", "Valor", "Periodo anterior", "Interanual", "Objetivo", "Cobertura"],
       ...data.metrics.map((metric) => [metric.label, metric.value, metric.previous, metric.previousYear, metric.target, metric.coverage.ratio]),

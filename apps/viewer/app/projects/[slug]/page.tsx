@@ -1,76 +1,474 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { Badge, Card, ChartFrame, DataTablePanel, MetricStrip } from "@seo/ui";
-import { PROJECT_CHAPTERS, projectSlugSchema } from "@seo/contracts";
+import { Badge, ChartFrame, MetricStrip, Notice } from "@seo/ui";
+import { ReportDataTable, type ReportDataRow } from "@seo/ui/data-table";
+import { MODE_LABEL } from "@/components/dashboard";
+import {
+  PROJECT_CHAPTERS,
+  isPilotProject,
+  projectSlugSchema,
+} from "@seo/contracts";
 import { AppShell } from "@/components/app-shell";
+import { UnmeasuredBrand } from "@/components/unmeasured-brand";
 import { TrendChart } from "@/components/trend-chart";
 import { getDashboard, parseFilters } from "@/lib/data";
+import {
+  BrandReportView,
+  REPORT_TABS,
+  type ReportTab,
+} from "@/components/report/brand-report";
+import { getBrandReport, reportFilters } from "@/lib/brand-report";
+import { resolveReportTab } from "@/components/report/report-tab";
 
 const chapterCopy = {
-  resumen: { title: "Resumen ejecutivo", intro: "Objetivos, score, conclusiones, riesgos, cobertura y una lectura prudente del forecast.", bullets: ["Cinco conclusiones como máximo, elegidas por una persona.", "Score ausente si falta una dimensión.", "Forecast solo con histórico suficiente e intervalo visible."] },
-  negocio: { title: "Negocio y conversiones", intro: "Sesiones, adquisición inicial, macro y microconversiones, embudos, landings, dispositivos y buscador interno.", bullets: ["Atribución en sesión separada de adquisición original.", "Embudos de cita/tienda, contacto y catálogo/producto.", "Términos internos, cero resultados y conversión posterior."] },
-  demanda: { title: "Demanda y visibilidad", intro: "GSC, non-branded, intención, rankings, competidores, curva de CTR y features de SERP.", bullets: ["Marca propia, paraguas Porcelanosa y non-branded.", "Set estable versionado separado de descubrimientos.", "Paid Search aparece solo como contexto de solapamiento."] },
-  contenido: { title: "Contenido", intro: "Inventario, clusters, rendimiento a 28/90/180 días, decay, gaps y canibalización multiseñal.", bullets: ["Estados editoriales y overrides locales.", "Quick wins con tráfico, posición, CTR y conversiones.", "Briefs completos permanecen en el workbench."] },
-  tecnica: { title: "Salud técnica", intro: "Prioridad según severidad, alcance, demanda, template, persistencia y esfuerzo estimado.", bullets: ["Indexabilidad, canonicals, robots, sitemap y hreflang.", "Enlazado, huérfanas, PageRank interno y rutas estratégicas.", "CrUX real, muestra PageSpeed y cobertura Schema."] },
-  mercados: { title: "Mercados Tier 1", intro: "Contribución, crecimiento y cobertura comparable de España, Reino Unido, Estados Unidos, Francia y Alemania.", bullets: ["Directorio internacional y matriz hreflang.", "Objetivos definidos por proyecto y mercado.", "Alertas solo con cambios materiales y persistentes."] },
-  geo: { title: "GEO", intro: "30 prompts por proyecto y mercado, ejecutados semanalmente de forma estable y versionada.", bullets: ["ChatGPT, Gemini, Copilot y Perplexity.", "Citación, sentimiento básico, competidores y fuentes.", "Tráfico IA y conversiones sin inferir causalidad."] },
-  cronologia: { title: "Cronología e informes", intro: "Anotaciones, cierres mensuales, revisiones trimestrales, especiales y versiones inmutables.", bullets: ["Publicaciones, migraciones, releases e incidencias.", "Autor y revisor diferentes.", "Correcciones mediante nueva versión y fe de erratas."] },
+  resumen: "Indicadores y evolución del periodo.",
+  negocio: "Visitas SEO y conversiones.",
+  demanda: "Keywords y presencia en Google.",
+  contenido: "Rendimiento de páginas.",
+  tecnica: "Incidencias y URLs afectadas.",
+  mercados: "Tráfico por mercado.",
+  geo: "Presencia en buscadores de IA.",
+  cronologia: "Informes y actividad del proyecto.",
 } as const;
 
-export default async function ProjectPage({ params, searchParams }: { params: Promise<{ slug: string }>; searchParams: Promise<Record<string, string | string[] | undefined>> }) {
+export default async function ProjectPage({
+  params,
+  searchParams,
+}: {
+  params: Promise<{ slug: string }>;
+  searchParams: Promise<Record<string, string | string[] | undefined>>;
+}) {
   const { slug: rawSlug } = await params;
   const slugResult = projectSlugSchema.safeParse(rawSlug);
   if (!slugResult.success) notFound();
   const rawFilters = await searchParams;
-  const chapterRaw = Array.isArray(rawFilters.chapter) ? rawFilters.chapter[0] : rawFilters.chapter;
-  const chapter = PROJECT_CHAPTERS.some((item) => item.key === chapterRaw) ? chapterRaw as keyof typeof chapterCopy : "resumen";
+
+  /* Informe ejecutivo (D-037): con un origen de dato real, la ficha de una marca
+     medida es el informe para dirección. El sintético no lo ofrece y la ficha
+     sigue siendo la de capítulos de validación de P1. */
+  if (isPilotProject(slugResult.data)) {
+    const report = await getBrandReport(slugResult.data, rawFilters);
+    if (report) {
+      const tabRaw = Array.isArray(rawFilters.tab)
+        ? rawFilters.tab[0]
+        : rawFilters.tab;
+      const legacy = Array.isArray(rawFilters.chapter)
+        ? rawFilters.chapter[0]
+        : rawFilters.chapter;
+      const tabs = REPORT_TABS.filter(
+        (item) => item.key !== "migracion" || report.migration,
+      );
+      const tab: ReportTab = resolveReportTab(tabRaw, legacy, tabs.map((item) => item.key));
+      const { present } = reportFilters(rawFilters);
+      const query = new URLSearchParams(
+        Object.entries(rawFilters).flatMap(([key, value]) =>
+          key === "tab" || key === "chapter" || value === undefined
+            ? []
+            : [[key, Array.isArray(value) ? value[0]! : value]],
+        ),
+      ).toString();
+      const view = (
+        <BrandReportView
+          report={report}
+          tab={tab}
+          present={present}
+          baseHref={`/projects/${slugResult.data}`}
+          query={query}
+        />
+      );
+      return present ? (
+        <div className="report-present-shell">{view}</div>
+      ) : (
+        <AppShell generatedAt={report.generatedAt} showGlobalFilters={false}>
+          {view}
+        </AppShell>
+      );
+    }
+  }
+
+  const chapterRaw = Array.isArray(rawFilters.chapter)
+    ? rawFilters.chapter[0]
+    : rawFilters.chapter;
+  const chapter = PROJECT_CHAPTERS.some((item) => item.key === chapterRaw)
+    ? (chapterRaw as keyof typeof chapterCopy)
+    : "resumen";
   const filters = { ...parseFilters(rawFilters), project: slugResult.data };
   const data = await getDashboard(filters);
   const project = data.projects[0];
-  if (!project) notFound();
-  const query = new URLSearchParams({ project: slugResult.data, market: filters.market, period: filters.period });
-  const copy = chapterCopy[chapter];
-
-  return <AppShell generatedAt={data.generatedAt}><nav className="project-tabs" aria-label="Capítulos del proyecto">{PROJECT_CHAPTERS.map((item) => <Link className={`project-tab ${chapter === item.key ? "project-tab-active" : ""}`} key={item.key} href={`/projects/${slugResult.data}?${query.toString()}&chapter=${item.key}`}>{item.label}</Link>)}</nav><main className="page" id="contenido"><header className="page-heading"><div><p className="eyebrow">Proyecto · {project.domain}</p><h1>{project.name}</h1><p className="lede">{copy.intro}</p></div><div className="date-context"><Badge tone={project.attention === "actuar" ? "bad" : "warn"}>{project.attention}</Badge><br /><br />Score <strong>{project.score}/100</strong><br />{project.delta > 0 ? "+" : ""}{project.delta} pts vs. periodo</div></header>
-    {chapter === "resumen" ? <><MetricStrip metrics={data.metrics} /><section className="section analytics-grid"><ProjectTrend data={data} /><Card className="chapter-card"><p className="eyebrow">Lectura del capítulo</p><h2>{copy.title}</h2><ul className="bullet-list">{copy.bullets.map((item) => <li key={item}>{item}</li>)}</ul></Card></section></> : <ChapterContent chapter={chapter} data={data} copy={copy} />}
-  </main></AppShell>;
+  /* El slug ya es válido —las ocho marcas lo son desde D-033—, así que no tener
+     ficha analítica no es un 404: es una marca real que aún no se mide. */
+  if (!project)
+    return (
+      <UnmeasuredBrand slug={slugResult.data} generatedAt={data.generatedAt} />
+    );
+  const query = new URLSearchParams({
+    project: slugResult.data,
+    market: filters.market,
+    period: filters.period,
+  });
+  return (
+    <AppShell generatedAt={data.generatedAt}>
+      <nav className="project-tabs" aria-label="Capítulos del proyecto">
+        {PROJECT_CHAPTERS.map((item) => (
+          <Link
+            className={`project-tab ${chapter === item.key ? "project-tab-active" : ""}`}
+            aria-current={chapter === item.key ? "page" : undefined}
+            key={item.key}
+            href={`/projects/${slugResult.data}?${query}&chapter=${item.key}`}
+          >
+            {item.label}
+          </Link>
+        ))}
+      </nav>
+      <main className="page" id="contenido">
+        <header className="page-heading">
+          <div>
+            <p className="eyebrow">{project.domain}</p>
+            <h1>{project.name}</h1>
+            <p className="lede">{chapterCopy[chapter]}</p>
+          </div>
+          <div className="date-context">
+            Corte {new Date(data.generatedAt).toLocaleDateString("es-ES")}
+            <br />
+            <strong>{MODE_LABEL[data.mode]}</strong>
+          </div>
+        </header>
+        {data.mode === "synthetic" ? (
+          <Notice tone="info">
+            Datos sintéticos para validar la interfaz.
+          </Notice>
+        ) : null}
+        {chapter === "resumen" || chapter === "negocio" ? (
+          <>
+            <MetricStrip metrics={data.metrics} />
+            <section className="section">
+              <ProjectTrend data={data} />
+            </section>
+          </>
+        ) : null}
+        {chapter === "resumen" && data.queryOpportunities.length ? (
+          <QueryOpportunitiesSection queries={data.queryOpportunities} />
+        ) : null}
+        {chapter === "demanda" ? (
+          <QueryOpportunitiesSection queries={data.queryOpportunities} />
+        ) : null}
+        {chapter === "contenido" || chapter === "demanda" ? (
+          <section className="section">
+            <div className="section-heading">
+              <h2>Páginas</h2>
+            </div>
+            <OpportunitiesTable pages={data.opportunities} />
+          </section>
+        ) : null}
+        {chapter === "tecnica" ? (
+          <section className="section">
+            <div className="section-heading">
+              <h2>Incidencias técnicas</h2>
+            </div>
+            <IssuesTable issues={data.technicalIssues} />
+          </section>
+        ) : null}
+        {chapter === "mercados" ? (
+          <section className="section">
+            <div className="section-heading">
+              <h2>Datos por mercado</h2>
+            </div>
+            <MarketsTable markets={data.markets} />
+          </section>
+        ) : null}
+        {chapter === "cronologia" ? (
+          <section className="section">
+            <div className="section-heading">
+              <h2>Informes</h2>
+              <Link href={`/cronologia?${query}`} className="section-link">
+                Ver cronología →
+              </Link>
+            </div>
+            <ReportsTable reports={data.reports} />
+          </section>
+        ) : null}
+        {chapter === "geo" ? (
+          <Notice tone="info">
+            La medición GEO no está disponible en este corte.
+          </Notice>
+        ) : null}
+        <footer className="section">
+          <Link className="section-link" href={`/data?${query}`}>
+            Fuentes y cobertura →
+          </Link>
+        </footer>
+      </main>
+    </AppShell>
+  );
 }
 
-/**
- * Misma serie que la portada, con el marco de gráfico compartido (P1.5): el
- * contrato de accesibilidad exige que todo gráfico tenga su alternativa tabular
- * alcanzable con teclado, no solo el de la portada.
- */
-function ProjectTrend({ data }: { data: Awaited<ReturnType<typeof getDashboard>> }) {
-  const sessions = data.metrics.find((metric) => metric.key === "organic_sessions") ?? null;
+function ProjectTrend({
+  data,
+}: {
+  data: Awaited<ReturnType<typeof getDashboard>>;
+}) {
+  const sessions = data.metrics.find(
+    (metric) => metric.key === "organic_sessions",
+  );
   const points = data.series.organic_sessions ?? [];
-  return <ChartFrame
-    className="chart-card"
-    eyebrow="Evolución"
-    title="Sesiones orgánicas"
-    level={2}
-    value={sessions?.value ?? null}
-    unit={sessions?.unit ?? "number"}
-    previous={sessions?.previous ?? null}
-    previousYear={sessions?.previousYear ?? null}
-    target={sessions?.target ?? null}
-    coverage={sessions?.coverage ?? null}
-    goodDirection={sessions?.goodDirection ?? "up"}
-    legend={<><span><i className="legend-dot" />Actual</span><span><i className="legend-dot legend-dot-dash" />Interanual</span></>}
-    table={{ caption: "Sesiones orgánicas diarias del proyecto: valor del periodo e interanual por fecha.", columns: ["Fecha", "Actual", "Interanual"], rows: points.map((point) => ({ key: point.date, cells: [point.date, point.value, point.previousYear] })) }}
-  ><TrendChart points={points} annotations={data.annotations} /></ChartFrame>;
+  return (
+    <ChartFrame
+      title="Visitas SEO"
+      level={2}
+      value={sessions?.value ?? null}
+      unit={sessions?.unit ?? "number"}
+      previous={sessions?.previous ?? null}
+      previousYear={sessions?.previousYear ?? null}
+      coverage={sessions?.coverage ?? null}
+      legend={
+        <>
+          <span>
+            <i className="legend-dot" />
+            Actual
+          </span>
+          <span>
+            <i className="legend-dot legend-dot-dash" />
+            Interanual
+          </span>
+        </>
+      }
+      table={{
+        caption: "Visitas SEO por fecha",
+        columns: ["Fecha", "Actual", "Interanual"],
+        rows: points.map((point) => ({
+          key: point.date,
+          cells: [point.date, point.value, point.previousYear],
+        })),
+      }}
+    >
+      <TrendChart points={points} annotations={data.annotations} />
+    </ChartFrame>
+  );
 }
 
-function ChapterContent({ chapter, data, copy }: { chapter: keyof typeof chapterCopy; data: Awaited<ReturnType<typeof getDashboard>>; copy: (typeof chapterCopy)[keyof typeof chapterCopy] }) {
-  return <><div className="chapter-grid"><Card className="chapter-card"><p className="eyebrow">Alcance</p><h2>{copy.title}</h2><p>{copy.intro}</p><ul className="bullet-list">{copy.bullets.map((item) => <li key={item}>{item}</li>)}</ul></Card><Card className="chapter-card"><p className="eyebrow">Conclusión destacada</p><h2>{data.executiveInsights[0]?.title ?? "Sin conclusión aprobada"}</h2><p>{data.executiveInsights[0]?.executiveSummary ?? "No hay evidencia suficiente en este corte."}</p>{data.executiveInsights[0] ? <Link className="section-link" href={`/insights#${data.executiveInsights[0].id}`}>Abrir evidencia →</Link> : null}</Card></div>
-    {chapter === "tecnica" ? <section className="section"><div className="section-heading"><div><p className="eyebrow">Priorización</p><h2>Incidencias técnicas</h2></div></div><IssuesTable issues={data.technicalIssues} /></section> : null}
-    {chapter === "contenido" || chapter === "demanda" ? <section className="section"><div className="section-heading"><div><p className="eyebrow">Oportunidades</p><h2>URLs con margen demostrado</h2></div></div><OpportunitiesTable pages={data.opportunities} /></section> : null}
-    {chapter === "mercados" ? <section className="section"><div className="section-heading"><div><p className="eyebrow">Tier 1</p><h2>Contribución por mercado</h2></div></div><MarketsTable markets={data.markets} /></section> : null}
-    {chapter === "cronologia" ? <section className="section"><div className="section-heading"><div><p className="eyebrow">Publicaciones</p><h2>Versiones disponibles</h2></div></div><ReportsTable reports={data.reports} /></section> : null}
-  </>;
-}
+type Dashboard = Awaited<ReturnType<typeof getDashboard>>;
+const n = (value: number) =>
+  value.toLocaleString("es-ES", {
+    useGrouping: "always" as unknown as boolean,
+    maximumFractionDigits: 2,
+  });
+const row = (
+  id: string,
+  values: ReportDataRow["values"],
+  cells?: ReportDataRow["cells"],
+): ReportDataRow => ({
+  id,
+  values,
+  cells,
+  searchText: Object.values(values).join(" "),
+});
 
-function IssuesTable({ issues }: { issues: Awaited<ReturnType<typeof getDashboard>>["technicalIssues"] }) { return <DataTablePanel label="Incidencias técnicas priorizadas"><table className="data-table"><thead><tr><th>Incidencia</th><th>Severidad</th><th>URLs</th><th>Tráfico en riesgo</th><th>Persistencia</th><th>Prioridad</th></tr></thead><tbody>{issues.map((issue) => <tr key={issue.id}><td><Link href={`/issues/${issue.id}`}><span className="cell-primary">{issue.title}</span><span className="cell-secondary">{issue.template} · {issue.category}</span></Link></td><td><Badge tone={issue.severity === "critica" ? "bad" : issue.severity === "alta" ? "warn" : "neutral"}>{issue.severity}</Badge></td><td>{issue.affectedUrls}</td><td>{issue.trafficAtRisk.toLocaleString("es-ES")}</td><td>{issue.persistenceRuns} crawls</td><td className="score">{issue.priorityScore}</td></tr>)}</tbody></table></DataTablePanel>; }
-function OpportunitiesTable({ pages }: { pages: Awaited<ReturnType<typeof getDashboard>>["opportunities"] }) { return <DataTablePanel label="URLs con oportunidad demostrada"><table className="data-table"><thead><tr><th>URL</th><th>Estado</th><th>Clics</th><th>Posición</th><th>CTR / esperado</th><th>Oportunidad</th></tr></thead><tbody>{pages.map((page) => <tr key={page.id}><td><Link href={`/pages/${page.id}`}><span className="cell-primary">{page.title}</span><span className="cell-secondary">{page.url}</span></Link></td><td><Badge tone={page.status === "decay" ? "warn" : "info"}>{page.status}</Badge></td><td>{page.clicks.toLocaleString("es-ES")}</td><td>{page.position}</td><td>{page.ctr}% / {page.expectedCtr}%</td><td className="score">{page.opportunityScore}</td></tr>)}</tbody></table></DataTablePanel>; }
-function MarketsTable({ markets }: { markets: Awaited<ReturnType<typeof getDashboard>>["markets"] }) { return <DataTablePanel label="Contribución por mercado Tier 1"><table className="data-table"><thead><tr><th>Mercado</th><th>Sesiones</th><th>Clics</th><th>Macroconv.</th><th>Cambio</th><th>Visibilidad</th></tr></thead><tbody>{markets.map((market) => <tr key={market.code}><td><span className="cell-primary">{market.name}</span></td><td>{market.sessions.toLocaleString("es-ES")}</td><td>{market.clicks.toLocaleString("es-ES")}</td><td>{market.conversions.toLocaleString("es-ES")}</td><td className={market.change >= 0 ? "delta-good" : "delta-bad"}>{market.change}%</td><td>{market.visibility}%</td></tr>)}</tbody></table></DataTablePanel>; }
-function ReportsTable({ reports }: { reports: Awaited<ReturnType<typeof getDashboard>>["reports"] }) { return <DataTablePanel label="Informes disponibles del proyecto"><table className="data-table"><thead><tr><th>Informe</th><th>Periodo</th><th>Versión</th><th>Estado</th><th>Revisión</th></tr></thead><tbody>{reports.map((report) => <tr key={report.id}><td><Link href={`/reports/${report.id}`}><span className="cell-primary">{report.title}</span><span className="cell-secondary">{report.type}</span></Link></td><td>{report.period}</td><td>v{report.version}</td><td><Badge tone={report.status === "publicado" ? "good" : "warn"}>{report.status}</Badge></td><td>{report.author} → {report.reviewer ?? "Pendiente"}</td></tr>)}</tbody></table></DataTablePanel>; }
+function QueryOpportunitiesSection({
+  queries,
+}: {
+  queries: Dashboard["queryOpportunities"];
+}) {
+  return (
+    <section className="section">
+      <div className="section-heading">
+        <div>
+          <h2>Keywords sin marca</h2>
+          <p>Search Console · Consultas con margen de posición.</p>
+        </div>
+      </div>
+      <ReportDataTable
+        id="project-keywords"
+        caption="Keywords sin marca"
+        columns={[
+          { key: "query", label: "Keyword" },
+          { key: "page", label: "URL" },
+          { key: "clicks", label: "Clics", numeric: true },
+          { key: "impressions", label: "Impresiones", numeric: true },
+          { key: "position", label: "Posición", numeric: true },
+          { key: "ctr", label: "CTR", numeric: true },
+        ]}
+        rows={queries.map((q) =>
+          row(
+            q.id,
+            {
+              query: q.query,
+              page: q.page,
+              clicks: q.clicks,
+              impressions: q.impressions,
+              position: q.position,
+              ctr: q.ctr,
+            },
+            {
+              clicks: n(q.clicks),
+              impressions: n(q.impressions),
+              position: n(q.position),
+              ctr: `${n(q.ctr)} %`,
+            },
+          ),
+        )}
+      />
+    </section>
+  );
+}
+function IssuesTable({ issues }: { issues: Dashboard["technicalIssues"] }) {
+  return (
+    <ReportDataTable
+      id="project-issues"
+      caption="Incidencias técnicas"
+      searchPlaceholder="Buscar incidencia o plantilla…"
+      columns={[
+        { key: "title", label: "Incidencia" },
+        { key: "severity", label: "Severidad" },
+        { key: "urls", label: "URLs", numeric: true },
+        { key: "traffic", label: "Tráfico afectado", numeric: true },
+        { key: "runs", label: "Crawls", numeric: true },
+      ]}
+      rows={issues.map((issue) =>
+        row(
+          issue.id,
+          {
+            title: issue.title,
+            severity: issue.severity,
+            urls: issue.affectedUrls,
+            traffic: issue.trafficAtRisk,
+            runs: issue.persistenceRuns,
+          },
+          {
+            title: (
+              <Link href={`/issues/${issue.id}`}>
+                <span className="cell-primary">{issue.title}</span>
+                <span className="cell-secondary">
+                  {issue.template} · {issue.category}
+                </span>
+              </Link>
+            ),
+            severity: (
+              <Badge
+                tone={
+                  issue.severity === "critica"
+                    ? "bad"
+                    : issue.severity === "alta"
+                      ? "warn"
+                      : "neutral"
+                }
+              >
+                {issue.severity}
+              </Badge>
+            ),
+            traffic: n(issue.trafficAtRisk),
+          },
+        ),
+      )}
+    />
+  );
+}
+function OpportunitiesTable({ pages }: { pages: Dashboard["opportunities"] }) {
+  return (
+    <ReportDataTable
+      id="project-pages"
+      caption="Páginas"
+      searchPlaceholder="Buscar página o URL…"
+      columns={[
+        { key: "url", label: "Página" },
+        { key: "status", label: "Estado" },
+        { key: "clicks", label: "Clics", numeric: true },
+        { key: "position", label: "Posición", numeric: true },
+        { key: "ctr", label: "CTR", numeric: true },
+      ]}
+      rows={pages.map((page) => ({
+        ...row(
+          page.id,
+          {
+            url: page.url,
+            status: page.status,
+            clicks: page.clicks,
+            position: page.position,
+            ctr: page.ctr,
+          },
+          {
+            url: (
+              <Link href={`/pages/${page.id}`}>
+                <span className="cell-primary">{page.title}</span>
+                <span className="cell-secondary">{page.url}</span>
+              </Link>
+            ),
+            clicks: n(page.clicks),
+            ctr: `${n(page.ctr)} %`,
+          },
+        ),
+        searchText: `${page.title} ${page.url} ${page.status}`,
+      }))}
+    />
+  );
+}
+function MarketsTable({ markets }: { markets: Dashboard["markets"] }) {
+  return (
+    <ReportDataTable
+      id="project-markets"
+      caption="Mercados"
+      searchPlaceholder="Buscar mercado…"
+      columns={[
+        { key: "name", label: "Mercado" },
+        { key: "sessions", label: "Visitas SEO", numeric: true },
+        { key: "clicks", label: "Clics", numeric: true },
+        { key: "conversions", label: "Conversiones", numeric: true },
+        { key: "change", label: "Variación", numeric: true },
+      ]}
+      rows={markets.map((market) =>
+        row(
+          market.code,
+          {
+            name: market.name,
+            sessions: market.sessions,
+            clicks: market.clicks,
+            conversions: market.conversions,
+            change: market.change,
+          },
+          {
+            sessions: n(market.sessions),
+            clicks: n(market.clicks),
+            conversions: n(market.conversions),
+            change: `${market.change > 0 ? "+" : ""}${n(market.change)} %`,
+          },
+        ),
+      )}
+    />
+  );
+}
+function ReportsTable({ reports }: { reports: Dashboard["reports"] }) {
+  return (
+    <ReportDataTable
+      id="project-reports"
+      caption="Informes del proyecto"
+      searchPlaceholder="Buscar informe…"
+      columns={[
+        { key: "title", label: "Informe" },
+        { key: "period", label: "Periodo" },
+        { key: "version", label: "Versión", numeric: true },
+        { key: "status", label: "Estado" },
+        { key: "reviewer", label: "Revisión" },
+      ]}
+      rows={reports.map((report) =>
+        row(
+          report.id,
+          {
+            title: report.title,
+            period: report.period,
+            version: report.version,
+            status: report.status,
+            reviewer: report.reviewer,
+          },
+          {
+            title: (
+              <Link className="section-link" href={`/reports/${report.id}`}>
+                {report.title}
+              </Link>
+            ),
+            version: `v${report.version}`,
+            reviewer: report.reviewer ?? "Pendiente",
+          },
+        ),
+      )}
+    />
+  );
+}

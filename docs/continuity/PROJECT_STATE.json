@@ -1,23 +1,24 @@
 {
   "schemaVersion": 1,
   "project": "SEO Dashboard V2",
-  "updatedAt": "2026-09-03T17:40:00+02:00",
+  "updatedAt": "2026-09-24T08:26:56+02:00",
   "objective": "Construir la plataforma SEO más útil y desarrollada del sector para convertir grandes volúmenes de datos en decisiones trazables, responsables y resultados medibles.",
   "repository": "https://github.com/amariner/seo-control",
   "currentPhase": {
-    "id": "P2",
-    "name": "Paridad crítica con SEO Dashboard V1",
+    "id": "P3",
+    "name": "Plataforma de datos reales del piloto",
     "status": "active",
-    "progressPercent": 0
+    "progressPercent": 25
   },
   "lastCompletedPhase": {
     "id": "P1",
     "name": "Sistema de diseño y calendario editorial general"
   },
-  "nextAction": "Arrancar P2.1 (inventario y contratos de migración): catalogar rutas, fuentes, transformaciones, filtros, exportaciones y dependencias de V1; clasificar cada capacidad como retain, redesign, merge, defer o retire; y definir reconciliación y tolerancia por dataset migrado. La matriz y sus evidencias viven en docs/continuity/V1_PARITY.md, que ya tiene el inventario de superficies y sirve de punto de partida.",
+  "nextAction": "2026-09-24: D-042 y D-043 integradas y verificadas en local: carga por zonas de informes y feedback inmediato del menú principal (spinner, barra y destino). Dev activo en 3000/3001. Siguiente paso: retomar P3.1 (Neon Frankfurt) y decisiones D-035, salvo feedback o petición explícita de despliegue. D-040/041/042/043 siguen locales. P3 activa 25%; P2 bloqueada 79%.",
   "pilot": [
     "porcelanosa",
-    "noken"
+    "noken",
+    "xtone"
   ],
   "portfolio": [
     "porcelanosa",
@@ -42,31 +43,53 @@
       "id": "local-disk",
       "scope": "crawls",
       "status": "active",
-      "detail": "El preflight del workbench mide aproximadamente 6,2 GiB libres (antes 7,9). Se exigen 50 GiB para habilitar crawls de hasta 50.000 URLs; el margen se sigue reduciendo."
+      "detail": "Los crawls de hasta 50.000 URLs exigen 50 GiB libres y el equipo está muy por debajo. La cifra ya no se escribe aquí: `pnpm status` la MIDE al abrir sesión y sale con código 1 si baja de 3 GiB, que es donde build, test y axe empiezan a fallar con ENOSPC. Ocurrió el 2026-09-04 con 117 MiB libres, a mitad de una verificación, mientras este campo seguía anunciando ~6,2 GiB. La causa fue el caché de Turborepo (.turbo, 6,4 GB de artefactos regenerables): `rm -rf .turbo` es el recurso conocido, y `rm -rf apps/*/.next` el siguiente."
     },
     {
       "id": "cloud-credentials",
       "scope": "phase-2-cloud",
-      "status": "expected",
-      "detail": "GA4, GSC, SEMrush, Entra, Neon y Azure permanecen sin activar hasta disponer de presupuesto y credenciales."
+      "status": "partial",
+      "detail": "GA4 y GSC: credenciales de V1 reutilizadas y activas en Vercel y en apps/viewer/.env.local (origen live, D-034). SEMrush tiene clave en V1 pero no está conectado en V2. Entra, Neon y Azure siguen sin activar hasta disponer de presupuesto y credenciales."
     },
     {
       "id": "before-screenshots-narrow",
       "scope": "design-qa",
       "status": "accepted",
       "detail": "Las capturas 'before' de 390 y 375 px se tomaron con Chrome headless, que fuerza un ancho mínimo de ventana de 500 px, por lo que no reflejan el layout anterior. El conjunto 'after' sí es fiable en los cuatro viewports mediante scripts/capture-screenshots.mjs. El estado anterior no se puede volver a capturar."
+    },
+    {
+      "id": "pending-retirements",
+      "scope": "phase-2-parity",
+      "status": "active",
+      "detail": "Dos retiradas propuestas en el inventario siguen sin aprobar: /api/cita-tienda-flow.json y /api/cita-tienda-es.json, ambos endpoints de desarrollo sin UI montada. La decisión es del responsable; P2 no cierra mientras sigan como proposed. Es uno de los tres criterios que el desarrollo no puede cerrar por sí solo."
+    },
+    {
+      "id": "p2-exit-missing",
+      "scope": "phase-2-parity",
+      "status": "active",
+      "detail": "Cuatro rutas de V1 siguen en 'missing' en la matriz de paridad (/tracking/autoridad-tematica P6, /tracking/prompts-geo P8, /canales/sem P6, /conjunto/canibalizaciones P6). El primer criterio de salida de P2 no admite capacidades críticas en 'missing', así que hace falta que el responsable declare si esas cuatro lo son. Si lo son, P2 no cierra; si no, se registra como decisión con nombre y fecha. No lo puede decidir el desarrollo."
+    },
+    {
+      "id": "public-viewer",
+      "scope": "security",
+      "status": "active",
+      "detail": "El visor desplegado es público (PUBLIC_ACCESS=true, D-035) y muestra dato real de negocio. Solo lo protege noindex. Se retira registrando la app en Microsoft Entra y quitando la variable en Vercel."
     }
   ],
   "lastValidation": {
-    "date": "2026-09-03",
-    "continuity": "passed: active phase, roadmap and required checkpoint files",
-    "typecheck": "passed: 8 packages",
-    "tests": "passed: 85 tests (41 editorial incl. 8 links, 26 viewer incl. 12 permisos, 5 workbench permisos, 13 contracts+local-data+sync)",
-    "productionBuild": "passed: viewer + workbench (incluye la nueva ruta /queries/[id])",
-    "editorialImport": "passed: 'Sin cambios' tras curar y revertir, confirmando que dataset y curación siguen siendo ficheros independientes (D-012)",
-    "browserQa": "passed: reciprocidad de links verificada de extremo a extremo con dos procesos reales (workbench :3021 escribe, visor :3020 lee); una pieza Noken curada con seis enlaces se vio en las fichas de insight, acción, query, página e informe, y el estado vacío explícito en las demás; enlaces de ida navegables desde el detalle de la pieza, con cluster/result como texto sin ruta; dato de prueba revertido al cerrar",
-    "apiQa": "passed: /api/v1/editorial/backlinks devuelve el índice completo y por ficha, y 400 ante un kind no válido; el resto de rutas editoriales sin cambios",
-    "accessibilityQa": "passed: axe-core 4.13.0 (pnpm axe) sobre 36 combinaciones ruta x viewport de visor y workbench a 1440 y 375 px: 0 incumplimientos WCAG 2.1 A/AA y 0 avisos de buenas prácticas (docs/design/axe-report.json). Encontró 18 incumplimientos reales en la primera pasada, todos corregidos (D-016). Cero desbordamiento horizontal en 13 rutas x 4 viewports con scripts/capture-screenshots.mjs"
+    "date": "2026-09-24",
+    "continuity": "passed: fase activa, roadmap y ficheros de checkpoint requeridos.",
+    "migrationInventory": "passed: pnpm migration:check con 23 superficies y 8 datasets; sin cambios en esta sesión.",
+    "typecheck": "passed: pnpm typecheck, 9 paquetes, tras D-043.",
+    "tests": "passed: pnpm --filter @seo/viewer test, 90 pruebas tras D-043. Suite global verificada esta misma sesión en D-042: 426 pruebas actuales; los demás paquetes no cambiaron.",
+    "productionBuild": "passed: pnpm build, viewer + workbench, 9 tareas, tras D-043.",
+    "ingestionDryRun": "passed: `pnpm ingest:dry-run` con 4 ciclos y 28 jobs por ciclo, ejecutados ahora con cuota y lock activos, termina con 28 días en el libro, 0 duplicados, 0 derivas y 0 huecos. Los tres escenarios de P3.3 salen como deben: lock ocupado -> run `blocked`, 28 aplazados, 0 de cuota y libro intacto; cuota recortada a 3 por fuente -> run `partial` con 6 días escritos, 22 aplazados, 0 fallos y huecos declarados; fuente intermitente -> run `complete` con 14 reintentos y 21 peticiones cobradas al presupuesto. Con `--fail-day=2026-09-02` los 4 jobs de ese día fallan tras el reintento que su clasificación permite, sus registros anteriores sobreviven intactos y el ciclo queda `partial` en vez de `complete`.",
+    "axe": "No reejecutado en D-042. QA manual de estados y árbol accesible: valores antiguos ocultos, regiones busy y controles inertes. No equivale a auditoría Axe.",
+    "editorialImport": "passed: «Sin cambios», la huella d7d3b5fc8c8e coincide con la importación del 2026-09-02. El runner de reconciliación verifica además que los cuatro ficheros de V1 siguen teniendo el hash que archivó esa importación.",
+    "reconciliation": "passed: pnpm reconcile:check sin desviaciones. 1 reconciliado (editorial-snapshots), 4 con baseline congelado (semrush-cache, crawl-snapshots, canibalizaciones-snapshot, prompts-geo-inventory), 2 bloqueados (ga4-daily y gsc-daily, que siguen sin artefacto que medir hasta que P3.2 tenga credenciales) y 1 no comparable (tasks-local-state).",
+    "note": "D-043 local: feedback de menú validado a 1440 y 375 px. Navegación lenta Informes → Inicio con spinner, barra y aviso; navegación cacheada llega sin estado residual. En móvil se cierra el menú, el foco vuelve a Abrir menú y el aviso sigue visible. Cambio a Editorial y comprobación del destino. Sin nuevas dependencias, escrituras de negocio ni despliegue. D-042 de informes conserva su QA previo.",
+    "deployment": "passed: vercel deploy --prod; /projects/xtone con 9 periodos, filtro de mercado, 4 pestañas y modo presentación en 200; porcelanosa y noken con todas las fuentes correctas (tras corregir la cuota de carga de GSC); comprobación de redirecciones operativa desde fra1.",
+    "responsive": "passed: D-043 en 1440x900 y 375x812, sin overflow global ni desplazamientos por el indicador. D-042 también validada en tablet 768x1024."
   },
   "editorialImport": {
     "schemaVersion": "editorial.v1",
@@ -83,5 +106,25 @@
     "rejections": 0,
     "identityCollisions": 0,
     "note": "Los cuatro snapshots V1 se archivan con hash y se mantienen como fuentes separadas (D-006). La importación es idempotente por huella de entradas."
+  },
+  "blockedPhase": {
+    "id": "P2",
+    "name": "Paridad crítica con SEO Dashboard V1",
+    "status": "blocked",
+    "progressPercent": 79,
+    "reason": "11 de 14 criterios terminados. Los tres restantes no son desarrollo: dos son decisiones del responsable SEO (validar los cinco flujos de docs/continuity/P2_ACCEPTANCE.md y aprobar o rechazar las dos retiradas propuestas) y el tercero espera los destinos de P3, P5, P6 y P8, con la muestra V1 ya medida y congelada con hash. Vuelve a active con la sesión de aceptación o cuando una de esas fases entregue lo que falta (D-027)."
+  },
+  "deployment": {
+    "viewer": {
+      "provider": "vercel",
+      "project": "seo-dashboard-viewer",
+      "url": "https://seo-dashboard-viewer.vercel.app",
+      "region": "fra1",
+      "dataSource": "live",
+      "publicAccess": true,
+      "plan": "hobby",
+      "deployedAt": "2026-09-23"
+    },
+    "workbench": "local"
   }
 }

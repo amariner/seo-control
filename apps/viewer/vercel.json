@@ -1,12 +1,4 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
-  "regions": ["fra1"],
-  "crons": [
-    { "path": "/api/v1/service/scheduled?source=ga4", "schedule": "15 5 * * *" },
-    { "path": "/api/v1/service/scheduled?source=gsc", "schedule": "45 5 * * *" },
-    { "path": "/api/v1/service/scheduled?source=semrush", "schedule": "0 6 * * 6" },
-    { "path": "/api/v1/service/scheduled?source=geo", "schedule": "30 6 * * 6" },
-    { "path": "/api/v1/service/scheduled?source=crux", "schedule": "0 7 * * 6" },
-    { "path": "/api/v1/service/scheduled?source=pagespeed", "schedule": "30 7 * * 6" }
-  ]
+  "regions": ["fra1"]
 }

@@ -19,8 +19,15 @@
     "db:generate": "pnpm --filter @seo/db generate",
     "db:migrate": "pnpm --filter @seo/db migrate",
     "editorial:import": "pnpm --filter @seo/editorial import:v1",
+    "projects:import": "pnpm --filter @seo/contracts import:v1-projects",
+    "ingest:dry-run": "pnpm --filter @seo/sync ingest:dry-run",
     "screenshots": "node scripts/capture-screenshots.mjs",
-    "axe": "node scripts/axe-audit.mjs"
+    "axe": "node scripts/axe-audit.mjs",
+    "migration:report": "node scripts/migration-report.mjs",
+    "migration:check": "node scripts/migration-report.mjs --check",
+    "reconcile": "node scripts/reconcile.mjs",
+    "reconcile:check": "node scripts/reconcile.mjs --check",
+    "reconcile:capture": "node scripts/reconcile.mjs --capture"
   },
   "devDependencies": {
     "@types/node": "^24.10.1",

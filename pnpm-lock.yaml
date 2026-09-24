@@ -38,6 +38,9 @@ importers:
       '@seo/editorial':
         specifier: workspace:*
         version: link:../../packages/editorial
+      '@seo/repository':
+        specifier: workspace:*
+        version: link:../../packages/repository
       '@seo/sync':
         specifier: workspace:*
         version: link:../../packages/sync
@@ -149,6 +152,9 @@ importers:
         specifier: ^4.5.4
         version: 4.5.4
     devDependencies:
+      '@types/node':
+        specifier: ^24.10.1
+        version: 24.13.3
       typescript:
         specifier: 6.0.3
         version: 6.0.3
@@ -225,11 +231,14 @@ importers:
         specifier: ^4.1.11
         version: 4.1.11(@types/node@24.13.3)(vite@8.2.2(@types/node@24.13.3)(esbuild@0.28.2)(tsx@4.23.13))
 
-  packages/sync:
+  packages/repository:
     dependencies:
       '@seo/contracts':
         specifier: workspace:*
         version: link:../contracts
+      '@seo/editorial':
+        specifier: workspace:*
+        version: link:../editorial
       zod:
         specifier: ^4.5.4
         version: 4.5.4
@@ -244,21 +253,52 @@ importers:
         specifier: ^4.1.11
         version: 4.1.11(@types/node@24.13.3)(vite@8.2.2(@types/node@24.13.3)(esbuild@0.28.2)(tsx@4.23.13))
 
+  packages/sync:
+    dependencies:
+      '@seo/contracts':
+        specifier: workspace:*
+        version: link:../contracts
+      zod:
+        specifier: ^4.5.4
+        version: 4.5.4
+    devDependencies:
+      '@types/node':
+        specifier: ^24.10.1
+        version: 24.13.3
+      tsx:
+        specifier: ^4.23.13
+        version: 4.23.13
+      typescript:
+        specifier: 6.0.3
+        version: 6.0.3
+      vitest:
+        specifier: ^4.1.11
+        version: 4.1.11(@types/node@24.13.3)(vite@8.2.2(@types/node@24.13.3)(esbuild@0.28.2)(tsx@4.23.13))
+
   packages/ui:
     dependencies:
       '@seo/contracts':
         specifier: workspace:*
         version: link:../contracts
+      '@tanstack/react-table':
+        specifier: ^9.2.4
+        version: 9.2.4(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
       lucide-react:
         specifier: ^1.39.0
         version: 1.39.0(react@19.2.8)
       react:
         specifier: ^19.2.8
         version: 19.2.8
+      react-dom:
+        specifier: ^19.2.8
+        version: 19.2.8(react@19.2.8)
     devDependencies:
       '@types/react':
         specifier: ^19.2.14
         version: 19.2.18
+      '@types/react-dom':
+        specifier: ^19.2.3
+        version: 19.2.5(@types/react@19.2.18)
       typescript:
         specifier: 6.0.3
         version: 6.0.3
