@@ -1,12 +1,18 @@
 .navigation-link-content {
   display: inline-flex;
+  min-width: 0;
   align-items: center;
-  gap: 6px;
+  gap: 8px;
+}
+.navigation-link-content > span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 .navigation-link-content > svg {
   flex-shrink: 0;
 }
-.nav-link:has(.navigation-link-content[data-pending]) {
+[data-sidebar="menu-button"]:has(.navigation-link-content[data-pending]) {
   color: var(--ds-accent);
   background: var(--ds-accent-band);
 }

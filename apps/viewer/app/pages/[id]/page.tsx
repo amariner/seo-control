@@ -25,6 +25,7 @@ export default async function PageDetail({
     <PageFrame
       eyebrow={`${page.project} · ${page.type}`}
       title={page.title}
+      crumb={page.title}
       description={page.url}
       generatedAt={data.generatedAt}
       aside={

@@ -123,3 +123,154 @@
   .report-evolution { break-inside: avoid; }
   .report-evolution-table { display: none; }
 }
+
+/* Interruptor línea / barras (D-045). */
+.report-evolution-aside {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px 18px;
+}
+.report-evolution-view {
+  display: inline-flex;
+  padding: 3px;
+  border: 1px solid var(--ds-line);
+  border-radius: 8px;
+  background: var(--ds-surface);
+}
+.report-evolution-view button {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 30px;
+  padding: 4px 10px;
+  border: 0;
+  border-radius: 5px;
+  background: transparent;
+  color: var(--ds-text);
+  font: 500 12px/18px var(--ds-font-sans);
+  cursor: pointer;
+}
+.report-evolution-view button[aria-pressed="true"] {
+  background: var(--ds-canvas);
+  color: var(--ds-accent);
+  box-shadow: 0 0 0 1px var(--ds-line);
+}
+.report-evolution-view button:focus-visible {
+  outline: 2px solid var(--ds-accent);
+  outline-offset: 1px;
+}
+.report-evolution[data-view="bar"] .report-chart-swatch {
+  flex-basis: 12px;
+  width: 12px;
+  height: 10px;
+  margin-top: 4px;
+  border-top-width: 10px;
+  border-top-style: solid;
+}
+.report-evolution[data-view="bar"] .report-chart-swatch-previous,
+.report-evolution[data-view="bar"] .report-chart-swatch-previousYear {
+  opacity: 0.55;
+}
+
+.report-evolution-footnotes {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 6px 16px;
+}
+.report-evolution-footnotes > div {
+  display: grid;
+  gap: 6px;
+}
+.report-evolution-footnotes .report-evolution-source {
+  margin-left: auto;
+  text-align: right;
+}
+
+/* Pies del gráfico más discretos (D-045). */
+.report-evolution-footnotes p,
+.report-evolution-footnotes .report-evolution-source,
+.report-evolution-footnotes .report-evolution-source span {
+  color: var(--ds-subtle);
+  font-weight: 400;
+}
+.report-evolution-footnotes .report-evolution-event {
+  border-left-color: var(--ds-subtle);
+}
+
+/* Fechas de la leyenda como tooltip: ratón en escritorio, toque en móvil. */
+.report-chart-legend-item {
+  position: relative;
+}
+.report-evolution-legend .report-chart-legend-item small {
+  position: absolute;
+  top: calc(100% - 2px);
+  left: 26px;
+  z-index: 5;
+  display: none;
+  margin: 0;
+  padding: 4px 8px;
+  border-radius: var(--ds-radius-sm);
+  background: var(--ds-ink);
+  color: #fff;
+  font-size: 12px;
+  line-height: 16px;
+  white-space: nowrap;
+  box-shadow: var(--ds-shadow-product);
+}
+@media (hover: hover) {
+  .report-evolution-legend .report-chart-legend-item:hover small,
+  .report-evolution-legend .report-chart-legend-item:focus-visible small {
+    display: block;
+  }
+}
+.report-evolution-legend .report-chart-legend-item[data-dates-open] small {
+  display: block;
+}
+/* Pies aún más discretos, a petición (D-045): grafito, 3,75:1. */
+.report-evolution-footnotes p,
+.report-evolution-footnotes .report-evolution-source,
+.report-evolution-footnotes .report-evolution-source span {
+  color: var(--ds-graphite);
+}
+.report-evolution-footnotes .report-evolution-event {
+  border-left-color: var(--ds-graphite);
+}
+
+/* Interruptor de tipo de gráfico solo con iconos (D-045). */
+.report-evolution-view button {
+  width: 34px;
+  justify-content: center;
+  padding: 4px;
+}
+
+/* Leyenda a la derecha del selector de métrica (D-045). */
+.report-evolution-toolbar .report-evolution-legend {
+  flex: 1 1 auto;
+  align-items: center;
+  margin: 0;
+}
+.report-evolution-toolbar .report-evolution-aside {
+  margin-left: auto;
+}
+@media (max-width: 760px) {
+  /* En móvil: selector e interruptor arriba; leyenda en su propia fila, en horizontal. */
+  .report-evolution-toolbar .report-evolution-legend {
+    order: 3;
+    display: flex;
+    flex-basis: 100%;
+    flex-wrap: wrap;
+    gap: 2px 16px;
+    margin-top: 0;
+  }
+  .report-evolution-toolbar .report-evolution-legend .report-chart-legend-item {
+    width: auto;
+    min-height: 36px;
+  }
+  .report-evolution-toolbar .report-evolution-select {
+    flex: 1 1 auto;
+    min-width: 0;
+  }
+}

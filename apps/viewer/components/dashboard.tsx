@@ -1,4 +1,6 @@
 import Link from "next/link";
+import type { ReactNode } from "react";
+import { ArrowUpRight } from "lucide-react";
 import {
   BRANDS,
   MARKETS,
@@ -6,10 +8,20 @@ import {
   formatPeriodRange,
   type DashboardPayload,
 } from "@seo/contracts";
-import { Badge, Card, MetricStrip } from "@seo/ui";
+import { Badge } from "@seo/ui";
 import { ReportDataTable } from "@seo/ui/data-table";
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardAction,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { AppShell } from "./app-shell";
-import { TrendChart } from "./trend-chart";
+import { ChartAreaInteractive } from "./chart-area-interactive";
+import { SectionCards } from "./section-cards";
 import "./overview.css";
 
 const projectName = (slug: string) =>
@@ -29,6 +41,58 @@ export const MODE_LABEL = {
   database: "Almacén de datos propio",
 } as const;
 
+/** Tarjeta de sección de dashboard-01 con título navegable y enlace opcional. */
+function SectionCard({
+  id,
+  title,
+  description,
+  href,
+  linkLabel,
+  meta,
+  children,
+}: {
+  id: string;
+  title: string;
+  description?: string;
+  href?: string;
+  linkLabel?: string;
+  meta?: ReactNode;
+  children: ReactNode;
+}) {
+  return (
+    <Card aria-labelledby={id} className="min-w-0 shadow-xs" role="region">
+      <CardHeader>
+        <CardTitle>
+          <h2 id={id} className="m-0 text-base font-semibold tracking-normal">
+            {title}
+          </h2>
+        </CardTitle>
+        {description ? <CardDescription>{description}</CardDescription> : null}
+        {href || meta ? (
+          <CardAction>
+            {href ? (
+              <Button
+                asChild
+                variant="outline"
+                size="sm"
+                className="h-9 text-primary"
+              >
+                <Link href={href}>
+                  {linkLabel}
+                  <ArrowUpRight aria-hidden />
+                </Link>
+              </Button>
+            ) : (
+              <span className="text-sm text-muted-foreground">{meta}</span>
+            )}
+          </CardAction>
+        ) : null}
+      </CardHeader>
+      <CardContent className="min-w-0">{children}</CardContent>
+    </Card>
+  );
+}
+
 export function Dashboard({ data }: { data: DashboardPayload }) {
   const points = data.series.organic_sessions ?? [];
   const semrushConnected = data.sources.some(
@@ -47,12 +111,17 @@ export function Dashboard({ data }: { data: DashboardPayload }) {
 
   return (
     <AppShell generatedAt={data.generatedAt}>
-      <main className="page overview-page" id="contenido">
-        <header className="page-heading">
-          <div>
+      <main
+        className="@container/main flex w-full flex-1 flex-col gap-4 py-6 md:gap-6"
+        id="contenido"
+      >
+        <header className="flex flex-wrap items-end justify-between gap-x-8 gap-y-3">
+          <div className="min-w-0">
             <p className="eyebrow">SEO Intelligence</p>
-            <h1>{selectedProject ?? "Resumen del grupo"}</h1>
-            <p className="lede">
+            <h1 className="m-0 text-3xl font-semibold tracking-tight">
+              {selectedProject ?? "Resumen del grupo"}
+            </h1>
+            <p className="mt-2 mb-0 text-muted-foreground">
               {selectedProject
                 ? "Resumen"
                 : new Intl.ListFormat("es", { type: "conjunction" }).format(
@@ -61,11 +130,13 @@ export function Dashboard({ data }: { data: DashboardPayload }) {
               · {selectedMarket}.
             </p>
           </div>
-          <div className="date-context">
-            <strong>
+          <div className="grid gap-1 text-sm text-muted-foreground sm:text-right">
+            <strong className="text-foreground">
               {formatPeriodRange(data.window.start, data.window.end)}
             </strong>
-            <p>{MODE_LABEL[data.mode]}</p>
+            <Badge tone={data.mode === "synthetic" ? "warn" : "info"}>
+              {MODE_LABEL[data.mode]}
+            </Badge>
             <details className="overview-periods">
               <summary>Comparativas · {data.window.days} días</summary>
               <p>
@@ -86,35 +157,28 @@ export function Dashboard({ data }: { data: DashboardPayload }) {
           </div>
         </header>
 
-        <section aria-labelledby="kpis">
-          <div className="section-heading">
-            <h2 id="kpis">Indicadores</h2>
+        <section aria-labelledby="kpis" className="grid gap-3">
+          <div className="flex items-center justify-between gap-4">
+            <h2
+              id="kpis"
+              className="m-0 text-base font-semibold tracking-normal"
+            >
+              Indicadores
+            </h2>
             <Link className="section-link" href="/data">
               Fuentes y cobertura →
             </Link>
           </div>
-          <MetricStrip metrics={data.metrics} />
+          <SectionCards metrics={data.metrics} />
         </section>
 
-        <section className="section" aria-labelledby="evolucion">
-          <div className="section-heading">
-            <div>
-              <h2 id="evolucion">Evolución</h2>
-              <p>Sesiones orgánicas · GA4</p>
-            </div>
-          </div>
-          <Card className="overview-chart">
-            <div className="overview-legend">
-              <span>
-                <i className="legend-dot" />
-                Periodo actual
-              </span>
-              <span>
-                <i className="legend-dot legend-dot-dash" />
-                Interanual
-              </span>
-            </div>
-            <TrendChart points={points} annotations={data.annotations} />
+        <section aria-label="Evolución">
+          <ChartAreaInteractive
+            title="Evolución"
+            description="Sesiones orgánicas diarias · GA4"
+            points={points}
+            annotations={data.annotations}
+          >
             <details className="overview-details">
               <summary>Ver datos diarios</summary>
               <ReportDataTable
@@ -145,104 +209,115 @@ export function Dashboard({ data }: { data: DashboardPayload }) {
                 }))}
               />
             </details>
-          </Card>
+          </ChartAreaInteractive>
         </section>
 
-        <section className="section" aria-labelledby="mercados">
-          <div className="section-heading">
-            <div>
-              <h2 id="mercados">Mercados</h2>
-              <p>Variación de sesiones frente al periodo anterior.</p>
-            </div>
-          </div>
-          <ReportDataTable
-            key={filterKey}
-            id="home-markets"
-            caption="Resultados por mercado"
-            searchPlaceholder="Buscar mercado…"
-            columns={[
-              { key: "name", label: "Mercado" },
-              { key: "sessions", label: "Sesiones", numeric: true },
-              { key: "change", label: "Variación", numeric: true },
-              { key: "clicks", label: "Clics", numeric: true },
-              { key: "conversions", label: "Eventos clave", numeric: true },
-              ...(semrushConnected
-                ? [{ key: "visibility", label: "Visibilidad", numeric: true }]
-                : []),
-            ]}
-            rows={data.markets.map((market) => ({
-              id: market.code,
-              searchText: `${market.name} ${market.code}`,
-              values: {
-                name: market.name,
-                sessions: market.sessions,
-                change: market.change,
-                clicks: market.clicks,
-                conversions: market.conversions,
-                visibility: semrushConnected ? market.visibility : null,
-              },
-              cells: {
-                name: (
-                  <>
-                    <span className="cell-primary">{market.name}</span>
-                    <span className="cell-secondary">{market.code}</span>
-                  </>
-                ),
-                sessions: number(market.sessions),
-                clicks: number(market.clicks),
-                conversions: number(market.conversions),
-                change: (
-                  <span
-                    className={market.change >= 0 ? "delta-good" : "delta-bad"}
+        <div className="grid gap-4 md:gap-6 @5xl/main:grid-cols-[minmax(0,2fr)_minmax(280px,1fr)]">
+          <SectionCard
+            id="mercados"
+            title="Mercados"
+            description="Variación de sesiones frente al periodo anterior."
+          >
+            <ReportDataTable
+              key={filterKey}
+              id="home-markets"
+              caption="Resultados por mercado"
+              searchPlaceholder="Buscar mercado…"
+              columns={[
+                { key: "name", label: "Mercado" },
+                { key: "sessions", label: "Sesiones", numeric: true },
+                { key: "change", label: "Variación", numeric: true },
+                { key: "clicks", label: "Clics", numeric: true },
+                { key: "conversions", label: "Eventos clave", numeric: true },
+                ...(semrushConnected
+                  ? [{ key: "visibility", label: "Visibilidad", numeric: true }]
+                  : []),
+              ]}
+              rows={data.markets.map((market) => ({
+                id: market.code,
+                searchText: `${market.name} ${market.code}`,
+                values: {
+                  name: market.name,
+                  sessions: market.sessions,
+                  change: market.change,
+                  clicks: market.clicks,
+                  conversions: market.conversions,
+                  visibility: semrushConnected ? market.visibility : null,
+                },
+                cells: {
+                  name: (
+                    <>
+                      <span className="cell-primary">{market.name}</span>
+                      <span className="cell-secondary">{market.code}</span>
+                    </>
+                  ),
+                  sessions: number(market.sessions),
+                  clicks: number(market.clicks),
+                  conversions: number(market.conversions),
+                  change: (
+                    <span
+                      className={
+                        market.change >= 0 ? "delta-good" : "delta-bad"
+                      }
+                    >
+                      {percent(market.change)}
+                    </span>
+                  ),
+                  visibility: `${market.visibility.toLocaleString("es-ES")}%`,
+                },
+              }))}
+            />
+          </SectionCard>
+
+          <SectionCard
+            id="proyectos"
+            title="Proyectos"
+            href="/projects"
+            linkLabel="Ver todos"
+          >
+            <ul className="m-0 grid list-none gap-2 p-0">
+              {data.projects.map((project) => (
+                <li key={project.slug}>
+                  <Link
+                    className="group flex items-center justify-between gap-3 rounded-lg border bg-background p-3 transition-colors hover:border-primary hover:bg-accent-band"
+                    href={`/projects/${project.slug}`}
                   >
-                    {percent(market.change)}
-                  </span>
-                ),
-                visibility: `${market.visibility.toLocaleString("es-ES")}%`,
-              },
-            }))}
-          />
-        </section>
-
-        <section className="section" aria-labelledby="proyectos">
-          <div className="section-heading">
-            <h2 id="proyectos">Proyectos</h2>
-            <Link className="section-link" href="/projects">
-              Ver todos →
-            </Link>
-          </div>
-          <div className="overview-projects">
-            {data.projects.map((project) => (
-              <Link
-                className="overview-project"
-                href={`/projects/${project.slug}`}
-                key={project.slug}
-              >
-                <strong>
-                  {project.name}
-                  <span aria-hidden="true">↗</span>
-                </strong>
-                <span>{project.domain}</span>
-                {project.score !== null && (
-                  <small>
-                    Score {number(project.score)}/100 ·{" "}
-                    {project.delta > 0 ? "+" : ""}
-                    {project.delta} pts
-                  </small>
-                )}
-              </Link>
-            ))}
-          </div>
-        </section>
+                    <span className="grid min-w-0 gap-0.5">
+                      <strong className="truncate text-sm font-semibold text-foreground group-hover:text-primary">
+                        {project.name}
+                      </strong>
+                      <span className="truncate text-xs text-muted-foreground">
+                        {project.domain}
+                      </span>
+                    </span>
+                    {project.score !== null ? (
+                      <span className="grid shrink-0 text-right text-xs text-muted-foreground">
+                        <strong className="text-sm text-foreground tabular-nums">
+                          {number(project.score)}/100
+                        </strong>
+                        {project.delta > 0 ? "+" : ""}
+                        {project.delta} pts
+                      </span>
+                    ) : (
+                      <ArrowUpRight
+                        aria-hidden
+                        className="size-4 shrink-0 text-muted-foreground group-hover:text-primary"
+                      />
+                    )}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </SectionCard>
+        </div>
 
         {data.actions.length > 0 && (
-          <section className="section" aria-labelledby="acciones">
-            <div className="section-heading">
-              <h2 id="acciones">Acciones</h2>
-              <Link className="section-link" href="/actions">
-                Ver plan →
-              </Link>
-            </div>
+          <SectionCard
+            id="acciones"
+            title="Acciones"
+            href="/actions"
+            linkLabel="Ver plan"
+          >
             <ReportDataTable
               key={filterKey}
               id="home-actions"
@@ -279,17 +354,15 @@ export function Dashboard({ data }: { data: DashboardPayload }) {
                 },
               }))}
             />
-          </section>
+          </SectionCard>
         )}
 
         {geoConnected && (
-          <section className="section" aria-labelledby="asistentes">
-            <div className="section-heading">
-              <h2 id="asistentes">Presencia en asistentes</h2>
-              <span className="muted">
-                {number(data.geo.totalPrompts)} ejecuciones
-              </span>
-            </div>
+          <SectionCard
+            id="asistentes"
+            title="Presencia en asistentes"
+            meta={`${number(data.geo.totalPrompts)} ejecuciones`}
+          >
             <dl className="overview-stats">
               <div>
                 <dt>Cuota de citación</dt>
@@ -317,16 +390,15 @@ export function Dashboard({ data }: { data: DashboardPayload }) {
                 <dd>{number(data.geo.aiConversions)}</dd>
               </div>
             </dl>
-          </section>
+          </SectionCard>
         )}
 
-        <section className="section" aria-labelledby="fuentes">
-          <div className="section-heading">
-            <h2 id="fuentes">Fuentes y cobertura</h2>
-            <Link className="section-link" href="/data">
-              Ver detalle →
-            </Link>
-          </div>
+        <SectionCard
+          id="fuentes"
+          title="Fuentes y cobertura"
+          href="/data"
+          linkLabel="Ver detalle"
+        >
           <ReportDataTable
             key={filterKey}
             id="home-sources"
@@ -375,7 +447,7 @@ export function Dashboard({ data }: { data: DashboardPayload }) {
                 : MODE_LABEL[data.mode]
             }
           />
-        </section>
+        </SectionCard>
       </main>
     </AppShell>
   );

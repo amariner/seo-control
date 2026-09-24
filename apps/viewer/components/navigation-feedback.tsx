@@ -17,9 +17,11 @@ export function NavigationLinkContent({
   href,
   label,
   icon: Icon,
+  iconSize = 14,
   onStatusChange,
 }: NavigationDestination & {
   icon: LucideIcon;
+  iconSize?: number;
   onStatusChange: NavigationStatusChange;
 }) {
   const { pending } = useLinkStatus();
@@ -34,9 +36,13 @@ export function NavigationLinkContent({
       data-pending={pending || undefined}
     >
       {pending ? (
-        <LoaderCircle size={14} className="navigation-spinner" aria-hidden />
+        <LoaderCircle
+          size={iconSize}
+          className="navigation-spinner"
+          aria-hidden
+        />
       ) : (
-        <Icon size={14} aria-hidden />
+        <Icon size={iconSize} aria-hidden />
       )}
       <span>{label}</span>
     </span>

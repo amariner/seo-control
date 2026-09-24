@@ -13,6 +13,8 @@
   --ds-ink: #101516;
   --ds-text: #46504e;
   --ds-muted: #5f6a67;
+  /* Texto de pie (notas y fuentes bajo gráficos): el gris más claro que cumple AA, 4,56:1 sobre blanco. */
+  --ds-subtle: #6e7875;
   --ds-line: #dcdedb;
   --ds-line-strong: #c7cbc7;
 
@@ -20,6 +22,11 @@
   --ds-accent-hover: #2445dc;
   --ds-accent-soft: #e9edff;
   --ds-accent-band: #f3f5ff;
+  /* Cobalto intermedio: segundo tramo de series y barras apiladas (SERIES_PALETTE). */
+  --ds-accent-mid: #8ea0ff;
+  /* Violeta: solo la serie de impresiones de Search Console (D-045). */
+  --ds-violet: #7a4fd8;
+  --ds-violet-soft: #c3aef2;
 
   --ds-positive: #176044;
   --ds-positive-soft: #e7f1ec;
@@ -27,6 +34,10 @@
   --ds-warning-soft: #fff3d8;
   --ds-danger: #8b3030;
   --ds-danger-soft: #fbe9e7;
+
+  /* Señal «en directo» (D-044): solo el punto de tiempo real, nunca texto. */
+  --ds-live: #3ddc84;
+  --ds-live-ring: rgb(61 220 132 / 28%);
 
   --ds-graphite: #7c8683;
   --ds-graphite-soft: #d9ddda;

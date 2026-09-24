@@ -7,13 +7,18 @@ import { findLegacyRoute } from "@/lib/legacy-routes";
  * una redirección declarada como `partial`: así un enlace antiguo nunca muere en
  * un 404, pero tampoco finge haber llegado a su destino.
  */
-export function LegacyNotice({ from }: { from: string | string[] | undefined }) {
+export function LegacyNotice({
+  from,
+}: {
+  from: string | string[] | undefined;
+}) {
   const route = findLegacyRoute(from);
   if (!route) return null;
   return (
     <Notice tone="warn">
-      Vienes de <code>{route.v1Route}</code>, una ruta del dashboard anterior. {route.missing} Está planificado en{" "}
-      <strong>{route.phase}</strong> del roadmap.
+      Vienes de <code>{route.v1Route}</code>, una ruta del dashboard anterior.{" "}
+      {route.missing} Está planificado en <strong>{route.phase}</strong> del
+      roadmap.
     </Notice>
   );
 }

@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "project": "SEO Dashboard V2",
-  "updatedAt": "2026-09-24T08:26:56+02:00",
+  "updatedAt": "2026-09-24T19:00:00+02:00",
   "objective": "Construir la plataforma SEO más útil y desarrollada del sector para convertir grandes volúmenes de datos en decisiones trazables, responsables y resultados medibles.",
   "repository": "https://github.com/amariner/seo-control",
   "currentPhase": {
@@ -14,7 +14,7 @@
     "id": "P1",
     "name": "Sistema de diseño y calendario editorial general"
   },
-  "nextAction": "2026-09-24: D-042 y D-043 integradas y verificadas en local: carga por zonas de informes y feedback inmediato del menú principal (spinner, barra y destino). Dev activo en 3000/3001. Siguiente paso: retomar P3.1 (Neon Frankfurt) y decisiones D-035, salvo feedback o petición explícita de despliegue. D-040/041/042/043 siguen locales. P3 activa 25%; P2 bloqueada 79%.",
+  "nextAction": "2026-09-24: D-044/045/046 (shadcn + dashboard-01, ficha de marca rediseñada, tiempo real GA4, visitas desde IA, keywords por posición) fusionadas en main y desplegadas en producción. Siguiente paso: revisar con el equipo de XTONE el tráfico directo anómalo (China/Singapur, bots probables) y el salto de impresiones desde el 17-09; después retomar P3.1 (Neon Frankfurt) y D-035. Pendiente de diseño: migrar el interior de las demás vistas del visor a primitivos shadcn y reejecutar Axe. P3 activa 25%; P2 bloqueada 79%.",
   "pilot": [
     "porcelanosa",
     "noken",
@@ -80,16 +80,16 @@
     "date": "2026-09-24",
     "continuity": "passed: fase activa, roadmap y ficheros de checkpoint requeridos.",
     "migrationInventory": "passed: pnpm migration:check con 23 superficies y 8 datasets; sin cambios en esta sesión.",
-    "typecheck": "passed: pnpm typecheck, 9 paquetes, tras D-043.",
-    "tests": "passed: pnpm --filter @seo/viewer test, 90 pruebas tras D-043. Suite global verificada esta misma sesión en D-042: 426 pruebas actuales; los demás paquetes no cambiaron.",
-    "productionBuild": "passed: pnpm build, viewer + workbench, 9 tareas, tras D-043.",
+    "typecheck": "passed: pnpm typecheck, 9 paquetes, antes de fusionar D-044/045/046.",
+    "tests": "passed: pnpm test, 443 pruebas en 8 paquetes.",
+    "productionBuild": "passed: pnpm build, viewer + workbench, 9 tareas.",
     "ingestionDryRun": "passed: `pnpm ingest:dry-run` con 4 ciclos y 28 jobs por ciclo, ejecutados ahora con cuota y lock activos, termina con 28 días en el libro, 0 duplicados, 0 derivas y 0 huecos. Los tres escenarios de P3.3 salen como deben: lock ocupado -> run `blocked`, 28 aplazados, 0 de cuota y libro intacto; cuota recortada a 3 por fuente -> run `partial` con 6 días escritos, 22 aplazados, 0 fallos y huecos declarados; fuente intermitente -> run `complete` con 14 reintentos y 21 peticiones cobradas al presupuesto. Con `--fail-day=2026-09-02` los 4 jobs de ese día fallan tras el reintento que su clasificación permite, sus registros anteriores sobreviven intactos y el ciclo queda `partial` en vez de `complete`.",
-    "axe": "No reejecutado en D-042. QA manual de estados y árbol accesible: valores antiguos ocultos, regiones busy y controles inertes. No equivale a auditoría Axe.",
+    "axe": "No reejecutado tras D-044 (shell y portada nuevos). Pendiente antes de fusionar la rama. QA manual: landmarks sin main duplicado, nav con nombre, foco al botón del menú tras navegar en móvil.",
     "editorialImport": "passed: «Sin cambios», la huella d7d3b5fc8c8e coincide con la importación del 2026-09-02. El runner de reconciliación verifica además que los cuatro ficheros de V1 siguen teniendo el hash que archivó esa importación.",
     "reconciliation": "passed: pnpm reconcile:check sin desviaciones. 1 reconciliado (editorial-snapshots), 4 con baseline congelado (semrush-cache, crawl-snapshots, canibalizaciones-snapshot, prompts-geo-inventory), 2 bloqueados (ga4-daily y gsc-daily, que siguen sin artefacto que medir hasta que P3.2 tenga credenciales) y 1 no comparable (tasks-local-state).",
-    "note": "D-043 local: feedback de menú validado a 1440 y 375 px. Navegación lenta Informes → Inicio con spinner, barra y aviso; navegación cacheada llega sin estado residual. En móvil se cierra el menú, el foco vuelve a Abrir menú y el aviso sigue visible. Cambio a Editorial y comprobación del destino. Sin nuevas dependencias, escrituras de negocio ni despliegue. D-042 de informes conserva su QA previo.",
+    "note": "D-044 en rama feat/shadcn-dashboard: shell shadcn (sidebar inset + cabecera con filtros Select) aplicado a todas las vistas del visor y portada rehecha con tarjetas de dashboard-01. Validado en 1440x900 y 375x812: filtro de mercado y selector de periodo actualizan la URL, hoja móvil cierra al navegar y devuelve el foco, pestañas fijas bajo la cabecera medida, sin overflow global. Calendario, proyecto XTONE y proyectos revisados con el shell nuevo. Ajustes posteriores: miga de pan única en la cabecera, periodo y mercado del informe de marca en la cabecera, tiempo real GA4 (verificado con dato real) en lugar del corte.",
     "deployment": "passed: vercel deploy --prod; /projects/xtone con 9 periodos, filtro de mercado, 4 pestañas y modo presentación en 200; porcelanosa y noken con todas las fuentes correctas (tras corregir la cuota de carga de GSC); comprobación de redirecciones operativa desde fra1.",
-    "responsive": "passed: D-043 en 1440x900 y 375x812, sin overflow global ni desplazamientos por el indicador. D-042 también validada en tablet 768x1024."
+    "responsive": "passed: D-044 en 1440x900 y 375x812 sin overflow global. Tablet 768 no revisada en esta sesión."
   },
   "editorialImport": {
     "schemaVersion": "editorial.v1",

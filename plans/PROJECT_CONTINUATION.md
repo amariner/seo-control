@@ -1,6 +1,19 @@
 # Checkpoint operativo — SEO Dashboard V2
 
-Última actualización: 24 de septiembre de 2026 (carga por zonas D-042 y feedback del menú D-043).
+Última actualización: 24 de septiembre de 2026 (shadcn/ui y dashboard-01 en el visor, D-044, rama `feat/shadcn-dashboard`).
+
+## Rediseño shadcn · D-044/045/046 (2026-09-24, fusionado en main y desplegado)
+
+- Rama `feat/shadcn-dashboard`. Tailwind v4 + shadcn/ui en `apps/viewer`;
+  tokens shadcn en `app/tailwind.css` apuntando a `--ds-*`.
+- Hecho: shell común (`components/app-shell.tsx`, `app-sidebar.tsx`,
+  `site-header.tsx`) para todas las vistas y portada (`dashboard.tsx`,
+  `section-cards.tsx`, `chart-area-interactive.tsx`). Menú antiguo retirado de
+  `globals.css`. Typecheck, 426 pruebas y build del visor en verde.
+- Reanudar: revisión visual del usuario; después migrar el interior de proyectos,
+  editorial, informes, acciones y datos a `components/ui/*` (Card, Tabs, Table,
+  Badge, Button), revisar tablet 768 y reejecutar `pnpm axe` antes de fusionar.
+
 
 ## Menú principal · D-043 (2026-09-24)
 

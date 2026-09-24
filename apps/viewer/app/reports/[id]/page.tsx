@@ -37,6 +37,7 @@ export default async function ReportPage({
     <PageFrame
       eyebrow={`${report.type} · v${current.version}`}
       title={report.title}
+      crumb={report.title}
       description={`${report.period} · ${report.project ?? "Conjunto del grupo"}`}
       generatedAt={archive.generatedAt}
       showGlobalFilters={false}

@@ -12,7 +12,9 @@ import { AppShell } from "@/components/app-shell";
 import { UnmeasuredBrand } from "@/components/unmeasured-brand";
 import { TrendChart } from "@/components/trend-chart";
 import { getDashboard, parseFilters } from "@/lib/data";
+import { ReportNavigationProvider } from "@/components/report/report-navigation";
 import {
+  BrandReportControls,
   BrandReportView,
   REPORT_TABS,
   type ReportTab,
@@ -58,7 +60,11 @@ export default async function ProjectPage({
       const tabs = REPORT_TABS.filter(
         (item) => item.key !== "migracion" || report.migration,
       );
-      const tab: ReportTab = resolveReportTab(tabRaw, legacy, tabs.map((item) => item.key));
+      const tab: ReportTab = resolveReportTab(
+        tabRaw,
+        legacy,
+        tabs.map((item) => item.key),
+      );
       const { present } = reportFilters(rawFilters);
       const query = new URLSearchParams(
         Object.entries(rawFilters).flatMap(([key, value]) =>
@@ -74,14 +80,27 @@ export default async function ProjectPage({
           present={present}
           baseHref={`/projects/${slugResult.data}`}
           query={query}
+          controlsInHeader={!present}
         />
       );
-      return present ? (
-        <div className="report-present-shell">{view}</div>
-      ) : (
-        <AppShell generatedAt={report.generatedAt} showGlobalFilters={false}>
-          {view}
-        </AppShell>
+      /* El proveedor envuelve también la cabecera: periodo y mercado viven en
+         ella (D-044) y comparten la carga por zonas del informe (D-042). */
+      return (
+        <ReportNavigationProvider>
+          {present ? (
+            <div className="report-present-shell">{view}</div>
+          ) : (
+            <AppShell
+              generatedAt={report.generatedAt}
+              showGlobalFilters={false}
+              headerControls={
+                <BrandReportControls report={report} variant="header" />
+              }
+            >
+              {view}
+            </AppShell>
+          )}
+        </ReportNavigationProvider>
       );
     }
   }

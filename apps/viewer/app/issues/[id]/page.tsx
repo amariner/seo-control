@@ -20,6 +20,7 @@ export default async function IssueDetail({
     <PageFrame
       eyebrow={`${issue.project} · ${issue.category}`}
       title={issue.title}
+      crumb={issue.title}
       description={`Detectada en ${issue.persistenceRuns} crawls.`}
       generatedAt={data.generatedAt}
       aside={

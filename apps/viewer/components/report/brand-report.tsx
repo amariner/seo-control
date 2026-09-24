@@ -1,5 +1,4 @@
-import Link from "next/link";
-import type { ReactNode } from "react";
+import { Fragment, type ReactNode } from "react";
 import { Database, Info } from "lucide-react";
 import { findBrand, type BrandReport, type ReportKpi } from "@seo/contracts";
 import { Notice } from "@seo/ui";
@@ -9,8 +8,11 @@ import { CompareBars } from "./compare-bars";
 import { RangePicker, PresentControls } from "./range-picker";
 import { MarketPicker } from "./market-picker";
 import { ReportPrint } from "./report-print";
+import { RankBar } from "./rank-bar";
+import { BingLogo, GoogleLogo } from "./google-logo";
+import { InfoHint } from "./info-hint";
+import { ExpandableList, ExpandableTable } from "./expandable-table";
 import {
-  ReportNavigationProvider,
   ReportPendingZone,
   ReportPendingMeta,
   ReportUpdateStatus,
@@ -53,14 +55,11 @@ const delta = (value: number | null, base: number | null) =>
     : ((value - base) / Math.abs(base)) * 100;
 const metric = (report: BrandReport, key: ReportKpi["key"]) =>
   report.kpis.find((item) => item.key === key);
-const primaryKeys: ReportKpi["key"][] = [
-  "search_sessions",
-  "clicks",
-  "search_leads",
-  "nonbrand_share",
-];
+/* Tras la tarjeta de buscadores (visitas SEO y clics); conversiones al final (D-045). */
+const primaryKeys: ReportKpi["key"][] = ["search_users"];
 const labels: Record<ReportKpi["key"], string> = {
   search_sessions: "Visitas SEO",
+  search_users: "Usuarios SEO",
   clicks: "Clics en Google",
   search_leads: "Conversiones SEO",
   nonbrand_share: "Clics sin marca",
@@ -68,6 +67,23 @@ const labels: Record<ReportKpi["key"], string> = {
   ctr: "CTR en Google",
   web_sessions: "Visitas totales",
 };
+/** Texto del icono de información de cada tarjeta (D-045). */
+const KPI_INFO: Partial<Record<ReportKpi["key"], string>> = {
+  search_sessions:
+    "Visitas desde todos los buscadores sin pagar (canal Organic Search). Google: clics de Search Console. Bing: visitas de Analytics que llegan desde Bing.",
+  search_users:
+    "Personas distintas que llegan desde buscadores. Una persona puede hacer varias visitas.",
+  web_sessions: "Todas las visitas a la web, vengan del canal que vengan.",
+  search_leads:
+    "Acciones clave de las visitas desde buscadores: solicitudes de información, muestras, contacto.",
+  clicks: "Clics en resultados de Google hacia la web, en la búsqueda web.",
+  impressions:
+    "Veces que la web aparece en resultados de Google, haya clic o no. Incluye Modo IA y AI Overviews sin desglose.",
+  ctr: "De cada 100 apariciones en Google, cuántas acaban en clic.",
+  nonbrand_share:
+    "Parte de los clics con búsqueda visible que no incluyen la marca.",
+};
+
 const sourceName = (source: string) =>
   source === "ga4" ? "GA4" : "Search Console";
 const row = (
@@ -98,11 +114,18 @@ function Delta({
     <span
       className={`brand-delta ${change === null || neutral ? "" : change >= 0 ? "delta-good" : "delta-bad"}`}
     >
-      {change === null
-        ? "—"
-        : `${change > 0 ? "+" : change < 0 ? "−" : ""}${number(Math.abs(change), 1)} %`}
+      {change === null ? "—" : signedPercent(change)}
     </span>
   );
+}
+
+/** Variación con signo; desde 1.000 % se abrevia en miles («+1,6k %»). */
+function signedPercent(change: number) {
+  const sign = change > 0 ? "+" : change < 0 ? "−" : "";
+  const size = Math.abs(change);
+  return size >= 1000
+    ? `${sign}${number(size / 1000, 1)}k %`
+    : `${sign}${number(size, 1)} %`;
 }
 function Url({ value }: { value: string | null }) {
   if (!value) return <span className="muted">—</span>;
@@ -176,20 +199,73 @@ function qualityNote(report: BrandReport, text: string) {
   }
   return text;
 }
-function Kpi({ item, report }: { item: ReportKpi; report: BrandReport }) {
+function Kpi({
+  item,
+  report,
+  help = true,
+  extra,
+  trend,
+}: {
+  item: ReportKpi;
+  report: BrandReport;
+  help?: boolean;
+  extra?: ReactNode;
+  trend?: number[];
+}) {
+  return (
+    <article className="brand-kpi">
+      <KpiBody
+        item={item}
+        report={report}
+        help={help}
+        extra={extra}
+        trend={trend}
+      />
+    </article>
+  );
+}
+
+function KpiBody({
+  item,
+  report,
+  source,
+  extra,
+  help = true,
+  trend,
+}: {
+  item: ReportKpi;
+  report: BrandReport;
+  /** Oculta «Qué mide» (D-045: Visitas y Usuarios SEO no lo muestran). */
+  help?: boolean;
+  /** Valores del periodo para la mini gráfica junto a la cifra. */
+  trend?: number[];
+  /** Sustituye a la fuente bajo el nombre cuando hace falta precisar su alcance. */
+  source?: string;
+  /** Cifras de apoyo bajo las comparaciones. */
+  extra?: ReactNode;
+}) {
   const flagged =
     item.key === "search_leads" &&
     report.dataQuality.some((note) => /conversiones/i.test(note.text));
   return (
-    <article className="brand-kpi">
+    <>
       <div className="brand-kpi-label">
-        <span>{labels[item.key]}</span>
-        <span className="brand-source">{sourceName(item.source)}</span>
+        <span className="brand-kpi-title">
+          {labels[item.key]}
+          <InfoHint
+            title={labels[item.key]}
+            source={source ?? sourceName(item.source)}
+            text={KPI_INFO[item.key] ?? item.help}
+          />
+        </span>
       </div>
       <ReportPendingZone variant="metric">
-        <strong className="brand-kpi-value">
-          {item.unit === "percent" ? percent(item.value) : number(item.value)}
-        </strong>
+        <div className="brand-kpi-figure">
+          <strong className="brand-kpi-value">
+            {item.unit === "percent" ? percent(item.value) : number(item.value)}
+          </strong>
+          {trend ? <Sparkline points={trend} /> : null}
+        </div>
         <div className="brand-kpi-comparisons">
           <span>
             <Delta value={item.value} base={item.previous} neutral={flagged} />
@@ -204,29 +280,596 @@ function Kpi({ item, report }: { item: ReportKpi; report: BrandReport }) {
             <small>vs. {report.window.previousYearLabel}</small>
           </span>
         </div>
+        {extra}
         {flagged ? (
           <a className="brand-kpi-note" href="#calidad">
             <Info size={13} aria-hidden />
             Medición por validar
           </a>
-        ) : (
+        ) : !help ? null : (
           <details className="brand-metric-help">
             <summary>Qué mide</summary>
             <p>
               {item.key === "search_sessions"
                 ? "Sesiones del canal Organic Search en GA4."
-                : item.key === "clicks"
-                  ? "Clics en los resultados de Google."
-                  : item.key === "nonbrand_share"
-                    ? "Porcentaje de clics con consulta visible que no incluyen la marca."
-                    : item.help}
+                : item.key === "search_users"
+                  ? "Usuarios totales del canal Organic Search en GA4. Una persona puede hacer varias visitas."
+                  : item.key === "clicks"
+                    ? "Clics en los resultados de Google."
+                    : item.key === "nonbrand_share"
+                      ? "Porcentaje de clics con consulta visible que no incluyen la marca."
+                      : item.help}
             </p>
           </details>
         )}
       </ReportPendingZone>
+    </>
+  );
+}
+
+/**
+ * Visitas SEO como cifra principal y los clics de Google en pequeño dentro de
+ * la misma tarjeta (D-045): son dos medidas del mismo tráfico, no dos KPI.
+ */
+function SearchTrafficCard({ report }: { report: BrandReport }) {
+  const visits = metric(report, "search_sessions");
+  const clicks = metric(report, "clicks");
+  const bing = report.searchReconciliation?.engines.find(
+    (engine) => engine.label === "Bing",
+  );
+  if (!visits) return null;
+  return (
+    <article className="brand-kpi">
+      <KpiBody
+        item={visits}
+        report={report}
+        help={false}
+        trend={seriesValues(report.searchSeries, report.window.end)}
+        extra={
+          <>
+            {clicks ? (
+              <p className="brand-kpi-sub">
+                <GoogleLogo />
+                <strong>{number(clicks.value)} clics</strong>
+                <Delta value={clicks.value} base={clicks.previous} />
+              </p>
+            ) : null}
+            {bing ? (
+              /* Bing no tiene clics conectados: son visitas GA4 desde Bing. */
+              <p className="brand-kpi-sub brand-kpi-sub-tight">
+                <BingLogo />
+                <strong>{number(bing.sessions)} visitas</strong>
+                <Delta value={bing.sessions} base={bing.previous || null} />
+              </p>
+            ) : null}
+          </>
+        }
+      />
     </article>
   );
 }
+
+/**
+ * Keywords posicionadas en Google y su reparto por posición media (D-045).
+ * La barra se lee con su leyenda; los recuentos son la fuente, no el color.
+ */
+function KeywordsCard({ report }: { report: BrandReport }) {
+  const data = report.keywordRanking;
+  /* Cuota de clics, no de búsquedas distintas: unas pocas búsquedas de marca
+     concentran casi todo el tráfico (D-045). */
+  const nonBrandClicks = metric(report, "nonbrand_share");
+  return (
+    <article className="brand-kpi brand-kpi-keywords">
+      <div className="brand-kpi-label">
+        <span className="brand-kpi-title">
+          Keywords
+          <InfoHint
+            title="Keywords"
+            source="Search Console"
+            text="Búsquedas de Google en las que la web aparece con impresiones en el periodo, repartidas por posición media. Google omite las búsquedas anónimas."
+          />
+        </span>
+      </div>
+      <ReportPendingZone variant="metric">
+        <div className="brand-kpi-figure">
+          <strong className="brand-kpi-value">
+            {number(data?.total ?? null)}
+            {data?.limitReached ? "+" : ""}
+          </strong>
+        </div>
+        {data ? (
+          <>
+            <RankBar
+              total={data.total}
+              segments={[
+                { key: "top3", label: "Top 3", count: data.top3 },
+                { key: "top20", label: "Posición 4–20", count: data.top20 },
+                { key: "rest", label: "Más de 20", count: data.rest },
+              ]}
+            />
+            <div className="brand-kpi-comparisons">
+              <span>
+                <Delta value={data.total} base={data.previousTotal} />
+                <small>vs. {report.window.previousLabel}</small>
+              </span>
+            </div>
+            {nonBrandClicks?.value !== null &&
+            nonBrandClicks?.value !== undefined ? (
+              <MiniRing
+                value={nonBrandClicks.value}
+                label="de clics sin marca"
+                detail={ppChange(nonBrandClicks.value, nonBrandClicks.previous)}
+              />
+            ) : null}
+          </>
+        ) : null}
+      </ReportPendingZone>
+    </article>
+  );
+}
+
+/**
+ * Visitas desde asistentes de IA y Modo IA de Google (D-046). Las visitas son
+ * GA4; el Modo IA no tiene cifra propia porque Search Console no lo separa de
+ * la búsqueda web (comprobado por API el 2026-09-24), y se dice así.
+ */
+function AiCard({ report }: { report: BrandReport }) {
+  const data = report.aiTraffic;
+  return (
+    <article className="brand-kpi brand-kpi-ai">
+      <div className="brand-kpi-label">
+        <span className="brand-kpi-title">
+          Visitas desde IA
+          <InfoHint
+            title="Visitas desde IA"
+            source="GA4"
+            text="Visitas que llegan desde un asistente de IA (ChatGPT, Gemini…), de cualquier canal. El Modo IA de Google no se publica por separado."
+          />
+        </span>
+      </div>
+      <ReportPendingZone variant="metric">
+        <ExpandableTable
+          caption="Visitas por asistente de IA"
+          head={
+            <tr className="brand-ai-total">
+              <th scope="row">Total</th>
+              <td>{number(data?.total ?? null)}</td>
+              <td>
+                {data ? (
+                  <Delta value={data.total} base={data.previousTotal} />
+                ) : null}
+              </td>
+            </tr>
+          }
+          rows={(data?.assistants ?? []).map((item) => (
+            <tr key={item.key}>
+              <th scope="row">{item.label}</th>
+              <td>{number(item.sessions)}</td>
+              <td>
+                <Delta value={item.sessions} base={item.previous} />
+              </td>
+            </tr>
+          ))}
+        />
+      </ReportPendingZone>
+    </article>
+  );
+}
+
+/**
+ * Anillo pequeño con un porcentaje y su texto al lado (D-045). El texto es la
+ * fuente del dato; el anillo solo lo hace visible de un vistazo.
+ */
+function MiniRing({
+  value,
+  label,
+  detail,
+}: {
+  value: number;
+  label: string;
+  detail?: string;
+}) {
+  const clamped = Math.max(0, Math.min(100, value));
+  return (
+    <div className="brand-mini-ring">
+      <svg viewBox="0 0 36 36" aria-hidden className="brand-mini-ring-svg">
+        <circle className="brand-mini-ring-track" cx="18" cy="18" r="15.9155" />
+        <circle
+          className="brand-mini-ring-value"
+          cx="18"
+          cy="18"
+          r="15.9155"
+          strokeDasharray={`${clamped} ${100 - clamped}`}
+        />
+      </svg>
+      <span>
+        <strong>{number(value, value < 100 && value % 1 ? 1 : 0)} %</strong>{" "}
+        {label}
+        {detail ? <small>{detail}</small> : null}
+      </span>
+    </div>
+  );
+}
+
+/**
+ * Mini gráfica de la evolución del periodo (D-045): una línea sin ejes para
+ * ver la tendencia de un vistazo. La cifra y sus comparaciones siguen siendo
+ * la fuente; el gráfico completo está en «Evolución del tráfico».
+ */
+function Sparkline({
+  points,
+  width = 72,
+  height = 26,
+}: {
+  points: number[];
+  width?: number;
+  height?: number;
+}) {
+  if (points.length < 2) return null;
+  const min = Math.min(...points);
+  const max = Math.max(...points);
+  const span = max - min || 1;
+  const x = (index: number) => (index / (points.length - 1)) * width;
+  const y = (value: number) => 2 + (1 - (value - min) / span) * (height - 4);
+  const line = points
+    .map((value, index) => `${x(index).toFixed(1)},${y(value).toFixed(1)}`)
+    .join(" ");
+  const first = points[0]!;
+  const last = points.at(-1)!;
+  return (
+    <svg
+      className="brand-sparkline"
+      viewBox={`0 0 ${width} ${height}`}
+      width={width}
+      height={height}
+      role="img"
+      aria-label={`Evolución del periodo, media diaria: de ${number(first)} a ${number(last)}`}
+    >
+      <polyline
+        points={`0,${height} ${line} ${width},${height}`}
+        className="brand-sparkline-area"
+      />
+      <polyline points={line} className="brand-sparkline-line" />
+      <circle
+        cx={x(points.length - 1)}
+        cy={y(last)}
+        r="2"
+        className="brand-sparkline-dot"
+      />
+    </svg>
+  );
+}
+
+/** CTR por tramo a partir de clics e impresiones del mismo tramo. */
+const ctrValues = (report: BrandReport) =>
+  report.clickSeries.flatMap((point, index) => {
+    const impressions = report.impressionsSeries[index]?.current;
+    return point.current === null || !impressions
+      ? []
+      : [(point.current / impressions) * 100];
+  });
+
+/** Serie de la mini gráfica de cada indicador, cuando existe. */
+const trendOf = (report: BrandReport, key: ReportKpi["key"]) =>
+  key === "search_sessions"
+    ? seriesValues(report.searchSeries, report.window.end)
+    : key === "search_users"
+      ? seriesValues(report.usersSeries, report.window.end)
+      : key === "clicks"
+        ? seriesValues(report.clickSeries, report.window.end)
+        : key === "impressions"
+          ? seriesValues(report.impressionsSeries, report.window.end)
+          : key === "ctr"
+            ? ctrValues(report)
+            : undefined;
+
+/**
+ * Valores de una serie como media diaria de cada tramo (D-045). El último
+ * tramo suele estar incompleto (90 días son 12 semanas y 6 días): su suma
+ * caería en picado sin que el tráfico cayera.
+ */
+const seriesValues = (series: BrandReport["searchSeries"], end: string) =>
+  series.flatMap((point, index) => {
+    if (point.current === null) return [];
+    const start = Date.parse(`${point.bucket}T00:00:00Z`);
+    const next = series[index + 1]?.bucket;
+    const stop = next
+      ? Date.parse(`${next}T00:00:00Z`)
+      : Date.parse(`${end}T00:00:00Z`) + 86_400_000;
+    const days = Math.max(1, Math.round((stop - start) / 86_400_000));
+    return [point.current / days];
+  });
+
+/** Variación en puntos porcentuales, con signo tipográfico. */
+const ppChange = (value: number | null, previous: number | null) => {
+  if (value === null || previous === null) return undefined;
+  const change = value - previous;
+  return `${change > 0 ? "+" : change < 0 ? "−" : ""}${number(Math.abs(change), 1)} pp vs. anterior`;
+};
+
+/** Nuevos frente a recurrentes dentro de Usuarios SEO (D-045). */
+function UserMix({ report }: { report: BrandReport }) {
+  const mix = report.userMix;
+  if (!mix) return null;
+  const total = mix.newUsers + mix.returningUsers;
+  const share = total ? (mix.newUsers / total) * 100 : 0;
+  return (
+    <MiniRing
+      value={share}
+      label="nuevos"
+      detail={ppChange(share, mix.previousNewShare)}
+    />
+  );
+}
+
+/** Variación de una fila: % en cifras, puntos en porcentajes (D-045). */
+function ChangeCell({
+  value,
+  base,
+  unit,
+}: {
+  value: number | null;
+  base: number | null;
+  unit: ReportKpi["unit"];
+}) {
+  if (value === null || base === null || (unit === "number" && base === 0))
+    return <span className="brand-change is-empty">—</span>;
+  const change =
+    unit === "percent" ? value - base : ((value - base) / Math.abs(base)) * 100;
+  const tone = Math.abs(change) < 0.05 ? "flat" : change > 0 ? "up" : "down";
+  return (
+    <span className={`brand-change is-${tone}`}>
+      {unit === "percent"
+        ? `${change > 0 ? "+" : change < 0 ? "−" : ""}${number(Math.abs(change), 1)} pp`
+        : signedPercent(change)}
+    </span>
+  );
+}
+
+type MetricRow = {
+  key: string;
+  label: string;
+  info: { source: string; text: string };
+  unit: ReportKpi["unit"];
+  value: number | null;
+  previous: number | null;
+  previousYear: number | null;
+  trend?: number[];
+};
+
+/**
+ * Todas las cifras del periodo con sus comparaciones (D-045): agrupadas por
+ * fuente, con variación frente al periodo anterior y al año pasado y la
+ * tendencia del periodo cuando hay serie. La fuente va en el icono de cada
+ * indicador, no en una columna.
+ */
+function AllMetricsTable({ report }: { report: BrandReport }) {
+  const kpi = (key: ReportKpi["key"]): MetricRow | null => {
+    const item = metric(report, key);
+    return item
+      ? {
+          key,
+          label: labels[key],
+          info: {
+            source: sourceName(item.source),
+            text: KPI_INFO[key] ?? item.help,
+          },
+          unit: item.unit,
+          value: item.value,
+          previous: item.previous,
+          previousYear: item.previousYear,
+          trend: trendOf(report, key),
+        }
+      : null;
+  };
+  const keywords = report.keywordRanking;
+  const ai = report.aiTraffic;
+  const groups: Array<{ title: string; rows: Array<MetricRow | null> }> = [
+    {
+      title: "Buscadores · Analytics",
+      rows: [
+        kpi("search_sessions"),
+        kpi("search_users"),
+        kpi("search_leads"),
+        ai
+          ? {
+              key: "ai",
+              label: "Visitas desde IA",
+              info: {
+                source: "GA4",
+                text: "Visitas desde asistentes de IA (ChatGPT, Gemini…), de cualquier canal.",
+              },
+              unit: "number",
+              value: ai.total,
+              previous: ai.previousTotal,
+              previousYear: null,
+            }
+          : null,
+        kpi("web_sessions"),
+      ],
+    },
+    {
+      title: "Google · Search Console",
+      rows: [
+        kpi("clicks"),
+        kpi("impressions"),
+        kpi("ctr"),
+        kpi("nonbrand_share"),
+        keywords
+          ? {
+              key: "keywords",
+              label: "Keywords posicionadas",
+              info: {
+                source: "Search Console",
+                text: "Búsquedas de Google con impresiones en el periodo.",
+              },
+              unit: "number",
+              value: keywords.total,
+              previous: keywords.previousTotal,
+              previousYear: null,
+            }
+          : null,
+      ],
+    },
+  ];
+  const format = (row: MetricRow, value: number | null) =>
+    row.unit === "percent" ? percent(value) : number(value);
+  return (
+    <table className="brand-metrics-table">
+      <caption className="ds-sr-only">
+        Indicadores del periodo y valores de comparación
+      </caption>
+      <thead>
+        <tr>
+          <th scope="col">Indicador</th>
+          <th scope="col" className="is-trend">
+            <span className="ds-sr-only">Tendencia del periodo</span>
+          </th>
+          <th scope="col" className="is-num">
+            Actual
+          </th>
+          <th scope="col" className="is-num">
+            {previousName(report)}
+          </th>
+          <th scope="col" className="is-num">
+            Variación
+          </th>
+          <th scope="col" className="is-num">
+            Año pasado
+          </th>
+          <th scope="col" className="is-num">
+            Interanual
+          </th>
+        </tr>
+      </thead>
+      {groups.map((group) => (
+        <tbody key={group.title}>
+          <tr className="brand-metrics-group">
+            <th scope="colgroup" colSpan={7}>
+              {group.title}
+            </th>
+          </tr>
+          {group.rows.flatMap((row) =>
+            row
+              ? [
+                  <tr key={row.key}>
+                    <th scope="row">
+                      <span className="brand-kpi-title">
+                        {row.label}
+                        <InfoHint
+                          title={row.label}
+                          source={row.info.source}
+                          text={row.info.text}
+                        />
+                      </span>
+                    </th>
+                    <td className="is-trend">
+                      {row.trend ? (
+                        <Sparkline points={row.trend} width={64} height={20} />
+                      ) : null}
+                    </td>
+                    <td className="is-num brand-metrics-current">
+                      {format(row, row.value)}
+                    </td>
+                    <td className="is-num">{format(row, row.previous)}</td>
+                    <td className="is-num">
+                      <ChangeCell
+                        value={row.value}
+                        base={row.previous}
+                        unit={row.unit}
+                      />
+                    </td>
+                    <td className="is-num">{format(row, row.previousYear)}</td>
+                    <td className="is-num">
+                      <ChangeCell
+                        value={row.value}
+                        base={row.previousYear}
+                        unit={row.unit}
+                      />
+                    </td>
+                  </tr>,
+                ]
+              : [],
+          )}
+        </tbody>
+      ))}
+    </table>
+  );
+}
+
+/** Conversiones SEO en la barra inferior, al final (D-045). */
+function LeadsInline({ report }: { report: BrandReport }) {
+  const item = metric(report, "search_leads");
+  if (!item) return null;
+  const flagged = report.dataQuality.some((note) =>
+    /conversiones/i.test(note.text),
+  );
+  return (
+    <span>
+      {labels.search_leads}
+      <strong>{number(item.value)}</strong>
+      <span title={`vs. ${report.window.previousLabel}`}>
+        <Delta value={item.value} base={item.previous} neutral={flagged} />
+        <span className="ds-sr-only"> vs. {report.window.previousLabel}</span>
+      </span>
+      {flagged ? (
+        <a
+          className="brand-kpi-note"
+          href="#calidad"
+          title="Medición por validar"
+        >
+          <Info size={13} aria-hidden />
+          <span className="ds-sr-only">Medición por validar</span>
+        </a>
+      ) : null}
+    </span>
+  );
+}
+
+/**
+ * Periodo y mercado del informe. En la vista normal viven en la barra superior
+ * (D-044); en el modo presentación, sin shell, vuelven al propio informe. En
+ * ambos casos deben estar dentro del mismo `ReportNavigationProvider` que la
+ * vista, porque comparten la carga por zonas de D-042.
+ */
+export function BrandReportControls({
+  report,
+  variant = "bar",
+}: {
+  report: BrandReport;
+  variant?: "bar" | "header";
+}) {
+  const search = metric(report, "search_sessions");
+  return (
+    <RangePicker
+      compact
+      variant={variant}
+      applied={report.window}
+      cutoff={report.cutoff}
+      gscFloor={report.gscFloor}
+      marketSlot={
+        <MarketPicker
+          compact
+          variant={variant}
+          markets={report.markets}
+          selected={report.market}
+          totalSessions={
+            report.market === "all" ? (search?.value ?? null) : null
+          }
+          totalPrevious={
+            report.market === "all" ? (search?.previous ?? null) : null
+          }
+          comparisonLabel={report.window.previousLabel}
+        />
+      }
+    />
+  );
+}
+
+/** Logotipos oficiales facilitados por cada marca (`public/brands`). Sin logo, el título es el nombre. */
+const BRAND_LOGOS: Partial<Record<string, string>> = {
+  xtone: "/brands/xtone.svg",
+};
 
 /** Vista compartida de datos por marca. Los diagnósticos automáticos se conservan en el contrato, pero no se publican aquí. */
 export function BrandReportView({
@@ -235,22 +878,24 @@ export function BrandReportView({
   present,
   baseHref,
   query,
+  controlsInHeader = false,
 }: {
   report: BrandReport;
   tab: ReportTab;
   present: boolean;
   baseHref: string;
   query: string;
+  /** La página ya pinta periodo y mercado en la cabecera del shell. */
+  controlsInHeader?: boolean;
 }) {
   const brand = findBrand(report.brand)!;
   const href = (key: ReportTab) =>
     `${baseHref}?${new URLSearchParams({ ...Object.fromEntries(new URLSearchParams(query)), tab: key })}`;
-  const search = metric(report, "search_sessions");
   const selectedMarket = report.markets.find(
     (item) => item.code === report.market,
   );
   return (
-    <ReportNavigationProvider>
+    <>
       <main
         className={`page report brand-report ${present ? "report-present" : ""}`}
         id="contenido"
@@ -258,16 +903,19 @@ export function BrandReportView({
         <ReportPrint />
         <header className="brand-header">
           <div>
-            <nav
-              className="brand-breadcrumb no-print"
-              aria-label="Ruta del proyecto"
-            >
-              <Link href="/projects">Proyectos</Link>
-              <span aria-hidden>/</span>
-              <span>{brand.name}</span>
-            </nav>
             <div className="brand-title">
-              <h1>{brand.name}</h1>
+              <h1>
+                {BRAND_LOGOS[brand.slug] ? (
+                  /* eslint-disable-next-line @next/next/no-img-element -- SVG estático de marca; next/image no aporta nada aquí. */
+                  <img
+                    className="brand-logo"
+                    src={BRAND_LOGOS[brand.slug]}
+                    alt={brand.name}
+                  />
+                ) : (
+                  brand.name
+                )}
+              </h1>
               <span>Rendimiento orgánico</span>
             </div>
             <p className="brand-domain">
@@ -280,26 +928,9 @@ export function BrandReportView({
           </div>
           <PresentControls present={present} />
         </header>
-        <RangePicker
-          compact
-          applied={report.window}
-          cutoff={report.cutoff}
-          gscFloor={report.gscFloor}
-          marketSlot={
-            <MarketPicker
-              compact
-              markets={report.markets}
-              selected={report.market}
-              totalSessions={
-                report.market === "all" ? (search?.value ?? null) : null
-              }
-              totalPrevious={
-                report.market === "all" ? (search?.previous ?? null) : null
-              }
-              comparisonLabel={report.window.previousLabel}
-            />
-          }
-        />
+        {/* Con los controles en la cabecera, el corte ya se lee en el rango
+            del periodo, que termina en él. */}
+        {controlsInHeader ? null : <BrandReportControls report={report} />}
         <ReportUpdateStatus />
         <p className="brand-print-context">
           {date(report.window.start)} – {date(report.window.end)} ·{" "}
@@ -365,7 +996,7 @@ export function BrandReportView({
           </span>
         </footer>
       </main>
-    </ReportNavigationProvider>
+    </>
   );
 }
 
@@ -386,73 +1017,87 @@ function Summary({
         aria-label="Indicadores SEO del periodo"
       >
         <div className="brand-kpis">
+          <SearchTrafficCard report={report} />
           {primaryKeys.map((key) => {
             const item = metric(report, key);
-            return item ? <Kpi key={key} item={item} report={report} /> : null;
+            return item ? (
+              <Kpi
+                key={key}
+                item={item}
+                report={report}
+                help={false}
+                extra={
+                  key === "search_users" ? <UserMix report={report} /> : null
+                }
+                trend={
+                  key === "search_users"
+                    ? seriesValues(report.usersSeries, report.window.end)
+                    : undefined
+                }
+              />
+            ) : null;
           })}
+          <KeywordsCard report={report} />
+          <AiCard report={report} />
         </div>
         <ReportPendingZone variant="rows">
-          <div className="brand-secondary-metrics">
+          <div
+            className="brand-secondary-metrics"
+            role="region"
+            aria-label="Otras cifras del periodo"
+            tabIndex={0}
+          >
             {(["impressions", "ctr"] as const).map((key) => {
               const item = metric(report, key);
               return item ? (
-                <span key={key}>
-                  {labels[key]}
-                  <strong>
-                    {item.unit === "percent"
-                      ? percent(item.value)
-                      : number(item.value)}
-                  </strong>
-                  <Delta value={item.value} base={item.previous} />
-                  <small>vs. {report.window.previousLabel}</small>
-                </span>
+                <Fragment key={key}>
+                  <span>
+                    {labels[key]}
+                    <strong>
+                      {item.unit === "percent"
+                        ? percent(item.value)
+                        : number(item.value)}
+                    </strong>
+                    {trendOf(report, key) ? (
+                      <Sparkline
+                        points={trendOf(report, key)!}
+                        width={44}
+                        height={16}
+                      />
+                    ) : null}
+                    <span title={`vs. ${report.window.previousLabel}`}>
+                      <Delta value={item.value} base={item.previous} />
+                      <span className="ds-sr-only">
+                        {" "}
+                        vs. {report.window.previousLabel}
+                      </span>
+                    </span>
+                  </span>
+                  {key === "impressions" ? (
+                    /* Search Console no separa el Modo IA de la búsqueda web (D-045). */
+                    <span title="Impresiones en el Modo IA de Google">
+                      <GoogleLogo size={12} />
+                      Modo IA
+                      <strong>—</strong>
+                      <small>sin desglose</small>
+                    </span>
+                  ) : null}
+                </Fragment>
               ) : null;
             })}
+            <LeadsInline report={report} />
           </div>
         </ReportPendingZone>
         <details className="brand-disclosure brand-all-metrics">
           <summary>Ver cifras y comparaciones completas</summary>
           <ReportPendingZone variant="table">
             <div
-              className="report-data-scroll"
+              className="brand-metrics-scroll"
               role="region"
               aria-label="Todos los indicadores"
               tabIndex={0}
             >
-              <table className="report-data-table">
-                <caption className="ds-sr-only">
-                  Indicadores del periodo y valores de comparación
-                </caption>
-                <thead>
-                  <tr>
-                    <th scope="col">Indicador</th>
-                    <th scope="col">Actual</th>
-                    <th scope="col">{previousName(report)}</th>
-                    <th scope="col">Año pasado</th>
-                    <th scope="col">Fuente</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {report.kpis.map((item) => {
-                    const format = item.unit === "percent" ? percent : number;
-                    return (
-                      <tr key={item.key}>
-                        <th scope="row">{labels[item.key]}</th>
-                        <td className="report-data-numeric">
-                          {format(item.value)}
-                        </td>
-                        <td className="report-data-numeric">
-                          {format(item.previous)}
-                        </td>
-                        <td className="report-data-numeric">
-                          {format(item.previousYear)}
-                        </td>
-                        <td>{sourceName(item.source)}</td>
-                      </tr>
-                    );
-                  })}
-                </tbody>
-              </table>
+              <AllMetricsTable report={report} />
             </div>
             <p className="brand-caption">
               Tráfico total y conversiones sujetos a los avisos de medición.
@@ -468,8 +1113,9 @@ function Summary({
         subtitle={`${report.window.granularity === "day" ? "Datos diarios" : report.window.granularity === "week" ? "Datos semanales" : "Datos mensuales"} · ${date(report.window.start)} – ${date(report.window.end)}`}
       >
         <EvolutionChart
-          searchSeries={report.searchSeries}
           clickSeries={report.clickSeries}
+          impressionsSeries={report.impressionsSeries}
+          webSeries={report.webSeries}
           window={report.window}
           annotations={report.annotations}
         />
@@ -482,32 +1128,48 @@ function Summary({
             title="Canales de tráfico"
             subtitle="Visitas de toda la web · GA4"
           >
-            <div className="brand-list">
-              {report.channels.slice(0, 5).map((item) => (
-                <div className="brand-list-row" key={item.key}>
+            <div className="brand-list-head brand-channel-row" aria-hidden>
+              <span>Canal</span>
+              <span />
+              <span>Visitas</span>
+              <span>Variación</span>
+            </div>
+            <ExpandableList
+              className="brand-list"
+              rows={report.channels.map((item) => (
+                <div
+                  className="brand-list-row brand-channel-row"
+                  key={item.key}
+                >
                   <div>
-                    <span
-                      className={
-                        item.key === "Organic Search" ? "brand-emphasis" : ""
-                      }
-                    >
-                      {item.label}
-                    </span>
+                    <div className="brand-channel-name">
+                      <span
+                        className={
+                          item.key === "Organic Search" ? "brand-emphasis" : ""
+                        }
+                      >
+                        {item.label}
+                      </span>
+                      <small title="Cuota de las visitas de la web">
+                        {percent(item.share)}
+                      </small>
+                    </div>
                     <div className="brand-mini-track" aria-hidden>
                       <i style={{ width: `${Math.min(100, item.share)}%` }} />
                     </div>
                   </div>
+                  <span className="brand-list-trend">
+                    {item.trend.length > 1 ? (
+                      <Sparkline points={item.trend} width={56} height={18} />
+                    ) : null}
+                  </span>
                   <strong>{number(item.sessions)}</strong>
-                  <span>{percent(item.share)}</span>
+                  <span title={`vs. ${report.window.previousLabel}`}>
+                    <Delta value={item.sessions} base={item.previous || null} />
+                  </span>
                 </div>
               ))}
-            </div>
-            <details className="brand-disclosure">
-              <summary>
-                Ver los {report.channels.length} canales y comparativas
-              </summary>
-              <Channels report={report} />
-            </details>
+            />
           </Section>
           <Section
             id="mercados-resumen"
@@ -525,22 +1187,30 @@ function Summary({
               />
             }
           >
-            <div className="brand-list">
-              {[...report.markets]
-                .filter((item) => item.tier1)
-                .sort((a, b) => b.sessions - a.sessions)
+            <div className="brand-list-head brand-market-row" aria-hidden>
+              <span>Mercado</span>
+              <span>Visitas</span>
+              <span>Variación</span>
+            </div>
+            <ExpandableList
+              className="brand-list"
+              rows={[...report.markets]
+                .sort(
+                  (a, b) =>
+                    Number(b.tier1) - Number(a.tier1) ||
+                    b.sessions - a.sessions,
+                )
                 .map((item) => (
-                  <div className="brand-list-row" key={item.code}>
+                  <div
+                    className="brand-list-row brand-market-row"
+                    key={item.code}
+                  >
                     <span>{item.name}</span>
                     <strong>{number(item.sessions)}</strong>
                     <Delta value={item.sessions} base={item.previous} />
                   </div>
                 ))}
-            </div>
-            <p className="brand-caption">
-              Variación frente al {report.window.previousLabel}. Los mercados se
-              definen por sección y país.
-            </p>
+            />
           </Section>
         </div>
       ) : (
@@ -548,99 +1218,7 @@ function Summary({
           Canales y mercados no disponibles: GA4 no ha respondido.
         </p>
       )}
-      <details className="brand-disclosure brand-history">
-        <summary>Histórico mensual · últimos 12 meses cerrados</summary>
-        <ReportPendingZone scope="market" variant="chart">
-          <p className="brand-caption">
-            Visitas SEO por mes frente al mismo mes del año anterior · GA4.
-          </p>
-          <CompareBars
-            label="Visitas SEO por mes frente al año anterior"
-            categories={report.months.map((item) => item.label)}
-            series={[
-              {
-                key: "current",
-                name: "Actual",
-                values: report.months.map((item) => item.searchSessions),
-              },
-              {
-                key: "previousYear",
-                name: "Año anterior",
-                values: report.months.map(
-                  (item) => item.searchSessionsPreviousYear,
-                ),
-              },
-            ]}
-          />
-          <ReportDataTable
-            id="monthly"
-            caption="Histórico mensual"
-            columns={[
-              { key: "month", label: "Mes" },
-              { key: "sessions", label: "Visitas SEO", numeric: true },
-              { key: "previous", label: "Año anterior", numeric: true },
-            ]}
-            rows={report.months.map((item) =>
-              row(
-                item.month,
-                {
-                  month: item.month,
-                  sessions: item.searchSessions,
-                  previous: item.searchSessionsPreviousYear,
-                },
-                {
-                  month: item.label,
-                  sessions: number(item.searchSessions),
-                  previous: number(item.searchSessionsPreviousYear),
-                },
-              ),
-            )}
-          />
-        </ReportPendingZone>
-      </details>
     </>
-  );
-}
-function Channels({ report }: { report: BrandReport }) {
-  return (
-    <ReportDataTable
-      id="channels"
-      caption="Canales de tráfico"
-      searchPlaceholder="Buscar canal…"
-      columns={[
-        { key: "channel", label: "Canal" },
-        { key: "sessions", label: "Visitas", numeric: true },
-        { key: "share", label: "Cuota", numeric: true },
-        {
-          key: "change",
-          label: `vs. ${previousName(report).toLowerCase()}`,
-          numeric: true,
-        },
-        { key: "year", label: "vs. año pasado", numeric: true },
-        { key: "leads", label: "Conversiones", numeric: true },
-      ]}
-      rows={report.channels.map((item) =>
-        row(
-          item.key,
-          {
-            channel: item.label,
-            sessions: item.sessions,
-            share: item.share,
-            change: delta(item.sessions, item.previous),
-            year: delta(item.sessions, item.previousYear),
-            leads: item.leads,
-          },
-          {
-            sessions: number(item.sessions),
-            share: percent(item.share),
-            change: <Delta value={item.sessions} base={item.previous} />,
-            year: <Delta value={item.sessions} base={item.previousYear} />,
-            leads: number(item.leads),
-          },
-        ),
-      )}
-      note="GA4 · Todas las visitas. Las anomalías de medición se detallan al pie de la página."
-    />
   );
 }
 function Coverage({

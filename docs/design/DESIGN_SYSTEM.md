@@ -243,3 +243,20 @@ line and announce the destination in a fixed, unobtrusive status. Mobile
 navigation closes on selection and restores focus to the menu trigger.
 Respect reduced motion, preserve prefetch and normal link interactions, and
 remove feedback on completion. Never display invented progress percentages.
+
+
+## shadcn/ui and dashboard-01 shell · D-044 (2026-09-24)
+
+- The viewer builds new UI with shadcn/ui on Tailwind v4. shadcn tokens are
+  aliases of the shared `--ds-*` tokens, never new values: primary = cobalt,
+  sidebar = mineral surface, border = hairline, radius = `--ds-radius-*`.
+- Shell: inset sidebar on mineral paper, white canvas for content, sticky
+  header with section title, global filters and search. On mobile the sidebar
+  is a sheet and filters form a three-column second row.
+- KPI cards keep the MetricStrip contract: coverage, previous period, YoY and
+  target stay visible. Chart cards keep ECharts and the tabular alternative.
+- Semantic colours stay semantic (`positive`, `warning`, `danger` utilities).
+- Header: breadcrumb is the only one in the product. On a brand report the
+  period and market pickers live in the header; the data cut-off stays under
+  the report title. The header live indicator uses `--ds-live` (a blinking
+  light-green dot) only when GA4 Realtime returns data; otherwise it is grey.

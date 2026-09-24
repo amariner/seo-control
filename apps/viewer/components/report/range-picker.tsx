@@ -110,13 +110,17 @@ export function RangePicker({
   gscFloor,
   marketSlot,
   compact = false,
+  variant = "bar",
 }: {
   applied: ReportWindow;
   cutoff: string;
   gscFloor: string;
   marketSlot?: ReactNode;
   compact?: boolean;
+  /** `header`: una sola línea en la barra superior (D-044); el corte lo pinta el informe. */
+  variant?: "bar" | "header";
 }) {
+  const inHeader = variant === "header";
   const router = useRouter();
   const pathname = usePathname();
   const params = useSearchParams();
@@ -276,9 +280,9 @@ export function RangePicker({
   const compareEnd = addDays(compareStart, resolved.days - 1);
 
   return (
-    <div className="range-bar no-print">
+    <div className={`range-bar no-print ${inHeader ? "range-bar-header" : ""}`}>
       <div className="range-anchor">
-        <span className="range-label">Periodo</span>
+        <span className={inHeader ? "ds-sr-only" : "range-label"}>Periodo</span>
         <button
           ref={trigger}
           type="button"
@@ -291,9 +295,11 @@ export function RangePicker({
           <CalendarRange size={16} aria-hidden />
           <span className="range-trigger-main">
             <strong>{displayed.label}</strong>
-            {compact ? null : ` · ${fmtRange(displayed.start, displayed.end)}`}
+            {compact && !inHeader
+              ? null
+              : ` · ${fmtRange(displayed.start, displayed.end)}`}
           </span>
-          <span className="range-trigger-sub">
+          <span className={inHeader ? "ds-sr-only" : "range-trigger-sub"}>
             {compact ? (
               fmtRange(displayed.start, displayed.end)
             ) : (
@@ -644,7 +650,9 @@ export function RangePicker({
       </div>
 
       {marketSlot}
-      <p className="range-note">Datos cerrados hasta el {fmt(cutoff)}</p>
+      {inHeader ? null : (
+        <p className="range-note">Datos cerrados hasta el {fmt(cutoff)}</p>
+      )}
     </div>
   );
 }
@@ -761,21 +769,26 @@ export function PresentControls({ present }: { present: boolean }) {
   }
   return (
     <div className="present-controls no-print">
-      <button
-        className="ds-button ds-button-compact"
-        type="button"
-        onClick={toggle}
-        disabled={navigation?.pending}
-      >
-        {present ? "Salir del modo presentación" : "Modo presentación"}
-      </button>
+      {/* El botón de entrada se retiró (D-044); solo se conserva la salida
+          para quien llegue con un enlace antiguo `?modo=presentacion`. */}
+      {present ? (
+        <button
+          className="ds-button ds-button-compact"
+          type="button"
+          onClick={toggle}
+          disabled={navigation?.pending}
+        >
+          Salir del modo presentación
+        </button>
+      ) : null}
       <button
         className="ds-button ds-button-compact"
         type="button"
         onClick={() => window.print()}
         disabled={navigation?.pending}
+        title="Abre el diálogo de impresión para guardar el informe en PDF"
       >
-        Imprimir o guardar PDF
+        Exportar PDF
       </button>
     </div>
   );

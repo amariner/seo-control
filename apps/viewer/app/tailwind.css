@@ -1,0 +1,174 @@
+/*
+ * Tailwind v4 + shadcn/ui para el visor (D-044).
+ *
+ * Los tokens de shadcn no introducen colores nuevos: cada uno apunta a un token
+ * `--ds-*` de `@seo/ui/tokens.css`, que sigue siendo la única fuente visual.
+ * Los tokens compartidos entran en la capa `base` para que las utilidades de
+ * Tailwind y los componentes shadcn puedan sobrescribir sus reglas globales
+ * (foco, enlaces, botones). `globals.css` entra en `components`: sigue ganando
+ * a los tokens, pero una utilidad explícita gana a sus selectores de elemento.
+ */
+@layer theme, base, components, utilities;
+
+@import "tailwindcss/theme.css" layer(theme);
+@import "tailwindcss/preflight.css" layer(base);
+@import "@seo/ui/tokens.css" layer(base);
+@import "./globals.css" layer(components);
+@import "tailwindcss/utilities.css" layer(utilities);
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+:root {
+  --radius: var(--ds-radius-md);
+  /* Altura real de la cabecera del visor; SiteHeader la actualiza al medirla. */
+  --app-header-offset: 57px;
+
+  --background: var(--ds-canvas);
+  --foreground: var(--ds-ink);
+  --card: var(--ds-surface-raised);
+  --card-foreground: var(--ds-ink);
+  --popover: var(--ds-surface-raised);
+  --popover-foreground: var(--ds-ink);
+
+  /* Cobalto: interacción, selección, procedencia y serie principal. */
+  --primary: var(--ds-accent);
+  --primary-foreground: #ffffff;
+  --secondary: var(--ds-surface);
+  --secondary-foreground: var(--ds-ink);
+  --muted: var(--ds-surface);
+  --muted-foreground: var(--ds-muted);
+  --accent: var(--ds-surface);
+  --accent-foreground: var(--ds-ink);
+  --destructive: var(--ds-danger);
+
+  --border: var(--ds-line);
+  --input: var(--ds-line-strong);
+  --ring: var(--ds-accent);
+
+  --chart-1: var(--ds-accent);
+  --chart-2: var(--ds-graphite);
+  --chart-3: var(--ds-accent-hover);
+  --chart-4: var(--ds-positive);
+  --chart-5: var(--ds-warning);
+
+  /* Papel mineral como marco; el lienzo blanco queda para el contenido. */
+  --sidebar: var(--ds-surface);
+  --sidebar-foreground: var(--ds-text);
+  --sidebar-primary: var(--ds-accent);
+  --sidebar-primary-foreground: #ffffff;
+  --sidebar-accent: var(--ds-surface-subtle);
+  --sidebar-accent-foreground: var(--ds-ink);
+  --sidebar-border: var(--ds-line);
+  --sidebar-ring: var(--ds-accent);
+}
+
+@theme inline {
+  --font-sans: var(--ds-font-sans);
+  --font-serif: var(--ds-font-serif);
+
+  --radius-xs: var(--ds-radius-xs);
+  --radius-sm: var(--ds-radius-sm);
+  --radius-md: calc(var(--ds-radius-md) - 2px);
+  --radius-lg: var(--ds-radius-md);
+  --radius-xl: var(--ds-radius-lg);
+
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+
+  /* Estados semánticos del contrato: nunca decoración. */
+  --color-positive: var(--ds-positive);
+  --color-positive-soft: var(--ds-positive-soft);
+  --color-warning: var(--ds-warning);
+  --color-warning-soft: var(--ds-warning-soft);
+  --color-danger: var(--ds-danger);
+  --color-danger-soft: var(--ds-danger-soft);
+  --color-accent-soft: var(--ds-accent-soft);
+  --color-accent-band: var(--ds-accent-band);
+  --color-ink: var(--ds-ink);
+  --color-graphite: var(--ds-graphite);
+  --color-live: var(--ds-live);
+
+  --animate-live-blink: live-blink 1.6s ease-in-out infinite;
+  @keyframes live-blink {
+    0%, 100% { opacity: 1; box-shadow: 0 0 0 0 var(--ds-live-ring); }
+    50% { opacity: 0.35; box-shadow: 0 0 0 4px var(--ds-live-ring); }
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  /* 1rem = 16 px para las medidas de shadcn; el cuerpo mantiene 15/24. */
+  html {
+    font-size: 16px;
+  }
+  body {
+    @apply bg-background text-foreground;
+    font: var(--ds-text-body);
+    font-variant-numeric: tabular-nums;
+  }
+  /* Preflight anula márgenes y viñetas del agente de usuario; las páginas que
+     aún no usan shadcn dependían de ellos. Se devuelven al valor del navegador
+     salvo en los elementos de shadcn (`data-slot`), que traen los suyos. */
+  :where(p, blockquote, figure, dl, dd, ul, ol, menu):not([data-slot]) {
+    margin: revert;
+    padding: revert;
+  }
+  :where(ul, ol, menu):not([data-slot]) {
+    list-style: revert;
+  }
+}
+
+/*
+ * Margen lateral común (D-044). El contenido de cada vista ocupa el ancho del
+ * inset y arranca en la misma línea que los iconos de los extremos de la barra
+ * superior (menú a la izquierda, búsqueda a la derecha). Va sin capa porque
+ * los CSS de vista (`brand-report.css`, módulos) tampoco la tienen.
+ */
+:root {
+  --app-gutter: 16px;
+}
+@media (min-width: 1024px) {
+  :root {
+    --app-gutter: 24px;
+  }
+}
+[data-slot="sidebar-inset"] main#contenido {
+  max-width: none;
+  margin-inline: 0;
+  padding-inline: var(--app-gutter);
+}
+[data-slot="sidebar-inset"] main#contenido.page-reading {
+  max-width: calc(var(--ds-readable) + 2 * var(--app-gutter));
+}

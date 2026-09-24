@@ -1,4 +1,6 @@
 .page {
+  width: 100%;
+  min-width: 0;
   max-width: 1408px;
   margin: 0 auto;
   padding: 42px 48px 48px;

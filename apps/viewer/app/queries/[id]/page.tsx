@@ -30,6 +30,7 @@ export default async function QueryDetail({
     <PageFrame
       eyebrow="Keyword"
       title={id.replaceAll("-", " ")}
+      crumb={id.replaceAll("-", " ")}
       description="Evidencia de origen y piezas editoriales vinculadas."
       generatedAt={data.generatedAt}
       aside={<Badge tone="warn">Sin serie propia</Badge>}

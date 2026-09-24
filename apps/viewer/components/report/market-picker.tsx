@@ -55,6 +55,7 @@ export function MarketPicker({
   totalPrevious,
   comparisonLabel,
   compact = false,
+  variant = "bar",
 }: {
   markets: Market[];
   selected: string;
@@ -62,7 +63,10 @@ export function MarketPicker({
   totalPrevious: number | null;
   comparisonLabel: string;
   compact?: boolean;
+  /** `header`: una sola línea en la barra superior (D-044). */
+  variant?: "bar" | "header";
 }) {
+  const inHeader = variant === "header";
   const router = useRouter();
   const pathname = usePathname();
   const params = useSearchParams();
@@ -192,7 +196,10 @@ export function MarketPicker({
 
   return (
     <div className="market-anchor">
-      <span className="range-label" id="mercado-label">
+      <span
+        className={inHeader ? "ds-sr-only" : "range-label"}
+        id="mercado-label"
+      >
         Mercado
       </span>
       <button
@@ -212,7 +219,7 @@ export function MarketPicker({
             ? ` · ${displayed.definition}`
             : ""}
         </span>
-        <span className="range-trigger-sub">
+        <span className={inHeader ? "ds-sr-only" : "range-trigger-sub"}>
           {compact ? (
             (displayed?.definition ?? "Todas las secciones de la web")
           ) : (

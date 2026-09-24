@@ -134,12 +134,27 @@ export async function ga4Batch(env: Env, propertyId: string, requests: Ga4Reques
   return reports;
 }
 
+/**
+ * Usuarios activos en los últimos 30 minutos (GA4 Realtime API). La API no
+ * expone canal, fuente ni ruta: la cifra es el tráfico total de la propiedad.
+ */
+export async function ga4RealtimeActiveUsers(env: Env, propertyId: string): Promise<number> {
+  const token = await ga4Token(env);
+  const result = await postJson<{ rows?: Ga4Row[]; totals?: Ga4Row[] }>(
+    `https://analyticsdata.googleapis.com/v1beta/properties/${propertyId}:runRealtimeReport`,
+    token,
+    { metrics: [{ name: "activeUsers" }] },
+  );
+  const row = result.rows?.[0] ?? result.totals?.[0];
+  return Number(row?.metricValues?.[0]?.value ?? 0);
+}
+
 // ---------------------------------------------------------------------------
 // Search Console API
 // ---------------------------------------------------------------------------
 
 export type GscFilter = { dimension: "page" | "query" | "country" | "device"; operator: "includingRegex" | "excludingRegex" | "equals" | "contains"; expression: string };
-export type GscRequest = { startDate: string; endDate: string; dimensions?: Array<"date" | "page" | "query" | "country">; filters?: GscFilter[]; rowLimit?: number };
+export type GscRequest = { startDate: string; endDate: string; dimensions?: Array<"date" | "page" | "query" | "country">; filters?: GscFilter[]; rowLimit?: number; startRow?: number; /** Tipo de búsqueda; por defecto `web`, que es lo que suma el panel. */ type?: "web" | "image" };
 export type GscRow = { keys?: string[]; clicks: number; impressions: number; ctr: number; position: number };
 
 export async function gscQuery(env: Env, siteUrl: string, request: GscRequest): Promise<GscRow[]> {
@@ -150,6 +165,8 @@ export async function gscQuery(env: Env, siteUrl: string, request: GscRequest): 
     dimensions: request.dimensions ?? [],
     dimensionFilterGroups: request.filters?.length ? [{ groupType: "and", filters: request.filters }] : undefined,
     rowLimit: request.rowLimit ?? 1000,
+    startRow: request.startRow,
+    type: request.type,
     dataState: "final",
   };
   const result = await postJson<{ rows?: GscRow[] }>(`https://www.googleapis.com/webmasters/v3/sites/${encodeURIComponent(siteUrl)}/searchAnalytics/query`, token, body);

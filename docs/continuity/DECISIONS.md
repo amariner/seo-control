@@ -1244,3 +1244,208 @@ No se reescriben decisiones antiguas. Si una cambia, se añade una nueva entrada
   al destino. Las respuestas rápidas no mantienen el indicador artificialmente.
 - Alcance: menú principal del visor. Complementa los skeletons de informes
   D-042 sin modificar sus filtros. Sin nuevas dependencias ni despliegue.
+
+
+## D-044 · shadcn/ui y layout dashboard-01 en el visor
+
+- Fecha: 2026-09-24. Estado: vigente en la rama `feat/shadcn-dashboard`,
+  pendiente de revisión y fusión. Petición explícita del usuario.
+- El visor incorpora Tailwind v4 (`@tailwindcss/postcss`) y shadcn/ui
+  (`components.json`, estilo new-york, `components/ui/*`). El workbench no cambia.
+- Los tokens de shadcn no añaden colores: `--primary` es el cobalto
+  `--ds-accent`, `--sidebar` el papel mineral `--ds-surface`, `--border`
+  `--ds-line`, radios `--ds-radius-*`, tipografía `--ds-font-sans`. Estados
+  positivos/aviso/peligro como utilidades `positive`, `warning`, `danger`.
+- Orden de capas: preflight y `@seo/ui/tokens.css` en `base`, `globals.css` en
+  `components`, utilidades encima. Las vistas no migradas recuperan márgenes y
+  viñetas del navegador fuera de elementos shadcn (`data-slot`).
+- Shell común: `SidebarProvider` + `AppSidebar` (variante inset, grupos
+  Rendimiento/Decisiones, búsqueda cruzada y Datos) + `SiteHeader` con filtros
+  globales en `Select`. `SidebarInset` es `div` porque cada vista tiene su `main`.
+  La altura real de la cabecera se publica en `--app-header-offset`.
+- Portada: tarjetas KPI que conservan cobertura, periodo anterior, interanual y
+  objetivo; tarjeta de evolución con selector de periodo ligado al parámetro
+  `period`; mercados, proyectos, acciones, asistentes y fuentes en tarjetas.
+- ECharts sigue siendo la librería de gráficos (D-041); no se instala recharts.
+  Se descartan del bloque la tabla con drag-and-drop, sus datos de ejemplo,
+  vaul, sonner y los iconos Tabler (se mantiene lucide).
+- Ajuste del 2026-09-24 (petición del usuario): la búsqueda sale del menú
+  lateral y queda solo en la cabecera. La cabecera muestra la única miga de pan
+  del visor (`lib/navigation.ts#buildBreadcrumb`: «Proyectos / XTONE»,
+  «Editorial / Backlog y plan», «Informes / título»); las vistas ya no pintan la
+  suya. Las fichas de detalle pasan su título con `crumb`. `.page` ocupa el
+  100 % del inset para que su margen automático no la encoja al contenido.
+- Ajuste del 2026-09-24 (petición del usuario): en la ficha de una marca con
+  informe, periodo y mercado pasan a la barra superior (`AppShell.headerControls`,
+  variante `header` de RangePicker/MarketPicker). `ReportNavigationProvider`
+  envuelve ahora el shell para que cabecera e informe compartan la carga por
+  zonas de D-042; en modo presentación los controles vuelven al informe. El
+  corte se mantiene visible bajo el título («Datos cerrados hasta…»).
+- El «Corte» de la cabecera se sustituye por usuarios activos en tiempo real:
+  `GET /api/v1/realtime?project=` → `readRealtime` (GA4 Realtime, `activeUsers`
+  de 30 min, caché de servidor de 30 s, sondeo cada 60 s con la pestaña
+  visible). Es tráfico total de la propiedad, no orgánico ni por mercado, y así
+  se etiqueta. Solo con `SEO_DATA_SOURCE=live`; sin él, punto gris y «Tiempo
+  real no disponible», nunca una cifra sintética. En el conjunto suma el piloto.
+- Nuevo token `--ds-live` (#3ddc84) solo para el punto intermitente
+  (`animate-live-blink`), que respeta movimiento reducido.
+- Ajuste del 2026-09-24 (petición del usuario): los selectores de periodo y
+  mercado de la barra son botones sin borde (fondo mineral al pasar el ratón,
+  anillo de foco). Margen lateral común `--app-gutter` (16 px, 24 px desde
+  1024 px): la barra y el `main#contenido` de cada vista lo comparten y el
+  contenido ocupa todo el ancho del inset, alineado con el icono del menú y el
+  de búsqueda. Se retira el ancho máximo centrado; las vistas de lectura
+  (`.page-reading`) conservan su medida alineada a la izquierda.
+- Ajuste del 2026-09-24: la ficha de XTONE usa el logotipo oficial facilitado
+  por el usuario (`apps/viewer/public/brands/xtone.svg`, viewBox recortado al
+  contenido, sin otros cambios) como contenido del `h1`, con `alt` «XTONE».
+  `BRAND_LOGOS` en `brand-report.tsx` admite el resto de marcas cuando lleguen.
+- Ajuste del 2026-09-24: logotipo de marca a 20–24 px de alto; se retira el
+  botón «Modo presentación» (la salida sigue disponible para enlaces antiguos
+  con `?modo=presentacion`); el submenú del informe (`.brand-tabs`) queda fijo
+  bajo la barra superior usando `--app-header-offset`.
+- Ajuste del 2026-09-24: se retira «Datos cerrados hasta…» bajo el título del
+  informe; el rango de la barra superior termina en el corte. El panel del
+  calendario sigue sin permitir días posteriores al corte.
+- Ajuste del 2026-09-24: aire simétrico en la cabecera del informe de marca
+  (`--brand-gap`: 42/32/24 px) encima del logo y antes del submenú; el aviso de
+  actualización de D-042 se superpone a ese hueco sin reservar altura propia.
+
+
+## D-045 · Visitas SEO y clics de Google en una sola tarjeta
+
+- Fecha: 2026-09-24. Estado: en prueba en `feat/shadcn-dashboard`. Petición del usuario.
+- La ficha de marca muestra tres tarjetas: Visitas SEO (cifra principal, GA4)
+  con «Desde Google · N clics» de Search Console en pequeño dentro de la misma
+  tarjeta, Clics sin marca y Conversiones SEO al final. Sin notas aclaratorias.
+- La barra inferior (impresiones, CTR) añade «Impresiones en Modo IA». Search
+  Console no separa el Modo IA de la búsqueda web (comprobado por API el
+  2026-09-24: `searchAppearance` solo devuelve vídeo, resultado traducido y
+  fragmento de producto), así que se muestra «—» sin estimar.
+- El informe incorpora `searchReconciliation` (sesiones orgánicas por buscador
+  y clics de Google Imágenes). Hoy no se pinta; queda para explicar la
+  diferencia si el usuario lo pide. Primera versión con tarjeta ampliada y notas
+  descartada por el usuario.
+- Ajuste del 2026-09-24: nueva tarjeta **Usuarios SEO** tras Visitas SEO
+  (KPI `search_users`: `totalUsers` del canal Organic Search en GA4, mismo
+  mercado y comparaciones; se lee en la consulta de canales, sin llamadas
+  extra). Orden: Visitas SEO, Usuarios SEO, Clics sin marca, Conversiones SEO.
+- Ajuste del 2026-09-24: tarjetas Visitas SEO · Usuarios SEO · Clics sin marca
+  (al final, con anillo SVG marca / sin marca). Conversiones SEO pasa al final de
+  la barra inferior (Impresiones · CTR · Modo IA · Conversiones), con textos de
+  apoyo abreviados («vs. anterior», detalle en `title`) para caber en una línea.
+- Ajuste del 2026-09-24: Clics sin marca pasa a ser solo gráfico (anillo con
+  el porcentaje en el centro, leyenda marca / sin marca y variación en puntos
+  porcentuales). Visitas SEO y Usuarios SEO sin «Qué mide»; la línea de Search
+  Console dice «Google» y pierde la divisoria.
+- Ajuste del 2026-09-24: la tarjeta de Clics sin marca se sustituye por
+  **Keywords**: búsquedas de Google con impresiones en el periodo (Search
+  Console, mismo mercado), variación frente al periodo anterior y barra apilada
+  por posición media (≤3, 4–20, >20) con recuentos y porcentajes. Se pagina la
+  API (`startRow`, 25.000 filas por página) hasta 100.000 filas por periodo;
+  XTONE superaba las 25.000 y sin paginar el total y la variación salían
+  recortados. Clics sin marca sigue en la tabla completa. Nuevo token
+  `--ds-accent-mid` (#8ea0ff, ya en `SERIES_PALETTE`).
+- El contador de tiempo real reintenta a los 10 s si una lectura falla.
+- Ajuste del 2026-09-24: Keywords muestra bajo la cifra el % de keywords sin
+  marca (recuento de consultas que no casan con `brandRegex`; no es la cuota de
+  clics de «Clics sin marca»). La barra pierde la leyenda: cada tramo es
+  enfocable y enseña su cifra en un tooltip (ratón o teclado).
+
+
+## D-046 · Visitas desde IA en la ficha de marca
+
+- Fecha: 2026-09-24. Estado: en prueba en `feat/shadcn-dashboard`. Petición del usuario.
+- Cuarta tarjeta «Visitas desde IA»: sesiones GA4 cuyo `sessionSource` es un
+  asistente (ChatGPT, Gemini, Perplexity, Copilot, Claude, DeepSeek, otros), de
+  cualquier canal —GA4 clasifica parte de ChatGPT como Referral o Email— y en el
+  mismo mercado. Total, variación y tabla por asistente (máx. 5).
+- La fila «Modo IA» de Google sale de la barra inferior y pasa a esta tabla con
+  «—» y «sin desglose»: Search Console no lo separa (ver D-045).
+- Visitas SEO muestra el logotipo oficial «G» de Google en la línea de clics.
+- Ajuste del 2026-09-24: la tarjeta de IA pierde la cifra grande y la variación; el total pasa a una fila «Total» de la tabla, antes de Modo IA.
+- Ajuste del 2026-09-24: las tarjetas pierden la línea de fuente bajo el título; un icono Info junto al título (`InfoHint`, tooltip con ratón, teclado o toque) muestra fuente y definición. Se oculta al imprimir.
+- Ajuste del 2026-09-24: Usuarios SEO muestra «N % nuevos» con su variación
+  en puntos y una barra nuevos / recurrentes (tooltip por tramo). `userMix` sale
+  de `newUsers` en la consulta de canales (sin llamadas extra); recurrentes =
+  total − nuevos. `RankBar` se generaliza para ambas barras.
+- Ajuste del 2026-09-24: Modo IA pasa de la tabla de IA al final de Visitas
+  SEO («G Modo IA — sin desglose»). Usuarios SEO pierde la barra y conserva
+  «N % nuevos». La tabla de IA empieza por el Total, muestra los tres primeros
+  asistentes y despliega el resto con «Ver más (n)» (`ExpandableTable`); las
+  cuatro tarjetas quedan a la misma altura (224 px a 1440).
+- Ajuste del 2026-09-24: Modo IA vuelve a la barra inferior, tras Impresiones.
+  Usuarios SEO (% nuevos) y Keywords (% sin marca) muestran un anillo pequeño
+  (`MiniRing`) junto al porcentaje. Tarjetas alineadas a 217 px (1440).
+- Ajuste del 2026-09-24: el anillo de Keywords muestra la cuota de **clics**
+  sin marca (18,8 % en XTONE), no la de búsquedas distintas (96,9 %): 790
+  búsquedas de marca concentran 17.228 de los 21.223 clics con búsqueda
+  visible. Orden de la tarjeta: número, barra de posiciones, variación, anillo.
+  Los anillos de Usuarios y Keywords se anclan al pie de la tarjeta y llevan
+  variación en pp, así quedan a la misma altura.
+- Ajuste del 2026-09-24: Visitas SEO añade bajo Google una línea de Bing con
+  su logotipo (Simple Icons 12, CC0, trazado de bing.com, #258FFA; descargado
+  con permiso del usuario). Son visitas GA4 desde Bing —no hay clics de Bing
+  Webmaster conectados— con variación frente al periodo anterior; la lectura de
+  buscadores de origen pasa a periodos con nombre.
+- Ajuste del 2026-09-24: Visitas SEO, Usuarios SEO y Keywords muestran junto a la cifra principal la del periodo anterior, en pequeño con su etiqueta (`PreviousFigure`).
+- Ajuste del 2026-09-24: junto a la cifra principal va solo la variación frente al periodo anterior, con su color (`FigureDelta`, nombre accesible y title «vs. periodo anterior»); se retira la cifra anterior y la línea «vs. periodo anterior» de debajo. Se mantiene «vs. año pasado».
+- Ajuste del 2026-09-24: se descarta la variación junto a la cifra (vuelve a
+  «−25,2 % vs. periodo anterior» debajo). En su lugar, mini gráfica sin ejes
+  (`Sparkline`, 72×26) de la evolución del periodo junto a Visitas SEO
+  (`searchSeries`) y Usuarios SEO (nuevo `usersSeries`: suma de usuarios
+  diarios por tramo, válida para la forma, no como usuarios únicos; sale de la
+  consulta diaria existente con `totalUsers`). Keywords no la lleva: no hay
+  serie diaria de keywords sin una consulta búsqueda × día muy pesada.
+- Ajuste del 2026-09-24: la barra inferior añade mini gráficas a Impresiones y
+  CTR (nueva `impressionsSeries`; CTR por tramo = clics / impresiones) y pierde
+  el texto «vs. anterior» (queda en `title` y para lectores). La tabla «Ver
+  cifras y comparaciones completas» se rehace (`AllMetricsTable`): grupos
+  Buscadores · Analytics y Google · Search Console, icono Info por indicador en
+  lugar de columna de fuente, tendencia, actual, anterior, variación, año
+  pasado e interanual (píldoras de color; en porcentajes, puntos). Añade
+  Visitas desde IA y Keywords posicionadas.
+- Ajuste del 2026-09-24: las mini gráficas usan la media diaria de cada tramo;
+  el último tramo semanal está incompleto (90 días = 12 semanas + 6 días) y su
+  suma caía en picado. La tabla completa deja de heredar `report-data-table`
+  (cabeceras fijas que se superponían, mínimo de 145 px por columna) y pasa a
+  estilos propios compactos: 13 px, 7×12 px de relleno, columnas numéricas al
+  ancho de su contenido y sin desplazamiento vertical interno.
+- Ajuste del 2026-09-24: las variaciones de la tabla completa pasan a texto de color sin fondo.
+- Ajuste del 2026-09-24: «Evolución del tráfico» muestra solo Search Console,
+  con pestañas Clics en Google (cobalto) e Impresiones (violeta; nuevos tokens
+  `--ds-violet`/`--ds-violet-soft` y `CHART_COLORS.violet*`, reservados a esa
+  serie). Se retira el desplegable «Ver datos del gráfico»; la tabla se
+  mantiene solo para lectores de pantalla como alternativa accesible.
+- Ajuste del 2026-09-24: «Proyectos» del menú lateral pasa a ser un selector
+  (`ProjectSelector`, menú desplegable de shadcn): muestra la marca abierta
+  (p. ej. «XTONE») como elemento activo y lista Todos los proyectos, las de
+  serie analítica y las demás. Se retira la miga de pan de la cabecera: la
+  ubicación se lee en el menú. `buildBreadcrumb` y la prop `crumb` quedan sin
+  uso en pantalla (se conservan con sus pruebas por si vuelve).
+- Ajuste del 2026-09-24: la barra inferior es un carril horizontal deslizable
+  (una línea, `scroll-snap`, región enfocable con nombre) desde 761 px; en
+  móvil sigue apilada. `position: relative` en el carril: sin él, los textos
+  solo para lectores (posición absoluta) escapaban del recorte y ensanchaban la
+  página 198 px a 1024.
+- Ajuste del 2026-09-24: tercera pestaña «Tráfico total» en Evolución del
+  tráfico (GA4, todos los canales, mismo mercado; nueva `webSeries` con tres
+  consultas diarias en el mismo lote). Serie en tinta, comparaciones en grafito.
+- Ajuste del 2026-09-24: Canales de tráfico y Mercados principales muestran 5
+  filas y despliegan el resto con «Ver más (n)» (`ExpandableList`); Mercados
+  incluye ya los no Tier 1 tras los Tier 1. Canales añade variación frente al
+  periodo anterior y mini gráfica por canal (`channels[].trend`, media diaria
+  por tramo, una consulta GA4 fecha × canal). Se retira la tabla «Ver los N
+  canales y comparativas» (`Channels`), sustituida por la lista.
+- Ajuste del 2026-09-24: variaciones desde 1.000 % abreviadas en miles («+1,6k %», `signedPercent`, en todo el informe). En Canales, la cuota sale de su columna y va a la derecha del nombre, sobre la barra y alineada con su final (220 px).
+- Ajuste del 2026-09-24: Evolución del tráfico añade un interruptor Línea /
+  Barras sobre el mismo periodo seleccionado (barras agrupadas actual, anterior
+  y año anterior). Se retira el desplegable «Histórico mensual · últimos 12
+  meses cerrados» de la portada del informe. Canales y Mercados comparten
+  cabecera de columnas y altura de fila; se quita la nota bajo Mercados.
+- Ajuste del 2026-09-24: la fuente y la granularidad del gráfico de evolución («Google Search Console · Totales por semana») pasan bajo el gráfico, a la derecha, en lugar de la frase «Comparación por tramos equivalentes…», que se retira.
+- Ajuste del 2026-09-24: nuevo token `--ds-subtle` (#6e7875, 4,56:1 sobre blanco, el gris más claro que cumple AA) para los pies del gráfico de evolución: anotaciones, fuente y granularidad, en peso normal. El grafito (#7c8683, 3,75:1) se descartó por no cumplir AA en 12 px.
+- Ajuste del 2026-09-24: pies del gráfico de evolución en grafito (#7c8683, 3,75:1: por debajo de AA en 12 px, decisión explícita del usuario). Las fechas de cada serie de la leyenda pasan a tooltip: al pasar el ratón en escritorio y al tocar en pantallas táctiles (hover: none), donde el toque muestra las fechas en lugar de ocultar la serie; el nombre accesible del botón incluye las fechas.
+- Ajuste del 2026-09-24: el área del gráfico de evolución llega al borde derecho del interruptor Línea/Barras (margen derecho 0; primera y última etiqueta del eje alineadas hacia dentro; margen de categoría solo en barras).
+- Ajuste del 2026-09-24: la métrica del gráfico de evolución pasa a un desplegable (Select de shadcn) con logo de Google en Clics e Impresiones e icono neutro en Tráfico total (dato de GA4). El interruptor Línea/Barras queda solo con iconos, con nombre accesible y title.
+- Ajuste del 2026-09-24: la leyenda del gráfico de evolución pasa a la barra de herramientas, a la derecha del selector de métrica y antes del interruptor; en móvil va en su propia fila, en horizontal.

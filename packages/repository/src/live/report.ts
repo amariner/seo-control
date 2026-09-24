@@ -65,6 +65,18 @@ const CHANNEL_LABELS: Record<string, string> = {
   "Mobile Push Notifications": "Notificaciones",
 };
 
+/** Orígenes de asistentes de IA conocidos en GA4 (`sessionSource`). */
+const AI_ASSISTANTS = [
+  { key: "chatgpt", label: "ChatGPT", pattern: /chatgpt|openai/i },
+  { key: "gemini", label: "Gemini", pattern: /gemini\.google|bard\.google/i },
+  { key: "perplexity", label: "Perplexity", pattern: /perplexity/i },
+  { key: "copilot", label: "Copilot", pattern: /copilot/i },
+  { key: "claude", label: "Claude", pattern: /claude\.ai|anthropic/i },
+  { key: "deepseek", label: "DeepSeek", pattern: /deepseek/i },
+  { key: "otros", label: "Otros asistentes", pattern: /meta\.ai|grok|mistral|poe\.com|you\.com|phind/i },
+] as const;
+const AI_SOURCE_FILTER = { filter: { fieldName: "sessionSource", stringFilter: { matchType: "PARTIAL_REGEXP", value: "chatgpt|openai|gemini\\.google|bard\\.google|perplexity|copilot|claude\\.ai|anthropic|deepseek|meta\\.ai|grok|mistral|poe\\.com|you\\.com|phind", caseSensitive: false } } };
+
 const ORGANIC_CHANNEL = { filter: { fieldName: "sessionDefaultChannelGroup", stringFilter: { matchType: "EXACT", value: "Organic Search" } } };
 const and = (...expressions: Array<Record<string, unknown> | null>) => {
   const list = expressions.filter((item): item is Record<string, unknown> => item !== null);
@@ -276,7 +288,9 @@ export async function buildBrandReport(input: {
   const monthsEnd = iso(Date.UTC(ly, lm, 0));
 
   const organicScope = and(ORGANIC_CHANNEL, scopeGa4);
-  const daily = (range: Range): Ga4Request => ({ dateRanges: [range], dimensions: [{ name: "date" }], metrics: [{ name: "sessions" }], dimensionFilter: organicScope, limit: "1000" });
+  // Todos los canales, mismo mercado: pestaña «Tráfico total» del gráfico de evolución.
+  const webDaily = (range: Range): Ga4Request => ({ dateRanges: [range], dimensions: [{ name: "date" }], metrics: [{ name: "sessions" }], dimensionFilter: and(scopeGa4), limit: "1000" });
+  const daily = (range: Range): Ga4Request => ({ dateRanges: [range], dimensions: [{ name: "date" }], metrics: [{ name: "sessions" }, { name: "totalUsers" }], dimensionFilter: organicScope, limit: "1000" });
 
   let ga4: Ga4Report[] = [];
   let ga4Markets: Ga4Report[] = [];
@@ -288,13 +302,22 @@ export async function buildBrandReport(input: {
     try {
       [ga4, ga4Markets] = await Promise.all([
         ga4Batch(env, brand.propertyId, [
-          { dateRanges: named, dimensions: [{ name: "sessionDefaultChannelGroup" }], metrics: [{ name: "sessions" }, { name: "keyEvents" }], dimensionFilter: and(scopeGa4), limit: "100" },
+          { dateRanges: named, dimensions: [{ name: "sessionDefaultChannelGroup" }], metrics: [{ name: "sessions" }, { name: "keyEvents" }, { name: "totalUsers" }, { name: "newUsers" }], dimensionFilter: and(scopeGa4), limit: "100" },
           daily(ranges.current),
           daily(ranges.previous),
           daily(ranges.previousYear),
           { dateRanges: [{ startDate: monthsStart, endDate: monthsEnd }], dimensions: [{ name: "yearMonth" }], metrics: [{ name: "sessions" }], dimensionFilter: organicScope, limit: "100" },
           { dateRanges: [ranges.current], dimensions: [{ name: "landingPage" }], metrics: [{ name: "sessions" }, { name: "keyEvents" }], dimensionFilter: organicScope, orderBys: [{ metric: { metricName: "keyEvents" }, desc: true }], limit: "300" },
           { dateRanges: [ranges.current], dimensions: [{ name: "eventName" }], metrics: [{ name: "keyEvents" }], dimensionFilter: organicScope, orderBys: [{ metric: { metricName: "keyEvents" }, desc: true }], limit: "20" },
+          // Buscador de origen de las visitas orgánicas: explica la distancia con Search Console (D-045).
+          { dateRanges: named, dimensions: [{ name: "sessionSource" }], metrics: [{ name: "sessions" }], dimensionFilter: organicScope, orderBys: [{ metric: { metricName: "sessions" }, desc: true }], limit: "150" },
+          // Visitas desde asistentes de IA, de cualquier canal (D-046).
+          { dateRanges: named, dimensions: [{ name: "sessionSource" }], metrics: [{ name: "sessions" }], dimensionFilter: and(AI_SOURCE_FILTER, scopeGa4), limit: "100" },
+          webDaily(ranges.current),
+          webDaily(ranges.previous),
+          webDaily(ranges.previousYear),
+          // Visitas diarias por canal del periodo actual: mini gráfica de cada canal.
+          { dateRanges: [ranges.current], dimensions: [{ name: "date" }, { name: "sessionDefaultChannelGroup" }], metrics: [{ name: "sessions" }], dimensionFilter: and(scopeGa4), limit: "10000" },
         ]),
         ga4Batch(env, brand.propertyId, allMarkets.map((item) => ({ dateRanges: named, metrics: [{ name: "sessions" }, { name: "keyEvents" }], dimensionFilter: and(ORGANIC_CHANNEL, ga4MarketFilter(brand, item.scope)) }))),
       ]);
@@ -304,7 +327,7 @@ export async function buildBrandReport(input: {
       sources.push({ source: "ga4", ok: false, note: error instanceof Error ? error.message : String(error) });
     }
   }
-  const [channelReport, dailyCurrent, dailyPrevious, dailyPreviousYear, monthlyReport, landingReport, eventReport] = ga4;
+  const [channelReport, dailyCurrent, dailyPrevious, dailyPreviousYear, monthlyReport, landingReport, eventReport, sourceReport, aiReport, webDailyCurrent, webDailyPrevious, webDailyPreviousYear, channelDailyReport] = ga4;
 
   // ---- GSC -----------------------------------------------------------------
   const site = brand.siteUrl;
@@ -350,6 +373,9 @@ export async function buildBrandReport(input: {
     markets: Array<{ current: GscRow[] | null; previous: GscRow[] | null }>;
     migration: { before: GscRow[]; after: GscRow[] } | null;
     editorial: Array<{ target: EditorialTarget; rows: GscRow[]; checked: boolean }>;
+    images: GscRow[] | null;
+    keywordsNow: GscRow[] | null;
+    keywordsBefore: GscRow[] | null;
   };
   let gsc: GscData | null = null;
   if (!site) sources.push({ source: "gsc", ok: false, note: `Falta ${brand.siteEnv}` });
@@ -361,7 +387,7 @@ export async function buildBrandReport(input: {
         opt(gscRanges.previousYear, (range) => q({ ...range, filters, dimensions, rowLimit: 1000 })),
       ]).then(([current, previous, previousYear]) => ({ current, previous, previousYear }));
       const keywordsOf = (keyword: string | null) => (keyword ?? "").split("/").map((item) => item.trim().toLowerCase()).filter(Boolean).slice(0, 2);
-      const [totals, branded, nonBranded, dailyClicks, monthly, pagesNow, pagesBefore, queryPagesNonBrand, queryPagesAll, markets, migration, editorial] = await Promise.all([
+      const [totals, branded, nonBranded, dailyClicks, monthly, pagesNow, pagesBefore, queryPagesNonBrand, queryPagesAll, markets, migration, editorial, images, keywordsNow, keywordsBefore] = await Promise.all([
         three(scopeGsc),
         three([...scopeGsc, isBrand]),
         three([...scopeGsc, nonBrand]),
@@ -386,8 +412,13 @@ export async function buildBrandReport(input: {
           const rows = (await Promise.all(keywordsOf(target.keyword).map((keyword) => q({ ...editorialRange, dimensions: ["page"], filters: [...scopeGsc, ...keywordFilters(keyword)], rowLimit: 20 })))).flat();
           return rows;
         }).then((rows) => ({ target, rows, checked: keywordsOf(target.keyword).length > 0 })).catch(() => ({ target, rows: [] as GscRow[], checked: false })))),
+        // Clics de Google Imágenes: llegan a GA4 como google/organic pero no suman en la búsqueda web (D-045).
+        opt(gscRanges.current, (range) => q({ ...range, filters: scopeGsc, type: "image" })).catch(() => null),
+        // Keywords posicionadas y su reparto por posición (D-045).
+        opt(gscRanges.current, (range) => allQueries(q, { ...range, dimensions: ["query"], filters: scopeGsc })).catch(() => null),
+        opt(gscRanges.previous, (range) => allQueries(q, { ...range, dimensions: ["query"], filters: scopeGsc })).catch(() => null),
       ]);
-      gsc = { totals, branded, nonBranded, daily: dailyClicks, monthly, pagesNow, pagesBefore, queryPagesNonBrand, queryPagesAll, markets, migration, editorial };
+      gsc = { totals, branded, nonBranded, daily: dailyClicks, monthly, pagesNow, pagesBefore, queryPagesNonBrand, queryPagesAll, markets, migration, editorial, images, keywordsNow, keywordsBefore };
       sources.push({ source: "gsc", ok: true, note: `Lectura directa · Search Console conserva desde el ${longDate(floor)}` });
     } catch (error) {
       sources.push({ source: "gsc", ok: false, note: error instanceof Error ? error.message : String(error) });
@@ -409,10 +440,20 @@ export async function buildBrandReport(input: {
     const row = (channelReport?.rows ?? []).find((item) => readCh(item, "sessionDefaultChannelGroup") === "Organic Search" && readCh(item, "dateRange") === range);
     return num(row?.metricValues?.[1]?.value);
   };
+  /* Usuarios del canal orgánico por periodo. No se suman entre canales: una
+     persona que llega por dos canales cuenta en ambos. */
+  const usersBy = (range: keyof Totals3<number>) => {
+    const row = (channelReport?.rows ?? []).find((item) => readCh(item, "sessionDefaultChannelGroup") === "Organic Search" && readCh(item, "dateRange") === range);
+    return num(row?.metricValues?.[2]?.value);
+  };
+  const newUsersBy = (range: keyof Totals3<number>) => {
+    const row = (channelReport?.rows ?? []).find((item) => readCh(item, "sessionDefaultChannelGroup") === "Organic Search" && readCh(item, "dateRange") === range);
+    return num(row?.metricValues?.[3]?.value);
+  };
   const webTotal = (range: keyof Totals3<number>) => sum([...channelMap.values()].map((entry) => entry[range]));
   const organic = channelMap.get("Organic Search") ?? { current: 0, previous: 0, previousYear: 0, leads: 0 };
   const channels: BrandReport["channels"] = [...channelMap]
-    .map(([key, entry]) => ({ key, label: CHANNEL_LABELS[key] ?? key, sessions: entry.current, previous: entry.previous, previousYear: entry.previousYear, leads: entry.leads, share: webTotal("current") ? round1((entry.current / webTotal("current")) * 100) : 0 }))
+    .map(([key, entry]) => ({ key, label: CHANNEL_LABELS[key] ?? key, sessions: entry.current, previous: entry.previous, previousYear: entry.previousYear, leads: entry.leads, share: webTotal("current") ? round1((entry.current / webTotal("current")) * 100) : 0, trend: [] as number[] }))
     .filter((entry) => entry.sessions > 0 || entry.previous > 0)
     .sort((a, b) => b.sessions - a.sessions);
 
@@ -435,12 +476,35 @@ export async function buildBrandReport(input: {
   const kpis: BrandReport["kpis"] = [
     { key: "web_sessions", label: "Visitas totales a la web", help: "Todas las visitas, vengan del canal que vengan (Analytics).", unit: "number", value: ga4Value(webTotal("current")), previous: ga4Value(webTotal("previous")), previousYear: ga4Value(webTotal("previousYear")), source: "ga4" },
     { key: "search_sessions", label: "Visitas desde buscadores", help: "Visitas que llegan desde Google o Bing sin pagar (Analytics).", unit: "number", value: ga4Value(organic.current), previous: ga4Value(organic.previous), previousYear: ga4Value(organic.previousYear), source: "ga4" },
+    { key: "search_users", label: "Personas desde buscadores", help: "Personas distintas que llegan desde buscadores sin pagar; una persona puede hacer varias visitas (Analytics).", unit: "number", value: ga4Value(usersBy("current")), previous: ga4Value(usersBy("previous")), previousYear: ga4Value(usersBy("previousYear")), source: "ga4" },
     { key: "search_leads", label: "Conversiones desde buscadores", help: "Acciones clave de las visitas de buscadores: solicitudes de información, muestras, contacto.", unit: "number", value: ga4Value(leadsBy("current")), previous: ga4Value(leadsBy("previous")), previousYear: ga4Value(leadsBy("previousYear")), source: "ga4" },
     { key: "nonbrand_share", label: "Búsquedas sin marca", help: "Parte de los clics que llega por búsquedas genéricas, de gente que aún no busca la marca.", unit: "percent", value: nonBrandShare("current"), previous: nonBrandShare("previous"), previousYear: nonBrandShare("previousYear"), source: "gsc" },
     { key: "clicks", label: "Clics en Google", help: "Personas que hicieron clic en un resultado nuestro (Search Console).", unit: "number", value: gscTotal("current").clicks, previous: gscTotal("previous").clicks, previousYear: gscTotal("previousYear").clicks, source: "gsc" },
     { key: "impressions", label: "Apariciones en Google", help: "Veces que salimos en los resultados, hagan clic o no.", unit: "number", value: gscTotal("current").impressions, previous: gscTotal("previous").impressions, previousYear: gscTotal("previousYear").impressions, source: "gsc" },
     { key: "ctr", label: "% que nos elige", help: "De cada 100 apariciones, cuántas acaban en clic.", unit: "percent", value: ctr("current"), previous: ctr("previous"), previousYear: ctr("previousYear"), source: "gsc" },
   ];
+
+  // ---- Conciliación GA4 ↔ Search Console (D-045) -----------------------------
+  const readSource = reader(sourceReport);
+  const searchReconciliation =
+    ga4Ok && sourceReport
+      ? buildSearchReconciliation(
+          (sourceReport.rows ?? []).map((row) => ({ source: readSource(row, "sessionSource"), range: readSource(row, "dateRange"), sessions: num(row.metricValues?.[0]?.value) })),
+          organic.current,
+          gscTotal("current").clicks,
+          gsc?.images ? clicksOf(gsc.images) : null,
+        )
+      : null;
+
+  const readAi = reader(aiReport);
+  const aiTraffic =
+    ga4Ok && aiReport
+      ? buildAiTraffic(
+          (aiReport.rows ?? []).map((row) => ({ source: readAi(row, "sessionSource"), range: readAi(row, "dateRange"), sessions: num(row.metricValues?.[0]?.value) })),
+        )
+      : null;
+  const userMix = ga4Ok && channelReport ? buildUserMix(usersBy("current"), newUsersBy("current"), usersBy("previous"), newUsersBy("previous")) : null;
+  const keywordRanking = gsc?.keywordsNow ? buildKeywordRanking(gsc.keywordsNow, gsc.keywordsBefore, brand.brandRegex) : null;
 
   // ---- Series comparables ----------------------------------------------------
   const bucketOf = (date: string, index: number) => {
@@ -471,10 +535,35 @@ export async function buildBrandReport(input: {
     }
     return [...buckets].map(([bucket, value]) => ({ bucket, ...value }));
   };
-  const ga4Daily = (report: Ga4Report | undefined) => (report ? indexOf((report.rows ?? []).map((row) => { const raw = row.dimensionValues?.[0]?.value ?? ""; return { date: `${raw.slice(0, 4)}-${raw.slice(4, 6)}-${raw.slice(6, 8)}`, value: num(row.metricValues?.[0]?.value) }; })) : null);
-  const gscDaily = (rows: GscRow[] | null | undefined) => (rows ? indexOf(rows.map((row) => ({ date: row.keys?.[0] ?? "", value: row.clicks }))) : null);
+  const ga4Daily = (report: Ga4Report | undefined, metricIndex = 0) => (report ? indexOf((report.rows ?? []).map((row) => { const raw = row.dimensionValues?.[0]?.value ?? ""; return { date: `${raw.slice(0, 4)}-${raw.slice(4, 6)}-${raw.slice(6, 8)}`, value: num(row.metricValues?.[metricIndex]?.value) }; })) : null);
+  const gscDaily = (rows: GscRow[] | null | undefined, field: "clicks" | "impressions" = "clicks") => (rows ? indexOf(rows.map((row) => ({ date: row.keys?.[0] ?? "", value: row[field] }))) : null);
   const searchSeries = ga4Ok ? series(ga4Daily(dailyCurrent), ga4Daily(dailyPrevious), ga4Daily(dailyPreviousYear)) : [];
+  /* Media diaria por tramo: el último tramo suele estar incompleto y su suma
+     caería sin que cayera el tráfico (D-045). */
+  const dailyAverages = (points: ReturnType<typeof series>) =>
+    points.flatMap((point, index) => {
+      if (point.current === null) return [];
+      const next = points[index + 1]?.bucket;
+      const stop = next ? Date.parse(`${next}T00:00:00Z`) : Date.parse(`${window.end}T00:00:00Z`) + 86_400_000;
+      const days = Math.max(1, Math.round((stop - Date.parse(`${point.bucket}T00:00:00Z`)) / 86_400_000));
+      return [round1(point.current / days)];
+    });
+  const readChannelDay = reader(channelDailyReport);
+  const channelDays = new Map<string, Array<{ date: string; value: number }>>();
+  for (const row of channelDailyReport?.rows ?? []) {
+    const raw = readChannelDay(row, "date");
+    const list = channelDays.get(readChannelDay(row, "sessionDefaultChannelGroup")) ?? [];
+    list.push({ date: `${raw.slice(0, 4)}-${raw.slice(4, 6)}-${raw.slice(6, 8)}`, value: num(row.metricValues?.[0]?.value) });
+    channelDays.set(readChannelDay(row, "sessionDefaultChannelGroup"), list);
+  }
+  for (const channel of channels) {
+    const days = channelDays.get(channel.key);
+    channel.trend = days ? dailyAverages(series(indexOf(days), null, null)) : [];
+  }
+  const webSeries = ga4Ok ? series(ga4Daily(webDailyCurrent), ga4Daily(webDailyPrevious), ga4Daily(webDailyPreviousYear)) : [];
+  const usersSeries = ga4Ok ? series(ga4Daily(dailyCurrent, 1), ga4Daily(dailyPrevious, 1), ga4Daily(dailyPreviousYear, 1)) : [];
   const clickSeries = gsc ? series(gscDaily(gsc.daily.current), gscDaily(gsc.daily.previous), gscDaily(gsc.daily.previousYear)) : [];
+  const impressionsSeries = gsc ? series(gscDaily(gsc.daily.current, "impressions"), gscDaily(gsc.daily.previous, "impressions"), gscDaily(gsc.daily.previousYear, "impressions")) : [];
 
   // ---- Mes a mes, año contra año ---------------------------------------------
   const monthlySessions = new Map<string, number>((monthlyReport?.rows ?? []).map((row) => { const raw = row.dimensionValues?.[0]?.value ?? ""; return [`${raw.slice(0, 4)}-${raw.slice(4, 6)}`, num(row.metricValues?.[0]?.value)]; }));
@@ -756,10 +845,17 @@ export async function buildBrandReport(input: {
     gscFloor: floor,
     verdict: { tone, headline, detail: `${detail}.` },
     kpis,
+    searchReconciliation,
+    keywordRanking,
+    aiTraffic,
+    userMix,
     readings,
     channels,
     searchSeries,
     clickSeries,
+    usersSeries,
+    impressionsSeries,
+    webSeries,
     months,
     annotations: (brand.annotations ?? []).map((item) => ({ ...item })),
     funnel,
@@ -775,4 +871,127 @@ export async function buildBrandReport(input: {
     dataQuality,
     sources,
   });
+}
+
+/** Buscador de una `sessionSource` de GA4, agrupando dominios de un mismo motor. */
+export function searchEngineOf(source: string) {
+  const value = source.toLowerCase();
+  if (value === "google" || /(^|\.)google\./.test(value)) return "Google";
+  if (/bing\b|msn\.com/.test(value)) return "Bing";
+  if (/yahoo/.test(value)) return "Yahoo";
+  if (/duckduckgo/.test(value)) return "DuckDuckGo";
+  if (/ecosia/.test(value)) return "Ecosia";
+  if (/yandex/.test(value)) return "Yandex";
+  return "Otros";
+}
+
+/**
+ * Conciliación de «Visitas SEO» con «Clics en Google» (D-045). Los otros
+ * buscadores salen por diferencia con el total orgánico, para que la suma
+ * cuadre aunque la cola larga de fuentes no quepa en la consulta.
+ */
+export function buildSearchReconciliation(
+  sources: Array<{ source: string; sessions: number; range?: string }>,
+  organicSessions: number,
+  googleWebClicks: number | null,
+  googleImageClicks: number | null,
+): NonNullable<BrandReport["searchReconciliation"]> {
+  const totals = new Map<string, number>();
+  const previous = new Map<string, number>();
+  for (const row of sources) {
+    const label = searchEngineOf(row.source);
+    // Sin `range` la fila es del periodo actual (lecturas de un solo periodo).
+    const target = !row.range || row.range === "current" ? totals : row.range === "previous" ? previous : null;
+    if (target) target.set(label, (target.get(label) ?? 0) + row.sessions);
+  }
+  const googleSessions = totals.get("Google") ?? 0;
+  return {
+    googleSessions,
+    otherEngineSessions: Math.max(0, organicSessions - googleSessions),
+    engines: [...totals]
+      .filter(([label]) => label !== "Google" && label !== "Otros")
+      .map(([label, sessions]) => ({ label, sessions, previous: previous.get(label) ?? 0 }))
+      .sort((a, b) => b.sessions - a.sessions)
+      .slice(0, 3),
+    googleWebClicks,
+    googleImageClicks,
+  };
+}
+
+/** Filas por página de la API de Search Console (su máximo). */
+const GSC_PAGE_SIZE = 25000;
+/** Tope de keywords leídas por periodo: cuatro páginas de la API. */
+export const KEYWORD_ROW_LIMIT = 100000;
+
+/** Todas las búsquedas del periodo, página a página, hasta `KEYWORD_ROW_LIMIT`. */
+async function allQueries(
+  query: (request: Parameters<typeof gscQuery>[2]) => Promise<GscRow[]>,
+  request: Parameters<typeof gscQuery>[2],
+): Promise<GscRow[]> {
+  const rows: GscRow[] = [];
+  for (let startRow = 0; startRow < KEYWORD_ROW_LIMIT; startRow += GSC_PAGE_SIZE) {
+    const page = await query({ ...request, rowLimit: GSC_PAGE_SIZE, startRow });
+    rows.push(...page);
+    if (page.length < GSC_PAGE_SIZE) break;
+  }
+  return rows;
+}
+
+/** Reparto de keywords por posición media (D-045): 1–3, 4–20 y más de 20. */
+export function buildKeywordRanking(
+  current: GscRow[],
+  previous: GscRow[] | null,
+  brandRegex: string,
+): NonNullable<BrandReport["keywordRanking"]> {
+  const ranked = current.filter((row) => row.impressions > 0);
+  // Misma expresión que el filtro de marca de Search Console (RE2 compatible con JS).
+  const isBrand = new RegExp(brandRegex, "i");
+  const top3 = ranked.filter((row) => row.position <= 3).length;
+  const top20 = ranked.filter((row) => row.position > 3 && row.position <= 20).length;
+  return {
+    total: ranked.length,
+    top3,
+    top20,
+    rest: ranked.length - top3 - top20,
+    nonBrand: ranked.filter((row) => !isBrand.test(row.keys?.[0] ?? "")).length,
+    previousTotal: previous ? previous.filter((row) => row.impressions > 0).length : null,
+    rowLimit: KEYWORD_ROW_LIMIT,
+    limitReached: current.length >= KEYWORD_ROW_LIMIT,
+  };
+}
+
+/** Visitas por asistente de IA, periodo actual y anterior (D-046). */
+export function buildAiTraffic(rows: Array<{ source: string; range: string; sessions: number }>): NonNullable<BrandReport["aiTraffic"]> {
+  const totals = new Map<string, { sessions: number; previous: number }>();
+  for (const row of rows) {
+    const assistant = AI_ASSISTANTS.find((item) => item.pattern.test(row.source));
+    if (!assistant || (row.range !== "current" && row.range !== "previous")) continue;
+    const entry = totals.get(assistant.key) ?? { sessions: 0, previous: 0 };
+    if (row.range === "current") entry.sessions += row.sessions;
+    else entry.previous += row.sessions;
+    totals.set(assistant.key, entry);
+  }
+  const assistants = AI_ASSISTANTS.flatMap((item) => {
+    const entry = totals.get(item.key);
+    return entry && (entry.sessions || entry.previous) ? [{ key: item.key, label: item.label, ...entry }] : [];
+  }).sort((a, b) => b.sessions - a.sessions);
+  return {
+    total: sum(assistants.map((item) => item.sessions)),
+    previousTotal: sum(assistants.map((item) => item.previous)),
+    assistants,
+  };
+}
+
+/**
+ * Nuevos frente a recurrentes (D-045). GA4 cuenta como nuevo a quien hace su
+ * primera visita en el periodo; el resto de usuarios son recurrentes.
+ */
+export function buildUserMix(total: number, fresh: number, previousTotal: number, previousFresh: number): NonNullable<BrandReport["userMix"]> | null {
+  if (!total) return null;
+  const newUsers = Math.min(fresh, total);
+  return {
+    newUsers,
+    returningUsers: total - newUsers,
+    previousNewShare: previousTotal ? round1((Math.min(previousFresh, previousTotal) / previousTotal) * 100) : null,
+  };
 }

@@ -21,6 +21,13 @@ export const CHART_COLORS = {
   warning: "#805600",
   danger: "#8b3030",
   canvas: "#ffffff",
+  /* Impresiones de Search Console (D-045): serie propia, distinta del cobalto de clics y visitas. */
+  violet: "#7a4fd8",
+  violetSoft: "#c3aef2",
+  violetBand: "rgba(122, 79, 216, 0.08)",
+  /* Tráfico total (todos los canales): tinta, para no competir con las series SEO. */
+  inkBand: "rgba(16, 21, 22, 0.05)",
+  graphiteLight: "#b5bcb8",
 } as const;
 
 export const SEO_CHART_THEME_NAME = "seo-intelligence";

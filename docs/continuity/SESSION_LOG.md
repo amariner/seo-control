@@ -780,3 +780,85 @@
   cierre/foco móvil y cambio a Editorial. Indicadores se retiran al terminar.
 - Typecheck 9 paquetes, 90 pruebas viewer, build y continuidad correctos.
   Dev sigue activo; no desplegado. P3 25%, P2 bloqueada 79%.
+
+
+## 2026-09-24 · shadcn/ui y dashboard-01 en el visor (D-044)
+
+- Rama `feat/shadcn-dashboard`. Tailwind v4 + shadcn en el visor; bloque
+  dashboard-01 adaptado: sidebar inset mineral, cabecera con filtros Select,
+  tarjetas KPI, evolución con selector de periodo y tablas en tarjetas.
+- Tokens shadcn mapeados a `--ds-*` (cobalto primario, sin colores nuevos).
+  Retirados los datos y dependencias de demo; ECharts y lucide se mantienen.
+- Corregidos durante QA: main duplicado, foco tras navegar en móvil, filtros
+  en tres filas en móvil y offsets fijos de la cabecera antigua.
+- Typecheck 9 paquetes, 426 pruebas y build del visor. QA 1440/375. Axe y
+  tablet pendientes. Sin despliegue ni fusión.
+- Ajuste: búsqueda retirada del menú lateral; miga de pan única en la cabecera
+  para todas las vistas (5 pruebas nuevas, 95 en el visor). Corregido el ancho
+  de `.page` dentro del inset, que en móvil cortaba informes y fichas.
+- Ajuste: periodo y mercado de la ficha de marca en la barra superior; tiempo
+  real GA4 en lugar del corte, con punto verde claro intermitente. Verificado con
+  dato real (XTONE 262, conjunto 660), cambio de periodo con skeletons desde la
+  cabecera y panel de mercado en móvil. 432 pruebas (6 nuevas de tiempo real),
+  typecheck y build de viewer + workbench.
+- Ajuste: selectores de la barra sin borde y contenido alineado con los iconos
+  de la barra (`--app-gutter`); medido en XTONE a 1440 (288/1408 px) y 375 px.
+- Ajuste: logotipo oficial de XTONE como título de su ficha (36 px de alto).
+- Ajuste: logo XTONE a 24 px, sin botón de modo presentación y submenú fijo al
+  hacer scroll (57 px en escritorio, 105 px en móvil, sin overflow).
+- Ajuste: retirada la frase de corte bajo el título de la ficha de marca.
+- Ajuste: margen superior e inferior de la cabecera de marca unificados (42/42 px
+  en escritorio, 26/24 px en móvil).
+- D-045: Visitas SEO con clics de Google en pequeño en la misma tarjeta,
+  conversiones al final y Modo IA en la barra inferior (sin dato separado en
+  Search Console, verificado por API). 438 pruebas.
+- Ajuste: tarjeta Usuarios SEO (XTONE 90 días: 26.391, −10 % vs. periodo).
+- Ajuste: anillo marca/sin marca en Clics sin marca y conversiones en la barra.
+- Ajuste: tarjeta gráfica de Clics sin marca y limpieza de Visitas/Usuarios SEO.
+- Ajuste: tarjeta Keywords (XTONE 90 días: 25.883, +80,5 %; top 3 1.806, 4–20
+  9.528, >20 14.549; Francia 4.882). Paginación de Search Console y reintento
+  del tiempo real. 440 pruebas, typecheck y build de ambas apps.
+- Ajuste: % de keywords sin marca (XTONE 96,9 %) y barra con tooltips.
+- D-046: tarjeta Visitas desde IA (XTONE 90 días: 369, −31 %; ChatGPT 346) con
+  fila Modo IA sin dato, y logo de Google en Visitas SEO.
+- Ajuste: total de IA como fila de la tabla (369, −31 %).
+- Ajuste: fuente de las tarjetas movida a un icono Info junto al título.
+- Ajuste: nuevos/recurrentes en Usuarios SEO (XTONE 68 % nuevos, +42,1 pp).
+  Verificado en crudo: el % de nuevos salta de ~22 % a 54–73 % desde julio de
+  2026, coincidiendo con el cambio de URLs del 23-07; posible efecto de
+  medición, pendiente de revisar con el equipo.
+- Ajuste: tabla de IA con total arriba y «Ver más», Modo IA en Visitas SEO y
+  sin barra en Usuarios SEO.
+- Ajuste: anillos de % nuevos y % sin marca; Modo IA en la barra inferior.
+- Ajuste: Keywords con anillo de clics sin marca (18,8 %, −2,2 pp) alineado con
+  el de usuarios nuevos; barra justo bajo la cifra.
+- Ajuste: línea de Bing en Visitas SEO (XTONE 5.645 visitas, −10,7 %).
+- Ajuste: cifra del periodo anterior junto a la principal (78.338 / 29.320 / 14.336).
+- Ajuste: variación con color junto a la cifra principal; tarjetas a 203 px.
+- Ajuste: mini gráficas de evolución en Visitas y Usuarios SEO; variación
+  devuelta a su línea.
+- Ajuste: mini gráficas en Impresiones/CTR y tabla completa rediseñada. La
+  tabla deja ver Visitas totales +374 % (564.991 vs. 119.164) en XTONE: dato
+  previo, pendiente de revisar (posible tráfico no humano o cambio de medición).
+- Ajuste: mini gráficas sin caída final (media diaria por tramo) y tabla
+  completa compacta con estilos propios.
+- Ajuste: variaciones de la tabla solo en texto de color.
+- Ajuste: evolución con clics / impresiones (violeta) y sin desplegable de datos.
+- Ajuste: selector de proyecto en el menú lateral; cabecera sin miga de pan.
+- Ajuste: barra inferior deslizable en horizontal salvo en móvil; corregido
+  un desbordamiento de página a 1024 px.
+- Ajuste: pestaña Tráfico total. Muestra en XTONE picos de ~140.000 visitas
+  semanales en agosto y septiembre, casi todo Directo: pendiente de revisar
+  (probable tráfico no humano).
+- Ajuste: canales y mercados desplegables; canales con variación y tendencia.
+  XTONE: Directo +1.636 %, Sin clasificar +8.924 %, Buscadores de pago
+  +1.861 % frente al periodo anterior → revisar medición/bots.
+- Ajuste: variaciones en «k» y cuota de canal sobre su barra.
+- Ajuste: interruptor línea/barras en evolución, listas de canales y mercados
+  alineadas, fuera el histórico mensual y la nota de mercados.
+- Ajuste: fuente del gráfico de evolución bajo el gráfico, a la derecha.
+- Ajuste: pies del gráfico de evolución en gris más claro (--ds-subtle).
+- Ajuste: fechas de la leyenda en tooltip (ratón / toque) y pies en grafito.
+- Ajuste: gráfico de evolución alineado con el interruptor.
+- Ajuste: desplegable de métrica con logo de Google e interruptor de iconos.
+- Ajuste: leyenda de evolución junto al selector.

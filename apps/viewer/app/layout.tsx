@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
-import "@seo/ui/tokens.css";
-import "./globals.css";
+import "./tailwind.css";
+import { TooltipProvider } from "@/components/ui/tooltip";
 
 export const metadata: Metadata = {
   title: { default: "SEO Intelligence", template: "%s · SEO Intelligence" },
@@ -9,5 +9,5 @@ export const metadata: Metadata = {
 };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
-  return <html lang="es"><body><a className="ds-skip-link" href="#contenido">Saltar al contenido</a>{children}</body></html>;
+  return <html lang="es"><body><a className="ds-skip-link" href="#contenido">Saltar al contenido</a><TooltipProvider delayDuration={200}>{children}</TooltipProvider></body></html>;
 }

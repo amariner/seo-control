@@ -9,6 +9,7 @@ export function PageFrame({
   aside,
   children,
   showGlobalFilters = true,
+  crumb,
 }: {
   eyebrow: string;
   title: string;
@@ -17,9 +18,15 @@ export function PageFrame({
   aside?: ReactNode;
   children: ReactNode;
   showGlobalFilters?: boolean;
+  /** Último nivel de la ruta de la cabecera en las fichas de detalle. */
+  crumb?: string;
 }) {
   return (
-    <AppShell generatedAt={generatedAt} showGlobalFilters={showGlobalFilters}>
+    <AppShell
+      generatedAt={generatedAt}
+      showGlobalFilters={showGlobalFilters}
+      crumb={crumb}
+    >
       <main className="page" id="contenido">
         <header className="page-heading">
           <div>

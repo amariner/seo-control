@@ -213,7 +213,7 @@ export function reportWindowParams(window: Pick<ReportWindow, "preset" | "start"
 const comparable = z.number().nullable();
 
 export const reportKpiSchema = z.object({
-  key: z.enum(["web_sessions", "search_sessions", "search_leads", "clicks", "impressions", "ctr", "nonbrand_share"]),
+  key: z.enum(["web_sessions", "search_sessions", "search_users", "search_leads", "clicks", "impressions", "ctr", "nonbrand_share"]),
   label: z.string(),
   /** Una frase que explica el indicador sin jerga. */
   help: z.string(),
@@ -241,6 +241,8 @@ export const reportChannelSchema = z.object({
   previousYear: z.number(),
   leads: z.number(),
   share: z.number(),
+  /** Media diaria de visitas por tramo del periodo, para la mini gráfica (D-045). */
+  trend: z.array(z.number()),
 });
 
 export const reportMonthSchema = z.object({
@@ -380,7 +382,63 @@ export const reportReadingSchema = z.array(z.string());
  * cambio de estructura desplegado seguiría sirviendo seis horas el informe
  * anterior guardado.
  */
-export const BRAND_REPORT_VERSION = "2026-09-23.12";
+export const BRAND_REPORT_VERSION = "2026-09-24.12";
+
+/**
+ * Por qué «Visitas SEO» (GA4) y «Clics en Google» (Search Console) no coinciden
+ * (D-045): GA4 cuenta sesiones de todos los buscadores; Search Console, clics en
+ * la búsqueda web de Google. Todo del periodo actual y del mismo mercado.
+ */
+export const reportSearchReconciliationSchema = z.object({
+  googleSessions: z.number().nullable(),
+  otherEngineSessions: z.number().nullable(),
+  /** Otros buscadores con más sesiones, agrupados por nombre (Bing, Yahoo…). */
+  engines: z.array(z.object({ label: z.string(), sessions: z.number(), previous: z.number() })),
+  googleWebClicks: z.number().nullable(),
+  googleImageClicks: z.number().nullable(),
+});
+export type ReportSearchReconciliation = z.infer<typeof reportSearchReconciliationSchema>;
+
+/**
+ * Keywords posicionadas (D-045): búsquedas de Google con impresiones en el
+ * periodo y su reparto por posición media. Search Console omite las consultas
+ * anónimas y devuelve como mucho `rowLimit` filas.
+ */
+export const reportKeywordRankingSchema = z.object({
+  total: z.number(),
+  /** Posición media ≤ 3. */
+  top3: z.number(),
+  /** Posición media > 3 y ≤ 20. */
+  top20: z.number(),
+  /** Posición media > 20. */
+  rest: z.number(),
+  /** Keywords que no contienen la marca propia ni la paraguas. */
+  nonBrand: z.number(),
+  previousTotal: z.number().nullable(),
+  rowLimit: z.number(),
+  limitReached: z.boolean(),
+});
+export type ReportKeywordRanking = z.infer<typeof reportKeywordRankingSchema>;
+
+/**
+ * Visitas desde asistentes de IA (D-046): sesiones de GA4 cuyo origen es un
+ * asistente (ChatGPT, Gemini…), de cualquier canal, en el mismo mercado.
+ */
+export const reportAiTrafficSchema = z.object({
+  total: z.number(),
+  previousTotal: z.number(),
+  assistants: z.array(z.object({ key: z.string(), label: z.string(), sessions: z.number(), previous: z.number() })),
+});
+export type ReportAiTraffic = z.infer<typeof reportAiTrafficSchema>;
+
+/** Usuarios SEO nuevos y recurrentes del periodo (D-045). Recurrentes = total − nuevos. */
+export const reportUserMixSchema = z.object({
+  newUsers: z.number(),
+  returningUsers: z.number(),
+  /** % de nuevos en el periodo anterior, para la variación en puntos. */
+  previousNewShare: z.number().nullable(),
+});
+export type ReportUserMix = z.infer<typeof reportUserMixSchema>;
 
 export const brandReportSchema = z.object({
   generatedAt: z.string().datetime(),
@@ -394,11 +452,21 @@ export const brandReportSchema = z.object({
   gscFloor: z.string().date(),
   verdict: z.object({ tone: z.enum(["good", "warn", "bad"]), headline: z.string(), detail: z.string() }),
   kpis: z.array(reportKpiSchema),
+  searchReconciliation: reportSearchReconciliationSchema.nullable(),
+  keywordRanking: reportKeywordRankingSchema.nullable(),
+  aiTraffic: reportAiTrafficSchema.nullable(),
+  userMix: reportUserMixSchema.nullable(),
   /** Lecturas automáticas por bloque. Siempre declaradas como tales en la interfaz. */
   readings: z.record(z.string(), reportReadingSchema),
   channels: z.array(reportChannelSchema),
   searchSeries: z.array(reportSeriesPointSchema),
   clickSeries: z.array(reportSeriesPointSchema),
+  /** Usuarios SEO por tramo: suma de usuarios diarios, solo para la mini gráfica (D-045). */
+  usersSeries: z.array(reportSeriesPointSchema),
+  /** Impresiones de Google por tramo (misma consulta diaria que `clickSeries`). */
+  impressionsSeries: z.array(reportSeriesPointSchema),
+  /** Visitas de todos los canales por tramo (GA4), para «Tráfico total». */
+  webSeries: z.array(reportSeriesPointSchema),
   months: z.array(reportMonthSchema),
   annotations: z.array(z.object({ id: z.string(), date: z.string().date(), label: z.string(), type: z.string() })),
   funnel: z.object({ impressions: z.number().nullable(), clicks: z.number().nullable(), searchSessions: z.number(), leads: z.number(), leadEvent: z.string().nullable(), leadEventShare: z.number().nullable() }),
