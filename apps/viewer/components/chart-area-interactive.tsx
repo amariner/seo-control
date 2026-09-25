@@ -3,14 +3,6 @@
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useTransition, type ReactNode } from "react";
 import { PERIODS, type DashboardPayload } from "@seo/contracts";
-import {
-  Card,
-  CardAction,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { TrendChart } from "./trend-chart";
 
@@ -23,7 +15,7 @@ const SHORT_PERIOD: Record<string, string> = {
 };
 
 /**
- * Tarjeta de evolución de dashboard-01 sobre ECharts (D-041). El selector usa
+ * Evolución sobre ECharts (D-041) con el patrón de sección de la ficha (D-049). El selector usa
  * el mismo parámetro `period` que el filtro global de la cabecera, así que
  * ambos controles siempre muestran el mismo valor.
  */
@@ -56,36 +48,38 @@ export function ChartAreaInteractive({
     );
   }
 
+  /* Patrón de la ficha de marca (D-049): título y selector fuera, gráfico en un
+     panel con filete fino. */
   return (
-    <Card className="@container/card" aria-busy={pending || undefined}>
-      <CardHeader>
-        <CardTitle className="text-base">{title}</CardTitle>
-        <CardDescription>{description}</CardDescription>
-        <CardAction className="hidden @[767px]/card:block">
-          <ToggleGroup
-            type="single"
-            value={period}
-            onValueChange={setPeriod}
-            variant="outline"
-            aria-label="Periodo del gráfico"
-            disabled={pending}
-            className="*:data-[slot=toggle-group-item]:h-9 *:data-[slot=toggle-group-item]:px-3"
-          >
-            {PERIODS.map((item) => (
-              <ToggleGroupItem
-                key={item.key}
-                value={item.key}
-                aria-label={item.label}
-                className="data-[state=on]:bg-accent-band data-[state=on]:text-primary"
-              >
-                {SHORT_PERIOD[item.key] ?? item.label}
-              </ToggleGroupItem>
-            ))}
-          </ToggleGroup>
-        </CardAction>
-      </CardHeader>
-      <CardContent className="px-2 pt-0 sm:px-6">
-        <div className="mb-2 flex gap-4 px-2 text-xs text-muted-foreground sm:px-0">
+    <div aria-busy={pending || undefined}>
+      <div className="section-heading">
+        <div>
+          <h2>{title}</h2>
+          <p>{description}</p>
+        </div>
+        <ToggleGroup
+          type="single"
+          value={period}
+          onValueChange={setPeriod}
+          variant="outline"
+          aria-label="Periodo del gráfico"
+          disabled={pending}
+          className="*:data-[slot=toggle-group-item]:h-9 *:data-[slot=toggle-group-item]:px-3"
+        >
+          {PERIODS.map((item) => (
+            <ToggleGroupItem
+              key={item.key}
+              value={item.key}
+              aria-label={item.label}
+              className="data-[state=on]:bg-accent-band data-[state=on]:text-primary"
+            >
+              {SHORT_PERIOD[item.key] ?? item.label}
+            </ToggleGroupItem>
+          ))}
+        </ToggleGroup>
+      </div>
+      <div className="overview-chart-panel">
+        <div className="mb-2 flex gap-4 text-xs text-muted-foreground">
           <span className="inline-flex items-center gap-1.5">
             <i aria-hidden className="inline-block h-0.75 w-2.5 bg-chart-1" />
             Periodo actual
@@ -105,7 +99,7 @@ export function ChartAreaInteractive({
           <TrendChart points={points} annotations={annotations} area />
         </div>
         {children}
-      </CardContent>
-    </Card>
+      </div>
+    </div>
   );
 }

@@ -103,6 +103,9 @@ const sleep = (ms) => new Promise((done) => setTimeout(done, ms));
 async function launchChrome() {
   const child = spawn(CHROME, [
     "--headless=new",
+    /* El proxy del visor responde 403 a «HeadlessChrome» (D-048); la auditoría se
+       presenta como un Chrome normal para medir la página real. */
+    "--user-agent=Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36",
     "--disable-gpu",
     "--hide-scrollbars",
     "--no-first-run",

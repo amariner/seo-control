@@ -1500,3 +1500,27 @@ No se reescriben decisiones antiguas. Si una cambia, se añade una nueva entrada
   de red es el Firewall de Vercel, gratuito en Hobby: Bot Protection en Challenge
   (reto JS a lo que no se comporta como navegador) y AI Bots en Deny, publicados
   el 2026-09-25 con `vercel firewall`.
+
+## D-049 · La ficha de marca como patrón visual de todo el visor
+
+- Fecha: 2026-09-25.
+- Estado: vigente.
+- Contexto: el responsable considera la ficha de marca (`/projects/xtone`) la
+  pantalla más clara del visor en diseño y estructura. Las demás mezclaban
+  tarjetas shadcn con insignias, cabeceras con eyebrow cobalto en mayúsculas y
+  rellenos sólidos en los filtros.
+- Decisión: extender su lenguaje al resto mediante clases globales, sin tocar la
+  ficha: cabecera «Título │ ámbito», KPI en columnas con filetes y sin marco
+  (`.ds-metric-strip` y `MetricCard` en `@seo/ui`), secciones sin tarjeta con
+  h2 de 22 px, listas con filetes, pestañas subrayadas sin iconos y selección
+  suave en cobalto. Detalle en `docs/design/DESIGN_SYSTEM.md`.
+- Portada: `SectionCards` desaparece y usa `MetricStrip`, así que los KPI de
+  Inicio, Conjunto y las fichas de detalle comparten componente. «Fuentes y
+  calidad» pasa de tarjetas a lista con filetes, y en móvil se reordena con
+  etiquetas en lugar de ocultar columnas.
+- La cobertura de cada KPI sigue visible, pero como pie discreto, en ámbar solo
+  si es parcial.
+- Auditoría: `axe-audit.mjs` y `capture-screenshots.mjs` se presentan con un
+  user-agent de Chrome normal, porque el proxy (D-048) responde 403 a
+  «HeadlessChrome».
+

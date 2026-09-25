@@ -901,3 +901,18 @@
 - Firewall de Vercel por CLI: Bot Protection → Challenge, AI Bots → Deny, publicado.
   GPTBot → 403 `deny` en el borde; curl con UA de Chrome → 429 `challenge`; el
   navegador real carga el panel con sesión.
+
+## 2026-09-25 · Patrón de la ficha en todo el visor (D-049)
+
+- Cabecera, KPI, secciones, pestañas y filtros alineados con la ficha de marca
+  en Inicio, Conjunto, Proyectos, Editorial, Evidencias, Informes, Acciones,
+  Cronología, Fuentes y las fichas de URL, keyword e incidencia. La ficha no cambia.
+- `SectionCards` eliminado; `MetricCard`/`.ds-metric-strip` rediseñados en `@seo/ui`.
+- Verificado en el navegador a 1208 px y 375 px, sin desbordamiento horizontal.
+  Typecheck y `pnpm test` (480 pruebas) en verde.
+- `pnpm axe` ya no recibe 403 (user-agent normal). Quedan 34 incidencias ajenas
+  al rediseño: `aria` del botón de la barra lateral en móvil, dos en la ficha
+  (`.is-top3`, `.report-evolution-source`) y las rutas de ejemplo
+  `/pages/page-1` y `/queries/…`, que dan el 404 por defecto de Next.
+- Sin commit ni despliegue.
+

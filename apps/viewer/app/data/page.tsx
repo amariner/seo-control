@@ -26,11 +26,22 @@ export default async function DataPage({
           <h2 id="fuentes">Fuentes</h2>
           <span className="result-count">{data.sources.length} fuentes</span>
         </div>
-        <div className="source-grid">
+        {/* Lista con filetes, como las de la ficha de marca (D-049). */}
+        <div className="source-rows" role="table" aria-label="Estado de las fuentes">
+          <div className="source-row source-row-head" role="row">
+            <span role="columnheader">Fuente</span>
+            <span role="columnheader">Estado</span>
+            <span role="columnheader">Cobertura</span>
+            <span role="columnheader">Corte</span>
+            <span role="columnheader">Último dato válido</span>
+          </div>
           {data.sources.map((source) => (
-            <Card className="source-card" key={source.source}>
-              <div className="source-head">
-                <h3>{source.label}</h3>
+            <div className="source-row" role="row" key={source.source}>
+              <span className="source-row-name" role="cell">
+                <strong>{source.label}</strong>
+                <span>{source.note}</span>
+              </span>
+              <span role="cell" data-label="Estado">
                 <Badge
                   tone={
                     source.status === "correcto"
@@ -40,32 +51,22 @@ export default async function DataPage({
                         : "bad"
                   }
                 >
-                  {source.status}
+                  {source.status.replaceAll("_", " ")}
                 </Badge>
-              </div>
-              <div className="geo-score" style={{ margin: "24px 0 16px" }}>
-                <strong style={{ fontSize: 32 }}>
-                  {Math.round(source.coverage * 100)}%
-                </strong>
-                <span>
-                  cobertura
-                  <br />
-                  corte {source.cutoff ?? "—"}
-                </span>
-              </div>
-              <p>{source.note}</p>
-              <div className="source-meta">
-                <span>Último dato válido</span>
-                <span>
-                  {source.lastValidSnapshot
-                    ? new Date(source.lastValidSnapshot).toLocaleString(
-                        "es-ES",
-                        { dateStyle: "short", timeStyle: "short" },
-                      )
-                    : "—"}
-                </span>
-              </div>
-            </Card>
+              </span>
+              <span className="source-row-num" role="cell" data-label="Cobertura">
+                {Math.round(source.coverage * 100)}&nbsp;%
+              </span>
+              <span role="cell" data-label="Corte">{source.cutoff ?? "—"}</span>
+              <span role="cell" data-label="Último dato válido">
+                {source.lastValidSnapshot
+                  ? new Date(source.lastValidSnapshot).toLocaleString("es-ES", {
+                      dateStyle: "short",
+                      timeStyle: "short",
+                    })
+                  : "—"}
+              </span>
+            </div>
           ))}
         </div>
       </section>

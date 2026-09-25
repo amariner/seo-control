@@ -417,90 +417,40 @@ button {
   color: var(--ds-danger);
 }
 
-/* Métricas */
+/* Métricas: columnas separadas por reglas finas, sin marco ni fondo (D-049,
+   patrón de la ficha de marca). La franja se desplaza a la izquierda lo que mide
+   el filete más el relleno y lo recorta, así la primera columna de cada fila
+   queda alineada con el texto y sin filete sea cual sea el número de columnas. */
 .ds-metric-strip {
+  --ds-strip-cols: 6;
+  --ds-strip-pad: 26px;
   display: grid;
-  grid-template-columns: repeat(6, minmax(0, 1fr));
-  border: 1px solid var(--ds-line);
-  border-radius: var(--ds-radius-md);
-  background: var(--ds-surface-raised);
-  overflow: hidden;
+  grid-template-columns: repeat(var(--ds-strip-cols), minmax(0, 1fr));
+  row-gap: 28px;
+  margin-left: calc(-1 * (var(--ds-strip-pad) + 1px));
+  clip-path: inset(-24px -24px -24px calc(var(--ds-strip-pad) + 1px));
 }
 .ds-metric-strip > * {
-  border-right: 1px solid var(--ds-line);
+  min-width: 0;
+  padding: 0 var(--ds-strip-pad);
+  border-left: 1px solid var(--ds-line);
 }
-.ds-metric-strip > *:last-child {
-  border-right: 0;
-}
+.ds-metric-strip[data-count="1"] { --ds-strip-cols: 1; }
+.ds-metric-strip[data-count="2"] { --ds-strip-cols: 2; }
+.ds-metric-strip[data-count="3"] { --ds-strip-cols: 3; }
+.ds-metric-strip[data-count="4"] { --ds-strip-cols: 4; }
+.ds-metric-strip[data-count="5"] { --ds-strip-cols: 5; }
 @media (max-width: 1180px) {
-  .ds-metric-strip {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
+  .ds-metric-strip:not([data-count="1"], [data-count="2"], [data-count="3"], [data-count="4"]) {
+    --ds-strip-cols: 3;
   }
-  .ds-metric-strip > *:nth-child(3n) {
-    border-right: 0;
-  }
-  .ds-metric-strip > *:nth-child(-n + 3) {
-    border-bottom: 1px solid var(--ds-line);
-  }
-}
-@media (max-width: 640px) {
-  .ds-metric-strip {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-  .ds-metric-strip > * {
-    border-right: 1px solid var(--ds-line);
-    border-bottom: 1px solid var(--ds-line);
-  }
-  .ds-metric-strip > *:nth-child(2n) {
-    border-right: 0;
-  }
-  .ds-metric-strip > *:nth-last-child(-n + 2) {
-    border-bottom: 0;
-  }
-}
-
-.ds-metric-strip[data-count="1"] {
-  grid-template-columns: minmax(0, 1fr);
-}
-.ds-metric-strip[data-count="2"] {
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-}
-.ds-metric-strip[data-count="3"] {
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-}
-.ds-metric-strip[data-count="3"] > * {
-  border-bottom: 0;
-}
-@media (max-width: 640px) {
-  .ds-metric-strip[data-count="3"] {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-  .ds-metric-strip[data-count="3"] > *:last-child {
-    grid-column: 1 / -1;
-    border-top: 1px solid var(--ds-line);
-  }
-}
-/* El número real de KPIs determina la distribución; cuatro no dejan huecos. */
-.ds-metric-strip[data-count="4"] {
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-}
-.ds-metric-strip[data-count="4"] > * {
-  border-bottom: 0;
-  border-right: 1px solid var(--ds-line);
-}
-.ds-metric-strip[data-count="4"] > *:last-child {
-  border-right: 0;
 }
 @media (max-width: 820px) {
-  .ds-metric-strip[data-count="4"] {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-  .ds-metric-strip[data-count="4"] > *:nth-child(2n) {
-    border-right: 0;
-  }
-  .ds-metric-strip[data-count="4"] > *:nth-child(-n + 2) {
-    border-bottom: 1px solid var(--ds-line);
-  }
+  .ds-metric-strip[data-count="4"] { --ds-strip-cols: 2; }
+}
+@media (max-width: 640px) {
+  .ds-metric-strip { --ds-strip-pad: 16px; }
+  .ds-metric-strip:not([data-count="1"]) { --ds-strip-cols: 2; }
 }
 
 /* Hilo de decisión: raíl vertical pegajoso; horizontal y desplazable en móvil */

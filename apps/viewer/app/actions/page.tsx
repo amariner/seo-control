@@ -139,26 +139,26 @@ export default async function ActionsPage({
           {summary.bloqueadas > 0 ? ` · ${summary.bloqueadas} bloqueadas` : ""}.
         </Notice>
       ) : null}
-      <div className="kpi-grid" style={{ marginBottom: 28 }}>
-        <div className="info-box">
-          <small>En plazo</small>
-          <strong>{summary.enPlazo}</strong>
+      <div className="ds-metric-strip action-strip" data-count="5">
+        <div className="metric-card">
+          <span className="metric-heading">En plazo</span>
+          <strong className="metric-value">{summary.enPlazo}</strong>
         </div>
-        <div className="info-box">
-          <small>Vencidas</small>
-          <strong>{summary.vencidas}</strong>
+        <div className="metric-card">
+          <span className="metric-heading">Vencidas</span>
+          <strong className="metric-value">{summary.vencidas}</strong>
         </div>
-        <div className="info-box">
-          <small>Sin fecha</small>
-          <strong>{summary.sinFecha}</strong>
+        <div className="metric-card">
+          <span className="metric-heading">Sin fecha</span>
+          <strong className="metric-value">{summary.sinFecha}</strong>
         </div>
-        <div className="info-box">
-          <small>Bloqueadas</small>
-          <strong>{summary.bloqueadas}</strong>
+        <div className="metric-card">
+          <span className="metric-heading">Bloqueadas</span>
+          <strong className="metric-value">{summary.bloqueadas}</strong>
         </div>
-        <div className="info-box">
-          <small>Cerradas</small>
-          <strong>{summary.cerradas}</strong>
+        <div className="metric-card">
+          <span className="metric-heading">Cerradas</span>
+          <strong className="metric-value">{summary.cerradas}</strong>
         </div>
       </div>
       <ReportDataTable

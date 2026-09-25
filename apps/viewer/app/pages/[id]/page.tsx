@@ -37,7 +37,7 @@ export default async function PageDetail({
       {data.mode === "synthetic" ? (
         <Notice tone="info">Datos sintéticos de validación.</Notice>
       ) : null}
-      <div className="kpi-grid">
+      <div className="ds-metric-strip" data-count="6">
         {[
           ["Clics", number(page.clicks)],
           ["Impresiones", number(page.impressions)],
@@ -46,10 +46,10 @@ export default async function PageDetail({
           ["CTR de referencia", `${number(page.expectedCtr)}%`],
           ["Conversiones", number(page.conversions)],
         ].map(([label, value]) => (
-          <Card className="metric-card" key={label}>
-            <span className="eyebrow">{label}</span>
+          <div className="metric-card" key={label}>
+            <span className="metric-heading">{label}</span>
             <strong className="metric-value">{value}</strong>
-          </Card>
+          </div>
         ))}
       </div>
       <section className="section" aria-labelledby="fuentes-url">

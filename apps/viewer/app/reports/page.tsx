@@ -51,7 +51,7 @@ export default async function ReportsPage({
 
   return (
     <PageFrame
-      eyebrow="Archivo"
+      eyebrow="Archivo de informes"
       title="Informes"
       description="Cierres, revisiones y versiones publicadas."
       generatedAt={archive.generatedAt}

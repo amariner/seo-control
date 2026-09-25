@@ -8,20 +8,10 @@ import {
   formatPeriodRange,
   type DashboardPayload,
 } from "@seo/contracts";
-import { Badge } from "@seo/ui";
+import { Badge, MetricStrip } from "@seo/ui";
 import { ReportDataTable } from "@seo/ui/data-table";
-import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardAction,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
 import { AppShell } from "./app-shell";
 import { ChartAreaInteractive } from "./chart-area-interactive";
-import { SectionCards } from "./section-cards";
 import "./overview.css";
 
 const projectName = (slug: string) =>
@@ -41,8 +31,11 @@ export const MODE_LABEL = {
   database: "Almacén de datos propio",
 } as const;
 
-/** Tarjeta de sección de dashboard-01 con título navegable y enlace opcional. */
-function SectionCard({
+/**
+ * Sección con el patrón de la ficha de marca (D-049): h2 con descripción gris y
+ * enlace a la derecha, sin tarjeta alrededor. El contenido se separa por reglas.
+ */
+function Section({
   id,
   title,
   description,
@@ -60,36 +53,22 @@ function SectionCard({
   children: ReactNode;
 }) {
   return (
-    <Card aria-labelledby={id} className="min-w-0 shadow-xs" role="region">
-      <CardHeader>
-        <CardTitle>
-          <h2 id={id} className="m-0 text-base font-semibold tracking-normal">
-            {title}
-          </h2>
-        </CardTitle>
-        {description ? <CardDescription>{description}</CardDescription> : null}
-        {href || meta ? (
-          <CardAction>
-            {href ? (
-              <Button
-                asChild
-                variant="outline"
-                size="sm"
-                className="h-9 text-primary"
-              >
-                <Link href={href}>
-                  {linkLabel}
-                  <ArrowUpRight aria-hidden />
-                </Link>
-              </Button>
-            ) : (
-              <span className="text-sm text-muted-foreground">{meta}</span>
-            )}
-          </CardAction>
+    <section aria-labelledby={id} className="overview-section">
+      <div className="section-heading">
+        <div>
+          <h2 id={id}>{title}</h2>
+          {description ? <p>{description}</p> : null}
+        </div>
+        {href ? (
+          <Link className="section-link" href={href}>
+            {linkLabel} <ArrowUpRight aria-hidden size={14} />
+          </Link>
+        ) : meta ? (
+          <span className="muted">{meta}</span>
         ) : null}
-      </CardHeader>
-      <CardContent className="min-w-0">{children}</CardContent>
-    </Card>
+      </div>
+      {children}
+    </section>
   );
 }
 
@@ -111,27 +90,25 @@ export function Dashboard({ data }: { data: DashboardPayload }) {
 
   return (
     <AppShell generatedAt={data.generatedAt}>
-      <main
-        className="@container/main flex w-full flex-1 flex-col gap-4 py-6 md:gap-6"
-        id="contenido"
-      >
-        <header className="flex flex-wrap items-end justify-between gap-x-8 gap-y-3">
-          <div className="min-w-0">
-            <p className="eyebrow">SEO Intelligence</p>
-            <h1 className="m-0 text-3xl font-semibold tracking-tight">
-              {selectedProject ?? "Resumen del grupo"}
-            </h1>
-            <p className="mt-2 mb-0 text-muted-foreground">
+      <main className="page overview-page @container/main" id="contenido">
+        <header className="page-heading">
+          <div>
+            <p className="eyebrow">
+              {selectedProject ? "Resumen" : "Rendimiento orgánico"}
+            </p>
+            <h1>{selectedProject ?? "Resumen del grupo"}</h1>
+            <p className="lede">
               {selectedProject
-                ? "Resumen"
+                ? (BRANDS.find((brand) => brand.slug === data.filters.project)
+                    ?.domain ?? selectedProject)
                 : new Intl.ListFormat("es", { type: "conjunction" }).format(
                     PILOT_PROJECTS.map((brand) => brand.name),
                   )}{" "}
               · {selectedMarket}.
             </p>
           </div>
-          <div className="grid gap-1 text-sm text-muted-foreground sm:text-right">
-            <strong className="text-foreground">
+          <div className="date-context overview-context">
+            <strong>
               {formatPeriodRange(data.window.start, data.window.end)}
             </strong>
             <Badge tone={data.mode === "synthetic" ? "warn" : "info"}>
@@ -157,22 +134,19 @@ export function Dashboard({ data }: { data: DashboardPayload }) {
           </div>
         </header>
 
-        <section aria-labelledby="kpis" className="grid gap-3">
-          <div className="flex items-center justify-between gap-4">
-            <h2
-              id="kpis"
-              className="m-0 text-base font-semibold tracking-normal"
-            >
-              Indicadores
-            </h2>
+        <section aria-labelledby="kpis">
+          <h2 id="kpis" className="ds-sr-only">
+            Indicadores
+          </h2>
+          <MetricStrip metrics={data.metrics} />
+          <p className="overview-kpi-foot">
             <Link className="section-link" href="/data">
-              Fuentes y cobertura →
+              Fuentes y cobertura <ArrowUpRight aria-hidden size={14} />
             </Link>
-          </div>
-          <SectionCards metrics={data.metrics} />
+          </p>
         </section>
 
-        <section aria-label="Evolución">
+        <section aria-label="Evolución" className="overview-section">
           <ChartAreaInteractive
             title="Evolución"
             description="Sesiones orgánicas diarias · GA4"
@@ -212,8 +186,8 @@ export function Dashboard({ data }: { data: DashboardPayload }) {
           </ChartAreaInteractive>
         </section>
 
-        <div className="grid gap-4 md:gap-6 @5xl/main:grid-cols-[minmax(0,2fr)_minmax(280px,1fr)]">
-          <SectionCard
+        <div className="overview-split">
+          <Section
             id="mercados"
             title="Mercados"
             description="Variación de sesiones frente al periodo anterior."
@@ -267,52 +241,40 @@ export function Dashboard({ data }: { data: DashboardPayload }) {
                 },
               }))}
             />
-          </SectionCard>
+          </Section>
 
-          <SectionCard
+          <Section
             id="proyectos"
             title="Proyectos"
             href="/projects"
             linkLabel="Ver todos"
           >
-            <ul className="m-0 grid list-none gap-2 p-0">
+            <ul className="overview-list">
               {data.projects.map((project) => (
                 <li key={project.slug}>
-                  <Link
-                    className="group flex items-center justify-between gap-3 rounded-lg border bg-background p-3 transition-colors hover:border-primary hover:bg-accent-band"
-                    href={`/projects/${project.slug}`}
-                  >
-                    <span className="grid min-w-0 gap-0.5">
-                      <strong className="truncate text-sm font-semibold text-foreground group-hover:text-primary">
-                        {project.name}
-                      </strong>
-                      <span className="truncate text-xs text-muted-foreground">
-                        {project.domain}
-                      </span>
+                  <Link href={`/projects/${project.slug}`}>
+                    <span className="overview-list-name">
+                      <strong>{project.name}</strong>
+                      <span>{project.domain}</span>
                     </span>
                     {project.score !== null ? (
-                      <span className="grid shrink-0 text-right text-xs text-muted-foreground">
-                        <strong className="text-sm text-foreground tabular-nums">
-                          {number(project.score)}/100
-                        </strong>
+                      <span className="overview-list-value">
+                        <strong>{number(project.score)}/100</strong>
                         {project.delta > 0 ? "+" : ""}
                         {project.delta} pts
                       </span>
                     ) : (
-                      <ArrowUpRight
-                        aria-hidden
-                        className="size-4 shrink-0 text-muted-foreground group-hover:text-primary"
-                      />
+                      <ArrowUpRight aria-hidden size={16} />
                     )}
                   </Link>
                 </li>
               ))}
             </ul>
-          </SectionCard>
+          </Section>
         </div>
 
         {data.actions.length > 0 && (
-          <SectionCard
+          <Section
             id="acciones"
             title="Acciones"
             href="/actions"
@@ -354,11 +316,11 @@ export function Dashboard({ data }: { data: DashboardPayload }) {
                 },
               }))}
             />
-          </SectionCard>
+          </Section>
         )}
 
         {geoConnected && (
-          <SectionCard
+          <Section
             id="asistentes"
             title="Presencia en asistentes"
             meta={`${number(data.geo.totalPrompts)} ejecuciones`}
@@ -390,10 +352,10 @@ export function Dashboard({ data }: { data: DashboardPayload }) {
                 <dd>{number(data.geo.aiConversions)}</dd>
               </div>
             </dl>
-          </SectionCard>
+          </Section>
         )}
 
-        <SectionCard
+        <Section
           id="fuentes"
           title="Fuentes y cobertura"
           href="/data"
@@ -447,7 +409,7 @@ export function Dashboard({ data }: { data: DashboardPayload }) {
                 : MODE_LABEL[data.mode]
             }
           />
-        </SectionCard>
+        </Section>
       </main>
     </AppShell>
   );

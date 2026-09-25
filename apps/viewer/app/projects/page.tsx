@@ -65,7 +65,7 @@ export default async function ProjectsPage({
 
   return (
     <PageFrame
-      eyebrow="SEO Intelligence · Grupo"
+      eyebrow="Webs del grupo"
       title="Proyectos"
       description="Informes, mercados y fuentes de cada web."
       generatedAt={data.generatedAt}

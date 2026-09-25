@@ -104,7 +104,7 @@ export default async function PortfolioPage({
 
   return (
     <PageFrame
-      eyebrow="SEO Intelligence · Grupo"
+      eyebrow="Rendimiento por marca"
       title="Conjunto"
       description="Resultados por marca y mercado. Selecciona qué quieres comparar."
       generatedAt={data.generatedAt}

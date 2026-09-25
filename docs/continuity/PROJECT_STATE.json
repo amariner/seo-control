@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "project": "SEO Dashboard V2",
-  "updatedAt": "2026-09-25T12:40:00+02:00",
+  "updatedAt": "2026-09-25T15:30:00+02:00",
   "objective": "Construir la plataforma SEO más útil y desarrollada del sector para convertir grandes volúmenes de datos en decisiones trazables, responsables y resultados medibles.",
   "repository": "https://github.com/amariner/seo-control",
   "currentPhase": {
@@ -14,7 +14,7 @@
     "id": "P1",
     "name": "Sistema de diseño y calendario editorial general"
   },
-  "nextAction": "2026-09-25: bloqueo de bots e IA en el visor (D-048) en producción (0a24cd7); Firewall de Vercel activo (Bot Protection: Challenge, AI Bots: Deny). login con Google (D-047) en producción; el visor ya no es público. Para dar acceso a alguien: añadir su email a ALLOWED_GOOGLE_EMAILS en Vercel y a los usuarios de prueba de Google Auth Platform (proyecto seo-intelligence-viewer), y volver a desplegar. Siguiente paso: revisar con XTONE el tráfico directo anómalo y retomar P3.1 (Neon Frankfurt). P3 activa 25%; P2 bloqueada 79%.",
+  "nextAction": "2026-09-25: patrón visual de la ficha de marca extendido a todo el visor (D-049), en local y sin commit. Pendiente: revisar con el responsable, hacer commit y desplegar; corregir las incidencias de axe ajenas (aria de la barra lateral en móvil, .is-top3 de la ficha, rutas de ejemplo con 404). bloqueo de bots e IA en el visor (D-048) en producción (0a24cd7); Firewall de Vercel activo (Bot Protection: Challenge, AI Bots: Deny). login con Google (D-047) en producción; el visor ya no es público. Para dar acceso a alguien: añadir su email a ALLOWED_GOOGLE_EMAILS en Vercel y a los usuarios de prueba de Google Auth Platform (proyecto seo-intelligence-viewer), y volver a desplegar. Siguiente paso: revisar con XTONE el tráfico directo anómalo y retomar P3.1 (Neon Frankfurt). P3 activa 25%; P2 bloqueada 79%.",
   "pilot": [
     "porcelanosa",
     "noken",

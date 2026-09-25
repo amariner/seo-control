@@ -32,21 +32,21 @@ export default async function IssueDetail({
       {data.mode === "synthetic" ? (
         <Notice tone="info">Incidencia sintética de validación.</Notice>
       ) : null}
-      <div className="kpi-grid">
-        <Card className="metric-card">
-          <span className="eyebrow">URLs afectadas</span>
+      <div className="ds-metric-strip" data-count="3">
+        <div className="metric-card">
+          <span className="metric-heading">URLs afectadas</span>
           <strong className="metric-value">
             {issue.affectedUrls.toLocaleString("es-ES")}
           </strong>
-        </Card>
-        <Card className="metric-card">
-          <span className="eyebrow">Prioridad / 100</span>
+        </div>
+        <div className="metric-card">
+          <span className="metric-heading">Prioridad / 100</span>
           <strong className="metric-value">{issue.priorityScore}</strong>
-        </Card>
-        <Card className="metric-card">
-          <span className="eyebrow">Crawls con incidencia</span>
+        </div>
+        <div className="metric-card">
+          <span className="metric-heading">Crawls con incidencia</span>
           <strong className="metric-value">{issue.persistenceRuns}</strong>
-        </Card>
+        </div>
       </div>
       <section className="section chapter-grid">
         <Card className="chapter-card">

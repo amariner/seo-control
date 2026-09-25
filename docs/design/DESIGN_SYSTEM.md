@@ -245,6 +245,27 @@ Respect reduced motion, preserve prefetch and normal link interactions, and
 remove feedback on completion. Never display invented progress percentages.
 
 
+## Brand-report pattern as the house style · D-049 (2026-09-25)
+
+The brand report (`/projects/[slug]`) is the reference layout for every viewer
+screen. Its essence, now shared through global classes:
+
+- **Heading** (`.page-heading`): `Title │ scope` on one line (h1 500 weight,
+  34–44 px, -0.045em; the `eyebrow` becomes the grey scope after a hairline),
+  grey description below, data context right-aligned in muted 13 px. Markup
+  stays eyebrow → h1 → lede; only the visual order changes.
+- **KPIs** (`.ds-metric-strip` + `MetricCard`): columns divided by hairlines,
+  no frame, no background, no badges. Label 15 px, value 28–38 px weight 500,
+  comparisons as `delta + muted label`. Coverage stays visible as a quiet foot
+  line and turns amber only when partial.
+- **Sections**: h2 550 22 px, grey one-line description, link on the right in
+  13 px cobalt. No card around sections; lists use 62 px rows with hairlines.
+  Charts sit in one bordered panel under the section heading.
+- **Tabs**: underline tabs, 30 px apart, muted → ink on hover → cobalt when
+  current, no icons.
+- **Selection**: chips and segmented controls mark the selection with cobalt
+  text, border and `--ds-accent-band`, never a solid fill.
+
 ## shadcn/ui and dashboard-01 shell · D-044 (2026-09-24)
 
 - The viewer builds new UI with shadcn/ui on Tailwind v4. shadcn tokens are
@@ -253,8 +274,8 @@ remove feedback on completion. Never display invented progress percentages.
 - Shell: inset sidebar on mineral paper, white canvas for content, sticky
   header with section title, global filters and search. On mobile the sidebar
   is a sheet and filters form a three-column second row.
-- KPI cards keep the MetricStrip contract: coverage, previous period, YoY and
-  target stay visible. Chart cards keep ECharts and the tabular alternative.
+- KPIs keep the MetricStrip contract: coverage, previous period, YoY and
+  target stay visible (as a hairline strip since D-049). Chart cards keep ECharts and the tabular alternative.
 - Semantic colours stay semantic (`positive`, `warning`, `danger` utilities).
 - Header: breadcrumb is the only one in the product. On a brand report the
   period and market pickers live in the header; the data cut-off stays under

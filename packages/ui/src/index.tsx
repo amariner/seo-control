@@ -265,15 +265,7 @@ export function MetricCard({
 }) {
   return (
     <article className="metric-card">
-      <div className="metric-heading">
-        <span>{metric.label}</span>
-        <StatusBadge
-          tone={metric.coverage.quality === "completa" ? "good" : "warn"}
-          title={`Cobertura ${metric.coverage.label}`}
-        >
-          {Math.round(metric.coverage.ratio * 100)}%
-        </StatusBadge>
-      </div>
+      <span className="metric-heading">{metric.label}</span>
       <strong className="metric-value">
         {formatValue(metric.value, metric.unit)}
       </strong>
@@ -284,7 +276,7 @@ export function MetricCard({
             comparison={metric.previous}
             goodDirection={metric.goodDirection}
           />{" "}
-          vs. periodo
+          vs. periodo anterior
         </span>
         <span>
           <Delta
@@ -292,7 +284,7 @@ export function MetricCard({
             comparison={metric.previousYear}
             goodDirection={metric.goodDirection}
           />{" "}
-          interanual
+          vs. año anterior
         </span>
       </div>
       {metric.target !== null ? (
@@ -305,11 +297,19 @@ export function MetricCard({
           <small>Objetivo {formatValue(metric.target, metric.unit)}</small>
         </div>
       ) : null}
+      {/* La cobertura sigue visible, pero como pie discreto: solo destaca si es parcial. */}
+      <small
+        className="metric-coverage"
+        data-quality={metric.coverage.quality === "completa" ? "complete" : "partial"}
+        title={`Cobertura ${metric.coverage.label}`}
+      >
+        Cobertura {Math.round(metric.coverage.ratio * 100)}&nbsp;%
+      </small>
     </article>
   );
 }
 
-/** Seis KPIs separados por líneas finas, no seis tarjetas flotantes. */
+/** KPIs en columnas separadas por líneas finas, no tarjetas flotantes (D-049). */
 export function MetricStrip({
   metrics,
 }: {

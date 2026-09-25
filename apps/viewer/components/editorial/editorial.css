@@ -9,15 +9,6 @@
   font-size: 13px;
   line-height: 1.7;
 }
-.editorial-page .editorial-tabs {
-  gap: 24px;
-  margin-bottom: 32px;
-}
-.editorial-page .editorial-tab {
-  padding: 0 2px 12px;
-  font-size: 14px;
-  gap: 8px;
-}
 .editorial-page .editorial-toolbar {
   padding: 20px;
   gap: 16px;

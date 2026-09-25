@@ -2,14 +2,13 @@ import Link from "next/link";
 import type { ReactNode } from "react";
 import type { EditorialDataset } from "@seo/contracts";
 import { StatusBadge } from "@seo/ui";
-import { CalendarDays, Lightbulb, ListTodo } from "lucide-react";
 import "./editorial.css";
 import { AppShell } from "@/components/app-shell";
 
 const tabs = [
-  { href: "/editorial/calendario", label: "Calendario", icon: CalendarDays },
-  { href: "/editorial/backlog", label: "Backlog y plan", icon: ListTodo },
-  { href: "/editorial/propuestas", label: "Propuestas", icon: Lightbulb },
+  { href: "/editorial/calendario", label: "Calendario" },
+  { href: "/editorial/backlog", label: "Backlog y plan" },
+  { href: "/editorial/propuestas", label: "Propuestas" },
 ] as const;
 
 export function EditorialFrame({ dataset, current, title, description, aside, children }: { dataset: EditorialDataset; current: (typeof tabs)[number]["href"]; title: string; description: string; aside?: ReactNode; children: ReactNode }) {
@@ -21,7 +20,7 @@ export function EditorialFrame({ dataset, current, title, description, aside, ch
       <main className="page editorial-page" id="contenido">
         <header className="page-heading">
           <div>
-            <p className="eyebrow">Editorial · 8 marcas</p>
+            <p className="eyebrow">Ocho marcas del grupo</p>
             <h1>{title}</h1>
             <p className="lede">{description}</p>
           </div>
@@ -34,7 +33,7 @@ export function EditorialFrame({ dataset, current, title, description, aside, ch
           )}
         </header>
         <nav className="editorial-tabs" aria-label="Secciones editoriales">
-          {tabs.map(({ href, label, icon: Icon }) => <Link key={href} href={href} className={`editorial-tab ${href === current ? "editorial-tab-active" : ""}`} aria-current={href === current ? "page" : undefined}><Icon size={14} aria-hidden />{label}</Link>)}
+          {tabs.map(({ href, label }) => <Link key={href} href={href} className={`editorial-tab ${href === current ? "editorial-tab-active" : ""}`} aria-current={href === current ? "page" : undefined}>{label}</Link>)}
         </nav>
         {children}
         <details className="editorial-provenance"><summary>Fuentes y cobertura de la importación</summary>

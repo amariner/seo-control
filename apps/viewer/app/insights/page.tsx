@@ -22,7 +22,7 @@ export default async function InsightsPage({
   const data = await getDashboard(parseFilters(input));
   return (
     <PageFrame
-      eyebrow="Archivo"
+      eyebrow="Análisis archivados"
       title="Evidencias"
       description="Fuentes vinculadas y análisis archivados."
       generatedAt={data.generatedAt}
