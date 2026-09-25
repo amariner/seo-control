@@ -2,12 +2,12 @@
 
 Última actualización: 24 de septiembre de 2026 (shadcn/ui y dashboard-01 en el visor, D-044, rama `feat/shadcn-dashboard`).
 
-## Bloqueo de bots e IA · D-048 (2026-09-25, local, sin desplegar)
+## Bloqueo de bots e IA · D-048 (2026-09-25, en producción)
 
 - Hecho: `apps/viewer/lib/crawlers.ts` + pruebas, 403 a bots en `proxy.ts` (login
   incluido), `robots.ts` en visor y workbench, `X-Robots-Tag` ampliada y `TDM-Reservation: 1`.
-- Reanudar: commit, `vercel deploy --prod` y comprobar con `curl -A GPTBot` → 403.
-  Activar en Vercel → Firewall las reglas gestionadas de bots e IA.
+- Desplegado (0a24cd7) y verificado en producción: bots → 403, navegador → 307/401.
+  Pendiente del responsable: activar en Vercel → Firewall las reglas gestionadas de bots e IA.
 
 ## Login con Google · D-047 (2026-09-25, en producción)
 

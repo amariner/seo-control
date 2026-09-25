@@ -894,4 +894,7 @@
 - Verificado con curl en 3000 y en `viewer-auth-qa` (3022): navegador → 307 al
   login / 401 en API; GPTBot, ClaudeBot, Googlebot y sin UA → 403 también en
   `/login`; `robots.txt` servido a bots. Typecheck, pruebas del visor y `next build` en verde.
-- Pendiente del responsable: activar en Vercel → Firewall las reglas de bots e IA. Sin desplegar.
+- Pendiente del responsable: activar en Vercel → Firewall las reglas de bots e IA.
+- Desplegado: commit 0a24cd7 en main y `vercel deploy --prod`. En producción,
+  GPTBot, ClaudeBot, PerplexityBot, Googlebot y sin UA → 403 en `/`, `/login` y API;
+  navegador → 307 / 200 login / 401; `robots.txt`, `X-Robots-Tag` y `TDM-Reservation` servidos.
