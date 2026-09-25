@@ -871,3 +871,15 @@
   https://seo-dashboard-viewer.vercel.app: portada, ficha XTONE y tiempo real.
 - Recordatorio: el visor sigue siendo público (D-035) y ahora enseña también
   tráfico directo inflado en XTONE (bots probables): revisar con el equipo.
+
+## 2026-09-25 · Login con Google (D-047)
+
+- Sin IT ni Entra disponibles, y sin Vercel Pro: acceso con Google más una lista
+  de emails (`lib/access.ts`, `auth.ts`, `app/login`, cierre de sesión en la barra lateral).
+- Verificado en local (config `viewer-auth-qa`, puerto 3022, bypass desactivado):
+  páginas → 307 a `/login`, `/api/v1/*` → 401 JSON, redirección a Google con
+  PKCE y `select_account`, aviso de `AccessDenied`. Typecheck y 102 pruebas del visor en verde.
+- Pendiente del responsable: crear el cliente OAuth web en Google Cloud y cargar
+  las variables en Vercel. Después, quitar `PUBLIC_ACCESS` y desplegar.
+- El gcloud local no arranca (necesita Python ≥ 3.10) y tampoco permite crear
+  clientes OAuth web: ese paso se hace desde la consola.

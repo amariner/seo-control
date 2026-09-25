@@ -2,9 +2,10 @@
 
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { Check, ChevronsUpDown, LoaderCircle } from "lucide-react";
+import { Check, ChevronsUpDown, LoaderCircle, LogOut } from "lucide-react";
 import { EXPANSION_PROJECTS, PILOT_PROJECTS, findBrand } from "@seo/contracts";
-import { useEffect, useTransition, type ComponentProps } from "react";
+import { useEffect, useState, useTransition, type ComponentProps } from "react";
+import { signOutAction } from "@/lib/auth-actions";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -168,22 +169,7 @@ export function AppSidebar({
         </nav>
       </SidebarContent>
       <SidebarFooter>
-        <div className="flex items-center gap-3 rounded-lg p-2">
-          <span
-            aria-hidden
-            className="grid size-8 shrink-0 place-items-center rounded-full bg-sidebar-accent text-xs font-bold text-foreground"
-          >
-            SEO
-          </span>
-          <span className="grid min-w-0 leading-tight">
-            <span className="truncate text-sm font-medium text-foreground">
-              Sesión corporativa
-            </span>
-            <span className="truncate text-xs font-semibold tracking-[0.08em] text-muted-foreground uppercase">
-              Confidencial
-            </span>
-          </span>
-        </div>
+        <SessionFooter />
       </SidebarFooter>
     </Sidebar>
   );
@@ -280,5 +266,58 @@ function ProjectSelector({
         </DropdownMenuContent>
       </DropdownMenu>
     </SidebarMenuItem>
+  );
+}
+
+/**
+ * Pie con la cuenta en sesión y la salida (D-047). La sesión se lee de
+ * `/api/auth/session` para no convertir cada AppShell en dinámico. Sin sesión
+ * (acceso público temporal o bypass de desarrollo) no se ofrece «Cerrar sesión».
+ */
+function SessionFooter() {
+  const [email, setEmail] = useState<string | null>(null);
+
+  useEffect(() => {
+    let cancelled = false;
+    fetch("/api/auth/session")
+      .then((response) => (response.ok ? response.json() : null))
+      .then((session: { user?: { email?: string } } | null) => {
+        if (!cancelled) setEmail(session?.user?.email ?? null);
+      })
+      .catch(() => undefined);
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  return (
+    <div className="flex items-center gap-3 rounded-lg p-2">
+      <span
+        aria-hidden
+        className="grid size-8 shrink-0 place-items-center rounded-full bg-sidebar-accent text-xs font-bold text-foreground"
+      >
+        {email ? email.slice(0, 1).toUpperCase() : "SEO"}
+      </span>
+      <span className="grid min-w-0 flex-1 leading-tight">
+        <span className="truncate text-sm font-medium text-foreground">
+          {email ?? "Sesión corporativa"}
+        </span>
+        <span className="truncate text-xs font-semibold tracking-[0.08em] text-muted-foreground uppercase">
+          Confidencial
+        </span>
+      </span>
+      {email ? (
+        <form action={signOutAction}>
+          <button
+            type="submit"
+            aria-label="Cerrar sesión"
+            title="Cerrar sesión"
+            className="grid size-8 place-items-center rounded-md text-muted-foreground hover:bg-sidebar-accent hover:text-foreground"
+          >
+            <LogOut className="size-4" aria-hidden />
+          </button>
+        </form>
+      ) : null}
+    </div>
   );
 }

@@ -50,6 +50,25 @@
         "3021"
       ],
       "port": 3021
+    },
+    {
+      "name": "viewer-auth-qa",
+      "runtimeExecutable": "env",
+      "runtimeArgs": [
+        "DEV_AUTH_BYPASS=false",
+        "AUTH_GOOGLE_ID=qa-client",
+        "AUTH_GOOGLE_SECRET=qa-secret",
+        "ALLOWED_GOOGLE_EMAILS=marinerandreu@gmail.com",
+        "pnpm",
+        "--filter",
+        "@seo/viewer",
+        "exec",
+        "next",
+        "dev",
+        "--port",
+        "3022"
+      ],
+      "port": 3022
     }
   ]
 }

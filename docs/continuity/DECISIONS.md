@@ -1449,3 +1449,26 @@ No se reescriben decisiones antiguas. Si una cambia, se añade una nueva entrada
 - Ajuste del 2026-09-24: el área del gráfico de evolución llega al borde derecho del interruptor Línea/Barras (margen derecho 0; primera y última etiqueta del eje alineadas hacia dentro; margen de categoría solo en barras).
 - Ajuste del 2026-09-24: la métrica del gráfico de evolución pasa a un desplegable (Select de shadcn) con logo de Google en Clics e Impresiones e icono neutro en Tráfico total (dato de GA4). El interruptor Línea/Barras queda solo con iconos, con nombre accesible y title.
 - Ajuste del 2026-09-24: la leyenda del gráfico de evolución pasa a la barra de herramientas, a la derecha del selector de métrica y antes del interruptor; en móvil va en su propia fila, en horizontal.
+
+## D-047 · Acceso al visor con Google mientras Entra ID no esté disponible
+
+- Fecha: 2026-09-25.
+- Estado: vigente. Sustituirá a D-035 cuando se retire `PUBLIC_ACCESS` en Vercel.
+- Contexto: no hay interlocución con IT ni acceso a Microsoft Entra, así que la
+  app no se puede registrar allí. El responsable sí gestiona Google Cloud, y no
+  quiere pasar Vercel a Pro (Vercel Authentication solo admite miembros del
+  equipo y Password Protection es de pago).
+- Decisión: login con Google (Auth.js, OIDC) y una lista de emails permitidos,
+  `ALLOWED_GOOGLE_EMAILS`, que mantiene el responsable en Vercel. Solo entra un
+  email **verificado** por Google y presente en la lista; una lista vacía no
+  deja entrar a nadie. Acceso inicial: solo `marinerandreu@gmail.com`.
+- Entra ID sigue en el código y se activa solo si existe
+  `AUTH_MICROSOFT_ENTRA_ID_ID`. El login muestra únicamente los proveedores
+  configurados.
+- `AUTH_GOOGLE_*` es un cliente OAuth web propio y **no** reutiliza
+  `GOOGLE_CLIENT_*`, que son las credenciales de solo lectura de GSC (D-034).
+- Sin sesión, las rutas `/api/*` responden 401 en JSON y las páginas redirigen
+  al login, que conserva solo la ruta del `callbackUrl`. `/api/auth` queda fuera
+  del proxy. Se mantiene la sesión JWT de 8 h con cookie `__Secure-`.
+- Riesgo aceptado: Hobby es de uso no comercial según las condiciones de Vercel.
+  El plan B es Azure UE (salida `standalone`).

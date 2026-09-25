@@ -153,6 +153,8 @@ h3 { margin: 0; font: 600 var(--ds-text-h3); color: var(--ds-ink); }
 .login-card .brand-mark { margin: 0 auto 24px; }
 .login-card p:not(.eyebrow) { margin: 12px 0 26px; color: var(--ds-text); font: var(--ds-text-ui); }
 .login-card .eyebrow { justify-content: center; }
+.login-card p.login-error { margin: 0 0 20px; padding: 12px 14px; border: 1px solid var(--ds-danger); border-radius: var(--ds-radius-md); background: var(--ds-danger-soft); color: var(--ds-ink); text-align: left; }
+.login-card form + form { margin-top: 10px; }
 
 /* ---------------------------------------------------------------------------
  * Editorial · calendario general, backlog, propuestas y detalle

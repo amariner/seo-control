@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "project": "SEO Dashboard V2",
-  "updatedAt": "2026-09-24T19:00:00+02:00",
+  "updatedAt": "2026-09-25T10:00:00+02:00",
   "objective": "Construir la plataforma SEO más útil y desarrollada del sector para convertir grandes volúmenes de datos en decisiones trazables, responsables y resultados medibles.",
   "repository": "https://github.com/amariner/seo-control",
   "currentPhase": {
@@ -14,7 +14,7 @@
     "id": "P1",
     "name": "Sistema de diseño y calendario editorial general"
   },
-  "nextAction": "2026-09-24: D-044/045/046 (shadcn + dashboard-01, ficha de marca rediseñada, tiempo real GA4, visitas desde IA, keywords por posición) fusionadas en main y desplegadas en producción. Siguiente paso: revisar con el equipo de XTONE el tráfico directo anómalo (China/Singapur, bots probables) y el salto de impresiones desde el 17-09; después retomar P3.1 (Neon Frankfurt) y D-035. Pendiente de diseño: migrar el interior de las demás vistas del visor a primitivos shadcn y reejecutar Axe. P3 activa 25%; P2 bloqueada 79%.",
+  "nextAction": "2026-09-25: login con Google + lista de emails (D-047) hecho en local, sin commit. Siguiente paso: el responsable crea el cliente OAuth web en Google Cloud; después se cargan las variables en Vercel, se quita PUBLIC_ACCESS, se despliega y se verifica en producción. Luego, revisar con XTONE el tráfico directo anómalo y retomar P3.1 (Neon Frankfurt). P3 activa 25%; P2 bloqueada 79%.",
   "pilot": [
     "porcelanosa",
     "noken",
@@ -73,7 +73,7 @@
       "id": "public-viewer",
       "scope": "security",
       "status": "active",
-      "detail": "El visor desplegado es público (PUBLIC_ACCESS=true, D-035) y muestra dato real de negocio. Solo lo protege noindex. Se retira registrando la app en Microsoft Entra y quitando la variable en Vercel."
+      "detail": "El visor desplegado es público (PUBLIC_ACCESS=true, D-035) y muestra dato real de negocio. Solo lo protege noindex. El login con Google ya está en el código (D-047), pendiente de desplegar: falta crear el cliente OAuth web en Google Cloud, cargar AUTH_SECRET, AUTH_GOOGLE_ID/SECRET y ALLOWED_GOOGLE_EMAILS en Vercel, quitar PUBLIC_ACCESS y desplegar."
     }
   ],
   "lastValidation": {

@@ -6,5 +6,5 @@ import { auth, publicAccess } from "./auth";
 export default publicAccess ? () => NextResponse.next() : auth;
 
 export const config = {
-  matcher: ["/((?!_next/static|_next/image|favicon.ico|login|api/v1/service).*)"],
+  matcher: ["/((?!_next/static|_next/image|favicon.ico|login|api/auth|api/v1/service).*)"],
 };

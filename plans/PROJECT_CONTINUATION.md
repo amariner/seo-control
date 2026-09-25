@@ -2,6 +2,20 @@
 
 Última actualización: 24 de septiembre de 2026 (shadcn/ui y dashboard-01 en el visor, D-044, rama `feat/shadcn-dashboard`).
 
+
+## Login con Google · D-047 (2026-09-25, local, sin commit)
+
+- Hecho: proveedor Google y lista `ALLOWED_GOOGLE_EMAILS` (`apps/viewer/auth.ts`,
+  `lib/access.ts` con pruebas), 401 JSON en `/api/*`, login con error
+  `AccessDenied` y cierre de sesión en el pie de la barra lateral. Entra queda
+  preparado y se activa por variable.
+- Reanudar: con el cliente OAuth creado, cargar en Vercel (producción) `AUTH_SECRET`
+  (nuevo), `AUTH_GOOGLE_ID`, `AUTH_GOOGLE_SECRET` (sensitive) y
+  `ALLOWED_GOOGLE_EMAILS=marinerandreu@gmail.com`; borrar `PUBLIC_ACCESS`;
+  commit, `vercel deploy --prod` y comprobar en producción el login, el rechazo
+  de otra cuenta, el 401 de la API y el cierre de sesión. Después, retirar el
+  bloqueo `public-viewer`.
+
 ## Rediseño shadcn · D-044/045/046 (2026-09-24, fusionado en main y desplegado)
 
 - Rama `feat/shadcn-dashboard`. Tailwind v4 + shadcn/ui en `apps/viewer`;
