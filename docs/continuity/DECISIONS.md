@@ -1476,3 +1476,25 @@ No se reescriben decisiones antiguas. Si una cambia, se añade una nueva entrada
   en Vercel; proyecto GCP `seo-intelligence-viewer` con la app en modo Prueba
   (usuarios externos). Acceso con dos cierres: la lista de Vercel y los usuarios
   de prueba de Google. Hoy hay dos cuentas autorizadas.
+
+## D-048 · Bloqueo de buscadores, bots e IA en el visor
+
+- Fecha: 2026-09-25.
+- Estado: vigente.
+- Contexto: el visor es privado (D-047), pero la pantalla de login, las
+  redirecciones y `robots.txt` (que antes redirigía al login) eran superficie
+  rastreable, y solo había `X-Robots-Tag: noindex` y meta robots.
+- Decisión, en capas:
+  1. `app/robots.ts`: `Disallow: /` general y por nombre para cada agente de IA
+     (`AI_AGENTS` en `lib/crawlers.ts`). Queda fuera del proxy para que se lea.
+  2. `proxy.ts`: cualquier user-agent de buscador, rastreador SEO, agente de IA,
+     previsualizador, navegador sin interfaz o librería HTTP (o sin user-agent)
+     recibe 403 `no-store` en todas las rutas, login incluido. Solo se eximen
+     `/robots.txt` y `/api/v1/service/*`, que tiene su propio token.
+  3. Cabeceras: `X-Robots-Tag` ampliada (`nosnippet`, `noimageindex`, `noai`,
+     `noimageai`…) y `TDM-Reservation: 1` (reserva de minería de textos y datos,
+     art. 4 de la Directiva UE 2019/790). Meta robots equivalente en el layout.
+  4. Workbench: `robots.txt` y las mismas cabeceras, aunque sea solo local.
+- Límite asumido: el user-agent se falsifica; esto frena a los bots declarados,
+  no a un scraper hostil. Lo que protege los datos sigue siendo la sesión. La capa
+  de red recomendada es el Firewall de Vercel (reglas gestionadas de bots e IA).

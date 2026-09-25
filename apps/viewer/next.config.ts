@@ -1,5 +1,6 @@
 import { resolve } from "node:path";
 import type { NextConfig } from "next";
+import { ROBOTS_DIRECTIVE } from "./lib/crawlers";
 
 const nextConfig: NextConfig = {
   reactStrictMode: true,
@@ -43,7 +44,9 @@ const nextConfig: NextConfig = {
         { key: "Referrer-Policy", value: "same-origin" },
         { key: "Permissions-Policy", value: "camera=(), microphone=(), geolocation=()" },
         { key: "Content-Security-Policy", value: "default-src 'self'; img-src 'self' data:; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; connect-src 'self'; frame-ancestors 'none'; base-uri 'self'; form-action 'self'" },
-        { key: "X-Robots-Tag", value: "noindex, nofollow, noarchive" },
+        { key: "X-Robots-Tag", value: ROBOTS_DIRECTIVE },
+        /* Reserva de minería de textos y datos (TDMRep, art. 4 Directiva UE 2019/790). */
+        { key: "TDM-Reservation", value: "1" },
         { key: "Strict-Transport-Security", value: "max-age=63072000; includeSubDomains; preload" },
       ],
     }];

@@ -886,3 +886,12 @@
 - En producción: commits e0dda52 (pestaña Keywords) y 0c62aa7 (login) subidos,
   `PUBLIC_ACCESS` eliminada y dos despliegues en fra1. Login real con Google
   verificado; segunda cuenta autorizada en Vercel y en los usuarios de prueba.
+
+## 2026-09-25 · Bloqueo de bots e IA (D-048)
+
+- `lib/crawlers.ts` (con pruebas), `proxy.ts` con 403 para bots antes de Auth.js,
+  `app/robots.ts` en visor y workbench, `X-Robots-Tag` ampliada y `TDM-Reservation`.
+- Verificado con curl en 3000 y en `viewer-auth-qa` (3022): navegador → 307 al
+  login / 401 en API; GPTBot, ClaudeBot, Googlebot y sin UA → 403 también en
+  `/login`; `robots.txt` servido a bots. Typecheck, pruebas del visor y `next build` en verde.
+- Pendiente del responsable: activar en Vercel → Firewall las reglas de bots e IA. Sin desplegar.
