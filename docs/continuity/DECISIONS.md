@@ -1497,4 +1497,6 @@ No se reescriben decisiones antiguas. Si una cambia, se añade una nueva entrada
   4. Workbench: `robots.txt` y las mismas cabeceras, aunque sea solo local.
 - Límite asumido: el user-agent se falsifica; esto frena a los bots declarados,
   no a un scraper hostil. Lo que protege los datos sigue siendo la sesión. La capa
-  de red recomendada es el Firewall de Vercel (reglas gestionadas de bots e IA).
+  de red es el Firewall de Vercel, gratuito en Hobby: Bot Protection en Challenge
+  (reto JS a lo que no se comporta como navegador) y AI Bots en Deny, publicados
+  el 2026-09-25 con `vercel firewall`.

@@ -898,3 +898,6 @@
 - Desplegado: commit 0a24cd7 en main y `vercel deploy --prod`. En producción,
   GPTBot, ClaudeBot, PerplexityBot, Googlebot y sin UA → 403 en `/`, `/login` y API;
   navegador → 307 / 200 login / 401; `robots.txt`, `X-Robots-Tag` y `TDM-Reservation` servidos.
+- Firewall de Vercel por CLI: Bot Protection → Challenge, AI Bots → Deny, publicado.
+  GPTBot → 403 `deny` en el borde; curl con UA de Chrome → 429 `challenge`; el
+  navegador real carga el panel con sesión.

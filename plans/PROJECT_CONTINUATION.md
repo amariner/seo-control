@@ -7,7 +7,9 @@
 - Hecho: `apps/viewer/lib/crawlers.ts` + pruebas, 403 a bots en `proxy.ts` (login
   incluido), `robots.ts` en visor y workbench, `X-Robots-Tag` ampliada y `TDM-Reservation: 1`.
 - Desplegado (0a24cd7) y verificado en producción: bots → 403, navegador → 307/401.
-  Pendiente del responsable: activar en Vercel → Firewall las reglas gestionadas de bots e IA.
+  Firewall de Vercel publicado por CLI: Bot Protection en Challenge y AI Bots en Deny
+  (`vercel firewall status`). Si un cliente legítimo sin navegador queda bloqueado,
+  crear una regla bypass (`vercel firewall rules`).
 
 ## Login con Google · D-047 (2026-09-25, en producción)
 
