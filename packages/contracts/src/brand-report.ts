@@ -268,7 +268,12 @@ export const reportMarketSchema = z.object({
   clicksPrevious: z.number().nullable(),
 });
 
+/** Tipo de oportunidad según posición y CTR: decide qué hacer con la keyword. */
+export const reportOpportunityKindSchema = z.enum(["ctr", "primera", "segunda", "lejos", "defender"]);
+export type ReportOpportunityKind = z.infer<typeof reportOpportunityKindSchema>;
+
 export const reportOpportunitySchema = z.object({
+  kind: reportOpportunityKindSchema,
   query: z.string(),
   impressions: z.number(),
   clicks: z.number(),
@@ -325,6 +330,21 @@ export const reportContentMoverSchema = z.object({
   before: z.number(),
   now: z.number(),
   change: z.number().nullable(),
+  /** Posición media ponderada por impresiones; nula si no aparece en ese periodo. */
+  position: z.number().nullable(),
+  previousPosition: z.number().nullable(),
+});
+
+/** Keyword sin marca que sube o baja en clics de Google frente al periodo anterior. */
+export const reportKeywordMoverSchema = z.object({
+  query: z.string(),
+  before: z.number(),
+  now: z.number(),
+  /** Nulo si no tenía clics antes: una keyword nueva no tiene porcentaje. */
+  change: z.number().nullable(),
+  /** Posición media ponderada por impresiones; nula si no aparece en ese periodo. */
+  position: z.number().nullable(),
+  previousPosition: z.number().nullable(),
 });
 
 export const reportMigrationUrlSchema = z.object({
@@ -382,7 +402,7 @@ export const reportReadingSchema = z.array(z.string());
  * cambio de estructura desplegado seguiría sirviendo seis horas el informe
  * anterior guardado.
  */
-export const BRAND_REPORT_VERSION = "2026-09-24.12";
+export const BRAND_REPORT_VERSION = "2026-09-24.16";
 
 /**
  * Por qué «Visitas SEO» (GA4) y «Clics en Google» (Search Console) no coinciden
@@ -404,6 +424,16 @@ export type ReportSearchReconciliation = z.infer<typeof reportSearchReconciliati
  * periodo y su reparto por posición media. Search Console omite las consultas
  * anónimas y devuelve como mucho `rowLimit` filas.
  */
+const keywordSegmentSchema = z.object({
+  total: z.number(),
+  top3: z.number(),
+  top20: z.number(),
+  rest: z.number(),
+  /** Nulos sin muestra anterior. */
+  previousTotal: z.number().nullable(),
+  previousTop3: z.number().nullable(),
+});
+
 export const reportKeywordRankingSchema = z.object({
   total: z.number(),
   /** Posición media ≤ 3. */
@@ -415,10 +445,32 @@ export const reportKeywordRankingSchema = z.object({
   /** Keywords que no contienen la marca propia ni la paraguas. */
   nonBrand: z.number(),
   previousTotal: z.number().nullable(),
+  /** Mismo reparto por segmento: todas, de marca y sin marca. */
+  segments: z.object({ all: keywordSegmentSchema, brand: keywordSegmentSchema, nonBrand: keywordSegmentSchema }),
   rowLimit: z.number(),
   limitReached: z.boolean(),
 });
 export type ReportKeywordRanking = z.infer<typeof reportKeywordRankingSchema>;
+
+const totals3 = z.object({ value: comparable, previous: comparable, previousYear: comparable });
+/** Totales de Search Console de un segmento. Posición media ponderada por impresiones; CTR en %. */
+const searchSegmentSchema = z.object({
+  clicks: totals3,
+  impressions: totals3,
+  ctr: totals3,
+  position: totals3,
+});
+/**
+ * Totales por segmento de búsqueda. `brand` + `nonBrand` no suman `all`: las
+ * consultas anónimas cuentan en el total pero Google no dice si son de marca.
+ */
+export const reportSearchTotalsSchema = z.object({
+  all: searchSegmentSchema,
+  brand: searchSegmentSchema,
+  nonBrand: searchSegmentSchema,
+});
+export type ReportSearchTotals = z.infer<typeof reportSearchTotalsSchema>;
+export type ReportSearchSegment = keyof ReportSearchTotals;
 
 /**
  * Visitas desde asistentes de IA (D-046): sesiones de GA4 cuyo origen es un
@@ -454,6 +506,7 @@ export const brandReportSchema = z.object({
   kpis: z.array(reportKpiSchema),
   searchReconciliation: reportSearchReconciliationSchema.nullable(),
   keywordRanking: reportKeywordRankingSchema.nullable(),
+  searchTotals: reportSearchTotalsSchema.nullable(),
   aiTraffic: reportAiTrafficSchema.nullable(),
   userMix: reportUserMixSchema.nullable(),
   /** Lecturas automáticas por bloque. Siempre declaradas como tales en la interfaz. */
@@ -478,6 +531,8 @@ export const brandReportSchema = z.object({
   convertingPages: z.array(reportConvertingPageSchema),
   contentUp: z.array(reportContentMoverSchema),
   contentDown: z.array(reportContentMoverSchema),
+  keywordsUp: z.array(reportKeywordMoverSchema),
+  keywordsDown: z.array(reportKeywordMoverSchema),
   migration: reportMigrationSchema.nullable(),
   editorial: z.array(reportEditorialSchema),
   nextSteps: z.array(z.object({ title: z.string(), why: z.string(), area: z.enum(["tecnico", "contenido", "editorial", "medicion"]) })),

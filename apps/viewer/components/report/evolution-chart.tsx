@@ -515,7 +515,8 @@ export function EvolutionChart({
         </p>
       )}
 
-      {/* Fuente y granularidad bajo el gráfico, a la derecha (D-045). */}
+      {/* Fuente bajo el gráfico, a la derecha (D-045); la granularidad solo
+          se anuncia a lectores de pantalla. */}
       <div className="report-evolution-footnotes">
         <div>
           {inRangeAnnotations.map((note) => (
@@ -527,7 +528,6 @@ export function EvolutionChart({
         </div>
         <p className="report-evolution-source">
           {source}
-          <span>{grain}</span>
         </p>
       </div>
 

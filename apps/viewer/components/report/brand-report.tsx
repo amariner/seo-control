@@ -12,11 +12,16 @@ import { RankBar } from "./rank-bar";
 import { BingLogo, GoogleLogo } from "./google-logo";
 import { InfoHint } from "./info-hint";
 import { ExpandableList, ExpandableTable } from "./expandable-table";
+import { MoversList } from "./movers-list";
+import { FilteredList } from "./filtered-list";
+import { KeywordKpis } from "./keyword-kpis";
+import { OPPORTUNITY_KINDS } from "./opportunity-kinds";
 import {
   ReportPendingZone,
   ReportPendingMeta,
   ReportUpdateStatus,
   ReportMarketLabel,
+  ReportMarketButton,
   ReportTabLink,
   ReportRetryButton,
 } from "./report-navigation";
@@ -1126,7 +1131,6 @@ function Summary({
             id="canales"
             skeleton="rows"
             title="Canales de tráfico"
-            subtitle="Visitas de toda la web · GA4"
           >
             <div className="brand-list-head brand-channel-row" aria-hidden>
               <span>Canal</span>
@@ -1176,7 +1180,6 @@ function Summary({
             scope="period"
             skeleton="rows"
             title="Mercados principales"
-            subtitle="Visitas SEO · Todos los mercados · GA4"
             action={
               <ReportTabLink
                 className="brand-link"
@@ -1189,26 +1192,37 @@ function Summary({
           >
             <div className="brand-list-head brand-market-row" aria-hidden>
               <span>Mercado</span>
-              <span>Visitas</span>
+              <span>Visitas SEO</span>
               <span>Variación</span>
             </div>
             <ExpandableList
               className="brand-list"
               rows={[...report.markets]
+                // Con un mercado elegido en el selector, la tabla solo muestra ese.
+                .filter(
+                  (item) =>
+                    report.market === "all" || item.code === report.market,
+                )
                 .sort(
                   (a, b) =>
                     Number(b.tier1) - Number(a.tier1) ||
                     b.sessions - a.sessions,
                 )
                 .map((item) => (
-                  <div
-                    className="brand-list-row brand-market-row"
+                  <ReportMarketButton
+                    className="brand-list-row brand-market-row brand-market-button"
                     key={item.code}
+                    active={item.code === report.market}
+                    market={{
+                      code: item.code,
+                      name: item.name,
+                      definition: item.definition,
+                    }}
                   >
                     <span>{item.name}</span>
                     <strong>{number(item.sessions)}</strong>
                     <Delta value={item.sessions} base={item.previous} />
-                  </div>
+                  </ReportMarketButton>
                 ))}
             />
           </Section>
@@ -1218,7 +1232,118 @@ function Summary({
           Canales y mercados no disponibles: GA4 no ha respondido.
         </p>
       )}
+      <div className="brand-summary-grid">
+        <Section
+          id="keywords-tendencia"
+          skeleton="rows"
+          action={
+            <ReportTabLink
+              className="brand-link"
+              href={href("busquedas")}
+              tab="busquedas"
+              label="Ver keywords"
+              active={false}
+            />
+          }
+          title="Tendencia de keywords"
+        >
+          <MoversList
+            head={<MoversHead label="Keyword" report={report} />}
+            up={report.keywordsUp.map((item) => (
+              <MoverRow key={item.query} label={item.query} item={item} />
+            ))}
+            down={report.keywordsDown.map((item) => (
+              <MoverRow key={item.query} label={item.query} item={item} />
+            ))}
+            empty={moversEmpty(report)}
+          />
+        </Section>
+        <Section
+          id="urls-tendencia"
+          skeleton="rows"
+          action={
+            <ReportTabLink
+              className="brand-link"
+              href={href("paginas")}
+              tab="paginas"
+              label="Ver páginas"
+              active={false}
+            />
+          }
+          title="Tendencia de URLs"
+        >
+          <MoversList
+            head={<MoversHead label="URL" report={report} />}
+            up={report.contentUp.map((item) => (
+              <MoverRow
+                key={item.page}
+                label={<Url value={item.page} />}
+                item={item}
+              />
+            ))}
+            down={report.contentDown.map((item) => (
+              <MoverRow
+                key={item.page}
+                label={<Url value={item.page} />}
+                item={item}
+              />
+            ))}
+            empty={moversEmpty(report)}
+          />
+        </Section>
+      </div>
     </>
+  );
+}
+/** Sin fuente o sin periodo anterior no hay subidas ni bajadas que enseñar. */
+function moversEmpty(report: BrandReport) {
+  return report.sources.find((item) => item.source === "gsc")?.ok
+    ? "Sin cambios de al menos 10 clics frente al periodo anterior."
+    : "Search Console no ha respondido para este periodo.";
+}
+function MoversHead({ label, report }: { label: string; report: BrandReport }) {
+  return (
+    <div className="brand-list-head brand-mover-row" aria-hidden>
+      <span>{label}</span>
+      <span>{previousName(report)}</span>
+      <span>Clics</span>
+      <span>Posición</span>
+      <span>Variación</span>
+    </div>
+  );
+}
+function MoverRow({
+  label,
+  item,
+}: {
+  label: ReactNode;
+  item: {
+    before: number;
+    now: number;
+    change: number | null;
+    position: number | null;
+    previousPosition: number | null;
+  };
+}) {
+  const gained = item.now - item.before;
+  return (
+    <div className="brand-list-row brand-mover-row">
+      <span className="brand-mover-label">{label}</span>
+      <span className="brand-mover-before">{number(item.before)}</span>
+      <strong>{number(item.now)}</strong>
+      <span
+        className="brand-mover-position"
+        title={`Posición media en el periodo anterior: ${number(item.previousPosition, 1)}`}
+      >
+        {number(item.position, 1)}
+      </span>
+      <span
+        className={`brand-delta ${gained >= 0 ? "delta-good" : "delta-bad"}`}
+        title={`${gained >= 0 ? "+" : "−"}${number(Math.abs(gained))} clics`}
+      >
+        {item.change === null ? "Nueva" : signedPercent(item.change)}
+      </span>
+    </div>
   );
 }
 function Coverage({
@@ -1238,7 +1363,144 @@ function Coverage({
     </p>
   );
 }
+/** Situación de la keyword objetivo, en corto para la lista. */
+const TARGET_SITUATIONS: Array<{
+  key: BrandReport["editorial"][number]["situation"];
+  label: string;
+}> = [
+  { key: "ya-top", label: "Top 3" },
+  { key: "cerca", label: "1.ª página" },
+  { key: "lejos", label: "Lejos" },
+  { key: "sin-presencia", label: "Sin presencia" },
+];
+const TARGET_SITUATION = new Map(
+  TARGET_SITUATIONS.map((item) => [item.key, item.label]),
+);
+function TargetKeywords({ report }: { report: BrandReport }) {
+  const targets = report.editorial
+    .filter((item) => item.keyword)
+    .sort(
+      (a, b) =>
+        Number(b.measured) - Number(a.measured) ||
+        (a.position ?? 999) - (b.position ?? 999),
+    );
+  return (
+    <Section
+      id="keywords-objetivo"
+      skeleton="rows"
+      title="Keywords objetivo"
+    >
+      {targets.length ? (
+        <>
+          <FilteredList
+            label="Situación de la keyword"
+            options={TARGET_SITUATIONS}
+            head={
+              <div className="brand-list-head brand-target-row" aria-hidden>
+                <span>Keyword</span>
+                <span>Posición</span>
+                <span>Clics</span>
+              </div>
+            }
+            rows={targets.map((item) => ({
+              id: item.id,
+              kind: item.measured ? item.situation : "sin-presencia",
+              node: (
+              <div
+                className="brand-list-row brand-target-row"
+                title={item.advice}
+              >
+                <span className="brand-opportunity-query">
+                  <strong>{item.keyword}</strong>
+                  <small>
+                    {item.measured
+                      ? TARGET_SITUATION.get(item.situation)
+                      : "Sin comprobar"}
+                    {" · "}
+                    {item.title}
+                  </small>
+                </span>
+                <span>{number(item.position, 1)}</span>
+                <strong>{item.measured ? number(item.clicks) : "—"}</strong>
+              </div>
+              ),
+            }))}
+          />
+          <p className="brand-list-foot">
+            Keywords de las piezas del plan editorial, medidas en Search
+            Console en los últimos meses.
+          </p>
+        </>
+      ) : (
+        <p className="brand-coverage">
+          <Info size={15} aria-hidden />
+          El plan editorial de esta marca no tiene keywords objetivo.
+        </p>
+      )}
+    </Section>
+  );
+}
+function Opportunities({ report }: { report: BrandReport }) {
+  const kindLabel = new Map(
+    OPPORTUNITY_KINDS.map((item) => [item.key, item.name]),
+  );
+  return (
+    <Section id="oportunidades" skeleton="rows" title="Oportunidades">
+      {report.opportunities.length ? (
+        <FilteredList
+          label="Tipo de oportunidad"
+          options={OPPORTUNITY_KINDS}
+          head={
+            <div className="brand-list-head brand-target-row" aria-hidden>
+              <span>Keyword</span>
+              <span>Posición</span>
+              <span>Por ganar</span>
+            </div>
+          }
+          rows={report.opportunities.map((item) => ({
+            id: `${item.query}:${item.page ?? ""}`,
+            kind: item.kind,
+            node: (
+              <div
+                className="brand-list-row brand-target-row"
+                title={`${kindLabel.get(item.kind)}: ${item.action} CTR ${percent(item.ctr)} (esperado ${percent(item.expectedCtr)}), ${number(item.impressions)} impresiones.`}
+              >
+                <span className="brand-opportunity-query">
+                  <strong>{item.query}</strong>
+                  <Url value={item.page} />
+                </span>
+                <span>{number(item.position, 1)}</span>
+                <strong>+{number(item.potentialClicks)}</strong>
+              </div>
+            ),
+          }))}
+        />
+      ) : (
+        <p className="brand-coverage">
+          <Info size={15} aria-hidden />
+          Sin oportunidades con impresiones suficientes en este periodo.
+        </p>
+      )}
+    </Section>
+  );
+}
 function Keywords({ report }: { report: BrandReport }) {
+  return (
+    <>
+      <KeywordKpis
+        ranking={report.keywordRanking}
+        totals={report.searchTotals}
+        window={report.window}
+      />
+      <div className="brand-summary-grid">
+        <TargetKeywords report={report} />
+        <Opportunities report={report} />
+      </div>
+      <KeywordsTable report={report} />
+    </>
+  );
+}
+function KeywordsTable({ report }: { report: BrandReport }) {
   return (
     <Section
       id="keywords"

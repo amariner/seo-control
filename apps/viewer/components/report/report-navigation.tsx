@@ -17,6 +17,7 @@ import {
   reportNavigationTarget,
   reportPendingMessage,
   reportZonePending,
+  type PendingMarket,
   type ReportNavigationUpdate,
   type ReportPendingScope,
   type ReportTarget,
@@ -252,6 +253,65 @@ export function ReportTabLink({
         <LoaderCircle className="report-update-icon" size={13} aria-hidden />
       )}
     </Link>
+  );
+}
+
+/**
+ * Fila de mercado que actúa como el selector de mercado: elegirla filtra todo
+ * el informe; volver a pulsar el mercado activo vuelve a todos los mercados.
+ */
+export function ReportMarketButton({
+  market,
+  active,
+  className,
+  children,
+}: {
+  market: PendingMarket;
+  active: boolean;
+  className?: string;
+  children: ReactNode;
+}) {
+  const router = useRouter();
+  const pathname = usePathname();
+  const params = useSearchParams();
+  const navigation = useReportNavigation();
+  const opening =
+    navigation?.pending && navigation.target?.market?.code === market.code;
+  function choose() {
+    const code = active ? "all" : market.code;
+    if (navigation) {
+      navigation.navigate({
+        params: { market: code === "all" ? null : code },
+        market: active
+          ? {
+              code: "all",
+              name: "Todos los mercados",
+              definition: "Todas las secciones de la web",
+            }
+          : market,
+      });
+      return;
+    }
+    const next = new URLSearchParams(params.toString());
+    if (code === "all") next.delete("market");
+    else next.set("market", code);
+    router.push(`${pathname}?${next.toString()}`, { scroll: false });
+  }
+  return (
+    <button
+      type="button"
+      className={className}
+      aria-pressed={active}
+      aria-busy={opening || undefined}
+      title={
+        active
+          ? "Volver a todos los mercados"
+          : `Ver el informe de ${market.name}`
+      }
+      onClick={choose}
+    >
+      {children}
+    </button>
   );
 }
 

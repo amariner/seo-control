@@ -472,6 +472,7 @@ export async function buildBrandReport(input: {
     return total.clicks === null || !total.impressions ? null : Math.round((total.clicks / total.impressions) * 10000) / 100;
   };
   const ga4Value = (value: number) => (ga4Ok ? value : null);
+  const searchTotals = gsc ? { all: buildSearchSegment(gsc.totals), brand: buildSearchSegment(gsc.branded), nonBrand: buildSearchSegment(gsc.nonBranded) } : null;
 
   const kpis: BrandReport["kpis"] = [
     { key: "web_sessions", label: "Visitas totales a la web", help: "Todas las visitas, vengan del canal que vengan (Analytics).", unit: "number", value: ga4Value(webTotal("current")), previous: ga4Value(webTotal("previous")), previousYear: ga4Value(webTotal("previousYear")), source: "ga4" },
@@ -635,6 +636,8 @@ export async function buildBrandReport(input: {
   }
   const queryRows = [...byQuery].map(([query, entry]) => ({ query, ...entry, position: entry.impressions ? entry.weighted / entry.impressions : 0 }));
   const curve = ctrCurve(queryRows);
+  const kindFor = (position: number, ctrValue: number, expected: number): BrandReport["opportunities"][number]["kind"] =>
+    position <= 3 ? (ctrValue < expected ? "ctr" : "defender") : position <= 10 ? "primera" : position <= 20 ? "segunda" : "lejos";
   const actionFor = (position: number, ctrValue: number, expected: number) =>
     position <= 3
       ? (ctrValue < expected ? "Ya estamos arriba pero nos eligen poco: reescribir título y descripción." : "Defender la posición: mantener la página actualizada.")
@@ -648,11 +651,11 @@ export async function buildBrandReport(input: {
     .map((row) => {
       const ctrValue = row.impressions ? (row.clicks / row.impressions) * 100 : 0;
       const expected = curve(row.position);
-      return { query: row.query, impressions: row.impressions, clicks: row.clicks, position: round1(row.position), ctr: round1(ctrValue), expectedCtr: round1(expected), potentialClicks: potential(row.impressions, row.clicks, row.position, curve), page: row.page, action: actionFor(row.position, ctrValue, expected) };
+      return { kind: kindFor(row.position, ctrValue, expected), query: row.query, impressions: row.impressions, clicks: row.clicks, position: round1(row.position), ctr: round1(ctrValue), expectedCtr: round1(expected), potentialClicks: potential(row.impressions, row.clicks, row.position, curve), page: row.page, action: actionFor(row.position, ctrValue, expected) };
     })
     .filter((row) => row.potentialClicks > 0)
     .sort((a, b) => b.potentialClicks - a.potentialClicks)
-    .slice(0, 10);
+    .slice(0, OPPORTUNITY_LIMIT);
 
   // ---- Páginas que convierten ------------------------------------------------------------
   const queriesByPage = new Map<string, Array<{ query: string; clicks: number }>>();
@@ -679,17 +682,7 @@ export async function buildBrandReport(input: {
     .map(([page, entry]) => ({ page, sessions: entry.sessions, leads: entry.leads, rate: entry.sessions ? round1((entry.leads / entry.sessions) * 100) : 0, queries: [...new Set((queriesByPage.get(page) ?? []).filter((item) => item.clicks > 0 && item.query.length > 3 && !/site:|\d{3,}/.test(item.query)).sort((a, b) => b.clicks - a.clicks).map((item) => item.query))].slice(0, 3) }));
 
   // ---- Contenidos que suben y bajan ---------------------------------------------------------
-  const pageClicks = (rows: GscRow[]) => {
-    const map = new Map<string, number>();
-    for (const row of rows) { const key = normalizePath(new URL(row.keys?.[0] ?? "https://x/").pathname); map.set(key, (map.get(key) ?? 0) + row.clicks); }
-    return map;
-  };
-  const now = pageClicks(gsc?.pagesNow ?? []);
-  const before = pageClicks(gsc?.pagesBefore ?? []);
-  const movers = [...new Set([...now.keys(), ...before.keys()])].map((page) => ({ page, before: before.get(page) ?? 0, now: now.get(page) ?? 0 })).map((row) => ({ ...row, change: row.before ? round1(((row.now - row.before) / row.before) * 100) : null }));
-  const hasPrevious = Boolean(gsc?.pagesBefore?.length);
-  const contentUp = hasPrevious ? movers.filter((row) => row.now > row.before && row.now >= 10).sort((a, b) => b.now - b.before - (a.now - a.before)).slice(0, 6) : [];
-  const contentDown = hasPrevious ? movers.filter((row) => row.before > row.now && row.before >= 10).sort((a, b) => a.now - a.before - (b.now - b.before)).slice(0, 6) : [];
+  const { contentUp, contentDown } = buildContentMovers(gsc?.pagesNow ?? null, gsc?.pagesBefore ?? null);
 
   // ---- Migración ------------------------------------------------------------------------------
   let migration: BrandReport["migration"] = null;
@@ -847,6 +840,7 @@ export async function buildBrandReport(input: {
     kpis,
     searchReconciliation,
     keywordRanking,
+    searchTotals,
     aiTraffic,
     userMix,
     readings,
@@ -865,6 +859,7 @@ export async function buildBrandReport(input: {
     convertingPages,
     contentUp,
     contentDown,
+    ...buildKeywordMovers(gsc?.keywordsNow ?? null, gsc?.keywordsBefore ?? null, brand.brandRegex),
     migration,
     editorial,
     nextSteps: nextSteps.slice(0, 5),
@@ -937,6 +932,103 @@ async function allQueries(
   return rows;
 }
 
+/** Oportunidades de la pestaña Keywords: bastan para priorizar sin volcar la muestra entera. */
+const OPPORTUNITY_LIMIT = 50;
+
+/** Totales de un segmento por periodo; nulos donde Search Console no respondió. */
+export function buildSearchSegment(rows: Totals3<GscRow[] | null>): NonNullable<BrandReport["searchTotals"]>["all"] {
+  const totals = (list: GscRow[] | null) => {
+    if (!list) return null;
+    const clicks = sum(list.map((row) => row.clicks));
+    const impressions = sum(list.map((row) => row.impressions));
+    return {
+      clicks,
+      impressions,
+      ctr: impressions ? Math.round((clicks / impressions) * 10000) / 100 : null,
+      position: impressions ? round1(sum(list.map((row) => row.position * row.impressions)) / impressions) : null,
+    };
+  };
+  const current = totals(rows.current);
+  const previous = totals(rows.previous);
+  const previousYear = totals(rows.previousYear);
+  const pick = (key: "clicks" | "impressions" | "ctr" | "position") => ({
+    value: current?.[key] ?? null,
+    previous: previous?.[key] ?? null,
+    previousYear: previousYear?.[key] ?? null,
+  });
+  return { clicks: pick("clicks"), impressions: pick("impressions"), ctr: pick("ctr"), position: pick("position") };
+}
+
+const MOVER_MIN_CLICKS = 10;
+const MOVER_LIMIT = 6;
+
+type MoverTotals = { clicks: number; impressions: number; weightedPosition: number };
+/** Suma clics e impresiones por clave; la posición se pondera por impresiones, como en GSC. */
+function moverTotals(rows: GscRow[], keyOf: (row: GscRow) => string | null) {
+  const map = new Map<string, MoverTotals>();
+  for (const row of rows) {
+    const key = keyOf(row);
+    if (!key) continue;
+    const entry = map.get(key) ?? { clicks: 0, impressions: 0, weightedPosition: 0 };
+    entry.clicks += row.clicks;
+    entry.impressions += row.impressions;
+    entry.weightedPosition += row.position * row.impressions;
+    map.set(key, entry);
+  }
+  return map;
+}
+const averagePosition = (entry: MoverTotals | undefined) => (entry?.impressions ? round1(entry.weightedPosition / entry.impressions) : null);
+
+/** Los que más clics ganan y pierden entre dos periodos, con su posición media en cada uno. */
+function rankMovers(now: Map<string, MoverTotals>, before: Map<string, MoverTotals>) {
+  const movers = [...new Set([...now.keys(), ...before.keys()])].map((key) => {
+    const current = now.get(key);
+    const previous = before.get(key);
+    const row = { key, before: previous?.clicks ?? 0, now: current?.clicks ?? 0 };
+    return {
+      ...row,
+      change: row.before ? round1(((row.now - row.before) / row.before) * 100) : null,
+      position: averagePosition(current),
+      previousPosition: averagePosition(previous),
+    };
+  });
+  return {
+    up: movers.filter((row) => row.now > row.before && row.now >= MOVER_MIN_CLICKS).sort((a, b) => b.now - b.before - (a.now - a.before)).slice(0, MOVER_LIMIT),
+    down: movers.filter((row) => row.before > row.now && row.before >= MOVER_MIN_CLICKS).sort((a, b) => a.now - a.before - (b.now - b.before)).slice(0, MOVER_LIMIT),
+  };
+}
+
+/**
+ * Keywords sin marca que más clics ganan y pierden frente al periodo anterior.
+ * Reutiliza las consultas por keyword ya pedidas para el reparto por posición,
+ * sin peticiones nuevas. Sin muestra anterior no se calcula nada: una ausencia
+ * nunca equivale a cero clics.
+ */
+export function buildKeywordMovers(
+  current: GscRow[] | null,
+  previous: GscRow[] | null,
+  brandRegex: string,
+): Pick<BrandReport, "keywordsUp" | "keywordsDown"> {
+  if (!current || !previous?.length) return { keywordsUp: [], keywordsDown: [] };
+  const isBrand = new RegExp(brandRegex, "i");
+  const keyOf = (row: GscRow) => {
+    const query = row.keys?.[0];
+    return query && !isBrand.test(query) ? query : null;
+  };
+  const { up, down } = rankMovers(moverTotals(current, keyOf), moverTotals(previous, keyOf));
+  const shape = ({ key, ...row }: (typeof up)[number]) => ({ query: key, ...row });
+  return { keywordsUp: up.map(shape), keywordsDown: down.map(shape) };
+}
+
+/** URLs (por ruta, sin host ni parámetros) que más clics ganan y pierden. */
+export function buildContentMovers(current: GscRow[] | null, previous: GscRow[] | null): Pick<BrandReport, "contentUp" | "contentDown"> {
+  if (!current || !previous?.length) return { contentUp: [], contentDown: [] };
+  const keyOf = (row: GscRow) => normalizePath(new URL(row.keys?.[0] ?? "https://x/").pathname);
+  const { up, down } = rankMovers(moverTotals(current, keyOf), moverTotals(previous, keyOf));
+  const shape = ({ key, ...row }: (typeof up)[number]) => ({ page: key, ...row });
+  return { contentUp: up.map(shape), contentDown: down.map(shape) };
+}
+
 /** Reparto de keywords por posición media (D-045): 1–3, 4–20 y más de 20. */
 export function buildKeywordRanking(
   current: GscRow[],
@@ -948,13 +1040,30 @@ export function buildKeywordRanking(
   const isBrand = new RegExp(brandRegex, "i");
   const top3 = ranked.filter((row) => row.position <= 3).length;
   const top20 = ranked.filter((row) => row.position > 3 && row.position <= 20).length;
+  const previousRanked = previous ? previous.filter((row) => row.impressions > 0) : null;
+  const segment = (match: (row: GscRow) => boolean) => {
+    const now = ranked.filter(match);
+    const before = previousRanked?.filter(match) ?? null;
+    const segmentTop3 = now.filter((row) => row.position <= 3).length;
+    const segmentTop20 = now.filter((row) => row.position > 3 && row.position <= 20).length;
+    return {
+      total: now.length,
+      top3: segmentTop3,
+      top20: segmentTop20,
+      rest: now.length - segmentTop3 - segmentTop20,
+      previousTotal: before ? before.length : null,
+      previousTop3: before ? before.filter((row) => row.position <= 3).length : null,
+    };
+  };
+  const brandRow = (row: GscRow) => isBrand.test(row.keys?.[0] ?? "");
   return {
     total: ranked.length,
     top3,
     top20,
     rest: ranked.length - top3 - top20,
-    nonBrand: ranked.filter((row) => !isBrand.test(row.keys?.[0] ?? "")).length,
-    previousTotal: previous ? previous.filter((row) => row.impressions > 0).length : null,
+    nonBrand: ranked.filter((row) => !brandRow(row)).length,
+    previousTotal: previousRanked ? previousRanked.length : null,
+    segments: { all: segment(() => true), brand: segment(brandRow), nonBrand: segment((row) => !brandRow(row)) },
     rowLimit: KEYWORD_ROW_LIMIT,
     limitReached: current.length >= KEYWORD_ROW_LIMIT,
   };

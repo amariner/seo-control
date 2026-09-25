@@ -131,34 +131,38 @@
   align-items: center;
   gap: 12px 18px;
 }
+/* Interruptor línea/barras minimalista: solo iconos, sin marco; el activo
+   se distingue por color de acento. */
 .report-evolution-view {
   display: inline-flex;
-  padding: 3px;
-  border: 1px solid var(--ds-line);
-  border-radius: 8px;
-  background: var(--ds-surface);
+  gap: 2px;
 }
 .report-evolution-view button {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
-  min-height: 30px;
-  padding: 4px 10px;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  padding: 0;
   border: 0;
-  border-radius: 5px;
+  border-radius: 6px;
   background: transparent;
-  color: var(--ds-text);
-  font: 500 12px/18px var(--ds-font-sans);
+  color: var(--ds-subtle);
   cursor: pointer;
+  transition: color 120ms ease;
+}
+.report-evolution-view button:hover {
+  color: var(--ds-text);
 }
 .report-evolution-view button[aria-pressed="true"] {
-  background: var(--ds-canvas);
   color: var(--ds-accent);
-  box-shadow: 0 0 0 1px var(--ds-line);
 }
 .report-evolution-view button:focus-visible {
   outline: 2px solid var(--ds-accent);
   outline-offset: 1px;
+}
+@media (prefers-reduced-motion: reduce) {
+  .report-evolution-view button { transition: none; }
 }
 .report-evolution[data-view="bar"] .report-chart-swatch {
   flex-basis: 12px;
@@ -240,17 +244,19 @@
 }
 
 /* Interruptor de tipo de gráfico solo con iconos (D-045). */
-.report-evolution-view button {
-  width: 34px;
-  justify-content: center;
-  padding: 4px;
-}
-
 /* Leyenda a la derecha del selector de métrica (D-045). */
 .report-evolution-toolbar .report-evolution-legend {
   flex: 1 1 auto;
   align-items: center;
   margin: 0;
+}
+/* Cada entrada de la leyenda, centrada en vertical con el selector. */
+.report-evolution-toolbar .report-chart-legend-item {
+  align-items: center;
+}
+.report-evolution-toolbar .report-chart-swatch,
+.report-evolution[data-view="bar"] .report-evolution-toolbar .report-chart-swatch {
+  margin-top: 0;
 }
 .report-evolution-toolbar .report-evolution-aside {
   margin-left: auto;

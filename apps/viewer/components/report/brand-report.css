@@ -265,6 +265,18 @@
   grid-template-columns: 1fr 1fr;
   gap: 48px;
 }
+/* Misma altura de cabecera con o sin enlace, para que las dos listas
+   arranquen a la par. */
+.brand-summary-grid .brand-section-head {
+  min-height: 40px;
+  flex-wrap: nowrap;
+}
+.brand-summary-grid .brand-section-head > div {
+  min-width: 0;
+}
+.brand-summary-grid .brand-section-head > .brand-link {
+  flex-shrink: 0;
+}
 .brand-list {
   border-top: 1px solid var(--ds-line);
 }
@@ -1198,4 +1210,302 @@
 }
 .brand-market-row > :nth-child(n + 2) {
   text-align: right;
+}
+/* Keywords y URLs en tendencia y en decadencia. */
+.brand-mover-row {
+  grid-template-columns: minmax(0, 1fr) 56px 56px 56px 64px;
+  gap: 10px;
+}
+.brand-mover-row > :nth-child(n + 2) {
+  text-align: right;
+}
+.brand-mover-label {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.brand-mover-label .brand-url {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.brand-mover-position {
+  color: var(--ds-text);
+  font-variant-numeric: tabular-nums;
+}
+.brand-mover-before {
+  color: var(--ds-muted);
+  font-variant-numeric: tabular-nums;
+}
+/* En móvil, «Anterior» cede su sitio al nombre; la variación ya lo resume. */
+@media (max-width: 640px) {
+  .brand-mover-row {
+    grid-template-columns: minmax(0, 1fr) 52px 52px 64px;
+  }
+  .brand-mover-row > :nth-child(2) {
+    display: none;
+  }
+}
+.brand-movers-switch {
+  display: inline-flex;
+  gap: 16px;
+  margin-bottom: 12px;
+}
+.brand-movers-switch button {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 32px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--ds-subtle);
+  font: 500 13px/20px var(--ds-font-sans);
+  cursor: pointer;
+  transition: color 120ms ease;
+}
+.brand-movers-switch button:hover {
+  color: var(--ds-text);
+}
+.brand-movers-switch button[aria-pressed="true"] {
+  color: var(--ds-accent);
+}
+.brand-movers-switch button:focus-visible {
+  outline: 2px solid var(--ds-accent);
+  outline-offset: 2px;
+}
+.brand-movers-empty {
+  margin: 0;
+  padding: 16px 0;
+  border-bottom: 1px solid var(--ds-line);
+  color: var(--ds-muted);
+  font-size: 13px;
+}
+@media (prefers-reduced-motion: reduce) {
+  .brand-movers-switch button { transition: none; }
+}
+
+/* Cada fila de mercado filtra el informe, como el selector de mercado. */
+.brand-market-button {
+  width: 100%;
+  padding: 0;
+  border: 0;
+  border-bottom: 1px solid var(--ds-line);
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  font-size: 14px;
+  text-align: left;
+  cursor: pointer;
+}
+.brand-market-button > span:first-child {
+  color: var(--ds-text);
+  transition: color 120ms ease;
+}
+.brand-market-button:hover > span:first-child,
+.brand-market-button[aria-pressed="true"] > span:first-child {
+  color: var(--ds-accent);
+}
+.brand-market-button[aria-pressed="true"] > span:first-child {
+  font-weight: 500;
+}
+.brand-market-button[aria-busy="true"] {
+  opacity: 0.6;
+}
+.brand-market-button:focus-visible {
+  outline: 2px solid var(--ds-accent);
+  outline-offset: -2px;
+}
+@media (prefers-reduced-motion: reduce) {
+  .brand-market-button > span:first-child { transition: none; }
+}
+
+/* Pestaña Keywords: filtro por tipo de oportunidad. */
+.brand-list-filter {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 16px;
+  margin-bottom: 12px;
+}
+.brand-list-filter button {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 32px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--ds-subtle);
+  font: 500 13px/20px var(--ds-font-sans);
+  cursor: pointer;
+  transition: color 120ms ease;
+}
+.brand-list-filter button span {
+  color: var(--ds-muted);
+  font-weight: 400;
+  font-variant-numeric: tabular-nums;
+}
+.brand-list-filter button:hover {
+  color: var(--ds-text);
+}
+.brand-list-filter button[aria-pressed="true"],
+.brand-list-filter button[aria-pressed="true"] span {
+  color: var(--ds-accent);
+}
+.brand-list-filter button:focus-visible {
+  outline: 2px solid var(--ds-accent);
+  outline-offset: 2px;
+}
+.brand-opportunity-query {
+  display: grid;
+  gap: 2px;
+  min-width: 0;
+}
+.brand-opportunity-query strong {
+  color: var(--ds-ink);
+  font-weight: 500;
+}
+.brand-opportunity-query .brand-url {
+  color: var(--ds-muted);
+  font-size: 12px;
+}
+.brand-opportunity-kind {
+  white-space: nowrap;
+  font-size: 13px;
+  color: var(--ds-text);
+  cursor: help;
+}
+@media (prefers-reduced-motion: reduce) {
+  .brand-list-filter button { transition: none; }
+}
+
+/* Keywords objetivo y oportunidades: listas compactas en dos columnas. */
+.brand-target-row {
+  grid-template-columns: minmax(0, 1fr) 64px 72px;
+  gap: 12px;
+}
+.brand-target-row > :nth-child(n + 2) {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+.brand-list-row.brand-target-row {
+  padding: 10px 0;
+}
+.brand-opportunity-query small,
+.brand-opportunity-query .brand-url {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: var(--ds-muted);
+  font-size: 12px;
+}
+.brand-opportunity-query strong {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.brand-list-foot {
+  margin: 12px 0 0;
+  color: var(--ds-muted);
+  font-size: 12px;
+}
+
+/* Tarjeta «De marca y sin marca»: el anillo filtra las demás tarjetas. */
+.brand-kpi-segment {
+  color: var(--ds-accent);
+  font-weight: 500;
+}
+.brand-split {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 2px;
+}
+.brand-split-text {
+  min-width: 0;
+}
+.brand-split-ring {
+  flex: 0 0 auto;
+  width: 48px;
+  height: 48px;
+  transform: rotate(-90deg);
+}
+.brand-split-arc {
+  fill: none;
+  stroke-width: 5;
+  cursor: pointer;
+  transition: opacity 120ms ease, stroke-width 120ms ease;
+}
+.brand-split-arc.is-brand {
+  stroke: var(--ds-graphite-soft);
+}
+.brand-split-arc.is-nonbrand {
+  stroke: var(--ds-accent);
+}
+.brand-split-arc.is-active {
+  stroke-width: 6.5;
+}
+.brand-split-arc.is-muted {
+  opacity: 0.35;
+}
+.brand-split-options {
+  display: grid;
+  gap: 4px;
+  min-width: 0;
+}
+.brand-split-options button {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  min-height: 40px;
+  padding: 4px 6px;
+  margin-left: -6px;
+  border: 0;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--ds-muted);
+  font: 400 13px/18px var(--ds-font-sans);
+  text-align: left;
+  cursor: pointer;
+}
+.brand-split-options button:hover {
+  background: var(--ds-surface);
+}
+.brand-split-options button[aria-pressed="true"] {
+  background: var(--ds-surface);
+  color: var(--ds-text);
+}
+.brand-split-options button:focus-visible {
+  outline: 2px solid var(--ds-accent);
+  outline-offset: 1px;
+}
+.brand-split-options strong {
+  color: var(--ds-ink);
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+}
+.brand-split-options small {
+  display: block;
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
+}
+.brand-split-options small .brand-delta {
+  margin-left: 4px;
+  font-size: 12px;
+}
+.brand-split-swatch {
+  flex: 0 0 auto;
+  width: 8px;
+  height: 8px;
+  margin-top: 5px;
+  border-radius: 50%;
+}
+.brand-split-swatch.is-brand {
+  background: var(--ds-graphite-soft);
+}
+.brand-split-swatch.is-nonbrand {
+  background: var(--ds-accent);
+}
+@media (prefers-reduced-motion: reduce) {
+  .brand-split-arc { transition: none; }
 }
