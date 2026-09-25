@@ -2,14 +2,14 @@
 
 Última actualización: 24 de septiembre de 2026 (shadcn/ui y dashboard-01 en el visor, D-044, rama `feat/shadcn-dashboard`).
 
-## Patrón de la ficha en todo el visor · D-049 (2026-09-25, local, sin commit)
+## Patrón de la ficha en todo el visor · D-049 (2026-09-25, en producción)
 
 - Hecho: clases globales (`apps/viewer/app/globals.css`) y `MetricCard`/`.ds-metric-strip`
   (`packages/ui`) con el lenguaje de la ficha; portada sin tarjetas (`components/dashboard.tsx`,
   `chart-area-interactive.tsx`, `overview.css`); lista de fuentes en `/data`; pestañas del
   editorial sin iconos; filtros con selección suave.
-- Reanudar: revisión del responsable, commit y despliegue. Después, las incidencias de
-  `pnpm axe` ajenas al rediseño (ver SESSION_LOG).
+- Desplegado (1698f76) y comprobado en producción. Reanudar: incidencias de `pnpm axe`
+  ajenas al rediseño (ver SESSION_LOG).
 
 ## Bloqueo de bots e IA · D-048 (2026-09-25, en producción)
 

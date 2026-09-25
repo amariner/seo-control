@@ -914,5 +914,6 @@
   al rediseño: `aria` del botón de la barra lateral en móvil, dos en la ficha
   (`.is-top3`, `.report-evolution-source`) y las rutas de ejemplo
   `/pages/page-1` y `/queries/…`, que dan el 404 por defecto de Next.
-- Sin commit ni despliegue.
+- Commit 1698f76 en main, subido y desplegado con `vercel deploy --prod`;
+  Inicio y Fuentes comprobados en producción.
 
