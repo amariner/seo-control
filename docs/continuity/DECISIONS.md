@@ -1472,3 +1472,7 @@ No se reescriben decisiones antiguas. Si una cambia, se añade una nueva entrada
   del proxy. Se mantiene la sesión JWT de 8 h con cookie `__Secure-`.
 - Riesgo aceptado: Hobby es de uso no comercial según las condiciones de Vercel.
   El plan B es Azure UE (salida `standalone`).
+- Despliegue (2026-09-25): D-035 queda **sustituida**. `PUBLIC_ACCESS` eliminada
+  en Vercel; proyecto GCP `seo-intelligence-viewer` con la app en modo Prueba
+  (usuarios externos). Acceso con dos cierres: la lista de Vercel y los usuarios
+  de prueba de Google. Hoy hay dos cuentas autorizadas.

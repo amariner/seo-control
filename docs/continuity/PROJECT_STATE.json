@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "project": "SEO Dashboard V2",
-  "updatedAt": "2026-09-25T10:00:00+02:00",
+  "updatedAt": "2026-09-25T11:00:00+02:00",
   "objective": "Construir la plataforma SEO más útil y desarrollada del sector para convertir grandes volúmenes de datos en decisiones trazables, responsables y resultados medibles.",
   "repository": "https://github.com/amariner/seo-control",
   "currentPhase": {
@@ -14,7 +14,7 @@
     "id": "P1",
     "name": "Sistema de diseño y calendario editorial general"
   },
-  "nextAction": "2026-09-25: login con Google + lista de emails (D-047) hecho en local, sin commit. Siguiente paso: el responsable crea el cliente OAuth web en Google Cloud; después se cargan las variables en Vercel, se quita PUBLIC_ACCESS, se despliega y se verifica en producción. Luego, revisar con XTONE el tráfico directo anómalo y retomar P3.1 (Neon Frankfurt). P3 activa 25%; P2 bloqueada 79%.",
+  "nextAction": "2026-09-25: login con Google (D-047) en producción; el visor ya no es público. Para dar acceso a alguien: añadir su email a ALLOWED_GOOGLE_EMAILS en Vercel y a los usuarios de prueba de Google Auth Platform (proyecto seo-intelligence-viewer), y volver a desplegar. Siguiente paso: revisar con XTONE el tráfico directo anómalo y retomar P3.1 (Neon Frankfurt). P3 activa 25%; P2 bloqueada 79%.",
   "pilot": [
     "porcelanosa",
     "noken",
@@ -72,8 +72,8 @@
     {
       "id": "public-viewer",
       "scope": "security",
-      "status": "active",
-      "detail": "El visor desplegado es público (PUBLIC_ACCESS=true, D-035) y muestra dato real de negocio. Solo lo protege noindex. El login con Google ya está en el código (D-047), pendiente de desplegar: falta crear el cliente OAuth web en Google Cloud, cargar AUTH_SECRET, AUTH_GOOGLE_ID/SECRET y ALLOWED_GOOGLE_EMAILS en Vercel, quitar PUBLIC_ACCESS y desplegar."
+      "status": "resolved",
+      "detail": "Resuelto el 2026-09-25 (D-047): PUBLIC_ACCESS eliminada en Vercel y login con Google en producción. Verificado: páginas → /login, /api/v1/* → 401, login real correcto. Acceso: 2 cuentas en ALLOWED_GOOGLE_EMAILS (Vercel) y en los usuarios de prueba del proyecto GCP seo-intelligence-viewer."
     }
   ],
   "lastValidation": {

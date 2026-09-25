@@ -883,3 +883,6 @@
   las variables en Vercel. Después, quitar `PUBLIC_ACCESS` y desplegar.
 - El gcloud local no arranca (necesita Python ≥ 3.10) y tampoco permite crear
   clientes OAuth web: ese paso se hace desde la consola.
+- En producción: commits e0dda52 (pestaña Keywords) y 0c62aa7 (login) subidos,
+  `PUBLIC_ACCESS` eliminada y dos despliegues en fra1. Login real con Google
+  verificado; segunda cuenta autorizada en Vercel y en los usuarios de prueba.
