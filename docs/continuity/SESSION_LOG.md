@@ -953,3 +953,7 @@
   sin desbordar la página). Typecheck y pruebas del visor en verde.
 - D-056: tabla compacta; a 1440 px caben las 13 columnas sin scroll (tabla 1118 px =
   contenedor). Brief en panel emergente centrado. Typecheck y pruebas del visor en verde.
+- Commit 90ed798 en main, subido y desplegado con `vercel deploy --prod`
+  (seo-dashboard-viewer-juuhkm9il, Ready, alias seo-dashboard-viewer.vercel.app). `next build`
+  local en verde antes del despliegue. curl sin sesión → 429 (challenge del Firewall, D-048);
+  la comprobación visual en producción requiere la sesión de Google del responsable.

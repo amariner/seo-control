@@ -2,7 +2,7 @@
 
 Última actualización: 24 de septiembre de 2026 (shadcn/ui y dashboard-01 en el visor, D-044, rama `feat/shadcn-dashboard`).
 
-## Plan editorial desde la hoja del equipo · D-050 (2026-09-28, sin commit)
+## Plan editorial desde la hoja del equipo · D-050…D-056 (2026-09-28, en producción, 90ed798)
 
 - Hecho: fuente `plan-sheet` (`packages/editorial/src/plan-sheet.ts`, `scripts/import-sheet.ts`,
   `pnpm editorial:import-sheet -- --file <xlsx> --brand <slug>`); Xtone activada con
