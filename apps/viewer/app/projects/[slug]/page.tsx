@@ -19,6 +19,7 @@ import {
   REPORT_TABS,
   type ReportTab,
 } from "@/components/report/brand-report";
+import { getPublishedAudit } from "@seo/site-audit/published";
 import { editorialOrigin, getBrandReport, projectEditorial, reportFilters } from "@/lib/brand-report";
 import { resolveReportTab } from "@/components/report/report-tab";
 
@@ -86,6 +87,7 @@ export default async function ProjectPage({
           editorialCalendar={editorial.calendar}
           editorialPieces={editorial.pieces}
           editorialThemes={editorial.themes}
+          siteAudit={getPublishedAudit(slugResult.data)}
         />
       );
       /* El proveedor envuelve también la cabecera: periodo y mercado viven en

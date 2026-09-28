@@ -1008,3 +1008,13 @@
   Datos de prueba revertidos. Sin commit ni despliegue. Falta `DATABASE_URL` (Neon Frankfurt).
 - D-068: pestaña Editorial de Xtone = plan general filtrado (filtros, todos los meses, temas, color de marca); enlace «Ver plan general» a todas las marcas. Verificado en el navegador; typecheck y 127 pruebas del visor en verde.
 - D-069: «Exportar a Excel» en la tabla del plan (general, Xtone, workbench) con búsqueda y filtros de la tabla; comprobado Xtone + Mes nov 2026 → 3 filas en tabla y en el .xlsx; workbench Backlog + «porcelanico» → 15. Typecheck y pruebas en verde.
+
+## 2026-09-28 · Crawl local y «Estado del sitio» (D-070)
+
+- `@seo/site-audit`: crawler (robots.txt, sitemaps, redirecciones, 2 peticiones a la vez), 28
+  comprobaciones on-page, resumen con topes (500 páginas, 10 muestras) y panel compartido.
+  Retirado el crawler por regex sin uso de `@seo/local-data`; crawls ≤1.000 URL con 3 GiB.
+- Workbench `/crawls` y visor `?tab=estado`. Crawl real de XTONE (200 URL): un 404 en
+  `/en/products/porcelain-tiles/`, una página noindex, redirecciones enlazadas desde el menú global,
+  hreflang sin x-default en todo el sitio. Typecheck y pruebas en verde.
+- D-071: retirado el formulario de crawl del workbench (los crawls se piden en el chat); detalle con todas las URL del crawl completo y ficha por URL. Verificado en /crawls/xtone/20260928-110450-0bd8 (200 URL) y la ficha de /en/ (404 enlazado, 52 entrantes, 62 salientes). Typecheck y pruebas en verde.

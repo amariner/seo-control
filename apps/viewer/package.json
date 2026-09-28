@@ -16,6 +16,7 @@
     "@seo/editorial": "workspace:*",
     "@seo/editorial-ui": "workspace:*",
     "@seo/repository": "workspace:*",
+    "@seo/site-audit": "workspace:*",
     "@seo/sync": "workspace:*",
     "@seo/ui": "workspace:*",
     "@tailwindcss/postcss": "^4.3.3",

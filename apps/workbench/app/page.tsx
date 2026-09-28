@@ -1,6 +1,5 @@
 import Link from "next/link";
 import { Archive, Bot, CheckCircle2, FileCheck2, FileInput, ScanSearch, ShieldCheck, UploadCloud } from "lucide-react";
-import { CrawlForm } from "@/components/crawl-form";
 import { ReportEditor } from "@/components/report-editor";
 import { WorkbenchFrame } from "@/components/workbench-frame";
 import { getWorkbenchState } from "@/lib/state";
@@ -71,9 +70,9 @@ export default async function Page() {
                 <span className="job-icon"><Archive size={15} /></span>
                 <div>
                   <strong>Crawls del piloto</strong>
-                  <small>{preflight?.ready ? "Preflight aprobado: ningún crawl ejecutado todavía" : `Bloqueados por disco: ${preflight?.freeGiB ?? "?"} GiB de los ${preflight?.requiredGiB ?? 50} GiB exigidos`}</small>
+                  <small>{preflight?.ready ? "Preflight de 50 GiB aprobado: crawls grandes disponibles" : `Hasta 1.000 URL disponibles; los grandes esperan disco (${preflight?.freeGiB ?? "?"} de ${preflight?.requiredGiB ?? 50} GiB)`}</small>
                 </div>
-                <span className="badge badge-warn">{preflight?.ready ? "sin ejecutar" : "bloqueado"}</span>
+                <span className="badge badge-good">disponible</span>
               </div>
               <div className="job">
                 <span className="job-icon"><CheckCircle2 size={15} /></span>
@@ -88,9 +87,8 @@ export default async function Page() {
                 <span className="badge">{curation.curatedPieces + curation.createdPieces > 0 ? "activa" : "vacía"}</span>
               </div>
             </div>
-            <CrawlForm ready={Boolean(preflight?.ready)} freeGiB={preflight?.freeGiB ?? null} requiredGiB={preflight?.requiredGiB ?? 50} />
             <p className="tool-note" style={{ marginTop: 12 }}>
-              <Link href="/herramientas">Ver herramientas →</Link>
+              <Link href="/crawls">Lanzar y revisar crawls →</Link> · <Link href="/herramientas">Ver herramientas →</Link>
             </p>
           </section>
 

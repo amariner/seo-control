@@ -2,6 +2,16 @@
 
 Última actualización: 28 de septiembre de 2026 (plan editorial compartido y sincronización visor ↔ workbench, D-067).
 
+## Crawl local y «Estado del sitio» · D-070 (2026-09-28, sin commit)
+
+- Hecho: `packages/site-audit` (crawler con robots/sitemap, 28 comprobaciones, resumen con topes,
+  panel compartido). Workbench `/crawls` (consulta: progreso, detalle con todas las URL y ficha por URL; se lanzan desde el chat, D-071). Visor: pestaña
+  `?tab=estado` en el proyecto. CLI `pnpm crawl` y `pnpm crawl:publish`.
+- Datos: crawl completo en `data/local/crawls` (fuera de git); resumen publicado en
+  `packages/site-audit/data/published/site-audits.json` (empaquetado en el build).
+- Reanudar: commit y despliegue; siguiente de P5: histórico y diff entre crawls, DuckDB/Parquet
+  para >1.000 URL, firma del paquete, enlaces a acciones.
+
 ## Plan editorial compartido y sincronización visor ↔ workbench · D-067 (2026-09-28, sin commit)
 
 - Hecho: `packages/editorial-ui` (calendario, tabla, temas, editores, `generalPlanRows`,

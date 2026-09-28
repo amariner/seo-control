@@ -1,0 +1,36 @@
+{
+  "name": "@seo/site-audit",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts",
+    "./published": "./src/published.ts",
+    "./runs": "./src/runs.ts",
+    "./panel": "./src/ui/panel.tsx",
+    "./panel.css": "./src/ui/panel.css"
+  },
+  "scripts": {
+    "build": "tsc --noEmit",
+    "lint": "tsc --noEmit",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "crawl": "tsx scripts/crawl.ts",
+    "publish:audit": "tsx scripts/publish.ts"
+  },
+  "dependencies": {
+    "@seo/contracts": "workspace:*",
+    "@seo/ui": "workspace:*",
+    "lucide-react": "^1.39.0",
+    "node-html-parser": "^7.0.1",
+    "react": "^19.2.8",
+    "zod": "^4.5.4"
+  },
+  "devDependencies": {
+    "@types/node": "^24.10.1",
+    "@types/react": "^19.2.14",
+    "tsx": "^4.23.13",
+    "typescript": "6.0.3",
+    "vitest": "^4.1.11"
+  }
+}

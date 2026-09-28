@@ -1810,3 +1810,44 @@ No se reescriben decisiones antiguas. Si una cambia, se añade una nueva entrada
   (fuente, filtros, piezas, fecha y autor). Rutas: visor
   `/api/v1/editorial/export/plan-editorial.xlsx[?brand=]` (incluye cambios pendientes del
   visor), workbench `/api/editorial/plan.xlsx`.
+
+## D-070 · Crawl local y «Estado del sitio» en el proyecto
+
+- Fecha: 2026-09-28.
+- Estado: vigente (adelanta una parte de P5 con un vertical pequeño y real).
+- Decisión:
+  - `packages/site-audit` (`@seo/site-audit`) sustituye al crawler por regex, nunca usado, de
+    `@seo/local-data`: robots.txt (grupos, comodines, regla más específica), sitemaps anidados,
+    HTML con `node-html-parser`, redirecciones seguidas como URL propias y 28 comprobaciones
+    on-page en `src/issues.ts` con umbrales a la vista (rastreo, indexación, contenido,
+    enlazado, internacional, rendimiento). Sin puntuación opaca: URL afectadas por severidad.
+  - «URL principales» = recorrido en anchura desde la portada: con tope, quedan las páginas a
+    menos clics. Educado: 2 peticiones a la vez, pausa de 300 ms o el `Crawl-delay` del sitio.
+  - Disco: hasta 1.000 URL basta con 3 GiB libres; por encima rige el preflight de 50 GiB.
+  - El crawl completo vive en `data/local/crawls/<proyecto>/<runId>.json` (fuera de git). Al
+    visor solo llega el resumen (`siteAuditSummarySchema`) en
+    `packages/site-audit/data/published/site-audits.json`, con topes: 500 filas de páginas y
+    10 muestras por incidencia. Se empaqueta en el build, como el plan editorial.
+  - Workbench: apartado «Crawls» (`/crawls`) para lanzar, seguir (progreso y parada) y ver el
+    detalle con el mismo panel que el visor. CLI: `pnpm crawl -- --project <slug> [--max N]`.
+  - Visor: pestaña «Estado del sitio» (`?tab=estado`) junto a «Plan editorial».
+  - Publicar se pide en el chat: `pnpm crawl:publish -- --project <slug>` escribe el resumen y
+    llega al visor con commit y despliegue. El tiempo de respuesta se mide desde el equipo local
+    y se rotula como orientativo (no es Core Web Vitals).
+- Pendiente (P5): DuckDB/Parquet para crawls grandes, firma del paquete, histórico y diff entre
+  crawls, enlaces a acciones.
+
+## D-071 · Crawls desde el chat y exploración URL a URL en el workbench
+
+- Fecha: 2026-09-28.
+- Estado: vigente (acota D-070).
+- Decisión: se retira el formulario «Nuevo crawl» y sus acciones del workbench. Un crawl dentro del
+  servidor de desarrollo moría si este se reiniciaba; los crawls se piden en el chat y corren con
+  `pnpm crawl` como proceso aparte. `/crawls` queda para consultar: el detalle muestra el panel del
+  resumen (sin su tabla de páginas) y todas las URL del crawl completo (`urlRows`) con HTTP,
+  indexabilidad, peor incidencia, profundidad, sitemap, title, H1, longitudes, palabras, enlaces
+  entrantes y salientes, imágenes sin alt y respuesta. Cada URL abre su ficha
+  (`/crawls/<proyecto>/<runId>/url?u=`, `urlReport`): respuesta y rastreo, motivo de no
+  indexabilidad, incidencias explicadas por severidad, metadatos, contenido, hreflang y enlaces
+  entrantes y salientes con su estado (rastreada, bloqueada por robots o fuera del tope). Nada de
+  esto se publica en el visor.

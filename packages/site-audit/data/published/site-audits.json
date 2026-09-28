@@ -1,0 +1,4260 @@
+{
+ "schemaVersion": "site-audit.v1",
+ "audits": {
+  "xtone": {
+   "schemaVersion": "site-audit.v1",
+   "project": "xtone",
+   "domain": "www.xtone-surface.com",
+   "startUrl": "https://www.xtone-surface.com/",
+   "runId": "20260928-110450-0bd8",
+   "startedAt": "2026-09-28T11:04:50.650Z",
+   "completedAt": "2026-09-28T11:08:57.912Z",
+   "durationMs": 247262,
+   "config": {
+    "maxUrls": 200,
+    "concurrency": 2,
+    "respectRobots": true,
+    "userAgent": "PorcelanosaSEOAuditBot/2.0 (+internal-authorized-audit)",
+    "selection": "Recorrido en anchura desde la portada: con tope, quedan las URL a menos clics de la portada. Respeta robots.txt; el sitemap solo mide cobertura."
+   },
+   "totals": {
+    "crawled": 200,
+    "html": 197,
+    "ok": 197,
+    "redirects": 2,
+    "clientErrors": 1,
+    "serverErrors": 0,
+    "failed": 0,
+    "indexable": 196,
+    "noindex": 1,
+    "blockedByRobots": 713,
+    "sitemapUrls": 807,
+    "crawledInSitemap": 164,
+    "pagesWithSevere": 3,
+    "avgResponseMs": 1947,
+    "p90ResponseMs": 2300
+   },
+   "statusDistribution": [
+    {
+     "status": 200,
+     "count": 197
+    },
+    {
+     "status": 301,
+     "count": 2
+    },
+    {
+     "status": 404,
+     "count": 1
+    }
+   ],
+   "depthDistribution": [
+    {
+     "depth": 0,
+     "count": 1
+    },
+    {
+     "depth": 1,
+     "count": 55
+    },
+    {
+     "depth": 2,
+     "count": 144
+    }
+   ],
+   "languages": [
+    {
+     "lang": "es-es",
+     "count": 94
+    },
+    {
+     "lang": "fr-fr",
+     "count": 52
+    },
+    {
+     "lang": "en-us",
+     "count": 51
+    }
+   ],
+   "issues": [
+    {
+     "id": "http_4xx",
+     "label": "Error 4xx",
+     "severity": "critica",
+     "category": "rastreo",
+     "description": "La URL, enlazada desde el propio sitio, responde con error de cliente (404, 410…).",
+     "affected": 1,
+     "sample": [
+      "/en/products/porcelain-tiles/"
+     ]
+    },
+    {
+     "id": "noindex",
+     "label": "Marcada como noindex",
+     "severity": "alta",
+     "category": "indexacion",
+     "description": "Meta robots o cabecera X-Robots-Tag con noindex: no aparecerá en Google. Revisar si es intencionado.",
+     "affected": 1,
+     "sample": [
+      "/en/legal-notice/"
+     ]
+    },
+    {
+     "id": "broken_links",
+     "label": "Enlaza a URL con error",
+     "severity": "alta",
+     "category": "enlazado",
+     "description": "La página enlaza a URL internas que devuelven 4xx o 5xx.",
+     "affected": 1,
+     "sample": [
+      "/en/"
+     ]
+    },
+    {
+     "id": "slow_response",
+     "label": "Respuesta de más de 1.5 s",
+     "severity": "media",
+     "category": "rendimiento",
+     "description": "Tiempo hasta recibir el HTML completo, medido desde el equipo local: orientativo, no es Core Web Vitals.",
+     "affected": 195,
+     "sample": [
+      "/",
+      "/contacto/",
+      "/en/",
+      "/fr/",
+      "/productos/porcelanico/",
+      "/espacios/",
+      "/library/",
+      "/profesionales/",
+      "/tiendas/",
+      "/productos/porcelanico/marmol/"
+     ]
+    },
+    {
+     "id": "description_missing",
+     "label": "Sin meta description",
+     "severity": "media",
+     "category": "contenido",
+     "description": "Sin description, Google improvisa el fragmento del resultado y baja el CTR.",
+     "affected": 7,
+     "sample": [
+      "/premios-xtone/",
+      "/blog/i-premios-xtone/",
+      "/nota-legal/",
+      "/en/blog/i-premios-xtone-en/",
+      "/fr/inscription-aux-prix-xtone/",
+      "/fr/blog/i-premios-xtone-fr/",
+      "/fr/mentions-legales/"
+     ]
+    },
+    {
+     "id": "redirect_internal",
+     "label": "Redirección enlazada",
+     "severity": "media",
+     "category": "rastreo",
+     "description": "La URL redirige; se llegó a ella por un enlace interno que debería apuntar al destino final.",
+     "affected": 2,
+     "sample": [
+      "/politica-de-privacidad/",
+      "/politica-de-privacidad"
+     ]
+    },
+    {
+     "id": "title_duplicate",
+     "label": "Title duplicado",
+     "severity": "media",
+     "category": "contenido",
+     "description": "Varias páginas indexables comparten title: compiten entre sí y Google reescribe el titular.",
+     "affected": 2,
+     "sample": [
+      "/en/products/natural-stone/",
+      "/en/products/natural-stone/granites/"
+     ]
+    },
+    {
+     "id": "sitemap_non_indexable",
+     "label": "En el sitemap y no indexable",
+     "severity": "media",
+     "category": "indexacion",
+     "description": "El sitemap debe listar solo URL indexables con respuesta 200.",
+     "affected": 1,
+     "sample": [
+      "/en/legal-notice/"
+     ]
+    },
+    {
+     "id": "hreflang_no_xdefault",
+     "label": "Hreflang sin x-default",
+     "severity": "baja",
+     "category": "internacional",
+     "description": "Falta la versión por defecto para usuarios de otros idiomas.",
+     "affected": 197,
+     "sample": [
+      "/",
+      "/contacto/",
+      "/en/",
+      "/fr/",
+      "/productos/porcelanico/",
+      "/espacios/",
+      "/library/",
+      "/profesionales/",
+      "/tiendas/",
+      "/productos/porcelanico/marmol/"
+     ]
+    },
+    {
+     "id": "links_to_redirects",
+     "label": "Enlaza a redirecciones",
+     "severity": "baja",
+     "category": "enlazado",
+     "description": "Enlaces internos que pasan por una redirección: gastan rastreo y autoridad.",
+     "affected": 196,
+     "sample": [
+      "/",
+      "/contacto/",
+      "/en/",
+      "/fr/",
+      "/productos/porcelanico/",
+      "/espacios/",
+      "/library/",
+      "/profesionales/",
+      "/tiendas/",
+      "/productos/porcelanico/marmol/"
+     ]
+    },
+    {
+     "id": "title_too_short",
+     "label": "Title de menos de 30 caracteres",
+     "severity": "baja",
+     "category": "contenido",
+     "description": "Un title muy corto desaprovecha la keyword y el contexto de la página.",
+     "affected": 37,
+     "sample": [
+      "/contacto/",
+      "/productos/porcelanico/monocolor/",
+      "/productos/mesas/",
+      "/espacios/banos/",
+      "/espacios/banos/suelo/",
+      "/espacios/mobiliario/mesas-comedor/",
+      "/nota-legal/",
+      "/en/contact/",
+      "/fr/contact/",
+      "/en/products/natural-stone/marble/"
+     ]
+    },
+    {
+     "id": "not_in_sitemap",
+     "label": "Indexable y fuera del sitemap",
+     "severity": "baja",
+     "category": "indexacion",
+     "description": "Página indexable que el sitemap no declara: se descubre peor.",
+     "affected": 33,
+     "sample": [
+      "/productos/porcelanico/marmol/",
+      "/productos/porcelanico/cemento/",
+      "/productos/porcelanico/madera/",
+      "/productos/porcelanico/metalico/",
+      "/productos/porcelanico/piedra/",
+      "/productos/porcelanico/monocolor/",
+      "/productos/piedra-natural/cuarcitas/",
+      "/productos/piedra-natural/granitos/",
+      "/productos/piedra-natural/dolomitas/",
+      "/productos/piedra-natural/marmoles/"
+     ]
+    },
+    {
+     "id": "title_too_long",
+     "label": "Title de más de 60 caracteres",
+     "severity": "baja",
+     "category": "contenido",
+     "description": "Google corta el titular hacia los 60 caracteres.",
+     "affected": 15,
+     "sample": [
+      "/library/",
+      "/espacios/interior/",
+      "/espacios/interior/revestimientos/",
+      "/espacios/exterior/",
+      "/blog/i-premios-xtone/",
+      "/en/spaces/exterior/",
+      "/en/blog/i-premios-xtone-en/",
+      "/fr/library/",
+      "/fr/espaces/cuisine/plans-de-travail/",
+      "/fr/espaces/interieur/"
+     ]
+    },
+    {
+     "id": "description_too_long",
+     "label": "Description de más de 160 caracteres",
+     "severity": "baja",
+     "category": "contenido",
+     "description": "Google corta el fragmento hacia los 160 caracteres.",
+     "affected": 14,
+     "sample": [
+      "/espacios/cocinas/revestimientos/",
+      "/espacios/mobiliario/mesas-exterior/",
+      "/en/spaces/furniture/outdoor-tables/",
+      "/fr/espaces/cuisine/plans-de-travail/",
+      "/fr/espaces/cuisine/revetements/",
+      "/fr/espaces/salles-de-bain/",
+      "/fr/espaces/salles-de-bain/sols/",
+      "/fr/espaces/mobilier/",
+      "/fr/espaces/mobilier/tables-salle-a-manger/",
+      "/fr/espaces/mobilier/tables-dexterieur/"
+     ]
+    },
+    {
+     "id": "html_heavy",
+     "label": "HTML de más de 500 KB",
+     "severity": "baja",
+     "category": "rendimiento",
+     "description": "Un HTML muy pesado retrasa el renderizado y el rastreo.",
+     "affected": 4,
+     "sample": [
+      "/profesionales/",
+      "/en/professionals/",
+      "/en/spaces/furniture/dining-tables/",
+      "/fr/professionnels/"
+     ]
+    },
+    {
+     "id": "description_duplicate",
+     "label": "Meta description duplicada",
+     "severity": "baja",
+     "category": "contenido",
+     "description": "Varias páginas indexables comparten description.",
+     "affected": 2,
+     "sample": [
+      "/en/products/natural-stone/",
+      "/en/products/natural-stone/granites/"
+     ]
+    },
+    {
+     "id": "img_missing_alt",
+     "label": "Imágenes sin alt",
+     "severity": "baja",
+     "category": "contenido",
+     "description": "Imágenes sin atributo alt: pierden búsqueda de imágenes y accesibilidad.",
+     "affected": 2,
+     "sample": [
+      "/premios-xtone/",
+      "/fr/inscription-aux-prix-xtone/"
+     ]
+    }
+   ],
+   "pages": [
+    {
+     "path": "/en/products/porcelain-tiles/",
+     "status": 404,
+     "depth": 2,
+     "indexable": false,
+     "inSitemap": false,
+     "title": null,
+     "titleLength": 0,
+     "descriptionLength": 0,
+     "h1Count": 0,
+     "wordCount": 0,
+     "responseMs": 1423,
+     "lang": null,
+     "issues": [
+      "http_4xx"
+     ]
+    },
+    {
+     "path": "/en/",
+     "status": 200,
+     "depth": 1,
+     "indexable": true,
+     "inSitemap": true,
+     "title": "XTONE: large-format surfaces in porcelain and stone",
+     "titleLength": 51,
+     "descriptionLength": 122,
+     "h1Count": 1,
+     "wordCount": 419,
+     "responseMs": 1754,
+     "lang": "en-US",
+     "issues": [
+      "broken_links",
+      "links_to_redirects",
+      "hreflang_no_xdefault",
+      "slow_response"
+     ]
+    },
+    {
+     "path": "/en/legal-notice/",
+     "status": 200,
+     "depth": 2,
+     "indexable": false,
+     "inSitemap": true,
+     "title": "Legal notice - Xtone",
+     "titleLength": 20,
+     "descriptionLength": 0,
+     "h1Count": 1,
+     "wordCount": 3492,
+     "responseMs": 1520,
+     "lang": "en-US",
+     "issues": [
+      "noindex",
+      "sitemap_non_indexable",
+      "title_too_short",
+      "links_to_redirects",
+      "hreflang_no_xdefault",
+      "slow_response"
+     ]
+    },
+    {
+     "path": "/",
+     "status": 200,
+     "depth": 0,
+     "indexable": true,
+     "inSitemap": true,
+     "title": "XTONE: superficies de gran formato en porcelánico y piedra",
+     "titleLength": 58,
+     "descriptionLength": 147,
+     "h1Count": 1,
+     "wordCount": 442,
+     "responseMs": 1949,
+     "lang": "es-ES",
+     "issues": [
+      "links_to_redirects",
+      "hreflang_no_xdefault",
+      "slow_response"
+     ]
+    },
+    {
+     "path": "/blog/i-premios-xtone/",
+     "status": 200,
+     "depth": 1,
+     "indexable": true,
+     "inSitemap": true,
+     "title": "XTONE celebra la primera edición de sus premios y convierte el diseño en una experiencia sensorial - Xtone",
+     "titleLength": 106,
+     "descriptionLength": 0,
+     "h1Count": 1,
+     "wordCount": 814,
+     "responseMs": 1850,
+     "lang": "es-ES",
+     "issues": [
+      "title_too_long",
+      "description_missing",
+      "links_to_redirects",
+      "hreflang_no_xdefault",
+      "slow_response"
+     ]
+    },
+    {
+     "path": "/nota-legal/",
+     "status": 200,
+     "depth": 1,
+     "indexable": true,
+     "inSitemap": true,
+     "title": "Nota legal - Xtone",
+     "titleLength": 18,
+     "descriptionLength": 0,
+     "h1Count": 1,
+     "wordCount": 3584,
+     "responseMs": 1686,
+     "lang": "es-ES",
+     "issues": [
+      "title_too_short",
+      "description_missing",
+      "links_to_redirects",
+      "hreflang_no_xdefault",
+      "slow_response"
+     ]
+    },
+    {
+     "path": "/premios-xtone/",
+     "status": 200,
+     "depth": 1,
+     "indexable": true,
+     "inSitemap": true,
+     "title": "Inscripción Premios XTONE - Xtone",
+     "titleLength": 33,
+     "descriptionLength": 0,
+     "h1Count": 1,
+     "wordCount": 1805,
+     "responseMs": 1795,
+     "lang": "es-ES",
+     "issues": [
+      "description_missing",
+      "img_missing_alt",
+      "links_to_redirects",
+      "hreflang_no_xdefault",
+      "slow_response"
+     ]
+    },
+    {
+     "path": "/productos/porcelanico/monocolor/",
+     "status": 200,
+     "depth": 1,
+     "indexable": true,
+     "inSitemap": false,
+     "title": "Porcelánico monocolor | XTONE",
+     "titleLength": 29,
+     "descriptionLength": 126,
+     "h1Count": 1,
+     "wordCount": 508,
+     "responseMs": 2454,
+     "lang": "es-ES",
+     "issues": [
+      "not_in_sitemap",
+      "title_too_short",
+      "links_to_redirects",
+      "hreflang_no_xdefault",
+      "slow_response"
+     ]
+    },
+    {
+     "path": "/contacto/",
+     "status": 200,
+     "depth": 1,
+     "indexable": true,
+     "inSitemap": true,
+     "title": "Contacta con nosotros | XTONE",
+     "titleLength": 29,
+     "descriptionLength": 122,
+     "h1Count": 1,
+     "wordCount": 783,
+     "responseMs": 1708,
+     "lang": "es-ES",
+     "issues": [
+      "title_too_short",
+      "links_to_redirects",
+      "hreflang_no_xdefault",
+      "slow_response"
+     ]
+    },
+    {
+     "path": "/espacios/banos/",
+     "status": 200,
+     "depth": 1,
+     "indexable": true,
+     "inSitemap": true,
+     "title": "Soluciones para baños | XTONE",
+     "titleLength": 29,
+     "descriptionLength": 139,
+     "h1Count": 1,
+     "wordCount": 2550,
+     "responseMs": 3177,
+     "lang": "es-ES",
+     "issues": [
+      "title_too_short",
+      "links_to_redirects",
+      "hreflang_no_xdefault",
+      "slow_response"
+     ]
+    },
+    {
+     "path": "/espacios/banos/suelo/",
+     "status": 200,
+     "depth": 1,
+     "indexable": true,
+     "inSitemap": true,
+     "title": "Suelos para baños | XTONE",
+     "titleLength": 25,
+     "descriptionLength": 139,
+     "h1Count": 1,
+     "wordCount": 2527,
+     "responseMs": 1943,
+     "lang": "es-ES",
+     "issues": [
+      "title_too_short",
+      "links_to_redirects",
+      "hreflang_no_xdefault",
+      "slow_response"
+     ]
+    },
+    {
+     "path": "/espacios/cocinas/revestimientos/",
+     "status": 200,
+     "depth": 1,
+     "indexable": true,
+     "inSitemap": true,
+     "title": "Revestimientos para cocinas | XTONE",
+     "titleLength": 35,
+     "descriptionLength": 164,
+     "h1Count": 1,
+     "wordCount": 2689,
+     "responseMs": 2623,
+     "lang": "es-ES",
+     "issues": [
+      "description_too_long",
+      "links_to_redirects",
+      "hreflang_no_xdefault",
+      "slow_response"
+     ]
+    },
+    {
+     "path": "/espacios/exterior/",
+     "status": 200,
+     "depth": 1,
+     "indexable": true,
+     "inSitemap": true,
+     "title": "Soluciones para exteriores porcelánico y piedra natural | XTONE",
+     "titleLength": 63,
+     "descriptionLength": 132,
+     "h1Count": 1,
+     "wordCount": 1760,
+     "responseMs": 1943,
+     "lang": "es-ES",
+     "issues": [
+      "title_too_long",
+      "links_to_redirects",
+      "hreflang_no_xdefault",
+      "slow_response"
+     ]
+    },
+    {
+     "path": "/espacios/interior/",
+     "status": 200,
+     "depth": 1,
+     "indexable": true,
+     "inSitemap": true,
+     "title": "Soluciones para interiores porcelánico y piedra natural | XTONE",
+     "titleLength": 63,
+     "descriptionLength": 134,
+     "h1Count": 1,
+     "wordCount": 2088,
+     "responseMs": 2224,
+     "lang": "es-ES",
+     "issues": [
+      "title_too_long",
+      "links_to_redirects",
+      "hreflang_no_xdefault",
+      "slow_response"
+     ]
+    },
+    {
+     "path": "/espacios/interior/revestimientos/",
+     "status": 200,
+     "depth": 1,
+     "indexable": true,
+     "inSitemap": true,
+     "title": "Revestimientos interiores porcelánico y piedra natural | XTONE",
+     "titleLength": 62,
+     "descriptionLength": 137,
+     "h1Count": 1,
+     "wordCount": 2433,
+     "responseMs": 1893,
+     "lang": "es-ES",
+     "issues": [
+      "title_too_long",
+      "links_to_redirects",
+      "hreflang_no_xdefault",
+      "slow_response"
+     ]
+    },
+    {
+     "path": "/espacios/mobiliario/mesas-comedor/",
+     "status": 200,
+     "depth": 1,
+     "indexable": true,
+     "inSitemap": true,
+     "title": "Mesas de comedor | XTONE",
+     "titleLength": 24,
+     "descriptionLength": 142,
+     "h1Count": 1,
+     "wordCount": 3331,
+     "responseMs": 2158,
+     "lang": "es-ES",
+     "issues": [
+      "title_too_short",
+      "links_to_redirects",
+      "hreflang_no_xdefault",
+      "slow_response"
+     ]
+    },
+    {
+     "path": "/espacios/mobiliario/mesas-exterior/",
+     "status": 200,
+     "depth": 1,
+     "indexable": true,
+     "inSitemap": true,
+     "title": "Mesas de exterior de porcelánico | XTONE",
+     "titleLength": 40,
+     "descriptionLength": 172,
+     "h1Count": 1,
+     "wordCount": 2977,
+     "responseMs": 2174,
+     "lang": "es-ES",
+     "issues": [
+      "description_too_long",
+      "links_to_redirects",
+      "hreflang_no_xdefault",
+      "slow_response"
+     ]
+    },
+    {
+     "path": "/library/",
+     "status": 200,
+     "depth": 1,
+     "indexable": true,
+     "inSitemap": true,
+     "title": "Library XTONE | Centros de exposición y selección de materiales",
+     "titleLength": 63,
+     "descriptionLength": 153,
+     "h1Count": 1,
+     "wordCount": 559,
+     "responseMs": 1869,
+     "lang": "es-ES",
+     "issues": [
+      "title_too_long",
+      "links_to_redirects",
+      "hreflang_no_xdefault",
+      "slow_response"
+     ]
+    },
+    {
+     "path": "/productos/mesas/",
+     "status": 200,
+     "depth": 1,
+     "indexable": true,
+     "inSitemap": true,
+     "title": "Mesas de porcelánico | XTONE",
+     "titleLength": 28,
+     "descriptionLength": 144,
+     "h1Count": 1,
+     "wordCount": 1272,
+     "responseMs": 2354,
+     "lang": "es-ES",
+     "issues": [
+      "title_too_short",
+      "links_to_redirects",
+      "hreflang_no_xdefault",
+      "slow_response"
+     ]
+    },
+    {
+     "path": "/productos/piedra-natural/cuarcitas/",
+     "status": 200,
+     "depth": 1,
+     "indexable": true,
+     "inSitemap": false,
+     "title": "Piedra natural cuarcita Altissima | XTONE",
+     "titleLength": 41,
+     "descriptionLength": 155,
+     "h1Count": 1,
+     "wordCount": 537,
+     "responseMs": 2142,
+     "lang": "es-ES",
+     "issues": [
+      "not_in_sitemap",
+      "links_to_redirects",
+      "hreflang_no_xdefault",
+      "slow_response"
+     ]
+    },
+    {
+     "path": "/productos/piedra-natural/dolomitas/",
+     "status": 200,
+     "depth": 1,
+     "indexable": true,
+     "inSitemap": false,
+     "title": "Piedra natural de dolomita | XTONE",
+     "titleLength": 34,
+     "descriptionLength": 148,
+     "h1Count": 1,
+     "wordCount": 535,
+     "responseMs": 2924,
+     "lang": "es-ES",
+     "issues": [
+      "not_in_sitemap",
+      "links_to_redirects",
+      "hreflang_no_xdefault",
+      "slow_response"
+     ]
+    },
+    {
+     "path": "/productos/piedra-natural/granitos/",
+     "status": 200,
+     "depth": 1,
+     "indexable": true,
+     "inSitemap": false,
+     "title": "Piedra natural de granito | XTONE",
+     "titleLength": 33,
+     "descriptionLength": 137,
+     "h1Count": 1,
+     "wordCount": 620,
+     "responseMs": 2897,
+     "lang": "es-ES",
+     "issues": [
+      "not_in_sitemap",
+      "links_to_redirects",
+      "hreflang_no_xdefault",
+      "slow_response"
+     ]
+    },
+    {
+     "path": "/productos/piedra-natural/marmoles/",
+     "status": 200,
+     "depth": 1,
+     "indexable": true,
+     "inSitemap": false,
+     "title": "Piedra natural de mármol | XTONE",
+     "titleLength": 32,
+     "descriptionLength": 147,
+     "h1Count": 1,
+     "wordCount": 539,
+     "responseMs": 2293,
+     "lang": "es-ES",
+     "issues": [
+      "not_in_sitemap",
+      "links_to_redirects",
+      "hreflang_no_xdefault",
+      "slow_response"
+     ]
+    },
+    {
+     "path": "/productos/piedra-natural/travertinos/",
+     "status": 200,
+     "depth": 1,
+     "indexable": true,
+     "inSitemap": false,
+     "title": "Piedra natural de travertino | XTONE",
+     "titleLength": 36,
+     "descriptionLength": 143,
+     "h1Count": 1,
+     "wordCount": 615,
+     "responseMs": 2267,
+     "lang": "es-ES",
+     "issues": [
+      "not_in_sitemap",
+      "links_to_redirects",
+      "hreflang_no_xdefault",
+      "slow_response"
+     ]
+    },
+    {
+     "path": "/productos/porcelanico/cemento/",
+     "status": 200,
+     "depth": 1,
+     "indexable": true,
+     "inSitemap": false,
+     "title": "Porcelánico efecto cemento | XTONE",
+     "titleLength": 34,
+     "descriptionLength": 131,
+     "h1Count": 1,
+     "wordCount": 500,
+     "responseMs": 2198,
+     "lang": "es-ES",
+     "issues": [
+      "not_in_sitemap",
+      "links_to_redirects",
+      "hreflang_no_xdefault",
+      "slow_response"
+     ]
+    },
+    {
+     "path": "/productos/porcelanico/madera/",
+     "status": 200,
+     "depth": 1,
+     "indexable": true,
+     "inSitemap": false,
+     "title": "Porcelánico efecto madera | XTONE",
+     "titleLength": 33,
+     "descriptionLength": 138,
+     "h1Count": 1,
+     "wordCount": 562,
+     "responseMs": 2175,
+     "lang": "es-ES",
+     "issues": [
+      "not_in_sitemap",
+      "links_to_redirects",
+      "hreflang_no_xdefault",
+      "slow_response"
+     ]
+    },
+    {
+     "path": "/productos/porcelanico/marmol/",
+     "status": 200,
+     "depth": 1,
+     "indexable": true,
+     "inSitemap": false,
+     "title": "Porcelánico efecto mármol | XTONE",
+     "titleLength": 33,
+     "descriptionLength": 128,
+     "h1Count": 1,
+     "wordCount": 605,
+     "responseMs": 2141,
+     "lang": "es-ES",
+     "issues": [
+      "not_in_sitemap",
+      "links_to_redirects",
+      "hreflang_no_xdefault",
+      "slow_response"
+     ]
+    },
+    {
+     "path": "/productos/porcelanico/metalico/",
+     "status": 200,
+     "depth": 1,
+     "indexable": true,
+     "inSitemap": false,
+     "title": "Porcelánico efecto metal | XTONE",
+     "titleLength": 32,
+     "descriptionLength": 126,
+     "h1Count": 1,
+     "wordCount": 528,
+     "responseMs": 1946,
+     "lang": "es-ES",
+     "issues": [
+      "not_in_sitemap",
+      "links_to_redirects",
+      "hreflang_no_xdefault",
+      "slow_response"
+     ]
+    },
+    {
+     "path": "/productos/porcelanico/piedra/",
+     "status": 200,
+     "depth": 1,
+     "indexable": true,
+     "inSitemap": false,
+     "title": "Piedra natural en gran formato | XTONE",
+     "titleLength": 38,
+     "descriptionLength": 139,
+     "h1Count": 1,
+     "wordCount": 555,
+     "responseMs": 2492,
+     "lang": "es-ES",
+     "issues": [
+      "not_in_sitemap",
+      "links_to_redirects",
+      "hreflang_no_xdefault",
+      "slow_response"
+     ]
+    },
+    {
+     "path": "/profesionales/",
+     "status": 200,
+     "depth": 1,
+     "indexable": true,
+     "inSitemap": true,
+     "title": "XTONE PRO | Servicios para profesionales",
+     "titleLength": 40,
+     "descriptionLength": 128,
+     "h1Count": 1,
+     "wordCount": 4134,
+     "responseMs": 2158,
+     "lang": "es-ES",
+     "issues": [
+      "links_to_redirects",
+      "hreflang_no_xdefault",
+      "slow_response",
+      "html_heavy"
+     ]
+    },
+    {
+     "path": "/blog/",
+     "status": 200,
+     "depth": 1,
+     "indexable": true,
+     "inSitemap": true,
+     "title": "Blog XTONE | Tendencias en Superficies de Gran Formato",
+     "titleLength": 54,
+     "descriptionLength": 119,
+     "h1Count": 1,
+     "wordCount": 694,
+     "responseMs": 1811,
+     "lang": "es-ES",
+     "issues": [
+      "links_to_redirects",
+      "hreflang_no_xdefault",
+      "slow_response"
+     ]
+    },
+    {
+     "path": "/espacios/",
+     "status": 200,
+     "depth": 1,
+     "indexable": true,
+     "inSitemap": true,
+     "title": "Espacios XTONE | Aplicaciones de Superficies de Gran Formato",
+     "titleLength": 60,
+     "descriptionLength": 128,
+     "h1Count": 1,
+     "wordCount": 256,
+     "responseMs": 1657,
+     "lang": "es-ES",
+     "issues": [
+      "links_to_redirects",
+      "hreflang_no_xdefault",
+      "slow_response"
+     ]
+    },
+    {
+     "path": "/espacios/banos/baneras/",
+     "status": 200,
+     "depth": 1,
+     "indexable": true,
+     "inSitemap": true,
+     "title": "Inspiración baños con bañeras XTONE",
+     "titleLength": 35,
+     "descriptionLength": 126,
+     "h1Count": 1,
+     "wordCount": 2503,
+     "responseMs": 2216,
+     "lang": "es-ES",
+     "issues": [
+      "links_to_redirects",
+      "hreflang_no_xdefault",
+      "slow_response"
+     ]
+    },
+    {
+     "path": "/espacios/banos/lavabos/",
+     "status": 200,
+     "depth": 1,
+     "indexable": true,
+     "inSitemap": true,
+     "title": "Ideas de baños con lavabos XTONE",
+     "titleLength": 32,
+     "descriptionLength": 136,
+     "h1Count": 1,
+     "wordCount": 2687,
+     "responseMs": 2938,
+     "lang": "es-ES",
+     "issues": [
+      "links_to_redirects",
+      "hreflang_no_xdefault",
+      "slow_response"
+     ]
+    },
+    {
+     "path": "/espacios/banos/platos-de-ducha/",
+     "status": 200,
+     "depth": 1,
+     "indexable": true,
+     "inSitemap": true,
+     "title": "Ideas de baños con platos de ducha XTONE",
+     "titleLength": 40,
+     "descriptionLength": 139,
+     "h1Count": 1,
+     "wordCount": 2717,
+     "responseMs": 2181,
+     "lang": "es-ES",
+     "issues": [
+      "links_to_redirects",
+      "hreflang_no_xdefault",
+      "slow_response"
+     ]
+    },
+    {
+     "path": "/espacios/banos/revestimiento/",
+     "status": 200,
+     "depth": 1,
+     "indexable": true,
+     "inSitemap": true,
+     "title": "Revestimientos para baños | XTONE",
+     "titleLength": 33,
+     "descriptionLength": 139,
+     "h1Count": 1,
+     "wordCount": 2665,
+     "responseMs": 2098,
+     "lang": "es-ES",
+     "issues": [
+      "links_to_redirects",
+      "hreflang_no_xdefault",
+      "slow_response"
+     ]
+    },
+    {
+     "path": "/espacios/cocinas/",
+     "status": 200,
+     "depth": 1,
+     "indexable": true,
+     "inSitemap": true,
+     "title": "Soluciones para cocinas | XTONE",
+     "titleLength": 31,
+     "descriptionLength": 129,
+     "h1Count": 1,
+     "wordCount": 2930,
+     "responseMs": 2605,
+     "lang": "es-ES",
+     "issues": [
+      "links_to_redirects",
+      "hreflang_no_xdefault",
+      "slow_response"
+     ]
+    },
+    {
+     "path": "/espacios/cocinas/encimeras/",
+     "status": 200,
+     "depth": 1,
+     "indexable": true,
+     "inSitemap": true,
+     "title": "Encimeras de cocina porcelánico y piedra natural",
+     "titleLength": 48,
+     "descriptionLength": 142,
+     "h1Count": 1,
+     "wordCount": 3246,
+     "responseMs": 2393,
+     "lang": "es-ES",
+     "issues": [
+      "links_to_redirects",
+      "hreflang_no_xdefault",
+      "slow_response"
+     ]
+    },
+    {
+     "path": "/espacios/cocinas/suelos/",
+     "status": 200,
+     "depth": 1,
+     "indexable": true,
+     "inSitemap": true,
+     "title": "Suelos de cocina porcelánico y piedra natural | XTONE",
+     "titleLength": 53,
+     "descriptionLength": 138,
+     "h1Count": 1,
+     "wordCount": 2586,
+     "responseMs": 2476,
+     "lang": "es-ES",
+     "issues": [
+      "links_to_redirects",
+      "hreflang_no_xdefault",
+      "slow_response"
+     ]
+    },
+    {
+     "path": "/espacios/exterior/fachadas/",
+     "status": 200,
+     "depth": 1,
+     "indexable": true,
+     "inSitemap": true,
+     "title": "Revestimientos para fachadas porcelánico y piedra natural",
+     "titleLength": 57,
+     "descriptionLength": 145,
+     "h1Count": 1,
+     "wordCount": 1984,
+     "responseMs": 2459,
+     "lang": "es-ES",
+     "issues": [
+      "links_to_redirects",
+      "hreflang_no_xdefault",
+      "slow_response"
+     ]
+    },
+    {
+     "path": "/espacios/exterior/suelos/",
+     "status": 200,
+     "depth": 1,
+     "indexable": true,
+     "inSitemap": true,
+     "title": "Suelos exteriores porcelánico y piedra natural | XTONE",
+     "titleLength": 54,
+     "descriptionLength": 146,
+     "h1Count": 1,
+     "wordCount": 1877,
+     "responseMs": 2458,
+     "lang": "es-ES",
+     "issues": [
+      "links_to_redirects",
+      "hreflang_no_xdefault",
+      "slow_response"
+     ]
+    },
+    {
+     "path": "/espacios/interior/chimeneas/",
+     "status": 200,
+     "depth": 1,
+     "indexable": true,
+     "inSitemap": true,
+     "title": "Revestimientos para chimeneas porcelánico y piedra natural",
+     "titleLength": 58,
+     "descriptionLength": 149,
+     "h1Count": 1,
+     "wordCount": 2392,
+     "responseMs": 2017,
+     "lang": "es-ES",
+     "issues": [
+      "links_to_redirects",
+      "hreflang_no_xdefault",
+      "slow_response"
+     ]
+    },
+    {
+     "path": "/espacios/interior/suelos/",
+     "status": 200,
+     "depth": 1,
+     "indexable": true,
+     "inSitemap": true,
+     "title": "Suelos interiores gran formato | XTONE",
+     "titleLength": 38,
+     "descriptionLength": 139,
+     "h1Count": 1,
+     "wordCount": 2467,
+     "responseMs": 1904,
+     "lang": "es-ES",
+     "issues": [
+      "links_to_redirects",
+      "hreflang_no_xdefault",
+      "slow_response"
+     ]
+    },
+    {
+     "path": "/espacios/mobiliario/",
+     "status": 200,
+     "depth": 1,
+     "indexable": true,
+     "inSitemap": true,
+     "title": "Soluciones para muebles en porcelánico | XTONE",
+     "titleLength": 46,
+     "descriptionLength": 145,
+     "h1Count": 1,
+     "wordCount": 3025,
+     "responseMs": 2213,
+     "lang": "es-ES",
+     "issues": [
+      "links_to_redirects",
+      "hreflang_no_xdefault",
+      "slow_response"
+     ]
+    },
+    {
+     "path": "/espacios/mobiliario/mesas-oficina/",
+     "status": 200,
+     "depth": 1,
+     "indexable": true,
+     "inSitemap": true,
+     "title": "Mesas de oficina de porcelánico | XTONE",
+     "titleLength": 39,
+     "descriptionLength": 150,
+     "h1Count": 1,
+     "wordCount": 3078,
+     "responseMs": 2209,
+     "lang": "es-ES",
+     "issues": [
+      "links_to_redirects",
+      "hreflang_no_xdefault",
+      "slow_response"
+     ]
+    },
+    {
+     "path": "/espacios/mobiliario/mostradores/",
+     "status": 200,
+     "depth": 1,
+     "indexable": true,
+     "inSitemap": true,
+     "title": "Mostradores en porcelánico | XTONE",
+     "titleLength": 34,
+     "descriptionLength": 120,
+     "h1Count": 1,
+     "wordCount": 2946,
+     "responseMs": 2548,
+     "lang": "es-ES",
+     "issues": [
+      "links_to_redirects",
+      "hreflang_no_xdefault",
+      "slow_response"
+     ]
+    },
+    {
+     "path": "/fr/",
+     "status": 200,
+     "depth": 1,
+     "indexable": true,
+     "inSitemap": true,
+     "title": "XTONE : revêtements grand format en grès cérame et en pierre",
+     "titleLength": 60,
+     "descriptionLength": 148,
+     "h1Count": 1,
+     "wordCount": 474,
+     "responseMs": 1620,
+     "lang": "fr-FR",
+     "issues": [
+      "links_to_redirects",
+      "hreflang_no_xdefault",
+      "slow_response"
+     ]
+    },
+    {
+     "path": "/productos/",
+     "status": 200,
+     "depth": 1,
+     "indexable": true,
+     "inSitemap": true,
+     "title": "Productos gran formato en piedra y porcelanico | XTONE",
+     "titleLength": 54,
+     "descriptionLength": 136,
+     "h1Count": 1,
+     "wordCount": 949,
+     "responseMs": 2220,
+     "lang": "es-ES",
+     "issues": [
+      "links_to_redirects",
+      "hreflang_no_xdefault",
+      "slow_response"
+     ]
+    },
+    {
+     "path": "/productos/baneras/",
+     "status": 200,
+     "depth": 1,
+     "indexable": true,
+     "inSitemap": true,
+     "title": "Bañeras de porcelánico | XTONE",
+     "titleLength": 30,
+     "descriptionLength": 145,
+     "h1Count": 1,
+     "wordCount": 914,
+     "responseMs": 1915,
+     "lang": "es-ES",
+     "issues": [
+      "links_to_redirects",
+      "hreflang_no_xdefault",
+      "slow_response"
+     ]
+    },
+    {
+     "path": "/productos/lavabos/",
+     "status": 200,
+     "depth": 1,
+     "indexable": true,
+     "inSitemap": true,
+     "title": "Lavabos de porcelánico y piedra natural | XTONE",
+     "titleLength": 47,
+     "descriptionLength": 151,
+     "h1Count": 1,
+     "wordCount": 1071,
+     "responseMs": 1865,
+     "lang": "es-ES",
+     "issues": [
+      "links_to_redirects",
+      "hreflang_no_xdefault",
+      "slow_response"
+     ]
+    },
+    {
+     "path": "/productos/piedra-natural/",
+     "status": 200,
+     "depth": 1,
+     "indexable": true,
+     "inSitemap": true,
+     "title": "Piedra natural en gran formato Altissima | XTONE",
+     "titleLength": 48,
+     "descriptionLength": 143,
+     "h1Count": 1,
+     "wordCount": 1371,
+     "responseMs": 2189,
+     "lang": "es-ES",
+     "issues": [
+      "links_to_redirects",
+      "hreflang_no_xdefault",
+      "slow_response"
+     ]
+    },
+    {
+     "path": "/productos/platos-de-ducha/",
+     "status": 200,
+     "depth": 1,
+     "indexable": true,
+     "inSitemap": true,
+     "title": "Platos de ducha porcelánicos | XTONE",
+     "titleLength": 36,
+     "descriptionLength": 152,
+     "h1Count": 1,
+     "wordCount": 1021,
+     "responseMs": 1997,
+     "lang": "es-ES",
+     "issues": [
+      "links_to_redirects",
+      "hreflang_no_xdefault",
+      "slow_response"
+     ]
+    },
+    {
+     "path": "/productos/porcelanico/",
+     "status": 200,
+     "depth": 1,
+     "indexable": true,
+     "inSitemap": true,
+     "title": "Porcelánico en gran formato | XTONE",
+     "titleLength": 35,
+     "descriptionLength": 144,
+     "h1Count": 1,
+     "wordCount": 2385,
+     "responseMs": 1903,
+     "lang": "es-ES",
+     "issues": [
+      "links_to_redirects",
+      "hreflang_no_xdefault",
+      "slow_response"
+     ]
+    },
+    {
+     "path": "/showroom/",
+     "status": 200,
+     "depth": 1,
+     "indexable": true,
+     "inSitemap": true,
+     "title": "Showroom XTONE | Galería de materiales en gran formato",
+     "titleLength": 54,
+     "descriptionLength": 140,
+     "h1Count": 1,
+     "wordCount": 265,
+     "responseMs": 2300,
+     "lang": "es-ES",
+     "issues": [
+      "links_to_redirects",
+      "hreflang_no_xdefault",
+      "slow_response"
+     ]
+    },
+    {
+     "path": "/sobre-xtone/",
+     "status": 200,
+     "depth": 1,
+     "indexable": true,
+     "inSitemap": true,
+     "title": "Conoce XTONE | Superficies de Gran Formato",
+     "titleLength": 42,
+     "descriptionLength": 115,
+     "h1Count": 1,
+     "wordCount": 998,
+     "responseMs": 2411,
+     "lang": "es-ES",
+     "issues": [
+      "links_to_redirects",
+      "hreflang_no_xdefault",
+      "slow_response"
+     ]
+    },
+    {
+     "path": "/tiendas/",
+     "status": 200,
+     "depth": 1,
+     "indexable": true,
+     "inSitemap": true,
+     "title": "Tiendas XTONE | Encuentra tu punto de venta",
+     "titleLength": 43,
+     "descriptionLength": 115,
+     "h1Count": 1,
+     "wordCount": 423,
+     "responseMs": 1564,
+     "lang": "es-ES",
+     "issues": [
+      "links_to_redirects",
+      "hreflang_no_xdefault",
+      "slow_response"
+     ]
+    },
+    {
+     "path": "/recursos/",
+     "status": 200,
+     "depth": 1,
+     "indexable": true,
+     "inSitemap": true,
+     "title": "Recursos XTONE | Catálogos y documentación técnica",
+     "titleLength": 50,
+     "descriptionLength": 139,
+     "h1Count": 1,
+     "wordCount": 6084,
+     "responseMs": 2230,
+     "lang": "es-ES",
+     "issues": [
+      "hreflang_no_xdefault",
+      "slow_response"
+     ]
+    },
+    {
+     "path": "/politica-de-privacidad/",
+     "status": 301,
+     "depth": 1,
+     "indexable": false,
+     "inSitemap": false,
+     "title": null,
+     "titleLength": 0,
+     "descriptionLength": 0,
+     "h1Count": 0,
+     "wordCount": 0,
+     "responseMs": 41,
+     "lang": null,
+     "issues": [
+      "redirect_internal"
+     ]
+    },
+    {
+     "path": "/en/products/natural-stone/granites/",
+     "status": 200,
+     "depth": 2,
+     "indexable": true,
+     "inSitemap": false,
+     "title": "Altissima large-format natural stone | XTONE",
+     "titleLength": 44,
+     "descriptionLength": 145,
+     "h1Count": 1,
+     "wordCount": 1362,
+     "responseMs": 2014,
+     "lang": "en-US",
+     "issues": [
+      "not_in_sitemap",
+      "title_duplicate",
+      "description_duplicate",
+      "links_to_redirects",
+      "hreflang_no_xdefault",
+      "slow_response"
+     ]
+    },
+    {
+     "path": "/en/blog/i-premios-xtone-en/",
+     "status": 200,
+     "depth": 2,
+     "indexable": true,
+     "inSitemap": true,
+     "title": "XTONE celebrates the first edition of its awards and turns design into a sensory experience - Xtone",
+     "titleLength": 99,
+     "descriptionLength": 0,
+     "h1Count": 1,
+     "wordCount": 755,
+     "responseMs": 1599,
+     "lang": "en-US",
+     "issues": [
+      "title_too_long",
+      "description_missing",
+      "links_to_redirects",
+      "hreflang_no_xdefault",
+      "slow_response"
+     ]
+    },
+    {
+     "path": "/en/products/natural-stone/",
+     "status": 200,
+     "depth": 2,
+     "indexable": true,
+     "inSitemap": true,
+     "title": "Altissima large-format natural stone | XTONE",
+     "titleLength": 44,
+     "descriptionLength": 145,
+     "h1Count": 1,
+     "wordCount": 1362,
+     "responseMs": 2260,
+     "lang": "en-US",
+     "issues": [
+      "title_duplicate",
+      "description_duplicate",
+      "links_to_redirects",
+      "hreflang_no_xdefault",
+      "slow_response"
+     ]
+    },
+    {
+     "path": "/en/products/natural-stone/marble/",
+     "status": 200,
+     "depth": 2,
+     "indexable": true,
+     "inSitemap": false,
+     "title": "Natural Marble Stone | XTONE",
+     "titleLength": 28,
+     "descriptionLength": 130,
+     "h1Count": 1,
+     "wordCount": 497,
+     "responseMs": 1594,
+     "lang": "en-US",
+     "issues": [
+      "not_in_sitemap",
+      "title_too_short",
+      "links_to_redirects",
+      "hreflang_no_xdefault",
+      "slow_response"
+     ]
+    },
+    {
+     "path": "/en/spaces/furniture/dining-tables/",
+     "status": 200,
+     "depth": 2,
+     "indexable": true,
+     "inSitemap": true,
+     "title": "Dining tables | XTONE",
+     "titleLength": 21,
+     "descriptionLength": 116,
+     "h1Count": 1,
+     "wordCount": 4891,
+     "responseMs": 2203,
+     "lang": "en-US",
+     "issues": [
+      "title_too_short",
+      "links_to_redirects",
+      "hreflang_no_xdefault",
+      "slow_response",
+      "html_heavy"
+     ]
+    },
+    {
+     "path": "/fr/blog/i-premios-xtone-fr/",
+     "status": 200,
+     "depth": 2,
+     "indexable": true,
+     "inSitemap": true,
+     "title": "XTONE célèbre la première édition de ses prix et transforme le design en une expérience sensorielle - Xtone",
+     "titleLength": 107,
+     "descriptionLength": 0,
+     "h1Count": 1,
+     "wordCount": 843,
+     "responseMs": 1878,
+     "lang": "fr-FR",
+     "issues": [
+      "title_too_long",
+      "description_missing",
+      "links_to_redirects",
+      "hreflang_no_xdefault",
+      "slow_response"
+     ]
+    },
+    {
+     "path": "/fr/espaces/cuisine/plans-de-travail/",
+     "status": 200,
+     "depth": 2,
+     "indexable": true,
+     "inSitemap": true,
+     "title": "Plans de travail de cuisine en grès cérame et en pierre naturelle",
+     "titleLength": 65,
+     "descriptionLength": 168,
+     "h1Count": 1,
+     "wordCount": 2168,
+     "responseMs": 1871,
+     "lang": "fr-FR",
+     "issues": [
+      "title_too_long",
+      "description_too_long",
+      "links_to_redirects",
+      "hreflang_no_xdefault",
+      "slow_response"
+     ]
+    },
+    {
+     "path": "/fr/espaces/interieur/cheminees/",
+     "status": 200,
+     "depth": 2,
+     "indexable": true,
+     "inSitemap": true,
+     "title": "Revêtements pour cheminées en grès cérame et en pierre naturelle",
+     "titleLength": 64,
+     "descriptionLength": 180,
+     "h1Count": 1,
+     "wordCount": 2462,
+     "responseMs": 1859,
+     "lang": "fr-FR",
+     "issues": [
+      "title_too_long",
+      "description_too_long",
+      "links_to_redirects",
+      "hreflang_no_xdefault",
+      "slow_response"
+     ]
+    },
+    {
+     "path": "/fr/inscription-aux-prix-xtone/",
+     "status": 200,
+     "depth": 2,
+     "indexable": true,
+     "inSitemap": true,
+     "title": "Inscription aux Prix XTONE - Xtone",
+     "titleLength": 34,
+     "descriptionLength": 0,
+     "h1Count": 1,
+     "wordCount": 1817,
+     "responseMs": 1795,
+     "lang": "fr-FR",
+     "issues": [
+      "description_missing",
+      "img_missing_alt",
+      "links_to_redirects",
+      "hreflang_no_xdefault",
+      "slow_response"
+     ]
+    },
+    {
+     "path": "/fr/produits/pierre-naturelle/marbres/",
+     "status": 200,
+     "depth": 2,
+     "indexable": true,
+     "inSitemap": false,
+     "title": "Marbre naturel | XTONE",
+     "titleLength": 22,
+     "descriptionLength": 143,
+     "h1Count": 1,
+     "wordCount": 576,
+     "responseMs": 1698,
+     "lang": "fr-FR",
+     "issues": [
+      "not_in_sitemap",
+      "title_too_short",
+      "links_to_redirects",
+      "hreflang_no_xdefault",
+      "slow_response"
+     ]
+    },
+    {
+     "path": "/en/contact/",
+     "status": 200,
+     "depth": 2,
+     "indexable": true,
+     "inSitemap": true,
+     "title": "Contact us | XTONE",
+     "titleLength": 18,
+     "descriptionLength": 125,
+     "h1Count": 1,
+     "wordCount": 839,
+     "responseMs": 1630,
+     "lang": "en-US",
+     "issues": [
+      "title_too_short",
+      "links_to_redirects",
+      "hreflang_no_xdefault",
+      "slow_response"
+     ]
+    },
+    {
+     "path": "/en/products/bathtubs/",
+     "status": 200,
+     "depth": 2,
+     "indexable": true,
+     "inSitemap": true,
+     "title": "Porcelain Bathtubs | XTONE",
+     "titleLength": 26,
+     "descriptionLength": 159,
+     "h1Count": 1,
+     "wordCount": 791,
+     "responseMs": 1795,
+     "lang": "en-US",
+     "issues": [
+      "title_too_short",
+      "links_to_redirects",
+      "hreflang_no_xdefault",
+      "slow_response"
+     ]
+    },
+    {
+     "path": "/en/products/natural-stone/dolomite/",
+     "status": 200,
+     "depth": 2,
+     "indexable": true,
+     "inSitemap": false,
+     "title": "Natural Dolomite Stone | XTONE",
+     "titleLength": 30,
+     "descriptionLength": 139,
+     "h1Count": 1,
+     "wordCount": 502,
+     "responseMs": 1694,
+     "lang": "en-US",
+     "issues": [
+      "not_in_sitemap",
+      "links_to_redirects",
+      "hreflang_no_xdefault",
+      "slow_response"
+     ]
+    },
+    {
+     "path": "/en/products/natural-stone/quartzite/",
+     "status": 200,
+     "depth": 2,
+     "indexable": true,
+     "inSitemap": false,
+     "title": "Altissima natural quartzite stone | XTONE",
+     "titleLength": 41,
+     "descriptionLength": 140,
+     "h1Count": 1,
+     "wordCount": 499,
+     "responseMs": 1778,
+     "lang": "en-US",
+     "issues": [
+      "not_in_sitemap",
+      "links_to_redirects",
+      "hreflang_no_xdefault",
+      "slow_response"
+     ]
+    },
+    {
+     "path": "/en/products/natural-stone/travertine/",
+     "status": 200,
+     "depth": 2,
+     "indexable": true,
+     "inSitemap": false,
+     "title": "Natural Travertine Stone | XTONE",
+     "titleLength": 32,
+     "descriptionLength": 132,
+     "h1Count": 1,
+     "wordCount": 569,
+     "responseMs": 1654,
+     "lang": "en-US",
+     "issues": [
+      "not_in_sitemap",
+      "links_to_redirects",
+      "hreflang_no_xdefault",
+      "slow_response"
+     ]
+    },
+    {
+     "path": "/en/products/porcelain-slabs/concrete-effect/",
+     "status": 200,
+     "depth": 2,
+     "indexable": true,
+     "inSitemap": false,
+     "title": "Concrete-effect porcelain slabs | XTONE",
+     "titleLength": 39,
+     "descriptionLength": 132,
+     "h1Count": 1,
+     "wordCount": 483,
+     "responseMs": 1737,
+     "lang": "en-US",
+     "issues": [
+      "not_in_sitemap",
+      "links_to_redirects",
+      "hreflang_no_xdefault",
+      "slow_response"
+     ]
+    },
+    {
+     "path": "/en/products/porcelain-slabs/marble-effect/",
+     "status": 200,
+     "depth": 2,
+     "indexable": true,
+     "inSitemap": false,
+     "title": "Marble-effect porcelain slabs | XTONE",
+     "titleLength": 37,
+     "descriptionLength": 136,
+     "h1Count": 1,
+     "wordCount": 602,
+     "responseMs": 1903,
+     "lang": "en-US",
+     "issues": [
+      "not_in_sitemap",
+      "links_to_redirects",
+      "hreflang_no_xdefault",
+      "slow_response"
+     ]
+    },
+    {
+     "path": "/en/products/porcelain-slabs/metallic-effect/",
+     "status": 200,
+     "depth": 2,
+     "indexable": true,
+     "inSitemap": false,
+     "title": "Large-format metallic-effect porcelain slabs | XTONE",
+     "titleLength": 52,
+     "descriptionLength": 127,
+     "h1Count": 1,
+     "wordCount": 510,
+     "responseMs": 1698,
+     "lang": "en-US",
+     "issues": [
+      "not_in_sitemap",
+      "links_to_redirects",
+      "hreflang_no_xdefault",
+      "slow_response"
+     ]
+    },
+    {
+     "path": "/en/products/porcelain-slabs/solid-colour/",
+     "status": 200,
+     "depth": 2,
+     "indexable": true,
+     "inSitemap": false,
+     "title": "Solid-color porcelain slabs | XTONE",
+     "titleLength": 35,
+     "descriptionLength": 128,
+     "h1Count": 1,
+     "wordCount": 516,
+     "responseMs": 2160,
+     "lang": "en-US",
+     "issues": [
+      "not_in_sitemap",
+      "links_to_redirects",
+      "hreflang_no_xdefault",
+      "slow_response"
+     ]
+    },
+    {
+     "path": "/en/products/porcelain-slabs/stone-effect/",
+     "status": 200,
+     "depth": 2,
+     "indexable": true,
+     "inSitemap": false,
+     "title": "Stone-effect porcelain slabs | XTONE",
+     "titleLength": 36,
+     "descriptionLength": 135,
+     "h1Count": 1,
+     "wordCount": 549,
+     "responseMs": 1921,
+     "lang": "en-US",
+     "issues": [
+      "not_in_sitemap",
+      "links_to_redirects",
+      "hreflang_no_xdefault",
+      "slow_response"
+     ]
+    },
+    {
+     "path": "/en/products/porcelain-slabs/wood-effect/",
+     "status": 200,
+     "depth": 2,
+     "indexable": true,
+     "inSitemap": false,
+     "title": "Wood-effect porcelain slabs | XTONE",
+     "titleLength": 35,
+     "descriptionLength": 142,
+     "h1Count": 1,
+     "wordCount": 525,
+     "responseMs": 1725,
+     "lang": "en-US",
+     "issues": [
+      "not_in_sitemap",
+      "links_to_redirects",
+      "hreflang_no_xdefault",
+      "slow_response"
+     ]
+    },
+    {
+     "path": "/en/products/tables/",
+     "status": 200,
+     "depth": 2,
+     "indexable": true,
+     "inSitemap": true,
+     "title": "Porcelain Tile Tables | XTONE",
+     "titleLength": 29,
+     "descriptionLength": 136,
+     "h1Count": 1,
+     "wordCount": 1164,
+     "responseMs": 1955,
+     "lang": "en-US",
+     "issues": [
+      "title_too_short",
+      "links_to_redirects",
+      "hreflang_no_xdefault",
+      "slow_response"
+     ]
+    },
+    {
+     "path": "/en/professionals/",
+     "status": 200,
+     "depth": 2,
+     "indexable": true,
+     "inSitemap": true,
+     "title": "XTONE PRO | Services for professionals",
+     "titleLength": 38,
+     "descriptionLength": 132,
+     "h1Count": 1,
+     "wordCount": 4106,
+     "responseMs": 2085,
+     "lang": "en-US",
+     "issues": [
+      "links_to_redirects",
+      "hreflang_no_xdefault",
+      "slow_response",
+      "html_heavy"
+     ]
+    },
+    {
+     "path": "/en/spaces/bathroom/",
+     "status": 200,
+     "depth": 2,
+     "indexable": true,
+     "inSitemap": true,
+     "title": "Bathroom solutions | XTONE",
+     "titleLength": 26,
+     "descriptionLength": 144,
+     "h1Count": 1,
+     "wordCount": 2499,
+     "responseMs": 1934,
+     "lang": "en-US",
+     "issues": [
+      "title_too_short",
+      "links_to_redirects",
+      "hreflang_no_xdefault",
+      "slow_response"
+     ]
+    },
+    {
+     "path": "/en/spaces/bathroom/flooring/",
+     "status": 200,
+     "depth": 2,
+     "indexable": true,
+     "inSitemap": true,
+     "title": "Bathroom flooring | XTONE",
+     "titleLength": 25,
+     "descriptionLength": 128,
+     "h1Count": 1,
+     "wordCount": 2463,
+     "responseMs": 2241,
+     "lang": "en-US",
+     "issues": [
+      "title_too_short",
+      "links_to_redirects",
+      "hreflang_no_xdefault",
+      "slow_response"
+     ]
+    },
+    {
+     "path": "/en/spaces/bathroom/wall-coverings/",
+     "status": 200,
+     "depth": 2,
+     "indexable": true,
+     "inSitemap": true,
+     "title": "Bathroom tiles | XTONE",
+     "titleLength": 22,
+     "descriptionLength": 130,
+     "h1Count": 1,
+     "wordCount": 2630,
+     "responseMs": 2053,
+     "lang": "en-US",
+     "issues": [
+      "title_too_short",
+      "links_to_redirects",
+      "hreflang_no_xdefault",
+      "slow_response"
+     ]
+    },
+    {
+     "path": "/en/spaces/exterior/",
+     "status": 200,
+     "depth": 2,
+     "indexable": true,
+     "inSitemap": true,
+     "title": "Solutions for outdoor use: porcelain tiles and natural stone | XTONE",
+     "titleLength": 68,
+     "descriptionLength": 120,
+     "h1Count": 1,
+     "wordCount": 1752,
+     "responseMs": 1557,
+     "lang": "en-US",
+     "issues": [
+      "title_too_long",
+      "links_to_redirects",
+      "hreflang_no_xdefault",
+      "slow_response"
+     ]
+    },
+    {
+     "path": "/en/spaces/furniture/counters/",
+     "status": 200,
+     "depth": 2,
+     "indexable": true,
+     "inSitemap": true,
+     "title": "Porcelain counters | XTONE",
+     "titleLength": 26,
+     "descriptionLength": 120,
+     "h1Count": 1,
+     "wordCount": 2937,
+     "responseMs": 1874,
+     "lang": "en-US",
+     "issues": [
+      "title_too_short",
+      "links_to_redirects",
+      "hreflang_no_xdefault",
+      "slow_response"
+     ]
+    },
+    {
+     "path": "/en/spaces/furniture/outdoor-tables/",
+     "status": 200,
+     "depth": 2,
+     "indexable": true,
+     "inSitemap": true,
+     "title": "Outdoor porcelain stoneware tables | XTONE",
+     "titleLength": 42,
+     "descriptionLength": 163,
+     "h1Count": 1,
+     "wordCount": 2943,
+     "responseMs": 1719,
+     "lang": "en-US",
+     "issues": [
+      "description_too_long",
+      "links_to_redirects",
+      "hreflang_no_xdefault",
+      "slow_response"
+     ]
+    },
+    {
+     "path": "/en/spaces/kitchen/",
+     "status": 200,
+     "depth": 2,
+     "indexable": true,
+     "inSitemap": true,
+     "title": "Kitchen solutions | XTONE",
+     "titleLength": 25,
+     "descriptionLength": 117,
+     "h1Count": 1,
+     "wordCount": 1577,
+     "responseMs": 2007,
+     "lang": "en-US",
+     "issues": [
+      "title_too_short",
+      "links_to_redirects",
+      "hreflang_no_xdefault",
+      "slow_response"
+     ]
+    },
+    {
+     "path": "/fr/blog/",
+     "status": 200,
+     "depth": 2,
+     "indexable": true,
+     "inSitemap": true,
+     "title": "Blog XTONE | Tendances en matière de revêtements grand format",
+     "titleLength": 61,
+     "descriptionLength": 150,
+     "h1Count": 1,
+     "wordCount": 684,
+     "responseMs": 1501,
+     "lang": "fr-FR",
+     "issues": [
+      "title_too_long",
+      "links_to_redirects",
+      "hreflang_no_xdefault",
+      "slow_response"
+     ]
+    },
+    {
+     "path": "/fr/espaces/cuisine/revetements/",
+     "status": 200,
+     "depth": 2,
+     "indexable": true,
+     "inSitemap": true,
+     "title": "Revêtements pour cuisines | XTONE",
+     "titleLength": 33,
+     "descriptionLength": 169,
+     "h1Count": 1,
+     "wordCount": 1521,
+     "responseMs": 1920,
+     "lang": "fr-FR",
+     "issues": [
+      "description_too_long",
+      "links_to_redirects",
+      "hreflang_no_xdefault",
+      "slow_response"
+     ]
+    },
+    {
+     "path": "/fr/espaces/exterieur/",
+     "status": 200,
+     "depth": 2,
+     "indexable": true,
+     "inSitemap": true,
+     "title": "Solutions d'extérieur : grès cérame et pierre naturelle | XTONE",
+     "titleLength": 63,
+     "descriptionLength": 133,
+     "h1Count": 1,
+     "wordCount": 1830,
+     "responseMs": 1752,
+     "lang": "fr-FR",
+     "issues": [
+      "title_too_long",
+      "links_to_redirects",
+      "hreflang_no_xdefault",
+      "slow_response"
+     ]
+    },
+    {
+     "path": "/fr/espaces/exterieur/sols/",
+     "status": 200,
+     "depth": 2,
+     "indexable": true,
+     "inSitemap": true,
+     "title": "Sols extérieurs en grès cérame et pierre naturelle | XTONE",
+     "titleLength": 58,
+     "descriptionLength": 181,
+     "h1Count": 1,
+     "wordCount": 1955,
+     "responseMs": 2103,
+     "lang": "fr-FR",
+     "issues": [
+      "description_too_long",
+      "links_to_redirects",
+      "hreflang_no_xdefault",
+      "slow_response"
+     ]
+    },
+    {
+     "path": "/fr/espaces/interieur/",
+     "status": 200,
+     "depth": 2,
+     "indexable": true,
+     "inSitemap": true,
+     "title": "Solutions pour intérieurs en grès cérame et pierre naturelle | XTONE",
+     "titleLength": 68,
+     "descriptionLength": 139,
+     "h1Count": 1,
+     "wordCount": 2104,
+     "responseMs": 1835,
+     "lang": "fr-FR",
+     "issues": [
+      "title_too_long",
+      "links_to_redirects",
+      "hreflang_no_xdefault",
+      "slow_response"
+     ]
+    },
+    {
+     "path": "/fr/espaces/interieur/revetements/",
+     "status": 200,
+     "depth": 2,
+     "indexable": true,
+     "inSitemap": true,
+     "title": "Revêtements intérieurs en grès cérame et pierre naturelle | XTONE",
+     "titleLength": 65,
+     "descriptionLength": 145,
+     "h1Count": 1,
+     "wordCount": 2494,
+     "responseMs": 1681,
+     "lang": "fr-FR",
+     "issues": [
+      "title_too_long",
+      "links_to_redirects",
+      "hreflang_no_xdefault",
+      "slow_response"
+     ]
+    },
+    {
+     "path": "/fr/espaces/interieur/sols/",
+     "status": 200,
+     "depth": 2,
+     "indexable": true,
+     "inSitemap": true,
+     "title": "Carrelages d'intérieur grand format | XTONE",
+     "titleLength": 43,
+     "descriptionLength": 176,
+     "h1Count": 1,
+     "wordCount": 2537,
+     "responseMs": 1639,
+     "lang": "fr-FR",
+     "issues": [
+      "description_too_long",
+      "links_to_redirects",
+      "hreflang_no_xdefault",
+      "slow_response"
+     ]
+    },
+    {
+     "path": "/fr/espaces/mobilier/",
+     "status": 200,
+     "depth": 2,
+     "indexable": true,
+     "inSitemap": true,
+     "title": "Solutions pour meubles en grès cérame | XTONE",
+     "titleLength": 45,
+     "descriptionLength": 165,
+     "h1Count": 1,
+     "wordCount": 3131,
+     "responseMs": 1769,
+     "lang": "fr-FR",
+     "issues": [
+      "description_too_long",
+      "links_to_redirects",
+      "hreflang_no_xdefault",
+      "slow_response"
+     ]
+    },
+    {
+     "path": "/fr/espaces/mobilier/tables-dexterieur/",
+     "status": 200,
+     "depth": 2,
+     "indexable": true,
+     "inSitemap": true,
+     "title": "Tables d'extérieur en grès cérame | XTONE",
+     "titleLength": 41,
+     "descriptionLength": 219,
+     "h1Count": 1,
+     "wordCount": 3025,
+     "responseMs": 1889,
+     "lang": "fr-FR",
+     "issues": [
+      "description_too_long",
+      "links_to_redirects",
+      "hreflang_no_xdefault",
+      "slow_response"
+     ]
+    },
+    {
+     "path": "/fr/espaces/mobilier/tables-salle-a-manger/",
+     "status": 200,
+     "depth": 2,
+     "indexable": true,
+     "inSitemap": true,
+     "title": "Tables de salle à manger | XTONE",
+     "titleLength": 32,
+     "descriptionLength": 162,
+     "h1Count": 1,
+     "wordCount": 3484,
+     "responseMs": 1956,
+     "lang": "fr-FR",
+     "issues": [
+      "description_too_long",
+      "links_to_redirects",
+      "hreflang_no_xdefault",
+      "slow_response"
+     ]
+    },
+    {
+     "path": "/fr/espaces/salles-de-bain/",
+     "status": 200,
+     "depth": 2,
+     "indexable": true,
+     "inSitemap": true,
+     "title": "Solutions pour salles de bains | XTONE",
+     "titleLength": 38,
+     "descriptionLength": 177,
+     "h1Count": 1,
+     "wordCount": 2620,
+     "responseMs": 1813,
+     "lang": "fr-FR",
+     "issues": [
+      "description_too_long",
+      "links_to_redirects",
+      "hreflang_no_xdefault",
+      "slow_response"
+     ]
+    },
+    {
+     "path": "/fr/espaces/salles-de-bain/sols/",
+     "status": 200,
+     "depth": 2,
+     "indexable": true,
+     "inSitemap": true,
+     "title": "Sols pour salles de bains | XTONE",
+     "titleLength": 33,
+     "descriptionLength": 167,
+     "h1Count": 1,
+     "wordCount": 2628,
+     "responseMs": 1930,
+     "lang": "fr-FR",
+     "issues": [
+      "description_too_long",
+      "links_to_redirects",
+      "hreflang_no_xdefault",
+      "slow_response"
+     ]
+    },
+    {
+     "path": "/fr/library/",
+     "status": 200,
+     "depth": 2,
+     "indexable": true,
+     "inSitemap": true,
+     "title": "Centres de Library | Centres d'exposition et sélection de matériaux",
+     "titleLength": 67,
+     "descriptionLength": 136,
+     "h1Count": 1,
+     "wordCount": 559,
+     "responseMs": 1679,
+     "lang": "fr-FR",
+     "issues": [
+      "title_too_long",
+      "links_to_redirects",
+      "hreflang_no_xdefault",
+      "slow_response"
+     ]
+    },
+    {
+     "path": "/fr/mentions-legales/",
+     "status": 200,
+     "depth": 2,
+     "indexable": true,
+     "inSitemap": true,
+     "title": "Mentions légales - Xtone",
+     "titleLength": 24,
+     "descriptionLength": 0,
+     "h1Count": 1,
+     "wordCount": 2472,
+     "responseMs": 1443,
+     "lang": "fr-FR",
+     "issues": [
+      "title_too_short",
+      "description_missing",
+      "links_to_redirects",
+      "hreflang_no_xdefault"
+     ]
+    },
+    {
+     "path": "/fr/produits/gres-cerame/effet-bois/",
+     "status": 200,
+     "depth": 2,
+     "indexable": true,
+     "inSitemap": false,
+     "title": "Grès cérame effet bois | XTONE",
+     "titleLength": 30,
+     "descriptionLength": 150,
+     "h1Count": 1,
+     "wordCount": 630,
+     "responseMs": 1643,
+     "lang": "fr-FR",
+     "issues": [
+      "not_in_sitemap",
+      "links_to_redirects",
+      "hreflang_no_xdefault",
+      "slow_response"
+     ]
+    },
+    {
+     "path": "/fr/produits/gres-cerame/effet-ciment-beton/",
+     "status": 200,
+     "depth": 2,
+     "indexable": true,
+     "inSitemap": false,
+     "title": "Carrelage en grès cérame effet béton | XTONE",
+     "titleLength": 44,
+     "descriptionLength": 154,
+     "h1Count": 1,
+     "wordCount": 564,
+     "responseMs": 1578,
+     "lang": "fr-FR",
+     "issues": [
+      "not_in_sitemap",
+      "links_to_redirects",
+      "hreflang_no_xdefault",
+      "slow_response"
+     ]
+    },
+    {
+     "path": "/fr/produits/gres-cerame/effet-marbre/",
+     "status": 200,
+     "depth": 2,
+     "indexable": true,
+     "inSitemap": false,
+     "title": "Carrelage en grès cérame effet marbre | XTONE",
+     "titleLength": 45,
+     "descriptionLength": 154,
+     "h1Count": 1,
+     "wordCount": 703,
+     "responseMs": 1875,
+     "lang": "fr-FR",
+     "issues": [
+      "not_in_sitemap",
+      "links_to_redirects",
+      "hreflang_no_xdefault",
+      "slow_response"
+     ]
+    },
+    {
+     "path": "/fr/produits/gres-cerame/effet-metallique/",
+     "status": 200,
+     "depth": 2,
+     "indexable": true,
+     "inSitemap": false,
+     "title": "Carrelage en grès cérame effet métal | XTONE",
+     "titleLength": 44,
+     "descriptionLength": 141,
+     "h1Count": 1,
+     "wordCount": 595,
+     "responseMs": 2112,
+     "lang": "fr-FR",
+     "issues": [
+      "not_in_sitemap",
+      "links_to_redirects",
+      "hreflang_no_xdefault",
+      "slow_response"
+     ]
+    },
+    {
+     "path": "/fr/produits/gres-cerame/effet-pierre/",
+     "status": 200,
+     "depth": 2,
+     "indexable": true,
+     "inSitemap": false,
+     "title": "Grès cérame effet pierre | XTONE",
+     "titleLength": 32,
+     "descriptionLength": 140,
+     "h1Count": 1,
+     "wordCount": 633,
+     "responseMs": 1688,
+     "lang": "fr-FR",
+     "issues": [
+      "not_in_sitemap",
+      "links_to_redirects",
+      "hreflang_no_xdefault",
+      "slow_response"
+     ]
+    },
+    {
+     "path": "/fr/produits/gres-cerame/monochrome/",
+     "status": 200,
+     "depth": 2,
+     "indexable": true,
+     "inSitemap": false,
+     "title": "Grès cérame monochrome | XTONE",
+     "titleLength": 30,
+     "descriptionLength": 137,
+     "h1Count": 1,
+     "wordCount": 585,
+     "responseMs": 1584,
+     "lang": "fr-FR",
+     "issues": [
+      "not_in_sitemap",
+      "links_to_redirects",
+      "hreflang_no_xdefault",
+      "slow_response"
+     ]
+    },
+    {
+     "path": "/fr/produits/pierre-naturelle/dolomites/",
+     "status": 200,
+     "depth": 2,
+     "indexable": true,
+     "inSitemap": false,
+     "title": "Pierre de dolomite naturelle | XTONE",
+     "titleLength": 36,
+     "descriptionLength": 143,
+     "h1Count": 1,
+     "wordCount": 591,
+     "responseMs": 1692,
+     "lang": "fr-FR",
+     "issues": [
+      "not_in_sitemap",
+      "links_to_redirects",
+      "hreflang_no_xdefault",
+      "slow_response"
+     ]
+    },
+    {
+     "path": "/fr/produits/pierre-naturelle/granites/",
+     "status": 200,
+     "depth": 2,
+     "indexable": true,
+     "inSitemap": false,
+     "title": "Pierre naturelle de granit | XTONE",
+     "titleLength": 34,
+     "descriptionLength": 138,
+     "h1Count": 1,
+     "wordCount": 646,
+     "responseMs": 1571,
+     "lang": "fr-FR",
+     "issues": [
+      "not_in_sitemap",
+      "links_to_redirects",
+      "hreflang_no_xdefault",
+      "slow_response"
+     ]
+    },
+    {
+     "path": "/fr/produits/pierre-naturelle/quartzites/",
+     "status": 200,
+     "depth": 2,
+     "indexable": true,
+     "inSitemap": false,
+     "title": "Quartzite naturel Altissima | XTONE",
+     "titleLength": 35,
+     "descriptionLength": 144,
+     "h1Count": 1,
+     "wordCount": 585,
+     "responseMs": 1582,
+     "lang": "fr-FR",
+     "issues": [
+      "not_in_sitemap",
+      "links_to_redirects",
+      "hreflang_no_xdefault",
+      "slow_response"
+     ]
+    },
+    {
+     "path": "/fr/produits/pierre-naturelle/travertins/",
+     "status": 200,
+     "depth": 2,
+     "indexable": true,
+     "inSitemap": false,
+     "title": "Pierre naturelle en travertin | XTONE",
+     "titleLength": 37,
+     "descriptionLength": 136,
+     "h1Count": 1,
+     "wordCount": 613,
+     "responseMs": 1616,
+     "lang": "fr-FR",
+     "issues": [
+      "not_in_sitemap",
+      "links_to_redirects",
+      "hreflang_no_xdefault",
+      "slow_response"
+     ]
+    },
+    {
+     "path": "/fr/produits/tables/",
+     "status": 200,
+     "depth": 2,
+     "indexable": true,
+     "inSitemap": true,
+     "title": "Tables en grès cérame | XTONE",
+     "titleLength": 29,
+     "descriptionLength": 150,
+     "h1Count": 1,
+     "wordCount": 1353,
+     "responseMs": 1714,
+     "lang": "fr-FR",
+     "issues": [
+      "title_too_short",
+      "links_to_redirects",
+      "hreflang_no_xdefault",
+      "slow_response"
+     ]
+    },
+    {
+     "path": "/fr/professionnels/",
+     "status": 200,
+     "depth": 2,
+     "indexable": true,
+     "inSitemap": true,
+     "title": "XTONE PRO | Services destinés aux professionnels",
+     "titleLength": 48,
+     "descriptionLength": 151,
+     "h1Count": 1,
+     "wordCount": 4081,
+     "responseMs": 2072,
+     "lang": "fr-FR",
+     "issues": [
+      "links_to_redirects",
+      "hreflang_no_xdefault",
+      "slow_response",
+      "html_heavy"
+     ]
+    },
+    {
+     "path": "/fr/ressources/",
+     "status": 200,
+     "depth": 2,
+     "indexable": true,
+     "inSitemap": true,
+     "title": "Ressources XTONE | Catalogues et documentation technique",
+     "titleLength": 56,
+     "descriptionLength": 177,
+     "h1Count": 1,
+     "wordCount": 6864,
+     "responseMs": 2092,
+     "lang": "fr-FR",
+     "issues": [
+      "description_too_long",
+      "links_to_redirects",
+      "hreflang_no_xdefault",
+      "slow_response"
+     ]
+    },
+    {
+     "path": "/producto/porcelanico/aged-clay/",
+     "status": 200,
+     "depth": 2,
+     "indexable": true,
+     "inSitemap": true,
+     "title": "Solo Warm | Porcelánico XTONE",
+     "titleLength": 29,
+     "descriptionLength": 91,
+     "h1Count": 1,
+     "wordCount": 927,
+     "responseMs": 1734,
+     "lang": "es-ES",
+     "issues": [
+      "title_too_short",
+      "links_to_redirects",
+      "hreflang_no_xdefault",
+      "slow_response"
+     ]
+    },
+    {
+     "path": "/producto/porcelanico/amazonite/",
+     "status": 200,
+     "depth": 2,
+     "indexable": true,
+     "inSitemap": true,
+     "title": "Amazonite | Porcelánico XTONE",
+     "titleLength": 29,
+     "descriptionLength": 126,
+     "h1Count": 1,
+     "wordCount": 1668,
+     "responseMs": 1843,
+     "lang": "es-ES",
+     "issues": [
+      "title_too_short",
+      "links_to_redirects",
+      "hreflang_no_xdefault",
+      "slow_response"
+     ]
+    },
+    {
+     "path": "/producto/porcelanico/ars-beige/",
+     "status": 200,
+     "depth": 2,
+     "indexable": true,
+     "inSitemap": true,
+     "title": "Ars Beige | Porcelánico XTONE",
+     "titleLength": 29,
+     "descriptionLength": 114,
+     "h1Count": 1,
+     "wordCount": 1095,
+     "responseMs": 1766,
+     "lang": "es-ES",
+     "issues": [
+      "title_too_short",
+      "links_to_redirects",
+      "hreflang_no_xdefault",
+      "slow_response"
+     ]
+    },
+    {
+     "path": "/producto/porcelanico/blue-roma/",
+     "status": 200,
+     "depth": 2,
+     "indexable": true,
+     "inSitemap": true,
+     "title": "Blue Roma | Porcelánico XTONE",
+     "titleLength": 29,
+     "descriptionLength": 111,
+     "h1Count": 1,
+     "wordCount": 1275,
+     "responseMs": 1808,
+     "lang": "es-ES",
+     "issues": [
+      "title_too_short",
+      "links_to_redirects",
+      "hreflang_no_xdefault",
+      "slow_response"
+     ]
+    },
+    {
+     "path": "/producto/porcelanico/calatorao/",
+     "status": 200,
+     "depth": 2,
+     "indexable": true,
+     "inSitemap": true,
+     "title": "Calatorao | Porcelánico XTONE",
+     "titleLength": 29,
+     "descriptionLength": 113,
+     "h1Count": 1,
+     "wordCount": 1214,
+     "responseMs": 1765,
+     "lang": "es-ES",
+     "issues": [
+      "title_too_short",
+      "links_to_redirects",
+      "hreflang_no_xdefault",
+      "slow_response"
+     ]
+    },
+    {
+     "path": "/producto/porcelanico/ele/",
+     "status": 200,
+     "depth": 2,
+     "indexable": true,
+     "inSitemap": true,
+     "title": "Ele | Porcelánico XTONE",
+     "titleLength": 23,
+     "descriptionLength": 121,
+     "h1Count": 1,
+     "wordCount": 1204,
+     "responseMs": 1969,
+     "lang": "es-ES",
+     "issues": [
+      "title_too_short",
+      "links_to_redirects",
+      "hreflang_no_xdefault",
+      "slow_response"
+     ]
+    },
+    {
+     "path": "/producto/porcelanico/liem-dark/",
+     "status": 200,
+     "depth": 2,
+     "indexable": true,
+     "inSitemap": true,
+     "title": "Liem Dark | Porcelánico XTONE",
+     "titleLength": 29,
+     "descriptionLength": 104,
+     "h1Count": 1,
+     "wordCount": 1219,
+     "responseMs": 1790,
+     "lang": "es-ES",
+     "issues": [
+      "title_too_short",
+      "links_to_redirects",
+      "hreflang_no_xdefault",
+      "slow_response"
+     ]
+    },
+    {
+     "path": "/producto/porcelanico/navona/",
+     "status": 200,
+     "depth": 2,
+     "indexable": true,
+     "inSitemap": true,
+     "title": "Navona | Porcelánico XTONE",
+     "titleLength": 26,
+     "descriptionLength": 100,
+     "h1Count": 1,
+     "wordCount": 1525,
+     "responseMs": 2084,
+     "lang": "es-ES",
+     "issues": [
+      "title_too_short",
+      "links_to_redirects",
+      "hreflang_no_xdefault",
+      "slow_response"
+     ]
+    },
+    {
+     "path": "/producto/porcelanico/neda/",
+     "status": 200,
+     "depth": 2,
+     "indexable": true,
+     "inSitemap": true,
+     "title": "Neda | Porcelánico XTONE",
+     "titleLength": 24,
+     "descriptionLength": 102,
+     "h1Count": 1,
+     "wordCount": 1237,
+     "responseMs": 2142,
+     "lang": "es-ES",
+     "issues": [
+      "title_too_short",
+      "links_to_redirects",
+      "hreflang_no_xdefault",
+      "slow_response"
+     ]
+    },
+    {
+     "path": "/producto/porcelanico/negresco/",
+     "status": 200,
+     "depth": 2,
+     "indexable": true,
+     "inSitemap": true,
+     "title": "Negresco | Porcelánico XTONE",
+     "titleLength": 28,
+     "descriptionLength": 113,
+     "h1Count": 1,
+     "wordCount": 1246,
+     "responseMs": 1952,
+     "lang": "es-ES",
+     "issues": [
+      "title_too_short",
+      "links_to_redirects",
+      "hreflang_no_xdefault",
+      "slow_response"
+     ]
+    },
+    {
+     "path": "/producto/porcelanico/nylo-noir/",
+     "status": 200,
+     "depth": 2,
+     "indexable": true,
+     "inSitemap": true,
+     "title": "Nylo Noir | Porcelánico XTONE",
+     "titleLength": 29,
+     "descriptionLength": 101,
+     "h1Count": 1,
+     "wordCount": 1019,
+     "responseMs": 2029,
+     "lang": "es-ES",
+     "issues": [
+      "title_too_short",
+      "links_to_redirects",
+      "hreflang_no_xdefault",
+      "slow_response"
+     ]
+    },
+    {
+     "path": "/producto/porcelanico/solo-dove/",
+     "status": 200,
+     "depth": 2,
+     "indexable": true,
+     "inSitemap": true,
+     "title": "Solo Dove | Porcelánico XTONE",
+     "titleLength": 29,
+     "descriptionLength": 97,
+     "h1Count": 1,
+     "wordCount": 928,
+     "responseMs": 2168,
+     "lang": "es-ES",
+     "issues": [
+      "title_too_short",
+      "links_to_redirects",
+      "hreflang_no_xdefault",
+      "slow_response"
+     ]
+    },
+    {
+     "path": "/producto/porcelanico/taj-mahal/",
+     "status": 200,
+     "depth": 2,
+     "indexable": true,
+     "inSitemap": true,
+     "title": "Taj Mahal | Porcelánico XTONE",
+     "titleLength": 29,
+     "descriptionLength": 100,
+     "h1Count": 1,
+     "wordCount": 1348,
+     "responseMs": 2212,
+     "lang": "es-ES",
+     "issues": [
+      "title_too_short",
+      "links_to_redirects",
+      "hreflang_no_xdefault",
+      "slow_response"
+     ]
+    },
+    {
+     "path": "/producto/porcelanico/titanium/",
+     "status": 200,
+     "depth": 2,
+     "indexable": true,
+     "inSitemap": true,
+     "title": "Titanium | Porcelánico XTONE",
+     "titleLength": 28,
+     "descriptionLength": 99,
+     "h1Count": 1,
+     "wordCount": 1346,
+     "responseMs": 2099,
+     "lang": "es-ES",
+     "issues": [
+      "title_too_short",
+      "links_to_redirects",
+      "hreflang_no_xdefault",
+      "slow_response"
+     ]
+    },
+    {
+     "path": "/producto/porcelanico/vendome/",
+     "status": 200,
+     "depth": 2,
+     "indexable": true,
+     "inSitemap": true,
+     "title": "Vendome | Porcelánico XTONE",
+     "titleLength": 27,
+     "descriptionLength": 97,
+     "h1Count": 1,
+     "wordCount": 1153,
+     "responseMs": 2506,
+     "lang": "es-ES",
+     "issues": [
+      "title_too_short",
+      "links_to_redirects",
+      "hreflang_no_xdefault",
+      "slow_response"
+     ]
+    },
+    {
+     "path": "/en/about-xtone/",
+     "status": 200,
+     "depth": 2,
+     "indexable": true,
+     "inSitemap": true,
+     "title": "Discover XTONE | Large-format surfaces",
+     "titleLength": 38,
+     "descriptionLength": 102,
+     "h1Count": 1,
+     "wordCount": 925,
+     "responseMs": 1878,
+     "lang": "en-US",
+     "issues": [
+      "links_to_redirects",
+      "hreflang_no_xdefault",
+      "slow_response"
+     ]
+    },
+    {
+     "path": "/en/blog/",
+     "status": 200,
+     "depth": 2,
+     "indexable": true,
+     "inSitemap": true,
+     "title": "XTONE Blog | Trends in Large-Format Surfaces",
+     "titleLength": 44,
+     "descriptionLength": 111,
+     "h1Count": 1,
+     "wordCount": 672,
+     "responseMs": 1738,
+     "lang": "en-US",
+     "issues": [
+      "links_to_redirects",
+      "hreflang_no_xdefault",
+      "slow_response"
+     ]
+    },
+    {
+     "path": "/en/library/",
+     "status": 200,
+     "depth": 2,
+     "indexable": true,
+     "inSitemap": true,
+     "title": "Library XTONE | Material exhibition and selection centres",
+     "titleLength": 57,
+     "descriptionLength": 157,
+     "h1Count": 1,
+     "wordCount": 526,
+     "responseMs": 1768,
+     "lang": "en-US",
+     "issues": [
+      "links_to_redirects",
+      "hreflang_no_xdefault",
+      "slow_response"
+     ]
+    },
+    {
+     "path": "/en/products/porcelain-slabs/",
+     "status": 200,
+     "depth": 2,
+     "indexable": true,
+     "inSitemap": true,
+     "title": "Large-format porcelain slabs | XTONE",
+     "titleLength": 36,
+     "descriptionLength": 138,
+     "h1Count": 1,
+     "wordCount": 2307,
+     "responseMs": 2259,
+     "lang": "en-US",
+     "issues": [
+      "links_to_redirects",
+      "hreflang_no_xdefault",
+      "slow_response"
+     ]
+    },
+    {
+     "path": "/en/products/shower-trays/",
+     "status": 200,
+     "depth": 2,
+     "indexable": true,
+     "inSitemap": true,
+     "title": "Porcelain Shower Trays | XTONE",
+     "titleLength": 30,
+     "descriptionLength": 146,
+     "h1Count": 1,
+     "wordCount": 902,
+     "responseMs": 1831,
+     "lang": "en-US",
+     "issues": [
+      "links_to_redirects",
+      "hreflang_no_xdefault",
+      "slow_response"
+     ]
+    },
+    {
+     "path": "/en/products/washbasins/",
+     "status": 200,
+     "depth": 2,
+     "indexable": true,
+     "inSitemap": true,
+     "title": "Porcelain and Natural Stone washbasins | XTONE",
+     "titleLength": 46,
+     "descriptionLength": 154,
+     "h1Count": 1,
+     "wordCount": 936,
+     "responseMs": 1906,
+     "lang": "en-US",
+     "issues": [
+      "links_to_redirects",
+      "hreflang_no_xdefault",
+      "slow_response"
+     ]
+    },
+    {
+     "path": "/en/resources/",
+     "status": 200,
+     "depth": 2,
+     "indexable": true,
+     "inSitemap": true,
+     "title": "XTONE Resources | Catalogues and technical documentation",
+     "titleLength": 56,
+     "descriptionLength": 137,
+     "h1Count": 1,
+     "wordCount": 6153,
+     "responseMs": 1996,
+     "lang": "en-US",
+     "issues": [
+      "links_to_redirects",
+      "hreflang_no_xdefault",
+      "slow_response"
+     ]
+    },
+    {
+     "path": "/en/showroom/",
+     "status": 200,
+     "depth": 2,
+     "indexable": true,
+     "inSitemap": true,
+     "title": "XTONE Showroom | Large-format materials gallery",
+     "titleLength": 47,
+     "descriptionLength": 117,
+     "h1Count": 1,
+     "wordCount": 245,
+     "responseMs": 2307,
+     "lang": "en-US",
+     "issues": [
+      "links_to_redirects",
+      "hreflang_no_xdefault",
+      "slow_response"
+     ]
+    },
+    {
+     "path": "/en/spaces/",
+     "status": 200,
+     "depth": 2,
+     "indexable": true,
+     "inSitemap": true,
+     "title": "XTONE Spaces | Applications for Large-Format Surfaces",
+     "titleLength": 53,
+     "descriptionLength": 114,
+     "h1Count": 1,
+     "wordCount": 237,
+     "responseMs": 1977,
+     "lang": "en-US",
+     "issues": [
+      "links_to_redirects",
+      "hreflang_no_xdefault",
+      "slow_response"
+     ]
+    },
+    {
+     "path": "/en/spaces/bathroom/basins/",
+     "status": 200,
+     "depth": 2,
+     "indexable": true,
+     "inSitemap": true,
+     "title": "Bathroom ideas with XTONE washbasins",
+     "titleLength": 36,
+     "descriptionLength": 129,
+     "h1Count": 1,
+     "wordCount": 2685,
+     "responseMs": 2063,
+     "lang": "en-US",
+     "issues": [
+      "links_to_redirects",
+      "hreflang_no_xdefault",
+      "slow_response"
+     ]
+    },
+    {
+     "path": "/en/spaces/bathroom/bathtubs/",
+     "status": 200,
+     "depth": 2,
+     "indexable": true,
+     "inSitemap": true,
+     "title": "Bathroom ideas with XTONE bathtubs",
+     "titleLength": 34,
+     "descriptionLength": 138,
+     "h1Count": 1,
+     "wordCount": 2487,
+     "responseMs": 1948,
+     "lang": "en-US",
+     "issues": [
+      "links_to_redirects",
+      "hreflang_no_xdefault",
+      "slow_response"
+     ]
+    },
+    {
+     "path": "/en/spaces/bathroom/shower-trays/",
+     "status": 200,
+     "depth": 2,
+     "indexable": true,
+     "inSitemap": true,
+     "title": "Bathroom ideas featuring XTONE shower trays",
+     "titleLength": 43,
+     "descriptionLength": 146,
+     "h1Count": 1,
+     "wordCount": 2661,
+     "responseMs": 2020,
+     "lang": "en-US",
+     "issues": [
+      "links_to_redirects",
+      "hreflang_no_xdefault",
+      "slow_response"
+     ]
+    },
+    {
+     "path": "/en/spaces/exterior/facades/",
+     "status": 200,
+     "depth": 2,
+     "indexable": true,
+     "inSitemap": true,
+     "title": "Porcelain and natural stone cladding for façades",
+     "titleLength": 48,
+     "descriptionLength": 133,
+     "h1Count": 1,
+     "wordCount": 1962,
+     "responseMs": 1653,
+     "lang": "en-US",
+     "issues": [
+      "links_to_redirects",
+      "hreflang_no_xdefault",
+      "slow_response"
+     ]
+    },
+    {
+     "path": "/en/spaces/exterior/flooring/",
+     "status": 200,
+     "depth": 2,
+     "indexable": true,
+     "inSitemap": true,
+     "title": "Outdoor flooring in porcelain and natural stone | XTONE",
+     "titleLength": 55,
+     "descriptionLength": 145,
+     "h1Count": 1,
+     "wordCount": 1857,
+     "responseMs": 2006,
+     "lang": "en-US",
+     "issues": [
+      "links_to_redirects",
+      "hreflang_no_xdefault",
+      "slow_response"
+     ]
+    },
+    {
+     "path": "/en/spaces/furniture/",
+     "status": 200,
+     "depth": 2,
+     "indexable": true,
+     "inSitemap": true,
+     "title": "Porcelain solutions for furniture | XTONE",
+     "titleLength": 41,
+     "descriptionLength": 142,
+     "h1Count": 1,
+     "wordCount": 2988,
+     "responseMs": 1815,
+     "lang": "en-US",
+     "issues": [
+      "links_to_redirects",
+      "hreflang_no_xdefault",
+      "slow_response"
+     ]
+    },
+    {
+     "path": "/en/spaces/furniture/office-desks/",
+     "status": 200,
+     "depth": 2,
+     "indexable": true,
+     "inSitemap": true,
+     "title": "Porcelain office desks | XTONE",
+     "titleLength": 30,
+     "descriptionLength": 152,
+     "h1Count": 1,
+     "wordCount": 3045,
+     "responseMs": 1743,
+     "lang": "en-US",
+     "issues": [
+      "links_to_redirects",
+      "hreflang_no_xdefault",
+      "slow_response"
+     ]
+    },
+    {
+     "path": "/en/spaces/interior/",
+     "status": 200,
+     "depth": 2,
+     "indexable": true,
+     "inSitemap": true,
+     "title": "Solutions for interior porcelain and natural stone | XTONE",
+     "titleLength": 58,
+     "descriptionLength": 124,
+     "h1Count": 1,
+     "wordCount": 2078,
+     "responseMs": 1782,
+     "lang": "en-US",
+     "issues": [
+      "links_to_redirects",
+      "hreflang_no_xdefault",
+      "slow_response"
+     ]
+    },
+    {
+     "path": "/en/spaces/interior/fireplaces/",
+     "status": 200,
+     "depth": 2,
+     "indexable": true,
+     "inSitemap": true,
+     "title": "Porcelain and natural stone cladding for fireplaces",
+     "titleLength": 51,
+     "descriptionLength": 137,
+     "h1Count": 1,
+     "wordCount": 2375,
+     "responseMs": 1775,
+     "lang": "en-US",
+     "issues": [
+      "links_to_redirects",
+      "hreflang_no_xdefault",
+      "slow_response"
+     ]
+    },
+    {
+     "path": "/en/spaces/interior/flooring/",
+     "status": 200,
+     "depth": 2,
+     "indexable": true,
+     "inSitemap": true,
+     "title": "Large-format indoor flooring | XTONE",
+     "titleLength": 36,
+     "descriptionLength": 134,
+     "h1Count": 1,
+     "wordCount": 2460,
+     "responseMs": 1665,
+     "lang": "en-US",
+     "issues": [
+      "links_to_redirects",
+      "hreflang_no_xdefault",
+      "slow_response"
+     ]
+    },
+    {
+     "path": "/en/spaces/interior/wall-coverings/",
+     "status": 200,
+     "depth": 2,
+     "indexable": true,
+     "inSitemap": true,
+     "title": "Porcelain and natural stone interior wall coverings | XTONE",
+     "titleLength": 59,
+     "descriptionLength": 128,
+     "h1Count": 1,
+     "wordCount": 2436,
+     "responseMs": 1619,
+     "lang": "en-US",
+     "issues": [
+      "links_to_redirects",
+      "hreflang_no_xdefault",
+      "slow_response"
+     ]
+    },
+    {
+     "path": "/en/spaces/kitchen/countertops/",
+     "status": 200,
+     "depth": 2,
+     "indexable": true,
+     "inSitemap": true,
+     "title": "Porcelain and natural stone kitchen countertops",
+     "titleLength": 47,
+     "descriptionLength": 131,
+     "h1Count": 1,
+     "wordCount": 1909,
+     "responseMs": 1867,
+     "lang": "en-US",
+     "issues": [
+      "links_to_redirects",
+      "hreflang_no_xdefault",
+      "slow_response"
+     ]
+    },
+    {
+     "path": "/en/spaces/kitchen/flooring/",
+     "status": 200,
+     "depth": 2,
+     "indexable": true,
+     "inSitemap": true,
+     "title": "Porcelain and natural stone kitchen flooring | XTONE",
+     "titleLength": 52,
+     "descriptionLength": 127,
+     "h1Count": 1,
+     "wordCount": 1278,
+     "responseMs": 1914,
+     "lang": "en-US",
+     "issues": [
+      "links_to_redirects",
+      "hreflang_no_xdefault",
+      "slow_response"
+     ]
+    },
+    {
+     "path": "/en/spaces/kitchen/wall-coverings/",
+     "status": 200,
+     "depth": 2,
+     "indexable": true,
+     "inSitemap": true,
+     "title": "Kitchen wall coverings | XTONE",
+     "titleLength": 30,
+     "descriptionLength": 148,
+     "h1Count": 1,
+     "wordCount": 1377,
+     "responseMs": 1843,
+     "lang": "en-US",
+     "issues": [
+      "links_to_redirects",
+      "hreflang_no_xdefault",
+      "slow_response"
+     ]
+    },
+    {
+     "path": "/en/stores/",
+     "status": 200,
+     "depth": 2,
+     "indexable": true,
+     "inSitemap": true,
+     "title": "XTONE shops | Find your nearest shop",
+     "titleLength": 36,
+     "descriptionLength": 104,
+     "h1Count": 1,
+     "wordCount": 411,
+     "responseMs": 1905,
+     "lang": "en-US",
+     "issues": [
+      "links_to_redirects",
+      "hreflang_no_xdefault",
+      "slow_response"
+     ]
+    },
+    {
+     "path": "/fr/a-propos-de-nous/",
+     "status": 200,
+     "depth": 2,
+     "indexable": true,
+     "inSitemap": true,
+     "title": "Découvrez XTONE | Revêtements grand format",
+     "titleLength": 42,
+     "descriptionLength": 126,
+     "h1Count": 1,
+     "wordCount": 1085,
+     "responseMs": 2330,
+     "lang": "fr-FR",
+     "issues": [
+      "links_to_redirects",
+      "hreflang_no_xdefault",
+      "slow_response"
+     ]
+    },
+    {
+     "path": "/fr/boutiques/",
+     "status": 200,
+     "depth": 2,
+     "indexable": true,
+     "inSitemap": true,
+     "title": "Magasins XTONE | Trouvez votre point de vente",
+     "titleLength": 45,
+     "descriptionLength": 130,
+     "h1Count": 1,
+     "wordCount": 427,
+     "responseMs": 1585,
+     "lang": "fr-FR",
+     "issues": [
+      "links_to_redirects",
+      "hreflang_no_xdefault",
+      "slow_response"
+     ]
+    },
+    {
+     "path": "/fr/espaces/",
+     "status": 200,
+     "depth": 2,
+     "indexable": true,
+     "inSitemap": true,
+     "title": "Espaces XTONE | Applications des surfaces grand format",
+     "titleLength": 54,
+     "descriptionLength": 142,
+     "h1Count": 1,
+     "wordCount": 255,
+     "responseMs": 1636,
+     "lang": "fr-FR",
+     "issues": [
+      "links_to_redirects",
+      "hreflang_no_xdefault",
+      "slow_response"
+     ]
+    },
+    {
+     "path": "/fr/espaces/cuisine/",
+     "status": 200,
+     "depth": 2,
+     "indexable": true,
+     "inSitemap": true,
+     "title": "Solutions pour cuisines | XTONE",
+     "titleLength": 31,
+     "descriptionLength": 157,
+     "h1Count": 1,
+     "wordCount": 1717,
+     "responseMs": 1826,
+     "lang": "fr-FR",
+     "issues": [
+      "links_to_redirects",
+      "hreflang_no_xdefault",
+      "slow_response"
+     ]
+    },
+    {
+     "path": "/fr/espaces/cuisine/sols/",
+     "status": 200,
+     "depth": 2,
+     "indexable": true,
+     "inSitemap": true,
+     "title": "Sols de cuisine en grès cérame et pierre naturelle | XTONE",
+     "titleLength": 58,
+     "descriptionLength": 141,
+     "h1Count": 1,
+     "wordCount": 1386,
+     "responseMs": 1784,
+     "lang": "fr-FR",
+     "issues": [
+      "links_to_redirects",
+      "hreflang_no_xdefault",
+      "slow_response"
+     ]
+    },
+    {
+     "path": "/fr/espaces/exterieur/facades/",
+     "status": 200,
+     "depth": 2,
+     "indexable": true,
+     "inSitemap": true,
+     "title": "Revêtements de façade en grès cérame et en pierre naturelle",
+     "titleLength": 59,
+     "descriptionLength": 152,
+     "h1Count": 1,
+     "wordCount": 2061,
+     "responseMs": 1744,
+     "lang": "fr-FR",
+     "issues": [
+      "links_to_redirects",
+      "hreflang_no_xdefault",
+      "slow_response"
+     ]
+    },
+    {
+     "path": "/fr/espaces/mobilier/bureaux/",
+     "status": 200,
+     "depth": 2,
+     "indexable": true,
+     "inSitemap": true,
+     "title": "Bureaux en grès cérame | XTONE",
+     "titleLength": 30,
+     "descriptionLength": 143,
+     "h1Count": 1,
+     "wordCount": 3146,
+     "responseMs": 2139,
+     "lang": "fr-FR",
+     "issues": [
+      "links_to_redirects",
+      "hreflang_no_xdefault",
+      "slow_response"
+     ]
+    },
+    {
+     "path": "/fr/espaces/mobilier/comptoirs/",
+     "status": 200,
+     "depth": 2,
+     "indexable": true,
+     "inSitemap": true,
+     "title": "Comptoirs en grès cérame | XTONE",
+     "titleLength": 32,
+     "descriptionLength": 118,
+     "h1Count": 1,
+     "wordCount": 3037,
+     "responseMs": 1986,
+     "lang": "fr-FR",
+     "issues": [
+      "links_to_redirects",
+      "hreflang_no_xdefault",
+      "slow_response"
+     ]
+    },
+    {
+     "path": "/fr/espaces/salles-de-bain/baignoires/",
+     "status": 200,
+     "depth": 2,
+     "indexable": true,
+     "inSitemap": true,
+     "title": "Idées de salles de bains avec baignoires XTONE",
+     "titleLength": 46,
+     "descriptionLength": 117,
+     "h1Count": 1,
+     "wordCount": 2595,
+     "responseMs": 1723,
+     "lang": "fr-FR",
+     "issues": [
+      "links_to_redirects",
+      "hreflang_no_xdefault",
+      "slow_response"
+     ]
+    },
+    {
+     "path": "/fr/espaces/salles-de-bain/lavabos/",
+     "status": 200,
+     "depth": 2,
+     "indexable": true,
+     "inSitemap": true,
+     "title": "Idées de salles de bains avec lavabos XTONE",
+     "titleLength": 43,
+     "descriptionLength": 123,
+     "h1Count": 1,
+     "wordCount": 2822,
+     "responseMs": 1798,
+     "lang": "fr-FR",
+     "issues": [
+      "links_to_redirects",
+      "hreflang_no_xdefault",
+      "slow_response"
+     ]
+    },
+    {
+     "path": "/fr/espaces/salles-de-bain/receveurs-de-douche/",
+     "status": 200,
+     "depth": 2,
+     "indexable": true,
+     "inSitemap": true,
+     "title": "Idées de salles de bains avec des receveurs de douche XTONE",
+     "titleLength": 59,
+     "descriptionLength": 140,
+     "h1Count": 1,
+     "wordCount": 2811,
+     "responseMs": 1818,
+     "lang": "fr-FR",
+     "issues": [
+      "links_to_redirects",
+      "hreflang_no_xdefault",
+      "slow_response"
+     ]
+    },
+    {
+     "path": "/fr/espaces/salles-de-bain/revetement/",
+     "status": 200,
+     "depth": 2,
+     "indexable": true,
+     "inSitemap": true,
+     "title": "Revêtements pour salles de bains | XTONE",
+     "titleLength": 40,
+     "descriptionLength": 152,
+     "h1Count": 1,
+     "wordCount": 2829,
+     "responseMs": 1832,
+     "lang": "fr-FR",
+     "issues": [
+      "links_to_redirects",
+      "hreflang_no_xdefault",
+      "slow_response"
+     ]
+    },
+    {
+     "path": "/fr/produits/baignoires/",
+     "status": 200,
+     "depth": 2,
+     "indexable": true,
+     "inSitemap": true,
+     "title": "Baignoires en grès cérame | XTONE",
+     "titleLength": 33,
+     "descriptionLength": 143,
+     "h1Count": 1,
+     "wordCount": 936,
+     "responseMs": 1638,
+     "lang": "fr-FR",
+     "issues": [
+      "links_to_redirects",
+      "hreflang_no_xdefault",
+      "slow_response"
+     ]
+    },
+    {
+     "path": "/fr/produits/gres-cerame/",
+     "status": 200,
+     "depth": 2,
+     "indexable": true,
+     "inSitemap": true,
+     "title": "Grès cérame grand format | XTONE",
+     "titleLength": 32,
+     "descriptionLength": 147,
+     "h1Count": 1,
+     "wordCount": 2787,
+     "responseMs": 1770,
+     "lang": "fr-FR",
+     "issues": [
+      "links_to_redirects",
+      "hreflang_no_xdefault",
+      "slow_response"
+     ]
+    },
+    {
+     "path": "/fr/produits/lavabos/",
+     "status": 200,
+     "depth": 2,
+     "indexable": true,
+     "inSitemap": true,
+     "title": "Lavabos en porcelaine et en pierre naturelle | XTONE",
+     "titleLength": 52,
+     "descriptionLength": 156,
+     "h1Count": 1,
+     "wordCount": 1106,
+     "responseMs": 1840,
+     "lang": "fr-FR",
+     "issues": [
+      "links_to_redirects",
+      "hreflang_no_xdefault",
+      "slow_response"
+     ]
+    },
+    {
+     "path": "/fr/produits/pierre-naturelle/",
+     "status": 200,
+     "depth": 2,
+     "indexable": true,
+     "inSitemap": true,
+     "title": "Pierre naturelle grand format Altissima | XTONE",
+     "titleLength": 47,
+     "descriptionLength": 159,
+     "h1Count": 1,
+     "wordCount": 1574,
+     "responseMs": 1534,
+     "lang": "fr-FR",
+     "issues": [
+      "links_to_redirects",
+      "hreflang_no_xdefault",
+      "slow_response"
+     ]
+    },
+    {
+     "path": "/fr/produits/receveurs-de-douche/",
+     "status": 200,
+     "depth": 2,
+     "indexable": true,
+     "inSitemap": true,
+     "title": "Receveurs de douche en porcelaine | XTONE",
+     "titleLength": 41,
+     "descriptionLength": 140,
+     "h1Count": 1,
+     "wordCount": 1053,
+     "responseMs": 1768,
+     "lang": "fr-FR",
+     "issues": [
+      "links_to_redirects",
+      "hreflang_no_xdefault",
+      "slow_response"
+     ]
+    },
+    {
+     "path": "/fr/showroom/",
+     "status": 200,
+     "depth": 2,
+     "indexable": true,
+     "inSitemap": true,
+     "title": "Showroom XTONE | Galerie de matériaux grand format",
+     "titleLength": 50,
+     "descriptionLength": 152,
+     "h1Count": 1,
+     "wordCount": 260,
+     "responseMs": 2541,
+     "lang": "fr-FR",
+     "issues": [
+      "links_to_redirects",
+      "hreflang_no_xdefault",
+      "slow_response"
+     ]
+    },
+    {
+     "path": "/producto/porcelanico/alpi-verde/",
+     "status": 200,
+     "depth": 2,
+     "indexable": true,
+     "inSitemap": true,
+     "title": "Alpi Verde | Porcelánico XTONE",
+     "titleLength": 30,
+     "descriptionLength": 129,
+     "h1Count": 1,
+     "wordCount": 1014,
+     "responseMs": 1753,
+     "lang": "es-ES",
+     "issues": [
+      "links_to_redirects",
+      "hreflang_no_xdefault",
+      "slow_response"
+     ]
+    },
+    {
+     "path": "/producto/porcelanico/alpinus-white/",
+     "status": 200,
+     "depth": 2,
+     "indexable": true,
+     "inSitemap": true,
+     "title": "Alpinus White | Porcelánico XTONE",
+     "titleLength": 33,
+     "descriptionLength": 123,
+     "h1Count": 1,
+     "wordCount": 1278,
+     "responseMs": 1719,
+     "lang": "es-ES",
+     "issues": [
+      "links_to_redirects",
+      "hreflang_no_xdefault",
+      "slow_response"
+     ]
+    },
+    {
+     "path": "/producto/porcelanico/andes-blue/",
+     "status": 200,
+     "depth": 2,
+     "indexable": true,
+     "inSitemap": true,
+     "title": "Andes Blue | Porcelánico XTONE",
+     "titleLength": 30,
+     "descriptionLength": 123,
+     "h1Count": 1,
+     "wordCount": 1126,
+     "responseMs": 1660,
+     "lang": "es-ES",
+     "issues": [
+      "links_to_redirects",
+      "hreflang_no_xdefault",
+      "slow_response"
+     ]
+    },
+    {
+     "path": "/producto/porcelanico/antique-gold/",
+     "status": 200,
+     "depth": 2,
+     "indexable": true,
+     "inSitemap": true,
+     "title": "Antique Gold | Porcelánico XTONE",
+     "titleLength": 32,
+     "descriptionLength": 113,
+     "h1Count": 1,
+     "wordCount": 1288,
+     "responseMs": 1737,
+     "lang": "es-ES",
+     "issues": [
+      "links_to_redirects",
+      "hreflang_no_xdefault",
+      "slow_response"
+     ]
+    },
+    {
+     "path": "/producto/porcelanico/astana-grey/",
+     "status": 200,
+     "depth": 2,
+     "indexable": true,
+     "inSitemap": true,
+     "title": "Astana Grey | Porcelánico XTONE",
+     "titleLength": 31,
+     "descriptionLength": 115,
+     "h1Count": 1,
+     "wordCount": 1266,
+     "responseMs": 1750,
+     "lang": "es-ES",
+     "issues": [
+      "links_to_redirects",
+      "hreflang_no_xdefault",
+      "slow_response"
+     ]
+    },
+    {
+     "path": "/producto/porcelanico/bottega-acero/",
+     "status": 200,
+     "depth": 2,
+     "indexable": true,
+     "inSitemap": true,
+     "title": "Bottega Acero | Porcelánico XTONE",
+     "titleLength": 33,
+     "descriptionLength": 132,
+     "h1Count": 1,
+     "wordCount": 1290,
+     "responseMs": 2115,
+     "lang": "es-ES",
+     "issues": [
+      "links_to_redirects",
+      "hreflang_no_xdefault",
+      "slow_response"
+     ]
+    },
+    {
+     "path": "/producto/porcelanico/bottega-antracita/",
+     "status": 200,
+     "depth": 2,
+     "indexable": true,
+     "inSitemap": true,
+     "title": "Bottega Antracita | Porcelánico XTONE",
+     "titleLength": 37,
+     "descriptionLength": 117,
+     "h1Count": 1,
+     "wordCount": 1291,
+     "responseMs": 2036,
+     "lang": "es-ES",
+     "issues": [
+      "links_to_redirects",
+      "hreflang_no_xdefault",
+      "slow_response"
+     ]
+    },
+    {
+     "path": "/producto/porcelanico/bottega-caliza/",
+     "status": 200,
+     "depth": 2,
+     "indexable": true,
+     "inSitemap": true,
+     "title": "Bottega Caliza | Porcelánico XTONE",
+     "titleLength": 34,
+     "descriptionLength": 107,
+     "h1Count": 1,
+     "wordCount": 1328,
+     "responseMs": 1764,
+     "lang": "es-ES",
+     "issues": [
+      "links_to_redirects",
+      "hreflang_no_xdefault",
+      "slow_response"
+     ]
+    },
+    {
+     "path": "/producto/porcelanico/breccia-imperiale/",
+     "status": 200,
+     "depth": 2,
+     "indexable": true,
+     "inSitemap": true,
+     "title": "Breccia Imperiale | Porcelánico XTONE",
+     "titleLength": 37,
+     "descriptionLength": 114,
+     "h1Count": 1,
+     "wordCount": 1502,
+     "responseMs": 1811,
+     "lang": "es-ES",
+     "issues": [
+      "links_to_redirects",
+      "hreflang_no_xdefault",
+      "slow_response"
+     ]
+    },
+    {
+     "path": "/producto/porcelanico/calacatta-antico/",
+     "status": 200,
+     "depth": 2,
+     "indexable": true,
+     "inSitemap": true,
+     "title": "Calacatta Antico | Porcelánico XTONE",
+     "titleLength": 36,
+     "descriptionLength": 104,
+     "h1Count": 1,
+     "wordCount": 1187,
+     "responseMs": 1821,
+     "lang": "es-ES",
+     "issues": [
+      "links_to_redirects",
+      "hreflang_no_xdefault",
+      "slow_response"
+     ]
+    },
+    {
+     "path": "/producto/porcelanico/calacatta-gold/",
+     "status": 200,
+     "depth": 2,
+     "indexable": true,
+     "inSitemap": true,
+     "title": "Calacatta Gold | Porcelánico XTONE",
+     "titleLength": 34,
+     "descriptionLength": 110,
+     "h1Count": 1,
+     "wordCount": 1183,
+     "responseMs": 1738,
+     "lang": "es-ES",
+     "issues": [
+      "links_to_redirects",
+      "hreflang_no_xdefault",
+      "slow_response"
+     ]
+    },
+    {
+     "path": "/producto/porcelanico/calacatta-green/",
+     "status": 200,
+     "depth": 2,
+     "indexable": true,
+     "inSitemap": true,
+     "title": "Calacatta Green | Porcelánico XTONE",
+     "titleLength": 35,
+     "descriptionLength": 105,
+     "h1Count": 1,
+     "wordCount": 1176,
+     "responseMs": 1826,
+     "lang": "es-ES",
+     "issues": [
+      "links_to_redirects",
+      "hreflang_no_xdefault",
+      "slow_response"
+     ]
+    },
+    {
+     "path": "/producto/porcelanico/calacatta-viola/",
+     "status": 200,
+     "depth": 2,
+     "indexable": true,
+     "inSitemap": true,
+     "title": "Calacatta Viola | Porcelánico XTONE",
+     "titleLength": 35,
+     "descriptionLength": 106,
+     "h1Count": 1,
+     "wordCount": 1277,
+     "responseMs": 1884,
+     "lang": "es-ES",
+     "issues": [
+      "links_to_redirects",
+      "hreflang_no_xdefault",
+      "slow_response"
+     ]
+    },
+    {
+     "path": "/producto/porcelanico/camouflage/",
+     "status": 200,
+     "depth": 2,
+     "indexable": true,
+     "inSitemap": true,
+     "title": "Camouflage | Porcelánico XTONE",
+     "titleLength": 30,
+     "descriptionLength": 109,
+     "h1Count": 1,
+     "wordCount": 1426,
+     "responseMs": 1973,
+     "lang": "es-ES",
+     "issues": [
+      "links_to_redirects",
+      "hreflang_no_xdefault",
+      "slow_response"
+     ]
+    },
+    {
+     "path": "/producto/porcelanico/ceppo-carabelas/",
+     "status": 200,
+     "depth": 2,
+     "indexable": true,
+     "inSitemap": true,
+     "title": "Ceppo Carabelas | Porcelánico XTONE",
+     "titleLength": 35,
+     "descriptionLength": 131,
+     "h1Count": 1,
+     "wordCount": 1285,
+     "responseMs": 1928,
+     "lang": "es-ES",
+     "issues": [
+      "links_to_redirects",
+      "hreflang_no_xdefault",
+      "slow_response"
+     ]
+    },
+    {
+     "path": "/producto/porcelanico/ewood-camel/",
+     "status": 200,
+     "depth": 2,
+     "indexable": true,
+     "inSitemap": true,
+     "title": "Ewood Camel | Porcelánico XTONE",
+     "titleLength": 31,
+     "descriptionLength": 101,
+     "h1Count": 1,
+     "wordCount": 1042,
+     "responseMs": 1635,
+     "lang": "es-ES",
+     "issues": [
+      "links_to_redirects",
+      "hreflang_no_xdefault",
+      "slow_response"
+     ]
+    },
+    {
+     "path": "/producto/porcelanico/fiori-di-bosco/",
+     "status": 200,
+     "depth": 2,
+     "indexable": true,
+     "inSitemap": true,
+     "title": "Fiori Di Bosco | Porcelánico XTONE",
+     "titleLength": 34,
+     "descriptionLength": 106,
+     "h1Count": 1,
+     "wordCount": 1069,
+     "responseMs": 1659,
+     "lang": "es-ES",
+     "issues": [
+      "links_to_redirects",
+      "hreflang_no_xdefault",
+      "slow_response"
+     ]
+    },
+    {
+     "path": "/producto/porcelanico/glem-white/",
+     "status": 200,
+     "depth": 2,
+     "indexable": true,
+     "inSitemap": true,
+     "title": "Glem White | Porcelánico XTONE",
+     "titleLength": 30,
+     "descriptionLength": 105,
+     "h1Count": 1,
+     "wordCount": 1150,
+     "responseMs": 1877,
+     "lang": "es-ES",
+     "issues": [
+      "links_to_redirects",
+      "hreflang_no_xdefault",
+      "slow_response"
+     ]
+    },
+    {
+     "path": "/producto/porcelanico/invisible-white/",
+     "status": 200,
+     "depth": 2,
+     "indexable": true,
+     "inSitemap": true,
+     "title": "Invisible White | Porcelánico XTONE",
+     "titleLength": 35,
+     "descriptionLength": 102,
+     "h1Count": 1,
+     "wordCount": 1023,
+     "responseMs": 1834,
+     "lang": "es-ES",
+     "issues": [
+      "links_to_redirects",
+      "hreflang_no_xdefault",
+      "slow_response"
+     ]
+    },
+    {
+     "path": "/producto/porcelanico/liem-black/",
+     "status": 200,
+     "depth": 2,
+     "indexable": true,
+     "inSitemap": true,
+     "title": "Liem Black | Porcelánico XTONE",
+     "titleLength": 30,
+     "descriptionLength": 107,
+     "h1Count": 1,
+     "wordCount": 1151,
+     "responseMs": 1788,
+     "lang": "es-ES",
+     "issues": [
+      "links_to_redirects",
+      "hreflang_no_xdefault",
+      "slow_response"
+     ]
+    },
+    {
+     "path": "/producto/porcelanico/moon-white/",
+     "status": 200,
+     "depth": 2,
+     "indexable": true,
+     "inSitemap": true,
+     "title": "Moon White | Porcelánico XTONE",
+     "titleLength": 30,
+     "descriptionLength": 105,
+     "h1Count": 1,
+     "wordCount": 1075,
+     "responseMs": 2123,
+     "lang": "es-ES",
+     "issues": [
+      "links_to_redirects",
+      "hreflang_no_xdefault",
+      "slow_response"
+     ]
+    },
+    {
+     "path": "/producto/porcelanico/orobico-dark/",
+     "status": 200,
+     "depth": 2,
+     "indexable": true,
+     "inSitemap": true,
+     "title": "Orobico Dark | Porcelánico XTONE",
+     "titleLength": 32,
+     "descriptionLength": 95,
+     "h1Count": 1,
+     "wordCount": 1140,
+     "responseMs": 2203,
+     "lang": "es-ES",
+     "issues": [
+      "links_to_redirects",
+      "hreflang_no_xdefault",
+      "slow_response"
+     ]
+    },
+    {
+     "path": "/producto/porcelanico/paonazzo-biondo/",
+     "status": 200,
+     "depth": 2,
+     "indexable": true,
+     "inSitemap": true,
+     "title": "Paonazzo Biondo | Porcelánico XTONE",
+     "titleLength": 35,
+     "descriptionLength": 91,
+     "h1Count": 1,
+     "wordCount": 1179,
+     "responseMs": 2144,
+     "lang": "es-ES",
+     "issues": [
+      "links_to_redirects",
+      "hreflang_no_xdefault",
+      "slow_response"
+     ]
+    },
+    {
+     "path": "/producto/porcelanico/port-laurent/",
+     "status": 200,
+     "depth": 2,
+     "indexable": true,
+     "inSitemap": true,
+     "title": "Port Laurent | Porcelánico XTONE",
+     "titleLength": 32,
+     "descriptionLength": 86,
+     "h1Count": 1,
+     "wordCount": 1434,
+     "responseMs": 1854,
+     "lang": "es-ES",
+     "issues": [
+      "links_to_redirects",
+      "hreflang_no_xdefault",
+      "slow_response"
+     ]
+    },
+    {
+     "path": "/producto/porcelanico/solo-black/",
+     "status": 200,
+     "depth": 2,
+     "indexable": true,
+     "inSitemap": true,
+     "title": "Solo Black | Porcelánico XTONE",
+     "titleLength": 30,
+     "descriptionLength": 91,
+     "h1Count": 1,
+     "wordCount": 957,
+     "responseMs": 2182,
+     "lang": "es-ES",
+     "issues": [
+      "links_to_redirects",
+      "hreflang_no_xdefault",
+      "slow_response"
+     ]
+    },
+    {
+     "path": "/producto/porcelanico/statuario-venato/",
+     "status": 200,
+     "depth": 2,
+     "indexable": true,
+     "inSitemap": true,
+     "title": "Statuario Venato | Porcelánico XTONE",
+     "titleLength": 36,
+     "descriptionLength": 94,
+     "h1Count": 1,
+     "wordCount": 1152,
+     "responseMs": 2138,
+     "lang": "es-ES",
+     "issues": [
+      "links_to_redirects",
+      "hreflang_no_xdefault",
+      "slow_response"
+     ]
+    },
+    {
+     "path": "/politica-de-privacidad",
+     "status": 301,
+     "depth": 2,
+     "indexable": false,
+     "inSitemap": false,
+     "title": null,
+     "titleLength": 0,
+     "descriptionLength": 0,
+     "h1Count": 0,
+     "wordCount": 0,
+     "responseMs": 26,
+     "lang": null,
+     "issues": [
+      "redirect_internal"
+     ]
+    },
+    {
+     "path": "/fr/contact/",
+     "status": 200,
+     "depth": 2,
+     "indexable": true,
+     "inSitemap": true,
+     "title": "Contactez-nous | XTONE",
+     "titleLength": 22,
+     "descriptionLength": 139,
+     "h1Count": 1,
+     "wordCount": 852,
+     "responseMs": 1489,
+     "lang": "fr-FR",
+     "issues": [
+      "title_too_short",
+      "links_to_redirects",
+      "hreflang_no_xdefault"
+     ]
+    }
+   ],
+   "pagesTruncated": false,
+   "publishedAt": "2026-09-28T11:09:05.399Z"
+  }
+ }
+}

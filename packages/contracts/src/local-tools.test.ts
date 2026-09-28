@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import inventoryData from "../../../docs/continuity/v1-migration-inventory.json";
-import { LOCAL_TOOLS, localToolSummary, localToolsByState, localToolSchema } from "./local-tools";
+import { LOCAL_TOOLS, localToolSummary, localToolsByState, localToolSchema, type LocalTool } from "./local-tools";
 
 /**
  * El catálogo de herramientas locales solo sirve si no puede mentir. Estas
@@ -30,7 +30,8 @@ describe("catálogo de herramientas locales", () => {
   });
 
   it("una herramienta bloqueada dice qué la bloquea y en qué fase se resuelve", () => {
-    for (const tool of LOCAL_TOOLS.filter((item) => item.state === "bloqueada")) {
+    // Tipo ancho: hoy ninguna está bloqueada (D-070) y la regla debe seguir valiendo si vuelve a haberla.
+    for (const tool of (LOCAL_TOOLS as readonly LocalTool[]).filter((item) => item.state === "bloqueada")) {
       expect(tool.blocker, `${tool.key} está bloqueada sin motivo`).toBeTruthy();
       expect(tool.phase).toMatch(/^P\d+$/);
       expect(tool.entryPoint, `${tool.key} está bloqueada y ofrece punto de entrada`).toBeNull();

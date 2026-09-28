@@ -1,0 +1,66 @@
+/* Estado del sitio (D-070): mismo lenguaje que la ficha de marca (D-049), sin tarjetas. */
+.sa-panel { display: grid; grid-template-columns: minmax(0, 1fr); gap: 40px; min-width: 0; }
+.sa-panel > * { min-width: 0; }
+.sa-meta { margin: 0; color: var(--ds-muted); font-size: 13px; }
+.sa-meta a { color: inherit; }
+.sa-muted { color: var(--ds-muted); }
+
+.sa-metrics { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); border-top: 1px solid var(--ds-line); border-bottom: 1px solid var(--ds-line); }
+.sa-metric { display: flex; flex-direction: column; padding: 20px 20px 18px; min-width: 0; }
+.sa-metric + .sa-metric { border-left: 1px solid var(--ds-line); }
+.sa-metric-label { color: var(--ds-text); font: 500 15px/1.4 var(--ds-font-sans); }
+.sa-metric-value { margin: 14px 0 6px; color: var(--ds-ink); font: 500 clamp(26px, 2.5vw, 36px)/1.12 var(--ds-font-sans); letter-spacing: -0.03em; font-variant-numeric: tabular-nums; }
+.sa-metric-note { color: var(--ds-muted); font-size: 12px; }
+
+.sa-block h3 { margin: 0 0 4px; font: 550 17px/1.4 var(--ds-font-sans); color: var(--ds-ink); }
+.sa-sub { margin: 0 0 20px; color: var(--ds-muted); font-size: 13px; }
+.sa-group + .sa-group { margin-top: 20px; }
+.sa-group h4 { margin: 0 0 6px; font-size: 12px; font-weight: 600; }
+.sa-issues, .sa-sample, .sa-dist { margin: 0; padding: 0; list-style: none; }
+.sa-issues > li { border-top: 1px solid var(--ds-line); }
+.sa-issues > li:last-child { border-bottom: 1px solid var(--ds-line); }
+.sa-issues summary { display: flex; justify-content: space-between; gap: 24px; align-items: center; padding: 12px 4px; cursor: pointer; list-style: none; }
+.sa-issues summary::-webkit-details-marker { display: none; }
+.sa-issues summary:hover { background: var(--ds-surface-subtle); }
+.sa-issues summary:focus-visible { outline: 2px solid var(--ds-accent); outline-offset: -2px; }
+.sa-issue-name { display: grid; gap: 2px; min-width: 0; }
+.sa-issue-name strong { font-size: 14px; font-weight: 550; color: var(--ds-ink); }
+.sa-issue-name small { color: var(--ds-muted); font-size: 12px; }
+.sa-issue-count { font-size: 18px; font-weight: 500; font-variant-numeric: tabular-nums; white-space: nowrap; color: var(--ds-ink); }
+.sa-issue-count small { margin-left: 6px; font-size: 12px; color: var(--ds-muted); }
+.sa-sample { display: grid; gap: 4px; padding: 4px 4px 14px; font-size: 13px; }
+.sa-sample a { color: var(--ds-accent); overflow-wrap: anywhere; }
+
+.sa-sev { display: inline-flex; align-items: center; gap: 6px; white-space: nowrap; }
+.sa-sev::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: var(--ds-line-strong); }
+.sa-sev.is-critica { color: var(--ds-danger); }
+.sa-sev.is-critica::before { background: var(--ds-danger); }
+.sa-sev.is-alta { color: var(--ds-warning); }
+.sa-sev.is-alta::before { background: var(--ds-warning); }
+.sa-sev.is-media::before { background: var(--ds-accent); }
+
+.sa-facts { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 32px; }
+.sa-facts h3 { font-size: 14px; margin-bottom: 10px; }
+.sa-dist li { display: flex; justify-content: space-between; gap: 12px; padding: 7px 0; border-top: 1px solid var(--ds-line); font-size: 13px; }
+.sa-dist strong { font-weight: 500; font-variant-numeric: tabular-nums; }
+
+.sa-status.is-ok { color: var(--ds-positive); }
+.sa-status.is-warn { color: var(--ds-warning); }
+.sa-status.is-bad { color: var(--ds-danger); font-weight: 600; }
+.sa-path { display: inline-block; max-width: 360px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; vertical-align: bottom; color: var(--ds-ink); }
+#estado-paginas-table td { white-space: nowrap; }
+#estado-paginas-table td:nth-child(7) { max-width: 320px; overflow: hidden; text-overflow: ellipsis; }
+
+@media (max-width: 1100px) {
+  .sa-metrics { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .sa-metric:nth-child(4) { border-left: 0; }
+  .sa-metric:nth-child(n + 4) { border-top: 1px solid var(--ds-line); }
+  .sa-facts { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 620px) {
+  .sa-metrics { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .sa-metric:nth-child(odd) { border-left: 0; }
+  .sa-metric:nth-child(4) { border-left: 1px solid var(--ds-line); }
+  .sa-metric:nth-child(n + 3) { border-top: 1px solid var(--ds-line); }
+  .sa-facts { grid-template-columns: 1fr; }
+}

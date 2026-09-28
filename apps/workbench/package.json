@@ -15,6 +15,7 @@
     "@seo/editorial": "workspace:*",
     "@seo/editorial-ui": "workspace:*",
     "@seo/local-data": "workspace:*",
+    "@seo/site-audit": "workspace:*",
     "@seo/sync": "workspace:*",
     "@seo/ui": "workspace:*",
     "@tiptap/react": "^3.31.0",

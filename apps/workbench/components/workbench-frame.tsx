@@ -12,6 +12,7 @@ const SECTIONS = [
   { href: "/", label: "Preparación" },
   { href: "/editorial/plan", label: "Plan editorial" },
   { href: "/editorial", label: "Curación" },
+  { href: "/crawls", label: "Crawls" },
   { href: "/herramientas", label: "Herramientas" },
 ] as const;
 

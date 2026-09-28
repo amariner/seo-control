@@ -1,7 +1,7 @@
 import { Fragment, type ReactNode } from "react";
 import Link from "next/link";
 import { ArrowUpRight, Database, Info } from "lucide-react";
-import { findBrand, type BrandReport, type EditorialDataset, type ReportKpi } from "@seo/contracts";
+import { findBrand, type BrandReport, type EditorialDataset, type ReportKpi, type SiteAuditSummary } from "@seo/contracts";
 import { Notice } from "@seo/ui";
 import { ReportDataTable, type ReportDataRow } from "./data-table";
 import { EvolutionChart } from "./evolution-chart";
@@ -18,6 +18,7 @@ import type { EditorialPlanRow, PublicationEvent } from "@seo/editorial-ui";
 import { EditorialPlan } from "@seo/editorial-ui/plan";
 import { ThemeTimeline } from "@seo/editorial-ui/theme-timeline";
 import { Url } from "@seo/editorial-ui/url-label";
+import { SiteAuditPanel } from "@seo/site-audit/panel";
 
 type EditorialThemes = EditorialDataset["calendar"]["themes"];
 import { FilteredList } from "./filtered-list";
@@ -42,6 +43,7 @@ export const REPORT_TABS = [
   { key: "mercados", label: "Mercados" },
   { key: "migracion", label: "Migración" },
   { key: "editorial", label: "Plan editorial" },
+  { key: "estado", label: "Estado del sitio" },
 ] as const;
 export type ReportTab = (typeof REPORT_TABS)[number]["key"];
 
@@ -880,6 +882,7 @@ export function BrandReportView({
   editorialCalendar,
   editorialPieces,
   editorialThemes,
+  siteAudit,
 }: {
   report: BrandReport;
   tab: ReportTab;
@@ -891,6 +894,8 @@ export function BrandReportView({
   editorialPieces?: EditorialPlanRow[];
   /** Temas del semestre, como en el plan general (D-068). */
   editorialThemes?: EditorialThemes;
+  /** Último crawl publicado del proyecto (D-070); `null` si no hay ninguno. */
+  siteAudit?: SiteAuditSummary | null;
   present: boolean;
   baseHref: string;
   query: string;
@@ -994,6 +999,7 @@ export function BrandReportView({
               themes={editorialThemes ?? []}
             />
           )}
+          {tab === "estado" && <SiteStatus report={report} audit={siteAudit ?? null} />}
         </div>
         <Quality report={report} />
         <footer className="brand-footer">
@@ -1855,6 +1861,23 @@ function Editorial({
           after={<ThemeTimeline themes={themes} pieces={pieces} currentMonth={new Date().toISOString().slice(0, 7)} />}
         />
       </div>
+    </Section>
+  );
+}
+function SiteStatus({ report, audit }: { report: BrandReport; audit: SiteAuditSummary | null }) {
+  const brand = findBrand(report.brand);
+  return (
+    <Section
+      id="estado"
+      scope="fixed"
+      title="Estado del sitio"
+      subtitle={audit ? `SEO on-page de las ${audit.totals.crawled.toLocaleString("es-ES")} URL principales de ${audit.domain}. No depende del periodo ni del mercado.` : "SEO on-page a partir de un crawl local del workbench."}
+    >
+      {audit ? (
+        <SiteAuditPanel summary={audit} />
+      ) : (
+        <p className="brand-coverage">Todavía no hay ningún crawl publicado de {brand?.name ?? report.brand}. Se lanza en el workbench y se publica su resumen con el siguiente despliegue.</p>
+      )}
     </Section>
   );
 }

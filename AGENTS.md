@@ -38,6 +38,14 @@ Cuando el usuario diga «informe adicional», «saca un informe», «necesito un
   y `vercel deploy --prod`. Al visor solo llegan el dataset y la curación: nunca informes
   adicionales ni datos intermedios.
 
+## Activador de crawls (D-070)
+
+- «Lanza un crawl de <proyecto>»: `pnpm crawl -- --project <slug> [--max N]` (necesita red; hasta
+  1.000 URL sin preflight de 50 GiB), en segundo plano; el avance y el resultado URL a URL se ven en
+  `/crawls` del workbench, que ya no lanza crawls (D-071). Resume incidencias al terminar.
+- «Publica el crawl de <proyecto>»: `pnpm crawl:publish -- --project <slug> [--run <id>]` y, si el
+  usuario lo confirma, commit y despliegue. Al visor solo va el resumen acotado, nunca el crawl.
+
 ## Prioridades permanentes
 
 1. Decisiones trazables para gerente y equipo SEO.
