@@ -6,6 +6,7 @@ const REPORT_TAB_KEYS = [
   "migracion",
   "editorial",
   "estado",
+  "informes",
 ] as const;
 type ReportTabKey = (typeof REPORT_TAB_KEYS)[number];
 

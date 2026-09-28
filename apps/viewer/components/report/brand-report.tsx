@@ -1,7 +1,21 @@
 import { Fragment, type ReactNode } from "react";
 import Link from "next/link";
-import { ArrowUpRight, Database, Info } from "lucide-react";
-import { findBrand, type BrandReport, type EditorialDataset, type ReportKpi, type SiteAuditSummary } from "@seo/contracts";
+import {
+  ArrowUpRight,
+  Database,
+  FileDown,
+  Info,
+  Presentation,
+} from "lucide-react";
+import {
+  findBrand,
+  presetRange,
+  type BrandReport,
+  type ReportPreset,
+  type EditorialDataset,
+  type ReportKpi,
+  type SiteAuditSummary,
+} from "@seo/contracts";
 import { Notice } from "@seo/ui";
 import { ReportDataTable, type ReportDataRow } from "./data-table";
 import { EvolutionChart } from "./evolution-chart";
@@ -23,6 +37,18 @@ import { SiteAuditPanel } from "@seo/site-audit/panel";
 type EditorialThemes = EditorialDataset["calendar"]["themes"];
 import { FilteredList } from "./filtered-list";
 import { KeywordKpis } from "./keyword-kpis";
+import { PageKpis } from "./page-kpis";
+import {
+  analysePages,
+  localeOf,
+  pageKindLabel,
+  pageKindOf,
+  PAGE_KINDS,
+  PAGE_TRENDS,
+  pageTrendOf,
+  rootLabelOf,
+  type PageGroup,
+} from "@/lib/page-analysis";
 import { OPPORTUNITY_KINDS } from "./opportunity-kinds";
 import {
   ReportPendingZone,
@@ -44,6 +70,7 @@ export const REPORT_TABS = [
   { key: "migracion", label: "Migración" },
   { key: "editorial", label: "Plan editorial" },
   { key: "estado", label: "Estado del sitio" },
+  { key: "informes", label: "Informes" },
 ] as const;
 export type ReportTab = (typeof REPORT_TABS)[number]["key"];
 
@@ -866,7 +893,7 @@ export function BrandReportControls({
 }
 
 /** Logotipos oficiales facilitados por cada marca (`public/brands`). Sin logo, el título es el nombre. */
-const BRAND_LOGOS: Partial<Record<string, string>> = {
+export const BRAND_LOGOS: Partial<Record<string, string>> = {
   xtone: "/brands/xtone.svg",
 };
 
@@ -999,7 +1026,12 @@ export function BrandReportView({
               themes={editorialThemes ?? []}
             />
           )}
-          {tab === "estado" && <SiteStatus report={report} audit={siteAudit ?? null} />}
+          {tab === "informes" && (
+            <Reports report={report} baseHref={baseHref} query={query} />
+          )}
+          {tab === "estado" && (
+            <SiteStatus report={report} audit={siteAudit ?? null} />
+          )}
         </div>
         <Quality report={report} />
         <footer className="brand-footer">
@@ -1145,11 +1177,7 @@ function Summary({
       </Section>
       {ga4Ready ? (
         <div className="brand-summary-grid">
-          <Section
-            id="canales"
-            skeleton="rows"
-            title="Canales de tráfico"
-          >
+          <Section id="canales" skeleton="rows" title="Canales de tráfico">
             <div className="brand-list-head brand-channel-row" aria-hidden>
               <span>Canal</span>
               <span />
@@ -1403,11 +1431,7 @@ function TargetKeywords({ report }: { report: BrandReport }) {
         (a.position ?? 999) - (b.position ?? 999),
     );
   return (
-    <Section
-      id="keywords-objetivo"
-      skeleton="rows"
-      title="Keywords objetivo"
-    >
+    <Section id="keywords-objetivo" skeleton="rows" title="Keywords objetivo">
       {targets.length ? (
         <>
           <FilteredList
@@ -1424,29 +1448,29 @@ function TargetKeywords({ report }: { report: BrandReport }) {
               id: item.id,
               kind: item.measured ? item.situation : "sin-presencia",
               node: (
-              <div
-                className="brand-list-row brand-target-row"
-                title={item.advice}
-              >
-                <span className="brand-opportunity-query">
-                  <strong>{item.keyword}</strong>
-                  <small>
-                    {item.measured
-                      ? TARGET_SITUATION.get(item.situation)
-                      : "Sin comprobar"}
-                    {" · "}
-                    {item.title}
-                  </small>
-                </span>
-                <span>{number(item.position, 1)}</span>
-                <strong>{item.measured ? number(item.clicks) : "—"}</strong>
-              </div>
+                <div
+                  className="brand-list-row brand-target-row"
+                  title={item.advice}
+                >
+                  <span className="brand-opportunity-query">
+                    <strong>{item.keyword}</strong>
+                    <small>
+                      {item.measured
+                        ? TARGET_SITUATION.get(item.situation)
+                        : "Sin comprobar"}
+                      {" · "}
+                      {item.title}
+                    </small>
+                  </span>
+                  <span>{number(item.position, 1)}</span>
+                  <strong>{item.measured ? number(item.clicks) : "—"}</strong>
+                </div>
               ),
             }))}
           />
           <p className="brand-list-foot">
-            Keywords de las piezas del plan editorial, medidas en Search
-            Console en los últimos meses.
+            Keywords de las piezas del plan editorial, medidas en Search Console
+            en los últimos meses.
           </p>
         </>
       ) : (
@@ -1554,9 +1578,66 @@ function KeywordsTable({ report }: { report: BrandReport }) {
     </Section>
   );
 }
+function PageGroupList({
+  id,
+  title,
+  label,
+  groups,
+}: {
+  id: string;
+  title: string;
+  label: string;
+  groups: PageGroup[];
+}) {
+  return (
+    <Section id={id} skeleton="rows" title={title}>
+      <div className="brand-page-groups">
+        <div className="brand-list-head brand-page-group-row" aria-hidden>
+          <span>{label}</span>
+          <span>Páginas</span>
+          <span>Clics</span>
+          <span>CTR</span>
+          <span>Posición</span>
+        </div>
+        <ExpandableList
+          className="brand-list"
+          rows={groups.map((item) => (
+            <div className="brand-list-row brand-page-group-row" key={item.key}>
+              <div>
+                <div className="brand-channel-name">
+                  <span>{item.label}</span>
+                  <small title="Cuota de los clics de la muestra">
+                    {percent(item.share)}
+                  </small>
+                </div>
+                <div className="brand-mini-track" aria-hidden>
+                  <i style={{ width: `${Math.min(100, item.share)}%` }} />
+                </div>
+              </div>
+              <span>{number(item.pages)}</span>
+              <strong>{number(item.clicks)}</strong>
+              <span>{percent(item.ctr)}</span>
+              <span>{number(item.position, 1)}</span>
+            </div>
+          ))}
+        />
+      </div>
+    </Section>
+  );
+}
 function Pages({ report }: { report: BrandReport }) {
+  const analysis = analysePages(report, rootLabelOf(report.markets));
+  const locales = [...new Set(report.pages.map((item) => localeOf(item.page)))];
   return (
     <>
+      {analysis.available && (
+        <PageKpis
+          analysis={analysis}
+          window={report.window}
+          table="pages"
+          context={`${findBrand(report.brand)?.name ?? report.brand} · ${date(report.window.start)} – ${date(report.window.end)} · Search Console`}
+        />
+      )}
       <Section
         id="paginas"
         title="Páginas en Google"
@@ -1568,8 +1649,40 @@ function Pages({ report }: { report: BrandReport }) {
             id="pages"
             caption="Páginas en Google"
             searchPlaceholder="Buscar URL…"
+            filters={[
+              {
+                key: "kind",
+                label: "Tipo",
+                options: PAGE_KINDS.filter((kind) =>
+                  analysis.kinds.some((item) => item.key === kind.key),
+                ).map((kind) => ({ value: kind.key, label: kind.label })),
+              },
+              {
+                key: "trend",
+                label: "Tendencia",
+                allLabel: "Todas",
+                options: PAGE_TRENDS.map((item) => ({
+                  value: item.key,
+                  label: item.label,
+                })),
+              },
+              ...(locales.length > 1
+                ? [
+                    {
+                      key: "locale",
+                      label: "Carpeta",
+                      allLabel: "Todas",
+                      options: analysis.locales.map((item) => ({
+                        value: item.key || "raiz",
+                        label: item.label,
+                      })),
+                    },
+                  ]
+                : []),
+            ]}
             columns={[
               { key: "page", label: "URL" },
+              { key: "kindLabel", label: "Tipo" },
               { key: "clicks", label: "Clics", numeric: true },
               {
                 key: "previousClicks",
@@ -1581,10 +1694,18 @@ function Pages({ report }: { report: BrandReport }) {
               { key: "ctr", label: "CTR", numeric: true },
               { key: "position", label: "Posición", numeric: true },
             ]}
-            rows={report.pages.map((item) =>
-              row(
+            rows={report.pages.map((item) => {
+              const kind = pageKindOf(item.page);
+              return row(
                 item.page,
-                { ...item, change: delta(item.clicks, item.previousClicks) },
+                {
+                  ...item,
+                  kind,
+                  kindLabel: pageKindLabel(kind),
+                  locale: localeOf(item.page) || "raiz",
+                  trend: pageTrendOf(item),
+                  change: delta(item.clicks, item.previousClicks),
+                },
                 {
                   page: <Url value={item.page} />,
                   clicks: number(item.clicks),
@@ -1596,44 +1717,171 @@ function Pages({ report }: { report: BrandReport }) {
                   ctr: percent(item.ctr),
                   position: number(item.position, 1),
                 },
-              ),
-            )}
-            note={`Anterior: ${date(report.window.previousStart)} – ${date(report.window.previousEnd)}. «—» indica que no hay dato comparable en la muestra, no cero clics.`}
+              );
+            })}
+            note={`Anterior: ${date(report.window.previousStart)} – ${date(report.window.previousEnd)}. «—» indica que no hay dato comparable en la muestra, no cero clics. El tipo se deduce de la ruta de la URL.`}
           />
         )}
       </Section>
-      <Section
-        id="conversiones"
-        title="Páginas con conversiones"
-        subtitle="Las ocho páginas con más conversiones SEO · GA4."
-      >
-        <ReportDataTable
-          id="conversions"
-          caption="Páginas con conversiones SEO"
-          searchPlaceholder="Buscar URL o keyword…"
-          columns={[
-            { key: "page", label: "Página de entrada" },
-            { key: "sessions", label: "Visitas SEO", numeric: true },
-            { key: "leads", label: "Conversiones", numeric: true },
-            { key: "rate", label: "Por 100 visitas", numeric: true },
-            { key: "queries", label: "Keywords" },
-          ]}
-          rows={report.convertingPages.map((item) =>
-            row(
-              item.page,
-              { ...item, queries: item.queries.join(" · ") },
-              {
-                page: <Url value={item.page} />,
-                sessions: number(item.sessions),
-                leads: number(item.leads),
-                rate: number(item.rate, 1),
-              },
-            ),
-          )}
-          note="Conversiones = eventos clave de GA4. Un usuario puede generar más de un evento. Keywords visibles de Search Console."
-        />
-      </Section>
+      {analysis.available && (
+        <div className="brand-summary-grid">
+          <PageGroupList
+            id="paginas-tipo"
+            title="Por tipo de página"
+            label="Tipo"
+            groups={analysis.kinds}
+          />
+          <PageGroupList
+            id="paginas-carpeta"
+            title="Por carpeta de idioma"
+            label="Carpeta"
+            groups={analysis.locales}
+          />
+        </div>
+      )}
     </>
+  );
+}
+/**
+ * Pestaña Informes (D-073): cada fila enlaza el informe del proyecto en modo
+ * presentación y en PDF. El informe recopila los apartados del proyecto,
+ * simplificados, para un periodo cerrado o el periodo que se está viendo.
+ */
+function Reports({
+  report,
+  baseHref,
+  query,
+}: {
+  report: BrandReport;
+  baseHref: string;
+  query: string;
+}) {
+  const current = new URLSearchParams(query);
+  const market =
+    report.markets.find((item) => item.code === report.market)?.name ??
+    "Todos los mercados";
+  const link = (params: Record<string, string>, pdf = false) => {
+    const next = new URLSearchParams();
+    for (const key of ["market", "yoy"]) {
+      const value = current.get(key);
+      if (value) next.set(key, value);
+    }
+    for (const [key, value] of Object.entries(params)) next.set(key, value);
+    if (pdf) next.set("pdf", "1");
+    const search = next.toString();
+    return `${baseHref}/informe${search ? `?${search}` : ""}`;
+  };
+  const closed: Array<{
+    preset: ReportPreset;
+    name: (start: string) => string;
+  }> = [
+    {
+      preset: "mes",
+      name: (start) =>
+        `Informe mensual · ${new Date(`${start}T00:00:00Z`).toLocaleDateString("es-ES", { month: "long", year: "numeric", timeZone: "UTC" })}`,
+    },
+    {
+      preset: "trimestre",
+      name: (start) =>
+        `Informe trimestral · ${Math.floor(Number(start.slice(5, 7)) / 3) + 1}.º trimestre ${start.slice(0, 4)}`,
+    },
+  ];
+  type ReportRow = {
+    key: string;
+    name: string;
+    start: string;
+    end: string;
+    params: Record<string, string>;
+  };
+  const rows: ReportRow[] = closed.flatMap(({ preset, name }): ReportRow[] => {
+    const range = presetRange(preset, report.cutoff);
+    return range
+      ? [
+          {
+            key: preset,
+            name: name(range.start),
+            start: range.start,
+            end: range.end,
+            params: { range: preset },
+          },
+        ]
+      : [];
+  });
+  const w = report.window;
+  if (!rows.some((item) => item.start === w.start && item.end === w.end)) {
+    const params: Record<string, string> = {};
+    for (const key of ["range", "from", "to", "cmp", "cfrom"]) {
+      const value = current.get(key);
+      if (value) params[key] = value;
+    }
+    rows.push({
+      key: "actual",
+      name: `Periodo seleccionado · ${w.label}`,
+      start: w.start,
+      end: w.end,
+      params,
+    });
+  }
+  return (
+    <Section
+      id="informes"
+      title="Informes"
+      subtitle="Recopilación de los apartados del proyecto, con las cifras clave y una aclaración breve por apartado."
+    >
+      <div className="brand-reports-wrap">
+        <table className="brand-reports">
+          <thead>
+            <tr>
+              <th>Informe</th>
+              <th>Periodo</th>
+              <th>Mercado</th>
+              <th>Presentación</th>
+              <th>PDF</th>
+            </tr>
+          </thead>
+          <tbody>
+            {rows.map((item) => (
+              <tr key={item.key}>
+                <td>
+                  <strong>{item.name}</strong>
+                </td>
+                <td>
+                  {date(item.start)} – {date(item.end)}
+                </td>
+                <td>{market}</td>
+                <td>
+                  <a
+                    className="brand-report-link"
+                    href={link(item.params)}
+                    target="_blank"
+                    rel="noopener"
+                  >
+                    <Presentation size={15} aria-hidden />
+                    Presentación
+                  </a>
+                </td>
+                <td>
+                  <a
+                    className="brand-report-link"
+                    href={link(item.params, true)}
+                    target="_blank"
+                    rel="noopener"
+                  >
+                    <FileDown size={15} aria-hidden />
+                    PDF
+                  </a>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+      <p className="brand-list-foot">
+        El PDF se genera con la impresión del navegador: elige «Guardar como
+        PDF» en el diálogo. El mercado es el seleccionado arriba; el periodo
+        anterior y el año pasado se comparan igual que en el resto del proyecto.
+      </p>
+    </Section>
   );
 }
 function Markets({ report }: { report: BrandReport }) {
@@ -1858,25 +2106,45 @@ function Editorial({
           filterable
           showPast
           exportHref={`/api/v1/editorial/export/plan-editorial.xlsx?brand=${report.brand}`}
-          after={<ThemeTimeline themes={themes} pieces={pieces} currentMonth={new Date().toISOString().slice(0, 7)} />}
+          after={
+            <ThemeTimeline
+              themes={themes}
+              pieces={pieces}
+              currentMonth={new Date().toISOString().slice(0, 7)}
+            />
+          }
         />
       </div>
     </Section>
   );
 }
-function SiteStatus({ report, audit }: { report: BrandReport; audit: SiteAuditSummary | null }) {
+function SiteStatus({
+  report,
+  audit,
+}: {
+  report: BrandReport;
+  audit: SiteAuditSummary | null;
+}) {
   const brand = findBrand(report.brand);
   return (
     <Section
       id="estado"
       scope="fixed"
       title="Estado del sitio"
-      subtitle={audit ? `SEO on-page de las ${audit.totals.crawled.toLocaleString("es-ES")} URL principales de ${audit.domain}. No depende del periodo ni del mercado.` : "SEO on-page a partir de un crawl local del workbench."}
+      subtitle={
+        audit
+          ? `SEO on-page de las ${audit.totals.crawled.toLocaleString("es-ES")} URL principales de ${audit.domain}. No depende del periodo ni del mercado.`
+          : "SEO on-page a partir de un crawl local del workbench."
+      }
     >
       {audit ? (
         <SiteAuditPanel summary={audit} />
       ) : (
-        <p className="brand-coverage">Todavía no hay ningún crawl publicado de {brand?.name ?? report.brand}. Se lanza en el workbench y se publica su resumen con el siguiente despliegue.</p>
+        <p className="brand-coverage">
+          Todavía no hay ningún crawl publicado de {brand?.name ?? report.brand}
+          . Se lanza en el workbench y se publica su resumen con el siguiente
+          despliegue.
+        </p>
       )}
     </Section>
   );

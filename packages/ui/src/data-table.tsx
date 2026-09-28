@@ -44,6 +44,13 @@ export type ReportDataRow = {
   cells?: Record<string, ReactNode>;
 };
 
+/**
+ * Evento para fijar filtros desde fuera de la tabla (p. ej. una tarjeta de KPI):
+ * `detail.id` es el `id` de la tabla y `detail.filters` sustituye a los activos.
+ */
+export const REPORT_DATA_FILTER_EVENT = "report-data:filter";
+export type ReportDataFilterEvent = CustomEvent<{ id: string; filters: Record<string, string> }>;
+
 /** Filtro de columna en la barra de la tabla: coincidencia exacta con `values[key]`. */
 export type ReportDataFilter = {
   key: string;
@@ -245,6 +252,17 @@ export function ReportDataTable({
     setSelected((current) => ({ ...current, [key]: value }));
     table.firstPage();
   }
+  useEffect(() => {
+    const onFilter = (event: Event) => {
+      const { detail } = event as ReportDataFilterEvent;
+      if (detail?.id !== id) return;
+      setSelected(detail.filters);
+      table.firstPage();
+      document.getElementById(`${id}-panel`)?.scrollIntoView({ behavior: "smooth", block: "start" });
+    };
+    window.addEventListener(REPORT_DATA_FILTER_EVENT, onFilter);
+    return () => window.removeEventListener(REPORT_DATA_FILTER_EVENT, onFilter);
+  }, [id, table]);
 
   return (
     <div className="report-data" id={`${id}-panel`}>

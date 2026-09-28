@@ -1,0 +1,421 @@
+/* Informe del proyecto (D-073): presentación en pantalla y PDF al imprimir. */
+
+html:has(.deck) {
+  scroll-snap-type: y mandatory;
+}
+.deck {
+  background: var(--ds-canvas);
+  color: var(--ds-text);
+}
+.deck-slide {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+  box-sizing: border-box;
+  min-height: 100vh;
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 72px 64px 56px;
+  scroll-snap-align: start;
+  border-bottom: 1px solid var(--ds-line);
+}
+.deck-running {
+  display: none;
+}
+
+/* Portada */
+.deck-cover {
+  justify-content: center;
+  gap: 14px;
+}
+.deck-eyebrow {
+  margin: 0;
+  color: var(--ds-accent);
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+.deck-cover-title {
+  margin: 0;
+  color: var(--ds-ink);
+  font: 500 clamp(44px, 6vw, 72px) / 1.05 var(--ds-font-sans);
+  letter-spacing: -0.04em;
+}
+.deck-cover-title img {
+  display: block;
+  height: clamp(44px, 6vw, 72px);
+  width: auto;
+}
+.deck-cover-period {
+  margin: 12px 0 0;
+  color: var(--ds-ink);
+  font-size: clamp(20px, 2vw, 26px);
+}
+.deck-cover-meta,
+.deck-cover-generated {
+  margin: 0;
+  color: var(--ds-muted);
+  font-size: 15px;
+  max-width: 70ch;
+}
+.deck-cover-generated {
+  margin-top: 12px;
+  font-size: 13px;
+}
+.deck-index {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 28px;
+  margin: 36px 0 0;
+  padding: 20px 0 0;
+  border-top: 1px solid var(--ds-line);
+  list-style: none;
+  font-size: 14px;
+}
+.deck-index span {
+  color: var(--ds-accent);
+  font-variant-numeric: tabular-nums;
+  font-weight: 600;
+}
+
+/* Apartado */
+.deck-head {
+  display: flex;
+  align-items: flex-start;
+  gap: 18px;
+}
+.deck-num {
+  color: var(--ds-accent);
+  font: 600 clamp(28px, 3vw, 40px) / 1 var(--ds-font-sans);
+  font-variant-numeric: tabular-nums;
+}
+.deck-head h2 {
+  margin: 0;
+  color: var(--ds-ink);
+  font: 500 clamp(28px, 3vw, 40px) / 1.1 var(--ds-font-sans);
+  letter-spacing: -0.03em;
+}
+.deck-source {
+  margin: 6px 0 0;
+  color: var(--ds-muted);
+  font-size: 13px;
+}
+.deck-note {
+  margin: 0;
+  max-width: 80ch;
+  padding: 14px 18px;
+  border-left: 3px solid var(--ds-accent);
+  background: var(--ds-accent-soft);
+  color: var(--ds-ink);
+  font-size: clamp(16px, 1.4vw, 19px);
+  line-height: 1.5;
+}
+.deck-metrics {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  border-top: 1px solid var(--ds-line);
+}
+.deck-metric {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 18px 22px 4px;
+  border-left: 1px solid var(--ds-line);
+}
+.deck-metric:first-child {
+  border-left: 0;
+  padding-left: 0;
+}
+.deck-metric-label {
+  color: var(--ds-text);
+  font-size: 14px;
+  font-weight: 500;
+}
+.deck-metric-value {
+  color: var(--ds-ink);
+  font: 500 clamp(32px, 3.4vw, 48px) / 1.1 var(--ds-font-sans);
+  letter-spacing: -0.035em;
+  font-variant-numeric: tabular-nums;
+}
+.deck-change {
+  font-size: 14px;
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+}
+.deck-change small {
+  color: var(--ds-muted);
+  font-size: 12px;
+  font-weight: 400;
+}
+.deck-change.is-good {
+  color: var(--ds-positive);
+}
+.deck-change.is-bad {
+  color: var(--ds-danger);
+}
+.deck-spark {
+  margin: 0;
+}
+.deck-spark svg {
+  display: block;
+  width: 100%;
+  height: clamp(120px, 20vh, 200px);
+  overflow: visible;
+}
+.deck-spark polyline {
+  fill: none;
+  stroke-width: 2.5;
+  stroke-linejoin: round;
+}
+.deck-spark-current {
+  stroke: var(--ds-accent);
+}
+.deck-spark-previous {
+  stroke: var(--ds-line-strong, var(--ds-muted));
+  stroke-dasharray: 5 4;
+}
+.deck-spark figcaption {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 18px;
+  margin-top: 8px;
+  color: var(--ds-muted);
+  font-size: 12px;
+}
+.deck-key::before {
+  content: "";
+  display: inline-block;
+  width: 14px;
+  height: 0;
+  margin-right: 6px;
+  vertical-align: middle;
+  border-top: 2.5px solid var(--ds-accent);
+}
+.deck-key.is-previous::before {
+  border-top: 2.5px dashed var(--ds-line-strong, var(--ds-muted));
+}
+.deck-spark-range {
+  margin-left: auto;
+}
+.deck-lists {
+  display: grid;
+  gap: 36px;
+}
+.deck-lists.is-pair {
+  grid-template-columns: 1fr 1fr;
+}
+.deck-list h3 {
+  margin: 0 0 8px;
+  color: var(--ds-ink);
+  font-size: 15px;
+  font-weight: 500;
+}
+.deck-list table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+.deck-list th {
+  padding: 8px 12px 8px 0;
+  border-bottom: 1px solid var(--ds-line);
+  color: var(--ds-muted);
+  font-size: 12px;
+  font-weight: 500;
+  text-align: left;
+}
+.deck-list td {
+  padding: 9px 12px 9px 0;
+  border-bottom: 1px solid var(--ds-line);
+  vertical-align: top;
+}
+.deck-list .is-numeric {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+.deck-foot {
+  display: flex;
+  justify-content: space-between;
+  margin-top: auto;
+  padding-top: 16px;
+  color: var(--ds-muted);
+  font-size: 12px;
+}
+
+/* Mandos */
+.deck-controls {
+  position: fixed;
+  z-index: 20;
+  right: 16px;
+  bottom: 16px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 6px;
+  border: 1px solid var(--ds-line);
+  border-radius: var(--ds-radius-md);
+  background: var(--ds-surface-raised, var(--ds-surface));
+  box-shadow: var(--ds-shadow-overlay);
+}
+.deck-control {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 32px;
+  padding: 0 10px;
+  border: 0;
+  border-radius: var(--ds-radius-sm);
+  background: none;
+  color: var(--ds-text);
+  font: 500 13px var(--ds-font-sans);
+  text-decoration: none;
+  cursor: pointer;
+}
+.deck-control:hover:not(:disabled) {
+  background: var(--ds-surface-subtle);
+  color: var(--ds-ink);
+}
+.deck-control:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+.deck-control.is-primary {
+  background: var(--ds-accent);
+  color: #fff;
+}
+.deck-control.is-primary:hover {
+  background: var(--ds-accent-hover, var(--ds-accent));
+  color: #fff;
+}
+.deck-counter {
+  min-width: 52px;
+  color: var(--ds-muted);
+  font-size: 13px;
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+}
+
+@media (max-width: 760px) {
+  html:has(.deck) {
+    scroll-snap-type: none;
+  }
+  .deck-slide {
+    min-height: auto;
+    padding: 40px 16px 72px;
+  }
+  .deck-lists.is-pair {
+    grid-template-columns: 1fr;
+  }
+  .deck-metric {
+    padding-left: 0;
+    border-left: 0;
+  }
+  .deck-control-text {
+    display: none;
+  }
+}
+
+/* PDF (V1): A4 apaisado, portada propia, una página por apartado, cabecera
+   repetida, siempre en claro y sin partir tarjetas ni filas. */
+@page deck {
+  size: A4 landscape;
+  margin: 10mm 12mm;
+}
+@media print {
+  html:has(.deck) {
+    scroll-snap-type: none;
+  }
+  .deck {
+    background: #fff;
+    color: #1f1f1f;
+    print-color-adjust: exact;
+    -webkit-print-color-adjust: exact;
+    --ds-canvas: #fff;
+    --ds-ink: #111;
+    --ds-text: #2b2b2b;
+    --ds-muted: #6b6b6b;
+    --ds-line: #dcdcdc;
+  }
+  .deck-controls {
+    display: none;
+  }
+  .deck-slide {
+    page: deck;
+    min-height: 0;
+    max-width: none;
+    height: auto;
+    padding: 0;
+    gap: 12px;
+    border: 0;
+    break-after: page;
+    page-break-after: always;
+  }
+  .deck-slide:last-of-type {
+    break-after: auto;
+    page-break-after: auto;
+  }
+  .deck-cover {
+    min-height: 175mm;
+  }
+  .deck-running {
+    display: flex;
+    justify-content: space-between;
+    padding-bottom: 4px;
+    border-bottom: 1px solid var(--ds-line);
+    color: var(--ds-muted);
+    font-size: 8.5px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+  .deck-head h2,
+  .deck-num {
+    font-size: 22px;
+  }
+  .deck-note {
+    font-size: 12px;
+    padding: 8px 12px;
+  }
+  .deck-metric {
+    padding: 10px 14px 2px;
+  }
+  .deck-metric-value {
+    font-size: 26px;
+  }
+  .deck-metric-label,
+  .deck-change,
+  .deck-list table {
+    font-size: 11px;
+  }
+  .deck-spark svg {
+    height: 110px;
+  }
+  .deck-list td,
+  .deck-list th {
+    padding: 4px 10px 4px 0;
+  }
+  /* Las dos tablas de un apartado, lado a lado: cada apartado cabe en una hoja. */
+  .deck-lists.is-pair {
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+  }
+  .deck-metric,
+  .deck-list tr,
+  .deck-spark,
+  .deck-note {
+    break-inside: avoid;
+  }
+  .deck-foot {
+    margin-top: 8px;
+    padding-top: 6px;
+    font-size: 9px;
+  }
+}
+.deck-loading {
+  display: grid;
+  place-items: center;
+  min-height: 100vh;
+  color: var(--ds-muted);
+  font-size: 15px;
+}

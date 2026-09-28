@@ -1018,3 +1018,27 @@
   `/en/products/porcelain-tiles/`, una página noindex, redirecciones enlazadas desde el menú global,
   hreflang sin x-default en todo el sitio. Typecheck y pruebas en verde.
 - D-071: retirado el formulario de crawl del workbench (los crawls se piden en el chat); detalle con todas las URL del crawl completo y ficha por URL. Verificado en /crawls/xtone/20260928-110450-0bd8 (200 URL) y la ficha de /en/ (404 enlazado, 52 entrantes, 62 salientes). Typecheck y pruebas en verde.
+
+## 2026-09-28 · KPIs y análisis de la pestaña «Páginas» (D-072)
+
+- Tarjetas (páginas en Google, con clics, ganan/pierden, URLs duplicadas), reparto por tipo y por
+  carpeta de idioma, lista «Páginas por revisar» y filtros por tipo/carpeta en la tabla. Todo desde
+  la muestra GSC del informe. XTONE 90 días: 2.850 URLs, 1.402 con clics, 152 ganan / 768 pierden,
+  232 rutas duplicadas. Verificado en el navegador (escritorio y 375 px, sin errores de consola);
+  typecheck y 135 pruebas del visor en verde (8 nuevas). Sin commit ni despliegue.
+- Ajuste: fuera «Páginas con conversiones» y «Páginas por revisar»; repartos por tipo y carpeta
+  bajo la tabla; la raíz se rotula «España (raíz)». Verificado en el navegador; typecheck y
+  pruebas del visor en verde.
+- Ajuste 2: 152/768 filtran la tabla (filtro «Tendencia» añadido); «URLs duplicadas» abre un brief
+  copiable (232 rutas, 482 variantes en XTONE). Verificado en el navegador (filtro → 768 filas,
+  diálogo, copia); typecheck y pruebas en verde (visor 137, ui 4).
+- Ajuste 3: el brief se abre al pulsar la cifra (232) y su tabla cruza cada ruta repetida con sus
+  formas de URL. Verificado en el navegador (232 filas); typecheck y visor 137 pruebas en verde.
+
+## 2026-09-28 · Pestaña «Informes» con presentación y PDF (D-073)
+
+- Tabla de informes (mes, trimestre, periodo seleccionado) con enlaces a la presentación y al PDF;
+  ruta `/projects/xtone/informe` con 7 apartados de datos reales y aclaración por apartado. PDF
+  por impresión del navegador como la V1: comprobado con Chrome headless (8 páginas A4
+  apaisadas: portada + 7). Typecheck y 140 pruebas del visor en verde. Sin commit ni despliegue.
+

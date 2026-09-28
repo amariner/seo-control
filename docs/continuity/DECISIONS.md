@@ -1851,3 +1851,55 @@ No se reescriben decisiones antiguas. Si una cambia, se añade una nueva entrada
   indexabilidad, incidencias explicadas por severidad, metadatos, contenido, hreflang y enlaces
   entrantes y salientes con su estado (rastreada, bloqueada por robots o fuera del tope). Nada de
   esto se publica en el visor.
+
+## D-072 · Indicadores y análisis en la pestaña «Páginas»
+
+- Fecha: 2026-09-28.
+- Estado: vigente.
+- Decisión: la pestaña «Páginas» del proyecto abre con cuatro tarjetas y tres bloques de análisis
+  calculados en el visor (`apps/viewer/lib/page-analysis.ts`) a partir de la muestra de páginas de
+  Search Console que ya trae el informe; no hay consultas nuevas ni cambios de contrato.
+  - Tarjetas: páginas en Google (con reparto por posición y variación frente a la muestra
+    anterior), páginas con clics (cuota, URLs que aparecen sin clics y concentración del top 10),
+    ganan y pierden (solo URLs presentes en las dos muestras; las demás se cuentan aparte como
+    «sin dato anterior», nunca como cero) y URLs duplicadas (misma ruta con y sin barra final,
+    mayúsculas o parámetros).
+  - Reparto por tipo de página (heurística por ruta: fichas, categorías, espacios, blog, descargas,
+    tiendas, institucional, técnicas) y por carpeta de idioma, con páginas, clics, cuota, CTR y
+    posición ponderada. La raíz del dominio se nombra con su mercado («España (raíz)» en XTONE).
+  - Orden de la pestaña: tarjetas, tabla «Páginas en Google» (con columna «Tipo» y filtros por
+    tipo y carpeta) y, debajo, los dos repartos.
+  - Tarjetas accionables: en «Ganan y pierden» cada cifra filtra la tabla (filtro «Tendencia»:
+    ganan, pierden, sin cambio, sin dato anterior) mediante el evento `report-data:filter` de
+    `@seo/ui/data-table`. la cifra de «URLs duplicadas» abre un brief con una tabla cruzada ruta ×
+    forma (con barra final, sin barra, con mayúsculas, con parámetros): clics y número de URLs en
+    cada cruce, forma principal resaltada (la de la URL con más clics), clics repartidos y acción
+    por ruta (301 hacia la forma principal, canonical para los parámetros). «Copiar» exporta la
+    misma tabla en HTML y texto tabulado para pegar en un ticket, documento u hoja.
+  - Retiradas a petición del usuario: «Páginas con conversiones» (GA4) y la lista «Páginas por
+    revisar». `convertingPages` sigue en el contrato y en el repositorio, sin uso en el visor.
+- Motivo: en XTONE la muestra deja ver 232 rutas servidas en varias URLs (p. ej. `/en` y `/en/`,
+  `/producto/…/` y `/productos/…`) y 365 URLs con parámetros, que reparten clics tras la migración.
+
+## D-073 · Pestaña «Informes» del proyecto: presentación y PDF
+
+- Fecha: 2026-09-28.
+- Estado: vigente.
+- Decisión: la ficha del proyecto gana una última pestaña, «Informes» (`?tab=informes`), con una
+  tabla: informe mensual (mes pasado), trimestral (trimestre pasado) y el periodo seleccionado si
+  no coincide, con el mercado activo, y dos enlaces por fila: «Presentación» y «PDF».
+  - El informe es una recopilación simplificada de los apartados (resumen, keywords, páginas,
+    mercados, migración, plan editorial y estado del sitio; los que no tienen datos se omiten),
+    con cuatro cifras clave, una lista corta y una aclaración por apartado redactada con
+    plantillas a partir de las cifras (`apps/viewer/lib/project-report.ts`), nunca con IA.
+  - Ruta `/projects/<slug>/informe` sin shell: una diapositiva por apartado a pantalla completa
+    (scroll-snap), teclado (flechas, AvPág, espacio, Inicio/Fin, F) y pantalla completa.
+  - PDF como la V1 (`/tracking/informe-v2`): `window.print()` con CSS de impresión, portada,
+    una página por apartado con cabecera repetida, siempre en claro, sin partir filas ni
+    tarjetas, y nombre del fichero desde `document.title`
+    (`informe-seo-<marca>-<mercado>-<inicio>_<fin>`). Se aparta de la V1 en la orientación: A4
+    apaisado (`@page deck`), porque la misma maqueta sirve de presentación. `?pdf=1` abre el
+    diálogo al cargar; el enlace «PDF» de la tabla lo usa.
+- Pendiente: exportación HTML autocontenida de la V1 (P7) y guardar el informe en el archivo de
+  `/reports` con versión inmutable.
+

@@ -1510,3 +1510,253 @@
   .brand-split-arc { transition: none; }
 }
 
+
+/* Pestaña Páginas (D-072): reparto por tipo de página y por carpeta de idioma. */
+.brand-page-group-row {
+  grid-template-columns: minmax(0, 1fr) 56px 64px 52px 56px;
+  gap: 10px;
+}
+.brand-page-group-row > :nth-child(n + 2) {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+.brand-page-group-row .brand-channel-name,
+.brand-page-group-row .brand-mini-track {
+  max-width: 220px;
+}
+.brand-page-balance .brand-kpi-value {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+}
+.brand-page-balance-sep {
+  color: var(--ds-line-strong, var(--ds-muted));
+  font-weight: 400;
+}
+/* La lista va a media anchura: se adapta a su contenedor, no a la ventana. */
+.brand-page-groups {
+  container-type: inline-size;
+}
+@container (max-width: 460px) {
+  .brand-page-group-row {
+    grid-template-columns: minmax(0, 1fr) 48px 60px 48px;
+  }
+  .brand-page-group-row > :nth-child(5) {
+    display: none;
+  }
+}
+
+/* Tarjetas accionables de Páginas (D-072): cifras que filtran y brief de duplicadas. */
+.brand-page-trend {
+  padding: 0;
+  border: 0;
+  background: none;
+  font: inherit;
+  letter-spacing: inherit;
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  transition: border-color var(--ds-duration-fast) var(--ds-ease);
+}
+.brand-page-trend:hover {
+  border-bottom-color: currentColor;
+}
+.brand-page-trend:focus-visible,
+.brand-page-dup-trigger:focus-visible {
+  outline: 2px solid var(--ds-focus-ring, var(--ds-accent));
+  outline-offset: 3px;
+}
+.brand-page-dup-trigger {
+  color: inherit;
+}
+.brand-dialog-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  background: rgb(0 0 0 / 0.45);
+}
+.brand-dialog {
+  position: fixed;
+  z-index: 61;
+  top: 50%;
+  left: 50%;
+  display: flex;
+  flex-direction: column;
+  width: min(1040px, calc(100vw - 32px));
+  max-height: calc(100vh - 48px);
+  padding: 24px;
+  transform: translate(-50%, -50%);
+  background: var(--ds-surface-raised, var(--ds-surface));
+  border: 1px solid var(--ds-line);
+  border-radius: var(--ds-radius-lg);
+  box-shadow: var(--ds-shadow-overlay);
+  color: var(--ds-text);
+}
+.brand-dialog-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 16px;
+}
+.brand-dialog-title {
+  margin: 0;
+  color: var(--ds-ink);
+  font: 500 20px/1.25 var(--ds-font-sans);
+  letter-spacing: -0.02em;
+}
+.brand-dialog-meta {
+  margin: 4px 0 0;
+  color: var(--ds-muted);
+  font-size: 13px;
+}
+.brand-dialog-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+.brand-dialog-actions .ds-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.brand-dialog-close {
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  border: 0;
+  border-radius: var(--ds-radius-sm);
+  background: none;
+  color: var(--ds-muted);
+  cursor: pointer;
+}
+.brand-dialog-close:hover {
+  background: var(--ds-surface-subtle);
+  color: var(--ds-ink);
+}
+.brand-dialog-summary {
+  margin: 16px 0;
+  font-size: 14px;
+  line-height: 1.5;
+}
+.brand-dialog-table {
+  min-height: 0;
+  overflow: auto;
+  border-top: 1px solid var(--ds-line);
+}
+.brand-dialog-table table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+.brand-dialog-table th {
+  position: sticky;
+  top: 0;
+  padding: 10px 12px 8px 0;
+  background: var(--ds-surface-raised, var(--ds-surface));
+  color: var(--ds-muted);
+  font-size: 12px;
+  font-weight: 500;
+  text-align: left;
+  border-bottom: 1px solid var(--ds-line);
+}
+.brand-dialog-table td {
+  padding: 9px 12px 9px 0;
+  vertical-align: top;
+  border-bottom: 1px solid var(--ds-line);
+}
+.brand-dialog-table td strong {
+  display: block;
+  color: var(--ds-ink);
+  font-weight: 500;
+  word-break: break-all;
+}
+.brand-dialog-table td small {
+  color: var(--ds-muted);
+  font-size: 12px;
+}
+.brand-dialog-table .is-numeric {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+.brand-dialog-url {
+  min-width: 220px;
+  word-break: break-all;
+}
+.brand-dialog-cell small {
+  display: block;
+  color: var(--ds-muted);
+  font-size: 11px;
+}
+.brand-dialog-cell.is-main {
+  background: var(--ds-accent-soft);
+  color: var(--ds-ink);
+  font-weight: 500;
+}
+.brand-dialog-cell.is-main small:last-child {
+  color: var(--ds-accent);
+  font-weight: 500;
+}
+.brand-dialog-cell.is-empty {
+  color: var(--ds-subtle, var(--ds-muted));
+}
+.brand-dialog-table td.brand-dialog-cell {
+  padding-left: 12px;
+}
+.brand-dialog-note {
+  margin: 14px 0 0;
+  color: var(--ds-muted);
+  font-size: 12px;
+}
+@media (max-width: 640px) {
+  .brand-dialog {
+    padding: 16px;
+  }
+  .brand-dialog-head {
+    flex-wrap: wrap;
+  }
+}
+/* Al filtrar desde una tarjeta, la barra de la tabla queda bajo la cabecera fija y las pestañas. */
+.brand-report .report-data {
+  scroll-margin-top: 150px;
+}
+
+/* Pestaña Informes (D-073). */
+.brand-reports-wrap {
+  overflow-x: auto;
+}
+.brand-reports {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+.brand-reports th {
+  padding: 0 16px 8px 0;
+  border-bottom: 1px solid var(--ds-line);
+  color: var(--ds-muted);
+  font-size: 12px;
+  font-weight: 500;
+  text-align: left;
+  white-space: nowrap;
+}
+.brand-reports td {
+  padding: 16px 16px 16px 0;
+  border-bottom: 1px solid var(--ds-line);
+  white-space: nowrap;
+}
+.brand-reports td strong {
+  color: var(--ds-ink);
+  font-weight: 500;
+}
+.brand-report-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--ds-accent);
+  font-weight: 500;
+  text-decoration: none;
+}
+.brand-report-link:hover {
+  text-decoration: underline;
+}
