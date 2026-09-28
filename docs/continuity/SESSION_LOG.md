@@ -1045,3 +1045,8 @@
   alias seo-dashboard-viewer.vercel.app). Producción pide el login de Google; no se revisó con
   sesión iniciada.
 
+## 2026-09-28 · Informe: lectura SEO, mes a mes, tendencias, plan y tareas (D-074)
+
+- Informe trimestral de XTONE (Q2 2026) revisado en presentación y en PDF (Chrome headless,
+  8 páginas, un apartado por página). Typecheck y pruebas del visor en verde. Sin commit.
+

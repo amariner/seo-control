@@ -1903,3 +1903,24 @@ No se reescriben decisiones antiguas. Si una cambia, se añade una nueva entrada
 - Pendiente: exportación HTML autocontenida de la V1 (P7) y guardar el informe en el archivo de
   `/reports` con versión inmutable.
 
+## D-074 · Informe del proyecto: lectura SEO, mes a mes, tendencias, plan y tareas
+
+- Fecha: 2026-09-28.
+- Estado: vigente (amplía D-073).
+- Decisión: cada apartado del informe añade una «Lectura SEO» junto a la aclaración: qué
+  significa y qué hacer, en una o dos frases como máximo. Se redacta con reglas y umbrales
+  explícitos en `apps/viewer/lib/project-report.ts` (p. ej. clics −10 % con impresiones −10 %
+  → caída de visibilidad; impresiones estables y CTR a la baja → snippets y AI Overviews), nunca
+  con IA; si ninguna regla aplica, la lectura se omite.
+  - Resumen: gráfico de barras mes a mes (12 meses de `report.months`, visitas SEO o clics sin
+    GA4) frente al mismo mes del año anterior, con los meses del periodo resaltados, junto a la
+    línea de clics del periodo.
+  - Keywords y Páginas: tablas «En tendencia» y «En bajada» (`keywordsUp/Down`,
+    `contentUp/Down`: clics antes → ahora y variación). Páginas deja de mostrar los repartos
+    por tipo y carpeta, que siguen en la pestaña.
+  - Plan editorial: «Publicado en el periodo» (publicadas con fecha dentro del periodo, con sus
+    clics si la keyword se midió) y «Próximas publicaciones».
+  - Estado del sitio: «Tareas a realizar», una por incidencia del crawl redactada como acción,
+    ordenadas por prioridad (urgente, alta, media, baja) y URLs afectadas, con una ruta de
+    ejemplo. El tiempo de respuesta se rotula como orientativo (medido en local).
+

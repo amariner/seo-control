@@ -176,7 +176,7 @@ html:has(.deck) {
   stroke: var(--ds-line-strong, var(--ds-muted));
   stroke-dasharray: 5 4;
 }
-.deck-spark figcaption {
+.deck-legend {
   display: flex;
   flex-wrap: wrap;
   gap: 6px 18px;
@@ -244,6 +244,109 @@ html:has(.deck) {
   font-size: 12px;
 }
 
+/* Aclaración y lectura SEO (D-074) */
+.deck-notes {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 14px;
+}
+.deck-notes .deck-note {
+  max-width: none;
+}
+.deck-reading {
+  margin: 0;
+  padding: 14px 18px;
+  border-left: 3px solid var(--ds-ink);
+  background: var(--ds-surface-subtle);
+  color: var(--ds-ink);
+  font-size: clamp(15px, 1.25vw, 17px);
+  line-height: 1.5;
+}
+.deck-reading strong {
+  display: block;
+  margin-bottom: 4px;
+  color: var(--ds-muted);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+/* Gráficos */
+.deck-charts {
+  display: grid;
+  gap: 32px;
+}
+.deck-charts.is-pair {
+  grid-template-columns: 1fr 1fr;
+}
+.deck-chart-title {
+  margin-bottom: 8px;
+  color: var(--ds-ink);
+  font-size: 14px;
+  font-weight: 500;
+}
+.deck-bars {
+  margin: 0;
+}
+.deck-bars svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-height: 32vh;
+}
+.deck-bars-axis {
+  stroke: var(--ds-line);
+}
+.deck-bar-year {
+  fill: var(--ds-line-strong, #c9c9c9);
+}
+.deck-bar-value {
+  fill: var(--ds-accent-mid, var(--ds-accent));
+  opacity: 0.45;
+}
+.is-period .deck-bar-value {
+  fill: var(--ds-accent);
+  opacity: 1;
+}
+.deck-bars-label {
+  fill: var(--ds-muted);
+  font-size: 13px;
+}
+.is-period .deck-bars-label {
+  fill: var(--ds-ink);
+  font-weight: 600;
+}
+.deck-key.is-bar::before,
+.deck-key.is-bar-year::before,
+.deck-key.is-bar-period::before {
+  width: 10px;
+  height: 10px;
+  border: 0;
+  border-radius: 2px;
+  background: var(--ds-accent);
+  opacity: 0.45;
+}
+.deck-key.is-bar-year::before {
+  background: var(--ds-line-strong, #c9c9c9);
+  opacity: 1;
+}
+.deck-key.is-bar-period::before {
+  opacity: 1;
+}
+.deck-list td.is-good {
+  color: var(--ds-positive);
+  font-weight: 500;
+}
+.deck-list td.is-bad {
+  color: var(--ds-danger);
+  font-weight: 500;
+}
+.deck-list td.deck-empty {
+  color: var(--ds-muted);
+  font-style: italic;
+}
+
 /* Mandos */
 .deck-controls {
   position: fixed;
@@ -300,6 +403,9 @@ html:has(.deck) {
 @media (max-width: 760px) {
   html:has(.deck) {
     scroll-snap-type: none;
+  }
+  .deck-charts.is-pair {
+    grid-template-columns: 1fr;
   }
   .deck-slide {
     min-height: auto;
@@ -373,9 +479,33 @@ html:has(.deck) {
   .deck-num {
     font-size: 22px;
   }
-  .deck-note {
-    font-size: 12px;
-    padding: 8px 12px;
+  .deck-note,
+  .deck-reading {
+    font-size: 11px;
+    padding: 7px 10px;
+  }
+  .deck-reading strong {
+    font-size: 8px;
+    margin-bottom: 2px;
+  }
+  .deck-notes {
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+  .deck-charts.is-pair {
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+  }
+  .deck-bars svg {
+    max-height: 115px;
+  }
+  .deck-chart-title {
+    font-size: 11px;
+    margin-bottom: 4px;
+  }
+  .deck-legend {
+    font-size: 9px;
+    margin-top: 4px;
   }
   .deck-metric {
     padding: 10px 14px 2px;
@@ -389,7 +519,7 @@ html:has(.deck) {
     font-size: 11px;
   }
   .deck-spark svg {
-    height: 110px;
+    height: 105px;
   }
   .deck-list td,
   .deck-list th {
@@ -403,6 +533,8 @@ html:has(.deck) {
   .deck-metric,
   .deck-list tr,
   .deck-spark,
+  .deck-bars,
+  .deck-reading,
   .deck-note {
     break-inside: avoid;
   }

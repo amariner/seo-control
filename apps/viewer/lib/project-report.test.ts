@@ -6,10 +6,19 @@ const kpi = (key: BrandReport["kpis"][number]["key"], value: number, previous: n
   ({ key, label: key, help: "", unit: "number", value, previous, previousYear: null, source }) as unknown as BrandReport["kpis"][number];
 
 const base = {
-  window: { previousLabel: "periodo anterior", previousYearLabel: "año pasado", label: "Mes pasado" },
+  window: { previousLabel: "periodo anterior", previousYearLabel: "año pasado", label: "Trimestre pasado", start: "2026-07-01", end: "2026-09-30", previousStart: "2026-04-01" },
   kpis: [kpi("search_sessions", 80, 100, "ga4"), kpi("clicks", 110, 100), kpi("impressions", 1000, 1000), kpi("search_leads", 5, 4, "ga4")],
   sources: [{ source: "gsc", ok: true }, { source: "ga4", ok: true }],
   clickSeries: [],
+  months: [
+    { month: "2026-06", label: "jun 26", searchSessions: 50, searchSessionsPreviousYear: 40, clicks: 10, clicksPreviousYear: null },
+    { month: "2026-07", label: "jul 26", searchSessions: 60, searchSessionsPreviousYear: 70, clicks: 12, clicksPreviousYear: null },
+  ],
+  keywordsUp: [{ query: "encimera", before: 10, now: 30, change: 200, position: 5, previousPosition: 8 }],
+  keywordsDown: [],
+  contentUp: [],
+  contentDown: [],
+  editorial: [],
   keywordRanking: null,
   searchTotals: null,
   searchQueries: [],
@@ -32,6 +41,20 @@ describe("buildProjectReport", () => {
     expect(summary?.note).toContain("Los clics en Google suben un 10 %");
     expect(summary?.metrics.map((item) => item.label)).toEqual(["Visitas SEO", "Clics en Google", "Impresiones", "Conversiones SEO"]);
     expect(summary?.metrics[0]?.change).toMatchObject({ text: "−20 %", tone: "bad" });
+    expect(summary?.reading).toBeTruthy();
+    expect(summary?.bars?.metric).toBe("Visitas SEO");
+    expect(summary?.bars?.months.map((m) => [m.label, m.inPeriod, m.previousYear])).toEqual([
+      ["jun 26", false, 40],
+      ["jul 26", true, 70],
+    ]);
+  });
+
+  it("pone las keywords en tendencia y en bajada, con mensaje si una lista está vacía", () => {
+    const keywords = buildProjectReport({ report: base, pieces: [], audit: null, today: "2026-09-28" })[1]!;
+    expect(keywords.lists.map((list) => list.title)).toEqual(["En tendencia", "En bajada"]);
+    expect(keywords.lists[0]?.rows).toEqual([["encimera", "10 → 30", "+200 %"]]);
+    expect(keywords.lists[1]?.rows).toEqual([]);
+    expect(keywords.lists[1]?.empty).toMatch(/Sin keywords/);
   });
 
   it("sin GA4 no muestra visitas ni conversiones y lo dice", () => {
@@ -43,14 +66,16 @@ describe("buildProjectReport", () => {
 
   it("omite los apartados sin datos y cuenta el plan editorial por estado", () => {
     const pieces = [
-      { statusKey: "publicado", publicationDate: "2026-09-01", status: "Publicado", title: "A", keyword: null },
-      { statusKey: "redactando", publicationDate: "2026-10-05", status: "Redactando", title: "B", keyword: "k" },
-      { statusKey: "backlog", publicationDate: null, status: "Backlog", title: "C", keyword: null },
+      { id: "a", statusKey: "publicado", publicationDate: "2026-09-01", status: "Publicado", title: "A", keyword: null },
+      { id: "o", statusKey: "publicado", publicationDate: "2026-03-01", status: "Publicado", title: "Antigua", keyword: null },
+      { id: "b", statusKey: "redactando", publicationDate: "2026-10-05", status: "Redactando", title: "B", keyword: "k" },
+      { id: "c", statusKey: "backlog", publicationDate: null, status: "Backlog", title: "C", keyword: null },
     ] as never;
     const slides = buildProjectReport({ report: base, pieces, audit: null, today: "2026-09-28" });
     expect(slides.map((slide) => slide.id)).toEqual(["resumen", "keywords", "editorial"]);
     const editorial = slides.at(-1)!;
-    expect(editorial.note).toBe("3 piezas en el plan: 1 publicadas, 1 en marcha y 1 por empezar. Próxima publicación: 05/10/2026.");
-    expect(editorial.lists[0]?.rows).toEqual([["05/10/2026", "B", "k", "Redactando"]]);
+    expect(editorial.note).toBe("1 pieza publicada en el periodo y 1 con fecha de publicación próxima. En total, 1 en marcha y 1 por empezar.");
+    expect(editorial.lists[0]?.rows).toEqual([["01/09/2026", "A", "—", "—"]]);
+    expect(editorial.lists[1]?.rows).toEqual([["05/10/2026", "B", "Redactando"]]);
   });
 });

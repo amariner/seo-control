@@ -5,7 +5,7 @@ import { DeckControls } from "./project-deck-controls";
 import "./project-deck.css";
 
 /**
- * Informe del proyecto (D-073). En pantalla es una presentación: una
+ * Informe del proyecto (D-073, D-074). En pantalla es una presentación: una
  * diapositiva por apartado, a pantalla completa y con teclado. Al imprimir, la
  * misma estructura sale como PDF al estilo de la V1 (portada, una página por
  * apartado, cabecera repetida y nombre de fichero desde `document.title`).
@@ -28,7 +28,7 @@ function Change({ item }: { item: NonNullable<DeckMetric["change"]> }) {
 }
 
 /** Una columna es numérica si todas sus celdas son cifras, variaciones o «—». */
-const NUMERIC = /^([−+]?[\d.,]+( %| pp)?|—)$/;
+const NUMERIC = /^([−+]?[\d.,]+( %| pp)?|—|Nueva|[\d.,]+ → [\d.,]+)$/;
 const numericColumns = (rows: string[][], width: number) =>
   Array.from(
     { length: width },
@@ -59,6 +59,9 @@ function Spark({ series }: { series: NonNullable<DeckSlide["series"]> }) {
       .join(" ");
   return (
     <figure className="deck-spark">
+      <figcaption className="deck-chart-title">
+        Clics en Google del periodo
+      </figcaption>
       <svg
         viewBox={`0 0 ${w} ${h}`}
         preserveAspectRatio="none"
@@ -76,13 +79,98 @@ function Spark({ series }: { series: NonNullable<DeckSlide["series"]> }) {
           vectorEffect="non-scaling-stroke"
         />
       </svg>
-      <figcaption>
+      <div className="deck-legend">
         <span className="deck-key is-current">Clics del periodo</span>
         <span className="deck-key is-previous">Periodo anterior</span>
         <span className="deck-spark-range">
           {series[0]?.label} – {series.at(-1)?.label}
         </span>
-      </figcaption>
+      </div>
+    </figure>
+  );
+}
+
+/**
+ * Mes a mes: cada mes, su valor y el del mismo mes del año anterior. Los meses
+ * del periodo del informe se resaltan; el resto da contexto.
+ */
+function Bars({ bars }: { bars: NonNullable<DeckSlide["bars"]> }) {
+  const w = 600;
+  const h = 250;
+  const top = 8;
+  const base = h - 26;
+  const max = Math.max(
+    1,
+    ...bars.months.flatMap((m) => [m.value ?? 0, m.previousYear ?? 0]),
+  );
+  const slot = w / bars.months.length;
+  const barW = Math.min(22, slot * 0.36);
+  const y = (value: number) => base - (value / max) * (base - top);
+  const hasYear = bars.months.some((m) => m.previousYear !== null);
+  const fmt = new Intl.NumberFormat("es-ES", {
+    useGrouping: "always" as unknown as boolean,
+  });
+  return (
+    <figure className="deck-bars">
+      <figcaption className="deck-chart-title">{bars.title}</figcaption>
+      <svg
+        viewBox={`0 0 ${w} ${h}`}
+        role="img"
+        aria-label={`${bars.title}, frente al mismo mes del año anterior`}
+      >
+        <line className="deck-bars-axis" x1={0} x2={w} y1={base} y2={base} />
+        {bars.months.map((month, index) => {
+          const cx = slot * index + slot / 2;
+          return (
+            <g
+              key={month.label}
+              className={month.inPeriod ? "is-period" : undefined}
+            >
+              {month.previousYear !== null ? (
+                <rect
+                  className="deck-bar-year"
+                  x={cx - barW - 1}
+                  y={y(month.previousYear)}
+                  width={barW}
+                  height={base - y(month.previousYear)}
+                  rx={2}
+                >
+                  <title>{`${month.label} · año anterior: ${fmt.format(month.previousYear)}`}</title>
+                </rect>
+              ) : null}
+              {month.value !== null ? (
+                <rect
+                  className="deck-bar-value"
+                  x={hasYear ? cx + 1 : cx - barW / 2}
+                  y={y(month.value)}
+                  width={barW}
+                  height={base - y(month.value)}
+                  rx={2}
+                >
+                  <title>{`${month.label}: ${fmt.format(month.value)}`}</title>
+                </rect>
+              ) : null}
+              <text
+                className="deck-bars-label"
+                x={cx}
+                y={h - 8}
+                textAnchor="middle"
+              >
+                {month.label}
+              </text>
+            </g>
+          );
+        })}
+      </svg>
+      <div className="deck-legend">
+        <span className="deck-key is-bar">{bars.metric}</span>
+        {hasYear ? (
+          <span className="deck-key is-bar-year">
+            Mismo mes del año anterior
+          </span>
+        ) : null}
+        <span className="deck-key is-bar-period">Meses del informe</span>
+      </div>
     </figure>
   );
 }
@@ -181,7 +269,15 @@ export function ProjectDeck({
               <p className="deck-source">{slide.source}</p>
             </div>
           </header>
-          <p className="deck-note">{slide.note}</p>
+          <div className="deck-notes">
+            <p className="deck-note">{slide.note}</p>
+            {slide.reading ? (
+              <p className="deck-reading">
+                <strong>Lectura SEO</strong>
+                {slide.reading}
+              </p>
+            ) : null}
+          </div>
           {slide.metrics.length ? (
             <div className="deck-metrics">
               {slide.metrics.map((metric) => (
@@ -194,8 +290,15 @@ export function ProjectDeck({
               ))}
             </div>
           ) : null}
-          {slide.series && slide.series.length > 1 ? (
-            <Spark series={slide.series} />
+          {(slide.series && slide.series.length > 1) || slide.bars ? (
+            <div
+              className={`deck-charts ${slide.bars && slide.series && slide.series.length > 1 ? "is-pair" : ""}`}
+            >
+              {slide.series && slide.series.length > 1 ? (
+                <Spark series={slide.series} />
+              ) : null}
+              {slide.bars ? <Bars bars={slide.bars} /> : null}
+            </div>
           ) : null}
           {slide.lists.length ? (
             <div
@@ -222,20 +325,42 @@ export function ProjectDeck({
                         </tr>
                       </thead>
                       <tbody>
-                        {list.rows.map((row, rowIndex) => (
-                          <tr key={rowIndex}>
-                            {row.map((cell, cellIndex) => (
-                              <td
-                                key={cellIndex}
-                                className={
-                                  numeric[cellIndex] ? "is-numeric" : undefined
-                                }
-                              >
-                                {cell}
-                              </td>
-                            ))}
+                        {list.rows.length ? (
+                          list.rows.map((row, rowIndex) => {
+                            const toneAt = list.toneColumn ?? row.length - 1;
+                            const tone = list.tones?.[rowIndex];
+                            return (
+                              <tr key={rowIndex}>
+                                {row.map((cell, cellIndex) => (
+                                  <td
+                                    key={cellIndex}
+                                    className={
+                                      [
+                                        numeric[cellIndex] ? "is-numeric" : "",
+                                        tone && cellIndex === toneAt
+                                          ? `is-${tone}`
+                                          : "",
+                                      ]
+                                        .filter(Boolean)
+                                        .join(" ") || undefined
+                                    }
+                                  >
+                                    {cell}
+                                  </td>
+                                ))}
+                              </tr>
+                            );
+                          })
+                        ) : (
+                          <tr>
+                            <td
+                              className="deck-empty"
+                              colSpan={list.head.length}
+                            >
+                              {list.empty ?? "Sin datos."}
+                            </td>
                           </tr>
-                        ))}
+                        )}
                       </tbody>
                     </table>
                   </div>
