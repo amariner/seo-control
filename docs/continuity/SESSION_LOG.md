@@ -1048,5 +1048,5 @@
 ## 2026-09-28 · Informe: lectura SEO, mes a mes, tendencias, plan y tareas (D-074)
 
 - Informe trimestral de XTONE (Q2 2026) revisado en presentación y en PDF (Chrome headless,
-  8 páginas, un apartado por página). Typecheck y pruebas del visor en verde. Sin commit.
-
+  8 páginas, un apartado por página). Typecheck y pruebas del visor en verde. Commit 71bad15,
+  subido a GitHub y desplegado en producción (Ready, alias seo-dashboard-viewer.vercel.app).

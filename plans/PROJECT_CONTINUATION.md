@@ -7,7 +7,7 @@
 - Hecho: `lib/project-report.ts` (+ pruebas), `components/report/project-deck*.tsx|css`, ruta
   `app/projects/[slug]/informe` (con `loading.tsx` propio) y pestaña `?tab=informes`.
 - D-074: lectura SEO por apartado, barras mes a mes en el resumen, tendencias en Keywords y
-  Páginas, publicado/próximo en Plan editorial y tareas en Estado del sitio (sin commit).
+  Páginas, publicado/próximo en Plan editorial y tareas en Estado del sitio (en producción, 71bad15).
 - Reanudar: seguir revisando el informe con el usuario; después, guardar cada informe en el
   archivo `/reports` y la exportación HTML autocontenida (P7).
 
