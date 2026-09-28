@@ -19,6 +19,7 @@
     "db:generate": "pnpm --filter @seo/db generate",
     "db:migrate": "pnpm --filter @seo/db migrate",
     "editorial:import": "pnpm --filter @seo/editorial import:v1",
+    "editorial:import-sheet": "pnpm --filter @seo/editorial import:sheet",
     "projects:import": "pnpm --filter @seo/contracts import:v1-projects",
     "ingest:dry-run": "pnpm --filter @seo/sync ingest:dry-run",
     "screenshots": "node scripts/capture-screenshots.mjs",

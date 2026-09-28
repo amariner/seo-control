@@ -40,7 +40,9 @@ export type NormalizeOptions = {
   expectedCounts?: Partial<Record<EditorialSourceKey, number>>;
 };
 
-export const V1_EXPECTED_COUNTS: Record<EditorialSourceKey, number> = {
+export type V1SourceKey = Exclude<EditorialSourceKey, "plan-sheet">;
+
+export const V1_EXPECTED_COUNTS: Record<V1SourceKey, number> = {
   "calendario-2026": 39,
   "conjunto-backlog": 115,
   conjunto: 146,
@@ -49,7 +51,23 @@ export const V1_EXPECTED_COUNTS: Record<EditorialSourceKey, number> = {
 
 export const V1_EXPECTED_PROPOSALS = 68;
 
-type V1Row = {
+/**
+ * Snapshot de la hoja «Plan editorial» (D-050). `brands` es la cobertura
+ * activada: solo esas marcas toman su plan de la hoja; el resto de filas se
+ * archiva pero no se importa hasta que se active su marca.
+ */
+export type PlanSheetSnapshot = {
+  schemaVersion: "plan-sheet.v1";
+  origin: { fileName: string; sha256: string; sheet: string; calendarSheet?: string };
+  brands: EditorialBrandSlug[];
+  rows: V1Row[];
+  /** Huecos «POST/NEWS <marca>» de la hoja «Calendario AAAA». */
+  calendar?: PlanSheetEvent[];
+};
+
+export type PlanSheetEvent = { year: number; month: number; day: number; type: string; brand: string; num: string | null; label: string };
+
+export type V1Row = {
   estado?: unknown;
   fechaRedaccion?: unknown;
   fechaPublicacion?: unknown;
@@ -298,7 +316,7 @@ export function normalizeEditorialSources(sources: RawSource[], options: Normali
 
   const bySource = new Map(sources.map((source) => [source.key, source]));
   const hashes = new Map(sources.map((source) => [source.key, sha256(source.text)]));
-  for (const key of Object.keys(V1_EXPECTED_COUNTS) as EditorialSourceKey[]) {
+  for (const key of Object.keys(V1_EXPECTED_COUNTS) as V1SourceKey[]) {
     if (!bySource.has(key)) warnings.push(`Falta la fuente ${key}; el dataset se genera sin ella.`);
   }
 
@@ -389,8 +407,13 @@ export function normalizeEditorialSources(sources: RawSource[], options: Normali
   }
 
   // 2. Backlog y plan histórico: mismas columnas, fuentes distintas (D-006).
-  const normalizeRows = (source: RawSource, kind: "backlog" | "plan", prefix: "ed-bk" | "ed-pl") => {
-    const parsed = parseJson(source, rejections);
+  const normalizeRows = (
+    source: RawSource,
+    kind: "backlog" | "plan",
+    prefix: "ed-bk" | "ed-pl" | "ed-ps",
+    select: { rows: V1Row[]; include: (row: V1Row) => boolean; expected: number; schema: string } | null = null,
+  ) => {
+    const parsed = select ? select.rows : parseJson(source, rejections);
     const rows = Array.isArray(parsed) ? (parsed as V1Row[]) : [];
     if (parsed !== null && !Array.isArray(parsed)) rejections.push({ source: source.key, sourceIndex: 0, reason: "La raíz no es un array", excerpt: source.text.slice(0, 40) });
     const pieces: EditorialPiece[] = [];
@@ -399,6 +422,7 @@ export function normalizeEditorialSources(sources: RawSource[], options: Normali
     let totalNormalized = 0;
     let briefCount = 0;
     rows.forEach((row, sourceIndex) => {
+      if (select && row && typeof row === "object" && !select.include(row)) return;
       if (!row || typeof row !== "object") {
         rejected += 1;
         rejections.push({ source: source.key, sourceIndex, reason: "Fila no es un objeto", excerpt: String(row).slice(0, 40) });
@@ -465,18 +489,75 @@ export function normalizeEditorialSources(sources: RawSource[], options: Normali
         links: [],
       });
     });
-    const objectRows = rows.filter((row) => row && typeof row === "object");
+    const objectRows = rows.filter((row) => row && typeof row === "object" && (!select || select.include(row)));
     emptyFields[source.key] = emptyFieldStats(objectRows);
     duplicates[source.key] = duplicateStats(objectRows);
     briefs[source.key] = { count: briefCount, totalChars, totalNormalizedChars: totalNormalized };
-    finishArchive(source, "v1.planEditorialRow[13]", pieces.length, rejected, expected[source.key]);
+    finishArchive(source, select?.schema ?? "v1.planEditorialRow[13]", pieces.length, rejected, select?.expected ?? expected[source.key as V1SourceKey]);
     return pieces;
   };
 
   const backlogSource = bySource.get("conjunto-backlog");
   const planSource = bySource.get("conjunto");
   const backlog = backlogSource ? normalizeRows(backlogSource, "backlog", "ed-bk") : [];
-  const plan = planSource ? normalizeRows(planSource, "plan", "ed-pl") : [];
+  const v1Plan = planSource ? normalizeRows(planSource, "plan", "ed-pl") : [];
+
+  // 2b. Hoja «Plan editorial» (D-050): sustituye el plan V1 de las marcas que cubre.
+  let plan = v1Plan;
+  const sheetSource = bySource.get("plan-sheet");
+  if (sheetSource) {
+    const snapshot = parseJson(sheetSource, rejections) as PlanSheetSnapshot | null;
+    const coveredSlugs = new Set(Array.isArray(snapshot?.brands) ? snapshot.brands : []);
+    // Calendario de la hoja: sustituye los eventos V1 de las marcas cubiertas.
+    const sheetEvents: EditorialCalendarEvent[] = [];
+    (Array.isArray(snapshot?.calendar) ? snapshot.calendar : []).forEach((event, sourceIndex) => {
+      const brand = normalizeBrand(event.brand);
+      if (!brand.slug || !coveredSlugs.has(brand.slug)) return;
+      const eventWarnings: string[] = [];
+      const date = validDate(event.year, event.month, event.day, `${event.year}-${event.month}-${event.day}`, eventWarnings, "day");
+      if (!date) {
+        rejections.push({ source: "plan-sheet", sourceIndex, reason: eventWarnings[0] ?? "Evento sin día válido", excerpt: JSON.stringify(event).slice(0, 80) });
+        return;
+      }
+      registerBrand(brand);
+      const sequence = orNull(clean(event.num));
+      const { id, ordinal } = identity.next("ed-ev", ["plan-sheet", event.year, event.month, event.day, brand.literal, sequence, clean(event.type)]);
+      sheetEvents.push({
+        id,
+        provenance: { source: "plan-sheet", sourceIndex, sourceSha256: hashes.get("plan-sheet")!, importedAt, identityOrdinal: ordinal },
+        date,
+        year: event.year,
+        month: event.month,
+        day: event.day,
+        typeLiteral: clean(event.type) || "POST",
+        brand,
+        sequence,
+        label: clean(event.label),
+        pieceId: null,
+      });
+    });
+    if (sheetEvents.length) {
+      const replacedEvents = events.filter((event) => event.brand.slug !== null && coveredSlugs.has(event.brand.slug)).length;
+      const kept = events.filter((event) => !(event.brand.slug !== null && coveredSlugs.has(event.brand.slug)));
+      events.splice(0, events.length, ...kept, ...sheetEvents);
+      events.sort((a, b) => a.date.localeCompare(b.date));
+      warnings.push(`Calendario tomado de la hoja «${snapshot?.origin?.calendarSheet ?? "Calendario"}» para ${[...coveredSlugs].join(", ")}: ${sheetEvents.length} huecos; sustituye ${replacedEvents} eventos V1.`);
+    }
+    const rows = Array.isArray(snapshot?.rows) ? snapshot.rows : [];
+    const covered = new Set(Array.isArray(snapshot?.brands) ? snapshot.brands : []);
+    const include = (row: V1Row) => {
+      const slug = normalizeBrand(row.marca).slug;
+      return slug !== null && covered.has(slug);
+    };
+    const expectedRows = rows.filter((row) => row && typeof row === "object" && include(row)).length;
+    const sheetPlan = normalizeRows(sheetSource, "plan", "ed-ps", { rows, include, expected: expectedRows, schema: "plan-sheet.v1{brands[],rows[13]}" });
+    const replaced = v1Plan.filter((piece) => piece.brand.slug !== null && covered.has(piece.brand.slug));
+    plan = [...v1Plan.filter((piece) => !replaced.includes(piece)), ...sheetPlan];
+    const origin = snapshot?.origin?.fileName ?? sheetSource.fileName;
+    for (const slug of covered) {
+      warnings.push(`Plan de ${slug} tomado de la hoja «${origin}»: ${sheetPlan.filter((piece) => piece.brand.slug === slug).length} piezas; sustituye ${replaced.filter((piece) => piece.brand.slug === slug).length} piezas del plan V1.`);
+    }
+  }
 
   // 3. Huecos y propuestas: relación hueco -> propuestas -> selección.
   const slots: EditorialSlot[] = [];

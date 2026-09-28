@@ -29,13 +29,22 @@ describe("dataset servido por el visor", () => {
   const dataset = getEditorial();
 
   it("expone los recuentos de control de la importación V1", () => {
-    expect(dataset.calendar.events).toHaveLength(39);
+    // 39 eventos V1 − 4 de Xtone + 12 huecos de Xtone en la hoja «Calendario 2026» (D-051).
+    expect(dataset.calendar.events).toHaveLength(47);
     expect(dataset.backlog).toHaveLength(115);
-    expect(dataset.plan).toHaveLength(146);
+    // 146 del plan V1 − 6 de Xtone + 9 de la hoja del equipo (D-050).
+    expect(dataset.plan).toHaveLength(149);
     expect(dataset.slots).toHaveLength(34);
     expect(dataset.slots.reduce((total, slot) => total + slot.proposals.length, 0)).toBe(68);
     expect(dataset.brands).toHaveLength(8);
     expect(dataset.mode).toBe("v1-import");
+  });
+
+  it("toma el plan de Xtone de la hoja del equipo y conserva el V1 del resto (D-050)", () => {
+    const xtone = dataset.plan.filter((piece) => piece.brand.slug === "xtone");
+    expect(xtone).toHaveLength(9);
+    expect(xtone.every((piece) => piece.provenance.source === "plan-sheet" && piece.id.startsWith("ed-ps-"))).toBe(true);
+    expect(dataset.plan.filter((piece) => piece.brand.slug !== "xtone").every((piece) => piece.provenance.source === "conjunto")).toBe(true);
   });
 
   it("conserva los briefs completos con su hash", () => {
@@ -49,8 +58,8 @@ describe("dataset servido por el visor", () => {
 describe("filtros compartibles y CSV", () => {
   it("separa backlog y plan como fuentes distintas", () => {
     expect(queryPieces({ kind: "backlog" }).items).toHaveLength(115);
-    expect(queryPieces({ kind: "plan" }).items).toHaveLength(146);
-    expect(queryPieces({}).items).toHaveLength(261);
+    expect(queryPieces({ kind: "plan" }).items).toHaveLength(149);
+    expect(queryPieces({}).items).toHaveLength(264);
   });
 
   it("aplica marca, mercado y búsqueda sin acentos", () => {
@@ -65,7 +74,7 @@ describe("filtros compartibles y CSV", () => {
   it("ignora valores de filtro inválidos en lugar de fallar", () => {
     expect(parseBrand({ brand: "marca-inexistente" })).toBe("all");
     expect(parseSort({ sort: "columna-falsa", dir: "raro" })).toEqual({ sort: "month", dir: "asc" });
-    expect(queryPieces({ month: "99" }).items).toHaveLength(261);
+    expect(queryPieces({ month: "99" }).items).toHaveLength(264);
   });
 
   it("exporta exactamente las filas visibles, en el mismo orden", () => {

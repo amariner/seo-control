@@ -917,3 +917,39 @@
 - Commit 1698f76 en main, subido y desplegado con `vercel deploy --prod`;
   Inicio y Fuentes comprobados en producción.
 
+## 2026-09-28 · Plan editorial de Xtone desde la hoja del equipo (D-050)
+
+- Importador `import:sheet` (exceljs, dependencia de desarrollo) y fuente `plan-sheet`
+  en contratos y normalizador; snapshot `data/sources/plan-sheet.json` (61 filas, marca activa: xtone).
+- Plan de Xtone: 9 piezas de la hoja sustituyen a las 6 del plan V1 (plan total 146 → 149).
+  El contenido de esas 9 ya estaba en el backlog V1; solo cambian espacios en los briefs.
+- Ficha `/projects/xtone?tab=editorial`: 9 piezas, fuente en la nota y enlace a la derecha
+  «Plan editorial general» → `/editorial/calendario`. Verificado en el navegador a 1440 px.
+- Typecheck y pruebas en verde (visor 127, editorial 47 con `plan-sheet.test.ts`).
+  Sin commit.
+
+## 2026-09-28 · Calendario de publicación en la ficha de marca (D-051)
+
+- Snapshot de la hoja con 75 huecos de «Calendario 2026»; Xtone: 6 POST y 6 NEWS
+  (sustituyen 4 eventos V1). Calendario total 39 → 47.
+- `components/report/publication-slider.tsx` encima de la tabla del plan en
+  `/projects/xtone?tab=editorial`. Verificado a 1440 px y 375 px (sin desbordamiento
+  horizontal); se abre en septiembre y los botones avanzan un mes.
+- Typecheck y `pnpm test` en verde (editorial 48, visor 127). Sin commit.
+- D-052: la lista del plan arranca en el mes en curso. En Xtone quedan las 3 piezas de
+  septiembre y se ocultan 6 (julio y agosto). La hoja no trae piezas de octubre a
+  diciembre, aunque el calendario tiene huecos POST en esos meses.
+- D-053: 6 piezas de Xtone reprogramadas por curación (julio → noviembre, agosto →
+  diciembre). La lista muestra 9 piezas: 3 en septiembre, 3 en noviembre y 3 en
+  diciembre; octubre sigue sin piezas. Hubo que reiniciar el visor en local para
+  vaciar la memoria del proceso; las claves de caché ya incluyen el mes.
+- D-054: conmutador «Tira / Mes completo» en el calendario de publicación. Verificado a
+  1440 px y 375 px: flechas mes a mes, se conserva el mes al cambiar de vista y no hay
+  desbordamiento horizontal. Typecheck y pruebas del visor (127) en verde.
+- Vista «Mes completo» compactada: tres meses a la vista (sep-oct-nov al abrir; la flecha
+  avanza de mes en mes). Comprobado a 1440 px y a ancho de tableta (dos meses).
+- D-055: tabla del plan con las 13 columnas de la hoja, en su orden, y el brief
+  desplegable. Verificado a 1440 px (desplazamiento horizontal dentro de la tabla,
+  sin desbordar la página). Typecheck y pruebas del visor en verde.
+- D-056: tabla compacta; a 1440 px caben las 13 columnas sin scroll (tabla 1118 px =
+  contenedor). Brief en panel emergente centrado. Typecheck y pruebas del visor en verde.

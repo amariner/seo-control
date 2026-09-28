@@ -1,8 +1,8 @@
 import { createHash } from "node:crypto";
 import { access, mkdir, readFile, writeFile } from "node:fs/promises";
 import { join, resolve } from "node:path";
-import { editorialImportReportSchema, type EditorialDataset, type EditorialImportReport, type EditorialSourceKey } from "@seo/contracts";
-import { normalizeEditorialSources, type RawSource } from "./normalize";
+import { editorialImportReportSchema, type EditorialDataset, type EditorialImportReport } from "@seo/contracts";
+import { normalizeEditorialSources, type RawSource, type V1SourceKey } from "./normalize";
 
 /**
  * Importador idempotente de los cuatro snapshots editoriales V1.
@@ -13,7 +13,7 @@ import { normalizeEditorialSources, type RawSource } from "./normalize";
  *   nada salvo que se fuerce; los IDs derivados son deterministas en cualquier caso.
  */
 
-export const V1_SOURCE_FILES: Record<EditorialSourceKey, string> = {
+export const V1_SOURCE_FILES: Record<V1SourceKey, string> = {
   "calendario-2026": "calendario-2026.json",
   "conjunto-backlog": "conjunto-backlog.json",
   conjunto: "conjunto.json",
@@ -29,6 +29,8 @@ export type ImportPaths = {
   archiveDir: string;
   /** Carpeta del dataset normalizado (`packages/editorial/data/normalized`). */
   normalizedDir: string;
+  /** Snapshot de la hoja «Plan editorial» (D-050). Opcional: si no existe, solo V1. */
+  planSheetPath?: string;
 };
 
 export type ImportResult =
@@ -41,6 +43,7 @@ export const DEFAULT_PATHS: ImportPaths = {
   sourceDir: resolve(PACKAGE_ROOT, "../../../seo-dashboard/src/data/plan-editorial"),
   archiveDir: resolve(PACKAGE_ROOT, "data/archive/v1"),
   normalizedDir: resolve(PACKAGE_ROOT, "data/normalized"),
+  planSheetPath: resolve(PACKAGE_ROOT, "data/sources/plan-sheet.json"),
 };
 
 async function exists(path: string) {
@@ -55,7 +58,7 @@ async function exists(path: string) {
 export async function readV1Sources(sourceDir: string) {
   const sources: RawSource[] = [];
   const missing: string[] = [];
-  for (const [key, fileName] of Object.entries(V1_SOURCE_FILES) as Array<[EditorialSourceKey, string]>) {
+  for (const [key, fileName] of Object.entries(V1_SOURCE_FILES) as Array<[V1SourceKey, string]>) {
     const path = join(sourceDir, fileName);
     if (!(await exists(path))) {
       missing.push(fileName);
@@ -85,6 +88,10 @@ export async function importV1Editorial(paths: ImportPaths = DEFAULT_PATHS, opti
   const now = options.now ?? new Date();
   const { sources, missing } = await readV1Sources(paths.sourceDir);
   if (!sources.length) throw new Error(`No se encontró ningún snapshot V1 en ${paths.sourceDir}`);
+  const v1Sources = [...sources];
+  if (paths.planSheetPath && (await exists(paths.planSheetPath))) {
+    sources.push({ key: "plan-sheet", fileName: "plan-sheet.json", text: await readFile(paths.planSheetPath, "utf8") });
+  }
   const fingerprint = fingerprintSources(sources);
   const previous = await readPreviousReport(paths.normalizedDir);
   if (previous && previous.inputFingerprint === fingerprint && !options.force) {
@@ -97,7 +104,7 @@ export async function importV1Editorial(paths: ImportPaths = DEFAULT_PATHS, opti
   await mkdir(paths.archiveDir, { recursive: true });
   await mkdir(paths.normalizedDir, { recursive: true });
   const written: string[] = [];
-  for (const source of sources) {
+  for (const source of v1Sources) {
     const target = join(paths.archiveDir, source.fileName);
     await writeFile(target, source.text, "utf8");
     written.push(target);
@@ -108,7 +115,7 @@ export async function importV1Editorial(paths: ImportPaths = DEFAULT_PATHS, opti
     inputFingerprint: fingerprint,
     origin: "SEO Dashboard V1 · src/data/plan-editorial",
     note: "Copias literales de los snapshots V1. Solo procedencia: nunca se sirven al navegador ni se editan.",
-    files: dataset.report.archives.map((archive) => ({ key: archive.key, fileName: archive.fileName, sha256: archive.sha256, byteLength: archive.byteLength, expectedCount: archive.expectedCount, importedCount: archive.importedCount, status: archive.status })),
+    files: dataset.report.archives.filter((archive) => archive.key !== "plan-sheet").map((archive) => ({ key: archive.key, fileName: archive.fileName, sha256: archive.sha256, byteLength: archive.byteLength, expectedCount: archive.expectedCount, importedCount: archive.importedCount, status: archive.status })),
   };
   const manifestPath = join(paths.archiveDir, "manifest.json");
   await writeFile(manifestPath, `${JSON.stringify(manifest, null, 2)}\n`, "utf8");

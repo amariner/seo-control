@@ -18,7 +18,8 @@ import { ctrCurve, normalizePath, potential } from "./opportunities";
  * dos definiciones en la misma página harían que los números no cuadraran.
  */
 
-export type EditorialTarget = { id: string; month: string | null; title: string; type: string; status: string; keyword: string | null };
+/** `current`: pieza del plan vigente de la hoja del equipo (D-050); se cruza aunque su mes ya haya pasado. */
+export type EditorialTarget = { id: string; month: string | null; title: string; type: string; status: string; keyword: string | null; current?: boolean };
 
 type Range = { startDate: string; endDate: string };
 type Totals3<T> = { current: T; previous: T; previousYear: T };
@@ -340,11 +341,12 @@ export async function buildBrandReport(input: {
   /*
    * Solo se cruzan con Google las piezas que aún importan —desde el mes pasado
    * en adelante— y como mucho 20: Porcelanosa tiene más de cien piezas y una
-   * consulta por pieza agotaba la cuota de carga de Search Console.
+   * consulta por pieza agotaba la cuota de carga de Search Console. Las piezas
+   * de un plan vigente (hoja del equipo, D-050) se cruzan todas.
    */
   const lastMonth = iso(Date.UTC(Number(cutoff.slice(0, 4)), Number(cutoff.slice(5, 7)) - 2, 1)).slice(0, 7);
   const editorialTargets = input.editorial
-    .filter((target) => !target.month || target.month >= lastMonth)
+    .filter((target) => target.current || !target.month || target.month >= lastMonth)
     .sort((a, b) => (a.month ?? "9999").localeCompare(b.month ?? "9999"))
     .slice(0, 20);
   const topLandingPaths = (landingReport?.rows ?? [])

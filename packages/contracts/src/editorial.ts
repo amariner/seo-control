@@ -23,10 +23,14 @@ export const editorialBrandSlugSchema = z.enum(BRAND_SLUGS);
 export const EDITORIAL_BRANDS: ReadonlyArray<{ slug: z.infer<typeof editorialBrandSlugSchema>; name: string; code: string; pilot: boolean }> =
   BRANDS.map(({ slug, name, code, pilot }) => ({ slug, name, code, pilot }));
 
-/** Fuentes V1 preservadas. La clave es estable y aparece en cada registro. */
-export const editorialSourceKeySchema = z.enum(["calendario-2026", "conjunto-backlog", "conjunto", "conjunto-propuestas"]);
+/**
+ * Fuentes preservadas. La clave es estable y aparece en cada registro: las
+ * cuatro V1 y `plan-sheet`, la hoja «Plan editorial» del equipo (xlsx) que
+ * sustituye al plan V1 de las marcas que cubre (D-050).
+ */
+export const editorialSourceKeySchema = z.enum(["calendario-2026", "conjunto-backlog", "conjunto", "conjunto-propuestas", "plan-sheet"]);
 
-/** Procedencia de una pieza: las cuatro fuentes V1 o "workbench" para piezas creadas directamente en V2 (P1.4). */
+/** Procedencia de una pieza: una fuente preservada o "workbench" para piezas creadas directamente en V2 (P1.4). */
 export const editorialProvenanceSourceSchema = z.union([editorialSourceKeySchema, z.literal("workbench")]);
 
 export const editorialStatusSchema = z.enum([
@@ -104,7 +108,7 @@ export type EditorialLinkKind = z.infer<typeof editorialLinkKindSchema>;
 export type EditorialLink = z.infer<typeof editorialLinkSchema>;
 
 export const editorialPieceSchema = z.object({
-  id: z.string().regex(/^ed-(bk|pl)-[a-f0-9]{16}(-\d+)?$/),
+  id: z.string().regex(/^ed-(bk|pl|ps)-[a-f0-9]{16}(-\d+)?$/),
   kind: z.enum(["backlog", "plan"]),
   provenance: editorialProvenanceSchema,
   status: editorialStatusSchema,

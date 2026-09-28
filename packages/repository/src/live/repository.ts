@@ -134,7 +134,7 @@ export function createLiveRepository(env: Env = process.env): MetricsRepository 
       if (!brand) throw new RepositoryUnavailableError("live", `La marca «${request.brand}» no tiene lectura directa configurada.`, "Añádela a LIVE_BRANDS con su propiedad GA4 y su sitio de Search Console.");
       const cutoff = liveCutoff();
       const window = resolveReportWindow(request.range, cutoff);
-      const key = `report:${BRAND_REPORT_VERSION}:${brand.slug}:${request.market}:${window.start}:${window.end}:${window.previousStart}:${window.previousYearStart}:${request.editorial.map((item) => `${item.id}=${item.keyword}`).join(",")}`;
+      const key = `report:${BRAND_REPORT_VERSION}:${brand.slug}:${request.market}:${window.start}:${window.end}:${window.previousStart}:${window.previousYearStart}:${request.editorial.map((item) => `${item.id}=${item.keyword}@${item.month ?? ""}${item.current ? "!" : ""}`).join(",")}`;
       return remember(key, () => buildBrandReport({ env, brand, market: request.market, window, cutoff, editorial: request.editorial }));
     },
 

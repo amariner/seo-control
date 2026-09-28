@@ -2,6 +2,20 @@
 
 Última actualización: 24 de septiembre de 2026 (shadcn/ui y dashboard-01 en el visor, D-044, rama `feat/shadcn-dashboard`).
 
+## Plan editorial desde la hoja del equipo · D-050 (2026-09-28, sin commit)
+
+- Hecho: fuente `plan-sheet` (`packages/editorial/src/plan-sheet.ts`, `scripts/import-sheet.ts`,
+  `pnpm editorial:import-sheet -- --file <xlsx> --brand <slug>`); Xtone activada con
+  `plan_editorial_seo.xlsx` (9 piezas). La ficha de marca muestra solo el plan de la hoja
+  y enlaza a la derecha con «Plan editorial general» (`/editorial/calendario`).
+- Calendario (D-051): la hoja «Calendario 2026» alimenta los huecos POST/NEWS de las
+  marcas activadas; la ficha los muestra en una tira horizontal (`publication-slider.tsx`).
+- Xtone reprogramada por curación (D-053): las piezas de julio y agosto pasan a noviembre y
+  diciembre; octubre sigue sin piezas.
+- Calendario con vista «Tira / Mes completo» (D-054). Tabla con las 13 columnas de la hoja (D-055).
+- Reanudar: activar las demás marcas cuando el responsable lo confirme (mismo comando
+  con `--brand noken`, etc.) y decidir si el backlog V1 de esas marcas se retira.
+
 ## Patrón de la ficha en todo el visor · D-049 (2026-09-25, en producción)
 
 - Hecho: clases globales (`apps/viewer/app/globals.css`) y `MetricCard`/`.ds-metric-strip`

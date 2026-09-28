@@ -1,6 +1,6 @@
 {
  "schemaVersion": "editorial.v1",
- "generatedAt": "2026-09-02T14:33:01.784Z",
+ "generatedAt": "2026-09-28T07:36:27.539Z",
  "mode": "v1-import",
  "planningYear": 2026,
  "brands": [
@@ -68,10 +68,10 @@
    "slug": "xtone",
    "name": "XTONE",
    "code": "XTONE",
-   "pilot": false,
-   "calendarEvents": 4,
+   "pilot": true,
+   "calendarEvents": 12,
    "backlogPieces": 12,
-   "planPieces": 6,
+   "planPieces": 9,
    "slots": 4
   },
   {
@@ -93,7 +93,7 @@
      "source": "calendario-2026",
      "sourceIndex": 0,
      "sourceSha256": "7255c673bdaee766a6c74d302f902969b4b226c250cf1e966ca31e24bcbb0187",
-     "importedAt": "2026-09-02T14:33:01.784Z",
+     "importedAt": "2026-09-28T07:36:27.539Z",
      "identityOrdinal": 1
     },
     "date": "2026-07-02",
@@ -111,12 +111,12 @@
     "pieceId": null
    },
    {
-    "id": "ed-ev-2ce22089cf47060b",
+    "id": "ed-ev-9f1c041164a176e1",
     "provenance": {
-     "source": "calendario-2026",
+     "source": "plan-sheet",
      "sourceIndex": 1,
-     "sourceSha256": "7255c673bdaee766a6c74d302f902969b4b226c250cf1e966ca31e24bcbb0187",
-     "importedAt": "2026-09-02T14:33:01.784Z",
+     "sourceSha256": "ba4c17eda90eda4af30c5830e2502b52f9dff42c7d4bc302b6573fc464226cfc",
+     "importedAt": "2026-09-28T07:36:27.539Z",
      "identityOrdinal": 1
     },
     "date": "2026-07-07",
@@ -127,7 +127,7 @@
     "brand": {
      "slug": "xtone",
      "line": null,
-     "literal": "Xtone"
+     "literal": "XTONE"
     },
     "sequence": null,
     "label": "POST XTONE",
@@ -139,7 +139,7 @@
      "source": "calendario-2026",
      "sourceIndex": 2,
      "sourceSha256": "7255c673bdaee766a6c74d302f902969b4b226c250cf1e966ca31e24bcbb0187",
-     "importedAt": "2026-09-02T14:33:01.784Z",
+     "importedAt": "2026-09-28T07:36:27.539Z",
      "identityOrdinal": 1
     },
     "date": "2026-07-09",
@@ -162,7 +162,7 @@
      "source": "calendario-2026",
      "sourceIndex": 3,
      "sourceSha256": "7255c673bdaee766a6c74d302f902969b4b226c250cf1e966ca31e24bcbb0187",
-     "importedAt": "2026-09-02T14:33:01.784Z",
+     "importedAt": "2026-09-28T07:36:27.539Z",
      "identityOrdinal": 1
     },
     "date": "2026-07-14",
@@ -185,7 +185,7 @@
      "source": "calendario-2026",
      "sourceIndex": 4,
      "sourceSha256": "7255c673bdaee766a6c74d302f902969b4b226c250cf1e966ca31e24bcbb0187",
-     "importedAt": "2026-09-02T14:33:01.784Z",
+     "importedAt": "2026-09-28T07:36:27.539Z",
      "identityOrdinal": 1
     },
     "date": "2026-07-21",
@@ -203,12 +203,35 @@
     "pieceId": null
    },
    {
+    "id": "ed-ev-3cb781d846a8ef2b",
+    "provenance": {
+     "source": "plan-sheet",
+     "sourceIndex": 7,
+     "sourceSha256": "ba4c17eda90eda4af30c5830e2502b52f9dff42c7d4bc302b6573fc464226cfc",
+     "importedAt": "2026-09-28T07:36:27.539Z",
+     "identityOrdinal": 1
+    },
+    "date": "2026-07-22",
+    "year": 2026,
+    "month": 7,
+    "day": 22,
+    "typeLiteral": "NEWS",
+    "brand": {
+     "slug": "xtone",
+     "line": null,
+     "literal": "XTONE"
+    },
+    "sequence": null,
+    "label": "NEWS XTONE",
+    "pieceId": null
+   },
+   {
     "id": "ed-ev-e34748faeb159455",
     "provenance": {
      "source": "calendario-2026",
      "sourceIndex": 5,
      "sourceSha256": "7255c673bdaee766a6c74d302f902969b4b226c250cf1e966ca31e24bcbb0187",
-     "importedAt": "2026-09-02T14:33:01.784Z",
+     "importedAt": "2026-09-28T07:36:27.539Z",
      "identityOrdinal": 1
     },
     "date": "2026-07-23",
@@ -231,7 +254,7 @@
      "source": "calendario-2026",
      "sourceIndex": 6,
      "sourceSha256": "7255c673bdaee766a6c74d302f902969b4b226c250cf1e966ca31e24bcbb0187",
-     "importedAt": "2026-09-02T14:33:01.784Z",
+     "importedAt": "2026-09-28T07:36:27.539Z",
      "identityOrdinal": 1
     },
     "date": "2026-07-28",
@@ -249,12 +272,12 @@
     "pieceId": null
    },
    {
-    "id": "ed-ev-9a2d619945352605",
+    "id": "ed-ev-6900e791c4e048ef",
     "provenance": {
-     "source": "calendario-2026",
-     "sourceIndex": 7,
-     "sourceSha256": "7255c673bdaee766a6c74d302f902969b4b226c250cf1e966ca31e24bcbb0187",
-     "importedAt": "2026-09-02T14:33:01.784Z",
+     "source": "plan-sheet",
+     "sourceIndex": 12,
+     "sourceSha256": "ba4c17eda90eda4af30c5830e2502b52f9dff42c7d4bc302b6573fc464226cfc",
+     "importedAt": "2026-09-28T07:36:27.539Z",
      "identityOrdinal": 1
     },
     "date": "2026-08-11",
@@ -265,7 +288,7 @@
     "brand": {
      "slug": "xtone",
      "line": null,
-     "literal": "Xtone"
+     "literal": "XTONE"
     },
     "sequence": null,
     "label": "POST XTONE",
@@ -277,7 +300,7 @@
      "source": "calendario-2026",
      "sourceIndex": 8,
      "sourceSha256": "7255c673bdaee766a6c74d302f902969b4b226c250cf1e966ca31e24bcbb0187",
-     "importedAt": "2026-09-02T14:33:01.784Z",
+     "importedAt": "2026-09-28T07:36:27.539Z",
      "identityOrdinal": 1
     },
     "date": "2026-08-13",
@@ -300,7 +323,7 @@
      "source": "calendario-2026",
      "sourceIndex": 9,
      "sourceSha256": "7255c673bdaee766a6c74d302f902969b4b226c250cf1e966ca31e24bcbb0187",
-     "importedAt": "2026-09-02T14:33:01.784Z",
+     "importedAt": "2026-09-28T07:36:27.539Z",
      "identityOrdinal": 1
     },
     "date": "2026-08-18",
@@ -318,12 +341,35 @@
     "pieceId": null
    },
    {
+    "id": "ed-ev-b8a63913d2a2e1c9",
+    "provenance": {
+     "source": "plan-sheet",
+     "sourceIndex": 17,
+     "sourceSha256": "ba4c17eda90eda4af30c5830e2502b52f9dff42c7d4bc302b6573fc464226cfc",
+     "importedAt": "2026-09-28T07:36:27.539Z",
+     "identityOrdinal": 1
+    },
+    "date": "2026-08-20",
+    "year": 2026,
+    "month": 8,
+    "day": 20,
+    "typeLiteral": "NEWS",
+    "brand": {
+     "slug": "xtone",
+     "line": null,
+     "literal": "XTONE"
+    },
+    "sequence": null,
+    "label": "NEWS XTONE",
+    "pieceId": null
+   },
+   {
     "id": "ed-ev-43de0ef0cf29066f",
     "provenance": {
      "source": "calendario-2026",
      "sourceIndex": 10,
      "sourceSha256": "7255c673bdaee766a6c74d302f902969b4b226c250cf1e966ca31e24bcbb0187",
-     "importedAt": "2026-09-02T14:33:01.784Z",
+     "importedAt": "2026-09-28T07:36:27.539Z",
      "identityOrdinal": 1
     },
     "date": "2026-08-25",
@@ -346,7 +392,7 @@
      "source": "calendario-2026",
      "sourceIndex": 11,
      "sourceSha256": "7255c673bdaee766a6c74d302f902969b4b226c250cf1e966ca31e24bcbb0187",
-     "importedAt": "2026-09-02T14:33:01.784Z",
+     "importedAt": "2026-09-28T07:36:27.539Z",
      "identityOrdinal": 1
     },
     "date": "2026-08-26",
@@ -369,7 +415,7 @@
      "source": "calendario-2026",
      "sourceIndex": 12,
      "sourceSha256": "7255c673bdaee766a6c74d302f902969b4b226c250cf1e966ca31e24bcbb0187",
-     "importedAt": "2026-09-02T14:33:01.784Z",
+     "importedAt": "2026-09-28T07:36:27.539Z",
      "identityOrdinal": 1
     },
     "date": "2026-08-27",
@@ -387,12 +433,35 @@
     "pieceId": null
    },
    {
+    "id": "ed-ev-ad145442020b7d81",
+    "provenance": {
+     "source": "plan-sheet",
+     "sourceIndex": 21,
+     "sourceSha256": "ba4c17eda90eda4af30c5830e2502b52f9dff42c7d4bc302b6573fc464226cfc",
+     "importedAt": "2026-09-28T07:36:27.539Z",
+     "identityOrdinal": 1
+    },
+    "date": "2026-09-01",
+    "year": 2026,
+    "month": 9,
+    "day": 1,
+    "typeLiteral": "NEWS",
+    "brand": {
+     "slug": "xtone",
+     "line": null,
+     "literal": "XTONE"
+    },
+    "sequence": null,
+    "label": "NEWS XTONE",
+    "pieceId": null
+   },
+   {
     "id": "ed-ev-59211abbf319bda1",
     "provenance": {
      "source": "calendario-2026",
      "sourceIndex": 13,
      "sourceSha256": "7255c673bdaee766a6c74d302f902969b4b226c250cf1e966ca31e24bcbb0187",
-     "importedAt": "2026-09-02T14:33:01.784Z",
+     "importedAt": "2026-09-28T07:36:27.539Z",
      "identityOrdinal": 1
     },
     "date": "2026-09-03",
@@ -410,35 +479,12 @@
     "pieceId": null
    },
    {
-    "id": "ed-ev-d3021d46e02c1f64",
-    "provenance": {
-     "source": "calendario-2026",
-     "sourceIndex": 14,
-     "sourceSha256": "7255c673bdaee766a6c74d302f902969b4b226c250cf1e966ca31e24bcbb0187",
-     "importedAt": "2026-09-02T14:33:01.784Z",
-     "identityOrdinal": 1
-    },
-    "date": "2026-09-08",
-    "year": 2026,
-    "month": 9,
-    "day": 8,
-    "typeLiteral": "POST",
-    "brand": {
-     "slug": "xtone",
-     "line": null,
-     "literal": "Xtone"
-    },
-    "sequence": null,
-    "label": "POST XTONE",
-    "pieceId": null
-   },
-   {
     "id": "ed-ev-80a03bc6f43de115",
     "provenance": {
      "source": "calendario-2026",
      "sourceIndex": 15,
      "sourceSha256": "7255c673bdaee766a6c74d302f902969b4b226c250cf1e966ca31e24bcbb0187",
-     "importedAt": "2026-09-02T14:33:01.784Z",
+     "importedAt": "2026-09-28T07:36:27.539Z",
      "identityOrdinal": 1
     },
     "date": "2026-09-10",
@@ -461,7 +507,7 @@
      "source": "calendario-2026",
      "sourceIndex": 16,
      "sourceSha256": "7255c673bdaee766a6c74d302f902969b4b226c250cf1e966ca31e24bcbb0187",
-     "importedAt": "2026-09-02T14:33:01.784Z",
+     "importedAt": "2026-09-28T07:36:27.539Z",
      "identityOrdinal": 1
     },
     "date": "2026-09-15",
@@ -484,7 +530,7 @@
      "source": "calendario-2026",
      "sourceIndex": 17,
      "sourceSha256": "7255c673bdaee766a6c74d302f902969b4b226c250cf1e966ca31e24bcbb0187",
-     "importedAt": "2026-09-02T14:33:01.784Z",
+     "importedAt": "2026-09-28T07:36:27.539Z",
      "identityOrdinal": 1
     },
     "date": "2026-09-22",
@@ -507,7 +553,7 @@
      "source": "calendario-2026",
      "sourceIndex": 18,
      "sourceSha256": "7255c673bdaee766a6c74d302f902969b4b226c250cf1e966ca31e24bcbb0187",
-     "importedAt": "2026-09-02T14:33:01.784Z",
+     "importedAt": "2026-09-28T07:36:27.539Z",
      "identityOrdinal": 1
     },
     "date": "2026-09-24",
@@ -530,7 +576,7 @@
      "source": "calendario-2026",
      "sourceIndex": 19,
      "sourceSha256": "7255c673bdaee766a6c74d302f902969b4b226c250cf1e966ca31e24bcbb0187",
-     "importedAt": "2026-09-02T14:33:01.784Z",
+     "importedAt": "2026-09-28T07:36:27.539Z",
      "identityOrdinal": 1
     },
     "date": "2026-09-28",
@@ -548,12 +594,35 @@
     "pieceId": null
    },
    {
+    "id": "ed-ev-02ba29db7c39d26d",
+    "provenance": {
+     "source": "plan-sheet",
+     "sourceIndex": 34,
+     "sourceSha256": "ba4c17eda90eda4af30c5830e2502b52f9dff42c7d4bc302b6573fc464226cfc",
+     "importedAt": "2026-09-28T07:36:27.539Z",
+     "identityOrdinal": 1
+    },
+    "date": "2026-09-29",
+    "year": 2026,
+    "month": 9,
+    "day": 29,
+    "typeLiteral": "POST",
+    "brand": {
+     "slug": "xtone",
+     "line": null,
+     "literal": "XTONE"
+    },
+    "sequence": null,
+    "label": "POST XTONE",
+    "pieceId": null
+   },
+   {
     "id": "ed-ev-5fb292fefa67044e",
     "provenance": {
      "source": "calendario-2026",
      "sourceIndex": 20,
      "sourceSha256": "7255c673bdaee766a6c74d302f902969b4b226c250cf1e966ca31e24bcbb0187",
-     "importedAt": "2026-09-02T14:33:01.784Z",
+     "importedAt": "2026-09-28T07:36:27.539Z",
      "identityOrdinal": 1
     },
     "date": "2026-09-30",
@@ -571,12 +640,12 @@
     "pieceId": null
    },
    {
-    "id": "ed-ev-73bb9346dcba04a8",
+    "id": "ed-ev-18c8fb0430dd45ae",
     "provenance": {
-     "source": "calendario-2026",
-     "sourceIndex": 21,
-     "sourceSha256": "7255c673bdaee766a6c74d302f902969b4b226c250cf1e966ca31e24bcbb0187",
-     "importedAt": "2026-09-02T14:33:01.784Z",
+     "source": "plan-sheet",
+     "sourceIndex": 38,
+     "sourceSha256": "ba4c17eda90eda4af30c5830e2502b52f9dff42c7d4bc302b6573fc464226cfc",
+     "importedAt": "2026-09-28T07:36:27.539Z",
      "identityOrdinal": 1
     },
     "date": "2026-10-06",
@@ -587,7 +656,7 @@
     "brand": {
      "slug": "xtone",
      "line": null,
-     "literal": "Xtone"
+     "literal": "XTONE"
     },
     "sequence": null,
     "label": "POST XTONE",
@@ -599,7 +668,7 @@
      "source": "calendario-2026",
      "sourceIndex": 22,
      "sourceSha256": "7255c673bdaee766a6c74d302f902969b4b226c250cf1e966ca31e24bcbb0187",
-     "importedAt": "2026-09-02T14:33:01.784Z",
+     "importedAt": "2026-09-28T07:36:27.539Z",
      "identityOrdinal": 1
     },
     "date": "2026-10-08",
@@ -622,7 +691,7 @@
      "source": "calendario-2026",
      "sourceIndex": 23,
      "sourceSha256": "7255c673bdaee766a6c74d302f902969b4b226c250cf1e966ca31e24bcbb0187",
-     "importedAt": "2026-09-02T14:33:01.784Z",
+     "importedAt": "2026-09-28T07:36:27.539Z",
      "identityOrdinal": 1
     },
     "date": "2026-10-13",
@@ -645,7 +714,7 @@
      "source": "calendario-2026",
      "sourceIndex": 24,
      "sourceSha256": "7255c673bdaee766a6c74d302f902969b4b226c250cf1e966ca31e24bcbb0187",
-     "importedAt": "2026-09-02T14:33:01.784Z",
+     "importedAt": "2026-09-28T07:36:27.539Z",
      "identityOrdinal": 1
     },
     "date": "2026-10-15",
@@ -668,7 +737,7 @@
      "source": "calendario-2026",
      "sourceIndex": 25,
      "sourceSha256": "7255c673bdaee766a6c74d302f902969b4b226c250cf1e966ca31e24bcbb0187",
-     "importedAt": "2026-09-02T14:33:01.784Z",
+     "importedAt": "2026-09-28T07:36:27.539Z",
      "identityOrdinal": 1
     },
     "date": "2026-10-20",
@@ -686,12 +755,35 @@
     "pieceId": null
    },
    {
+    "id": "ed-ev-8cc4aeccb305cea1",
+    "provenance": {
+     "source": "plan-sheet",
+     "sourceIndex": 45,
+     "sourceSha256": "ba4c17eda90eda4af30c5830e2502b52f9dff42c7d4bc302b6573fc464226cfc",
+     "importedAt": "2026-09-28T07:36:27.539Z",
+     "identityOrdinal": 1
+    },
+    "date": "2026-10-21",
+    "year": 2026,
+    "month": 10,
+    "day": 21,
+    "typeLiteral": "NEWS",
+    "brand": {
+     "slug": "xtone",
+     "line": null,
+     "literal": "XTONE"
+    },
+    "sequence": null,
+    "label": "NEWS XTONE",
+    "pieceId": null
+   },
+   {
     "id": "ed-ev-9c1c641e41b7bb38",
     "provenance": {
      "source": "calendario-2026",
      "sourceIndex": 26,
      "sourceSha256": "7255c673bdaee766a6c74d302f902969b4b226c250cf1e966ca31e24bcbb0187",
-     "importedAt": "2026-09-02T14:33:01.784Z",
+     "importedAt": "2026-09-28T07:36:27.539Z",
      "identityOrdinal": 1
     },
     "date": "2026-10-22",
@@ -714,7 +806,7 @@
      "source": "calendario-2026",
      "sourceIndex": 27,
      "sourceSha256": "7255c673bdaee766a6c74d302f902969b4b226c250cf1e966ca31e24bcbb0187",
-     "importedAt": "2026-09-02T14:33:01.784Z",
+     "importedAt": "2026-09-28T07:36:27.539Z",
      "identityOrdinal": 1
     },
     "date": "2026-10-27",
@@ -737,7 +829,7 @@
      "source": "calendario-2026",
      "sourceIndex": 28,
      "sourceSha256": "7255c673bdaee766a6c74d302f902969b4b226c250cf1e966ca31e24bcbb0187",
-     "importedAt": "2026-09-02T14:33:01.784Z",
+     "importedAt": "2026-09-28T07:36:27.539Z",
      "identityOrdinal": 1
     },
     "date": "2026-10-29",
@@ -755,12 +847,35 @@
     "pieceId": null
    },
    {
+    "id": "ed-ev-5a13a704f213c26a",
+    "provenance": {
+     "source": "plan-sheet",
+     "sourceIndex": 50,
+     "sourceSha256": "ba4c17eda90eda4af30c5830e2502b52f9dff42c7d4bc302b6573fc464226cfc",
+     "importedAt": "2026-09-28T07:36:27.539Z",
+     "identityOrdinal": 1
+    },
+    "date": "2026-11-03",
+    "year": 2026,
+    "month": 11,
+    "day": 3,
+    "typeLiteral": "POST",
+    "brand": {
+     "slug": "xtone",
+     "line": null,
+     "literal": "XTONE"
+    },
+    "sequence": null,
+    "label": "POST XTONE",
+    "pieceId": null
+   },
+   {
     "id": "ed-ev-0374897dcc978c8d",
     "provenance": {
      "source": "calendario-2026",
      "sourceIndex": 29,
      "sourceSha256": "7255c673bdaee766a6c74d302f902969b4b226c250cf1e966ca31e24bcbb0187",
-     "importedAt": "2026-09-02T14:33:01.784Z",
+     "importedAt": "2026-09-28T07:36:27.539Z",
      "identityOrdinal": 1
     },
     "date": "2026-11-10",
@@ -783,7 +898,7 @@
      "source": "calendario-2026",
      "sourceIndex": 30,
      "sourceSha256": "7255c673bdaee766a6c74d302f902969b4b226c250cf1e966ca31e24bcbb0187",
-     "importedAt": "2026-09-02T14:33:01.784Z",
+     "importedAt": "2026-09-28T07:36:27.539Z",
      "identityOrdinal": 1
     },
     "date": "2026-11-12",
@@ -806,7 +921,7 @@
      "source": "calendario-2026",
      "sourceIndex": 31,
      "sourceSha256": "7255c673bdaee766a6c74d302f902969b4b226c250cf1e966ca31e24bcbb0187",
-     "importedAt": "2026-09-02T14:33:01.784Z",
+     "importedAt": "2026-09-28T07:36:27.539Z",
      "identityOrdinal": 1
     },
     "date": "2026-11-17",
@@ -824,12 +939,35 @@
     "pieceId": null
    },
    {
+    "id": "ed-ev-b7d7f2cfa1edb389",
+    "provenance": {
+     "source": "plan-sheet",
+     "sourceIndex": 57,
+     "sourceSha256": "ba4c17eda90eda4af30c5830e2502b52f9dff42c7d4bc302b6573fc464226cfc",
+     "importedAt": "2026-09-28T07:36:27.539Z",
+     "identityOrdinal": 1
+    },
+    "date": "2026-11-18",
+    "year": 2026,
+    "month": 11,
+    "day": 18,
+    "typeLiteral": "NEWS",
+    "brand": {
+     "slug": "xtone",
+     "line": null,
+     "literal": "XTONE"
+    },
+    "sequence": null,
+    "label": "NEWS XTONE",
+    "pieceId": null
+   },
+   {
     "id": "ed-ev-477c8c3e589844c2",
     "provenance": {
      "source": "calendario-2026",
      "sourceIndex": 32,
      "sourceSha256": "7255c673bdaee766a6c74d302f902969b4b226c250cf1e966ca31e24bcbb0187",
-     "importedAt": "2026-09-02T14:33:01.784Z",
+     "importedAt": "2026-09-28T07:36:27.539Z",
      "identityOrdinal": 1
     },
     "date": "2026-11-24",
@@ -852,7 +990,7 @@
      "source": "calendario-2026",
      "sourceIndex": 33,
      "sourceSha256": "7255c673bdaee766a6c74d302f902969b4b226c250cf1e966ca31e24bcbb0187",
-     "importedAt": "2026-09-02T14:33:01.784Z",
+     "importedAt": "2026-09-28T07:36:27.539Z",
      "identityOrdinal": 1
     },
     "date": "2026-11-25",
@@ -875,7 +1013,7 @@
      "source": "calendario-2026",
      "sourceIndex": 34,
      "sourceSha256": "7255c673bdaee766a6c74d302f902969b4b226c250cf1e966ca31e24bcbb0187",
-     "importedAt": "2026-09-02T14:33:01.784Z",
+     "importedAt": "2026-09-28T07:36:27.539Z",
      "identityOrdinal": 1
     },
     "date": "2026-11-26",
@@ -893,12 +1031,35 @@
     "pieceId": null
    },
    {
+    "id": "ed-ev-6f569a2f7f0b243b",
+    "provenance": {
+     "source": "plan-sheet",
+     "sourceIndex": 63,
+     "sourceSha256": "ba4c17eda90eda4af30c5830e2502b52f9dff42c7d4bc302b6573fc464226cfc",
+     "importedAt": "2026-09-28T07:36:27.539Z",
+     "identityOrdinal": 1
+    },
+    "date": "2026-12-01",
+    "year": 2026,
+    "month": 12,
+    "day": 1,
+    "typeLiteral": "POST",
+    "brand": {
+     "slug": "xtone",
+     "line": null,
+     "literal": "XTONE"
+    },
+    "sequence": null,
+    "label": "POST XTONE",
+    "pieceId": null
+   },
+   {
     "id": "ed-ev-3dac2c406dbe708b",
     "provenance": {
      "source": "calendario-2026",
      "sourceIndex": 35,
      "sourceSha256": "7255c673bdaee766a6c74d302f902969b4b226c250cf1e966ca31e24bcbb0187",
-     "importedAt": "2026-09-02T14:33:01.784Z",
+     "importedAt": "2026-09-28T07:36:27.539Z",
      "identityOrdinal": 1
     },
     "date": "2026-12-08",
@@ -921,7 +1082,7 @@
      "source": "calendario-2026",
      "sourceIndex": 36,
      "sourceSha256": "7255c673bdaee766a6c74d302f902969b4b226c250cf1e966ca31e24bcbb0187",
-     "importedAt": "2026-09-02T14:33:01.784Z",
+     "importedAt": "2026-09-28T07:36:27.539Z",
      "identityOrdinal": 1
     },
     "date": "2026-12-17",
@@ -944,7 +1105,7 @@
      "source": "calendario-2026",
      "sourceIndex": 37,
      "sourceSha256": "7255c673bdaee766a6c74d302f902969b4b226c250cf1e966ca31e24bcbb0187",
-     "importedAt": "2026-09-02T14:33:01.784Z",
+     "importedAt": "2026-09-28T07:36:27.539Z",
      "identityOrdinal": 1
     },
     "date": "2026-12-21",
@@ -962,12 +1123,35 @@
     "pieceId": null
    },
    {
+    "id": "ed-ev-9201df8f982379a3",
+    "provenance": {
+     "source": "plan-sheet",
+     "sourceIndex": 72,
+     "sourceSha256": "ba4c17eda90eda4af30c5830e2502b52f9dff42c7d4bc302b6573fc464226cfc",
+     "importedAt": "2026-09-28T07:36:27.539Z",
+     "identityOrdinal": 1
+    },
+    "date": "2026-12-22",
+    "year": 2026,
+    "month": 12,
+    "day": 22,
+    "typeLiteral": "NEWS",
+    "brand": {
+     "slug": "xtone",
+     "line": null,
+     "literal": "XTONE"
+    },
+    "sequence": null,
+    "label": "NEWS XTONE",
+    "pieceId": null
+   },
+   {
     "id": "ed-ev-1f6d16f6f9b837d6",
     "provenance": {
      "source": "calendario-2026",
      "sourceIndex": 38,
      "sourceSha256": "7255c673bdaee766a6c74d302f902969b4b226c250cf1e966ca31e24bcbb0187",
-     "importedAt": "2026-09-02T14:33:01.784Z",
+     "importedAt": "2026-09-28T07:36:27.539Z",
      "identityOrdinal": 1
     },
     "date": "2026-12-28",
@@ -1078,7 +1262,7 @@
     "source": "conjunto-backlog",
     "sourceIndex": 0,
     "sourceSha256": "4b1edd3c9cf061630901d26c512a39e0227a67556a64d509168ea18cb887c330",
-    "importedAt": "2026-09-02T14:33:01.784Z",
+    "importedAt": "2026-09-28T07:36:27.539Z",
     "identityOrdinal": 1
    },
    "status": "backlog",
@@ -1133,7 +1317,7 @@
     "source": "conjunto-backlog",
     "sourceIndex": 1,
     "sourceSha256": "4b1edd3c9cf061630901d26c512a39e0227a67556a64d509168ea18cb887c330",
-    "importedAt": "2026-09-02T14:33:01.784Z",
+    "importedAt": "2026-09-28T07:36:27.539Z",
     "identityOrdinal": 1
    },
    "status": "backlog",
@@ -1188,7 +1372,7 @@
     "source": "conjunto-backlog",
     "sourceIndex": 2,
     "sourceSha256": "4b1edd3c9cf061630901d26c512a39e0227a67556a64d509168ea18cb887c330",
-    "importedAt": "2026-09-02T14:33:01.784Z",
+    "importedAt": "2026-09-28T07:36:27.539Z",
     "identityOrdinal": 1
    },
    "status": "backlog",
@@ -1243,7 +1427,7 @@
     "source": "conjunto-backlog",
     "sourceIndex": 3,
     "sourceSha256": "4b1edd3c9cf061630901d26c512a39e0227a67556a64d509168ea18cb887c330",
-    "importedAt": "2026-09-02T14:33:01.784Z",
+    "importedAt": "2026-09-28T07:36:27.539Z",
     "identityOrdinal": 1
    },
    "status": "aceptado",
@@ -1298,7 +1482,7 @@
     "source": "conjunto-backlog",
     "sourceIndex": 4,
     "sourceSha256": "4b1edd3c9cf061630901d26c512a39e0227a67556a64d509168ea18cb887c330",
-    "importedAt": "2026-09-02T14:33:01.784Z",
+    "importedAt": "2026-09-28T07:36:27.539Z",
     "identityOrdinal": 1
    },
    "status": "aceptado",
@@ -1353,7 +1537,7 @@
     "source": "conjunto-backlog",
     "sourceIndex": 5,
     "sourceSha256": "4b1edd3c9cf061630901d26c512a39e0227a67556a64d509168ea18cb887c330",
-    "importedAt": "2026-09-02T14:33:01.784Z",
+    "importedAt": "2026-09-28T07:36:27.539Z",
     "identityOrdinal": 1
    },
    "status": "backlog",
@@ -1408,7 +1592,7 @@
     "source": "conjunto-backlog",
     "sourceIndex": 6,
     "sourceSha256": "4b1edd3c9cf061630901d26c512a39e0227a67556a64d509168ea18cb887c330",
-    "importedAt": "2026-09-02T14:33:01.784Z",
+    "importedAt": "2026-09-28T07:36:27.539Z",
     "identityOrdinal": 1
    },
    "status": "redactando",
@@ -1463,7 +1647,7 @@
     "source": "conjunto-backlog",
     "sourceIndex": 7,
     "sourceSha256": "4b1edd3c9cf061630901d26c512a39e0227a67556a64d509168ea18cb887c330",
-    "importedAt": "2026-09-02T14:33:01.784Z",
+    "importedAt": "2026-09-28T07:36:27.539Z",
     "identityOrdinal": 1
    },
    "status": "redactando",
@@ -1518,7 +1702,7 @@
     "source": "conjunto-backlog",
     "sourceIndex": 8,
     "sourceSha256": "4b1edd3c9cf061630901d26c512a39e0227a67556a64d509168ea18cb887c330",
-    "importedAt": "2026-09-02T14:33:01.784Z",
+    "importedAt": "2026-09-28T07:36:27.539Z",
     "identityOrdinal": 1
    },
    "status": "backlog",
@@ -1573,7 +1757,7 @@
     "source": "conjunto-backlog",
     "sourceIndex": 9,
     "sourceSha256": "4b1edd3c9cf061630901d26c512a39e0227a67556a64d509168ea18cb887c330",
-    "importedAt": "2026-09-02T14:33:01.784Z",
+    "importedAt": "2026-09-28T07:36:27.539Z",
     "identityOrdinal": 1
    },
    "status": "backlog",
@@ -1628,7 +1812,7 @@
     "source": "conjunto-backlog",
     "sourceIndex": 10,
     "sourceSha256": "4b1edd3c9cf061630901d26c512a39e0227a67556a64d509168ea18cb887c330",
-    "importedAt": "2026-09-02T14:33:01.784Z",
+    "importedAt": "2026-09-28T07:36:27.539Z",
     "identityOrdinal": 1
    },
    "status": "backlog",
@@ -1683,7 +1867,7 @@
     "source": "conjunto-backlog",
     "sourceIndex": 11,
     "sourceSha256": "4b1edd3c9cf061630901d26c512a39e0227a67556a64d509168ea18cb887c330",
-    "importedAt": "2026-09-02T14:33:01.784Z",
+    "importedAt": "2026-09-28T07:36:27.539Z",
     "identityOrdinal": 1
    },
    "status": "backlog",
@@ -1738,7 +1922,7 @@
     "source": "conjunto-backlog",
     "sourceIndex": 12,
     "sourceSha256": "4b1edd3c9cf061630901d26c512a39e0227a67556a64d509168ea18cb887c330",
-    "importedAt": "2026-09-02T14:33:01.784Z",
+    "importedAt": "2026-09-28T07:36:27.539Z",
     "identityOrdinal": 1
    },
    "status": "backlog",
@@ -1793,7 +1977,7 @@
     "source": "conjunto-backlog",
     "sourceIndex": 13,
     "sourceSha256": "4b1edd3c9cf061630901d26c512a39e0227a67556a64d509168ea18cb887c330",
-    "importedAt": "2026-09-02T14:33:01.784Z",
+    "importedAt": "2026-09-28T07:36:27.539Z",
     "identityOrdinal": 1
    },
    "status": "backlog",
@@ -1848,7 +2032,7 @@
     "source": "conjunto-backlog",
     "sourceIndex": 14,
     "sourceSha256": "4b1edd3c9cf061630901d26c512a39e0227a67556a64d509168ea18cb887c330",
-    "importedAt": "2026-09-02T14:33:01.784Z",
+    "importedAt": "2026-09-28T07:36:27.539Z",
     "identityOrdinal": 1
    },
    "status": "backlog",
@@ -1903,7 +2087,7 @@
     "source": "conjunto-backlog",
     "sourceIndex": 15,
     "sourceSha256": "4b1edd3c9cf061630901d26c512a39e0227a67556a64d509168ea18cb887c330",
-    "importedAt": "2026-09-02T14:33:01.784Z",
+    "importedAt": "2026-09-28T07:36:27.539Z",
     "identityOrdinal": 1
    },
    "status": "backlog",
@@ -1958,7 +2142,7 @@
     "source": "conjunto-backlog",
     "sourceIndex": 16,
     "sourceSha256": "4b1edd3c9cf061630901d26c512a39e0227a67556a64d509168ea18cb887c330",
-    "importedAt": "2026-09-02T14:33:01.784Z",
+    "importedAt": "2026-09-28T07:36:27.539Z",
     "identityOrdinal": 1
    },
    "status": "backlog",
@@ -2013,7 +2197,7 @@
     "source": "conjunto-backlog",
     "sourceIndex": 17,
     "sourceSha256": "4b1edd3c9cf061630901d26c512a39e0227a67556a64d509168ea18cb887c330",
-    "importedAt": "2026-09-02T14:33:01.784Z",
+    "importedAt": "2026-09-28T07:36:27.539Z",
     "identityOrdinal": 1
    },
    "status": "backlog",
@@ -2068,7 +2252,7 @@
     "source": "conjunto-backlog",
     "sourceIndex": 18,
     "sourceSha256": "4b1edd3c9cf061630901d26c512a39e0227a67556a64d509168ea18cb887c330",
-    "importedAt": "2026-09-02T14:33:01.784Z",
+    "importedAt": "2026-09-28T07:36:27.539Z",
     "identityOrdinal": 1
    },
    "status": "backlog",
@@ -2123,7 +2307,7 @@
     "source": "conjunto-backlog",
     "sourceIndex": 19,
     "sourceSha256": "4b1edd3c9cf061630901d26c512a39e0227a67556a64d509168ea18cb887c330",
-    "importedAt": "2026-09-02T14:33:01.784Z",
+    "importedAt": "2026-09-28T07:36:27.539Z",
     "identityOrdinal": 1
    },
    "status": "backlog",
@@ -2178,7 +2362,7 @@
     "source": "conjunto-backlog",
     "sourceIndex": 20,
     "sourceSha256": "4b1edd3c9cf061630901d26c512a39e0227a67556a64d509168ea18cb887c330",
-    "importedAt": "2026-09-02T14:33:01.784Z",
+    "importedAt": "2026-09-28T07:36:27.539Z",
     "identityOrdinal": 1
    },
    "status": "backlog",
@@ -2233,7 +2417,7 @@
     "source": "conjunto-backlog",
     "sourceIndex": 21,
     "sourceSha256": "4b1edd3c9cf061630901d26c512a39e0227a67556a64d509168ea18cb887c330",
-    "importedAt": "2026-09-02T14:33:01.784Z",
+    "importedAt": "2026-09-28T07:36:27.539Z",
     "identityOrdinal": 1
    },
    "status": "backlog",
@@ -2288,7 +2472,7 @@
     "source": "conjunto-backlog",
     "sourceIndex": 22,
     "sourceSha256": "4b1edd3c9cf061630901d26c512a39e0227a67556a64d509168ea18cb887c330",
-    "importedAt": "2026-09-02T14:33:01.784Z",
+    "importedAt": "2026-09-28T07:36:27.539Z",
     "identityOrdinal": 1
    },
    "status": "backlog",
@@ -2343,7 +2527,7 @@
     "source": "conjunto-backlog",
     "sourceIndex": 23,
     "sourceSha256": "4b1edd3c9cf061630901d26c512a39e0227a67556a64d509168ea18cb887c330",
-    "importedAt": "2026-09-02T14:33:01.784Z",
+    "importedAt": "2026-09-28T07:36:27.539Z",
     "identityOrdinal": 1
    },
    "status": "backlog",
@@ -2398,7 +2582,7 @@
     "source": "conjunto-backlog",
     "sourceIndex": 24,
     "sourceSha256": "4b1edd3c9cf061630901d26c512a39e0227a67556a64d509168ea18cb887c330",
-    "importedAt": "2026-09-02T14:33:01.784Z",
+    "importedAt": "2026-09-28T07:36:27.539Z",
     "identityOrdinal": 1
    },
    "status": "backlog",
@@ -2453,7 +2637,7 @@
     "source": "conjunto-backlog",
     "sourceIndex": 25,
     "sourceSha256": "4b1edd3c9cf061630901d26c512a39e0227a67556a64d509168ea18cb887c330",
-    "importedAt": "2026-09-02T14:33:01.784Z",
+    "importedAt": "2026-09-28T07:36:27.539Z",
     "identityOrdinal": 1
    },
    "status": "backlog",
@@ -2508,7 +2692,7 @@
     "source": "conjunto-backlog",
     "sourceIndex": 26,
     "sourceSha256": "4b1edd3c9cf061630901d26c512a39e0227a67556a64d509168ea18cb887c330",
-    "importedAt": "2026-09-02T14:33:01.784Z",
+    "importedAt": "2026-09-28T07:36:27.539Z",
     "identityOrdinal": 1
    },
    "status": "backlog",
@@ -2563,7 +2747,7 @@
     "source": "conjunto-backlog",
     "sourceIndex": 27,
     "sourceSha256": "4b1edd3c9cf061630901d26c512a39e0227a67556a64d509168ea18cb887c330",
-    "importedAt": "2026-09-02T14:33:01.784Z",
+    "importedAt": "2026-09-28T07:36:27.539Z",
     "identityOrdinal": 1
    },
    "status": "backlog",
@@ -2618,7 +2802,7 @@
     "source": "conjunto-backlog",
     "sourceIndex": 28,
     "sourceSha256": "4b1edd3c9cf061630901d26c512a39e0227a67556a64d509168ea18cb887c330",
-    "importedAt": "2026-09-02T14:33:01.784Z",
+    "importedAt": "2026-09-28T07:36:27.539Z",
     "identityOrdinal": 1
    },
    "status": "backlog",
@@ -2673,7 +2857,7 @@
     "source": "conjunto-backlog",
     "sourceIndex": 29,
     "sourceSha256": "4b1edd3c9cf061630901d26c512a39e0227a67556a64d509168ea18cb887c330",
-    "importedAt": "2026-09-02T14:33:01.784Z",
+    "importedAt": "2026-09-28T07:36:27.539Z",
     "identityOrdinal": 1
    },
    "status": "backlog",
@@ -2728,7 +2912,7 @@
     "source": "conjunto-backlog",
     "sourceIndex": 30,
     "sourceSha256": "4b1edd3c9cf061630901d26c512a39e0227a67556a64d509168ea18cb887c330",
-    "importedAt": "2026-09-02T14:33:01.784Z",
+    "importedAt": "2026-09-28T07:36:27.539Z",
     "identityOrdinal": 1
    },
    "status": "backlog",
@@ -2783,7 +2967,7 @@
     "source": "conjunto-backlog",
     "sourceIndex": 31,
     "sourceSha256": "4b1edd3c9cf061630901d26c512a39e0227a67556a64d509168ea18cb887c330",
-    "importedAt": "2026-09-02T14:33:01.784Z",
+    "importedAt": "2026-09-28T07:36:27.539Z",
     "identityOrdinal": 1
    },
    "status": "backlog",
@@ -2838,7 +3022,7 @@
     "source": "conjunto-backlog",
     "sourceIndex": 32,
     "sourceSha256": "4b1edd3c9cf061630901d26c512a39e0227a67556a64d509168ea18cb887c330",
-    "importedAt": "2026-09-02T14:33:01.784Z",
+    "importedAt": "2026-09-28T07:36:27.539Z",
     "identityOrdinal": 1
    },
    "status": "backlog",
@@ -2893,7 +3077,7 @@
     "source": "conjunto-backlog",
     "sourceIndex": 33,
     "sourceSha256": "4b1edd3c9cf061630901d26c512a39e0227a67556a64d509168ea18cb887c330",
-    "importedAt": "2026-09-02T14:33:01.784Z",
+    "importedAt": "2026-09-28T07:36:27.539Z",
     "identityOrdinal": 1
    },
    "status": "backlog",
@@ -2948,7 +3132,7 @@
     "source": "conjunto-backlog",
     "sourceIndex": 34,
     "sourceSha256": "4b1edd3c9cf061630901d26c512a39e0227a67556a64d509168ea18cb887c330",
-    "importedAt": "2026-09-02T14:33:01.784Z",
+    "importedAt": "2026-09-28T07:36:27.539Z",
     "identityOrdinal": 1
    },
    "status": "backlog",
@@ -3003,7 +3187,7 @@
     "source": "conjunto-backlog",
     "sourceIndex": 35,
     "sourceSha256": "4b1edd3c9cf061630901d26c512a39e0227a67556a64d509168ea18cb887c330",
-    "importedAt": "2026-09-02T14:33:01.784Z",
+    "importedAt": "2026-09-28T07:36:27.539Z",
     "identityOrdinal": 1
    },
    "status": "backlog",
@@ -3058,7 +3242,7 @@
     "source": "conjunto-backlog",
     "sourceIndex": 36,
     "sourceSha256": "4b1edd3c9cf061630901d26c512a39e0227a67556a64d509168ea18cb887c330",
-    "importedAt": "2026-09-02T14:33:01.784Z",
+    "importedAt": "2026-09-28T07:36:27.539Z",
     "identityOrdinal": 1
    },
    "status": "backlog",
@@ -3113,7 +3297,7 @@
     "source": "conjunto-backlog",
     "sourceIndex": 37,
     "sourceSha256": "4b1edd3c9cf061630901d26c512a39e0227a67556a64d509168ea18cb887c330",
-    "importedAt": "2026-09-02T14:33:01.784Z",
+    "importedAt": "2026-09-28T07:36:27.539Z",
     "identityOrdinal": 1
    },
    "status": "backlog",
@@ -3168,7 +3352,7 @@
     "source": "conjunto-backlog",
     "sourceIndex": 38,
     "sourceSha256": "4b1edd3c9cf061630901d26c512a39e0227a67556a64d509168ea18cb887c330",
-    "importedAt": "2026-09-02T14:33:01.784Z",
+    "importedAt": "2026-09-28T07:36:27.539Z",
     "identityOrdinal": 1
    },
    "status": "backlog",
@@ -3223,7 +3407,7 @@
     "source": "conjunto-backlog",
     "sourceIndex": 39,
     "sourceSha256": "4b1edd3c9cf061630901d26c512a39e0227a67556a64d509168ea18cb887c330",
-    "importedAt": "2026-09-02T14:33:01.784Z",
+    "importedAt": "2026-09-28T07:36:27.539Z",
     "identityOrdinal": 1
    },
    "status": "backlog",
@@ -3278,7 +3462,7 @@
     "source": "conjunto-backlog",
     "sourceIndex": 40,
     "sourceSha256": "4b1edd3c9cf061630901d26c512a39e0227a67556a64d509168ea18cb887c330",
-    "importedAt": "2026-09-02T14:33:01.784Z",
+    "importedAt": "2026-09-28T07:36:27.539Z",
     "identityOrdinal": 1
    },
    "status": "backlog",
@@ -3333,7 +3517,7 @@
     "source": "conjunto-backlog",
     "sourceIndex": 41,
     "sourceSha256": "4b1edd3c9cf061630901d26c512a39e0227a67556a64d509168ea18cb887c330",
-    "importedAt": "2026-09-02T14:33:01.784Z",
+    "importedAt": "2026-09-28T07:36:27.539Z",
     "identityOrdinal": 1
    },
    "status": "backlog",
@@ -3388,7 +3572,7 @@
     "source": "conjunto-backlog",
     "sourceIndex": 42,
     "sourceSha256": "4b1edd3c9cf061630901d26c512a39e0227a67556a64d509168ea18cb887c330",
-    "importedAt": "2026-09-02T14:33:01.784Z",
+    "importedAt": "2026-09-28T07:36:27.539Z",
     "identityOrdinal": 1
    },
    "status": "backlog",
@@ -3443,7 +3627,7 @@
     "source": "conjunto-backlog",
     "sourceIndex": 43,
     "sourceSha256": "4b1edd3c9cf061630901d26c512a39e0227a67556a64d509168ea18cb887c330",
-    "importedAt": "2026-09-02T14:33:01.784Z",
+    "importedAt": "2026-09-28T07:36:27.539Z",
     "identityOrdinal": 1
    },
    "status": "backlog",
@@ -3498,7 +3682,7 @@
     "source": "conjunto-backlog",
     "sourceIndex": 44,
     "sourceSha256": "4b1edd3c9cf061630901d26c512a39e0227a67556a64d509168ea18cb887c330",
-    "importedAt": "2026-09-02T14:33:01.784Z",
+    "importedAt": "2026-09-28T07:36:27.539Z",
     "identityOrdinal": 1
    },
    "status": "backlog",
@@ -3553,7 +3737,7 @@
     "source": "conjunto-backlog",
     "sourceIndex": 45,
     "sourceSha256": "4b1edd3c9cf061630901d26c512a39e0227a67556a64d509168ea18cb887c330",
-    "importedAt": "2026-09-02T14:33:01.784Z",
+    "importedAt": "2026-09-28T07:36:27.539Z",
     "identityOrdinal": 1
    },
    "status": "backlog",
@@ -3608,7 +3792,7 @@
     "source": "conjunto-backlog",
     "sourceIndex": 46,
     "sourceSha256": "4b1edd3c9cf061630901d26c512a39e0227a67556a64d509168ea18cb887c330",
-    "importedAt": "2026-09-02T14:33:01.784Z",
+    "importedAt": "2026-09-28T07:36:27.539Z",
     "identityOrdinal": 1
    },
    "status": "backlog",
@@ -3663,7 +3847,7 @@
     "source": "conjunto-backlog",
     "sourceIndex": 47,
     "sourceSha256": "4b1edd3c9cf061630901d26c512a39e0227a67556a64d509168ea18cb887c330",
-    "importedAt": "2026-09-02T14:33:01.784Z",
+    "importedAt": "2026-09-28T07:36:27.539Z",
     "identityOrdinal": 1
    },
    "status": "backlog",
@@ -3718,7 +3902,7 @@
     "source": "conjunto-backlog",
     "sourceIndex": 48,
     "sourceSha256": "4b1edd3c9cf061630901d26c512a39e0227a67556a64d509168ea18cb887c330",
-    "importedAt": "2026-09-02T14:33:01.784Z",
+    "importedAt": "2026-09-28T07:36:27.539Z",
     "identityOrdinal": 1
    },
    "status": "backlog",
@@ -3773,7 +3957,7 @@
     "source": "conjunto-backlog",
     "sourceIndex": 49,
     "sourceSha256": "4b1edd3c9cf061630901d26c512a39e0227a67556a64d509168ea18cb887c330",
-    "importedAt": "2026-09-02T14:33:01.784Z",
+    "importedAt": "2026-09-28T07:36:27.539Z",
     "identityOrdinal": 1
    },
    "status": "backlog",
@@ -3828,7 +4012,7 @@
     "source": "conjunto-backlog",
     "sourceIndex": 50,
     "sourceSha256": "4b1edd3c9cf061630901d26c512a39e0227a67556a64d509168ea18cb887c330",
-    "importedAt": "2026-09-02T14:33:01.784Z",
+    "importedAt": "2026-09-28T07:36:27.539Z",
     "identityOrdinal": 1
    },
    "status": "backlog",
@@ -3883,7 +4067,7 @@
     "source": "conjunto-backlog",
     "sourceIndex": 51,
     "sourceSha256": "4b1edd3c9cf061630901d26c512a39e0227a67556a64d509168ea18cb887c330",
-    "importedAt": "2026-09-02T14:33:01.784Z",
+    "importedAt": "2026-09-28T07:36:27.539Z",
     "identityOrdinal": 1
    },
    "status": "backlog",
@@ -3938,7 +4122,7 @@
     "source": "conjunto-backlog",
     "sourceIndex": 52,
     "sourceSha256": "4b1edd3c9cf061630901d26c512a39e0227a67556a64d509168ea18cb887c330",
-    "importedAt": "2026-09-02T14:33:01.784Z",
+    "importedAt": "2026-09-28T07:36:27.539Z",
     "identityOrdinal": 1
    },
    "status": "backlog",
@@ -3993,7 +4177,7 @@
     "source": "conjunto-backlog",
     "sourceIndex": 53,
     "sourceSha256": "4b1edd3c9cf061630901d26c512a39e0227a67556a64d509168ea18cb887c330",
-    "importedAt": "2026-09-02T14:33:01.784Z",
+    "importedAt": "2026-09-28T07:36:27.539Z",
     "identityOrdinal": 1
    },
    "status": "backlog",
@@ -4048,7 +4232,7 @@
     "source": "conjunto-backlog",
     "sourceIndex": 54,
     "sourceSha256": "4b1edd3c9cf061630901d26c512a39e0227a67556a64d509168ea18cb887c330",
-    "importedAt": "2026-09-02T14:33:01.784Z",
+    "importedAt": "2026-09-28T07:36:27.539Z",
     "identityOrdinal": 1
    },
    "status": "backlog",
@@ -4103,7 +4287,7 @@
     "source": "conjunto-backlog",
     "sourceIndex": 55,
     "sourceSha256": "4b1edd3c9cf061630901d26c512a39e0227a67556a64d509168ea18cb887c330",
-    "importedAt": "2026-09-02T14:33:01.784Z",
+    "importedAt": "2026-09-28T07:36:27.539Z",
     "identityOrdinal": 1
    },
    "status": "backlog",
@@ -4158,7 +4342,7 @@
     "source": "conjunto-backlog",
     "sourceIndex": 56,
     "sourceSha256": "4b1edd3c9cf061630901d26c512a39e0227a67556a64d509168ea18cb887c330",
-    "importedAt": "2026-09-02T14:33:01.784Z",
+    "importedAt": "2026-09-28T07:36:27.539Z",
     "identityOrdinal": 1
    },
    "status": "backlog",
@@ -4213,7 +4397,7 @@
     "source": "conjunto-backlog",
     "sourceIndex": 57,
     "sourceSha256": "4b1edd3c9cf061630901d26c512a39e0227a67556a64d509168ea18cb887c330",
-    "importedAt": "2026-09-02T14:33:01.784Z",
+    "importedAt": "2026-09-28T07:36:27.539Z",
     "identityOrdinal": 1
    },
    "status": "backlog",
@@ -4268,7 +4452,7 @@
     "source": "conjunto-backlog",
     "sourceIndex": 58,
     "sourceSha256": "4b1edd3c9cf061630901d26c512a39e0227a67556a64d509168ea18cb887c330",
-    "importedAt": "2026-09-02T14:33:01.784Z",
+    "importedAt": "2026-09-28T07:36:27.539Z",
     "identityOrdinal": 1
    },
    "status": "backlog",
@@ -4323,7 +4507,7 @@
     "source": "conjunto-backlog",
     "sourceIndex": 59,
     "sourceSha256": "4b1edd3c9cf061630901d26c512a39e0227a67556a64d509168ea18cb887c330",
-    "importedAt": "2026-09-02T14:33:01.784Z",
+    "importedAt": "2026-09-28T07:36:27.539Z",
     "identityOrdinal": 1
    },
    "status": "backlog",
@@ -4378,7 +4562,7 @@
     "source": "conjunto-backlog",
     "sourceIndex": 60,
     "sourceSha256": "4b1edd3c9cf061630901d26c512a39e0227a67556a64d509168ea18cb887c330",
-    "importedAt": "2026-09-02T14:33:01.784Z",
+    "importedAt": "2026-09-28T07:36:27.539Z",
     "identityOrdinal": 1
    },
    "status": "backlog",
@@ -4433,7 +4617,7 @@
     "source": "conjunto-backlog",
     "sourceIndex": 61,
     "sourceSha256": "4b1edd3c9cf061630901d26c512a39e0227a67556a64d509168ea18cb887c330",
-    "importedAt": "2026-09-02T14:33:01.784Z",
+    "importedAt": "2026-09-28T07:36:27.539Z",
     "identityOrdinal": 1
    },
    "status": "backlog",
@@ -4488,7 +4672,7 @@
     "source": "conjunto-backlog",
     "sourceIndex": 62,
     "sourceSha256": "4b1edd3c9cf061630901d26c512a39e0227a67556a64d509168ea18cb887c330",
-    "importedAt": "2026-09-02T14:33:01.784Z",
+    "importedAt": "2026-09-28T07:36:27.539Z",
     "identityOrdinal": 1
    },
    "status": "backlog",
@@ -4543,7 +4727,7 @@
     "source": "conjunto-backlog",
     "sourceIndex": 63,
     "sourceSha256": "4b1edd3c9cf061630901d26c512a39e0227a67556a64d509168ea18cb887c330",
-    "importedAt": "2026-09-02T14:33:01.784Z",
+    "importedAt": "2026-09-28T07:36:27.539Z",
     "identityOrdinal": 1
    },
    "status": "backlog",
@@ -4598,7 +4782,7 @@
     "source": "conjunto-backlog",
     "sourceIndex": 64,
     "sourceSha256": "4b1edd3c9cf061630901d26c512a39e0227a67556a64d509168ea18cb887c330",
-    "importedAt": "2026-09-02T14:33:01.784Z",
+    "importedAt": "2026-09-28T07:36:27.539Z",
     "identityOrdinal": 1
    },
    "status": "backlog",
@@ -4653,7 +4837,7 @@
     "source": "conjunto-backlog",
     "sourceIndex": 65,
     "sourceSha256": "4b1edd3c9cf061630901d26c512a39e0227a67556a64d509168ea18cb887c330",
-    "importedAt": "2026-09-02T14:33:01.784Z",
+    "importedAt": "2026-09-28T07:36:27.539Z",
     "identityOrdinal": 1
    },
    "status": "backlog",
@@ -4708,7 +4892,7 @@
     "source": "conjunto-backlog",
     "sourceIndex": 66,
     "sourceSha256": "4b1edd3c9cf061630901d26c512a39e0227a67556a64d509168ea18cb887c330",
-    "importedAt": "2026-09-02T14:33:01.784Z",
+    "importedAt": "2026-09-28T07:36:27.539Z",
     "identityOrdinal": 1
    },
    "status": "backlog",
@@ -4763,7 +4947,7 @@
     "source": "conjunto-backlog",
     "sourceIndex": 67,
     "sourceSha256": "4b1edd3c9cf061630901d26c512a39e0227a67556a64d509168ea18cb887c330",
-    "importedAt": "2026-09-02T14:33:01.784Z",
+    "importedAt": "2026-09-28T07:36:27.539Z",
     "identityOrdinal": 1
    },
    "status": "backlog",
@@ -4818,7 +5002,7 @@
     "source": "conjunto-backlog",
     "sourceIndex": 68,
     "sourceSha256": "4b1edd3c9cf061630901d26c512a39e0227a67556a64d509168ea18cb887c330",
-    "importedAt": "2026-09-02T14:33:01.784Z",
+    "importedAt": "2026-09-28T07:36:27.539Z",
     "identityOrdinal": 1
    },
    "status": "backlog",
@@ -4873,7 +5057,7 @@
     "source": "conjunto-backlog",
     "sourceIndex": 69,
     "sourceSha256": "4b1edd3c9cf061630901d26c512a39e0227a67556a64d509168ea18cb887c330",
-    "importedAt": "2026-09-02T14:33:01.784Z",
+    "importedAt": "2026-09-28T07:36:27.539Z",
     "identityOrdinal": 1
    },
    "status": "backlog",
@@ -4928,7 +5112,7 @@
     "source": "conjunto-backlog",
     "sourceIndex": 70,
     "sourceSha256": "4b1edd3c9cf061630901d26c512a39e0227a67556a64d509168ea18cb887c330",
-    "importedAt": "2026-09-02T14:33:01.784Z",
+    "importedAt": "2026-09-28T07:36:27.539Z",
     "identityOrdinal": 1
    },
    "status": "backlog",
@@ -4983,7 +5167,7 @@
     "source": "conjunto-backlog",
     "sourceIndex": 71,
     "sourceSha256": "4b1edd3c9cf061630901d26c512a39e0227a67556a64d509168ea18cb887c330",
-    "importedAt": "2026-09-02T14:33:01.784Z",
+    "importedAt": "2026-09-28T07:36:27.539Z",
     "identityOrdinal": 1
    },
    "status": "backlog",
@@ -5038,7 +5222,7 @@
     "source": "conjunto-backlog",
     "sourceIndex": 72,
     "sourceSha256": "4b1edd3c9cf061630901d26c512a39e0227a67556a64d509168ea18cb887c330",
-    "importedAt": "2026-09-02T14:33:01.784Z",
+    "importedAt": "2026-09-28T07:36:27.539Z",
     "identityOrdinal": 1
    },
    "status": "backlog",
@@ -5093,7 +5277,7 @@
     "source": "conjunto-backlog",
     "sourceIndex": 73,
     "sourceSha256": "4b1edd3c9cf061630901d26c512a39e0227a67556a64d509168ea18cb887c330",
-    "importedAt": "2026-09-02T14:33:01.784Z",
+    "importedAt": "2026-09-28T07:36:27.539Z",
     "identityOrdinal": 1
    },
    "status": "backlog",
@@ -5148,7 +5332,7 @@
     "source": "conjunto-backlog",
     "sourceIndex": 74,
     "sourceSha256": "4b1edd3c9cf061630901d26c512a39e0227a67556a64d509168ea18cb887c330",
-    "importedAt": "2026-09-02T14:33:01.784Z",
+    "importedAt": "2026-09-28T07:36:27.539Z",
     "identityOrdinal": 1
    },
    "status": "backlog",
@@ -5203,7 +5387,7 @@
     "source": "conjunto-backlog",
     "sourceIndex": 75,
     "sourceSha256": "4b1edd3c9cf061630901d26c512a39e0227a67556a64d509168ea18cb887c330",
-    "importedAt": "2026-09-02T14:33:01.784Z",
+    "importedAt": "2026-09-28T07:36:27.539Z",
     "identityOrdinal": 1
    },
    "status": "backlog",
@@ -5258,7 +5442,7 @@
     "source": "conjunto-backlog",
     "sourceIndex": 76,
     "sourceSha256": "4b1edd3c9cf061630901d26c512a39e0227a67556a64d509168ea18cb887c330",
-    "importedAt": "2026-09-02T14:33:01.784Z",
+    "importedAt": "2026-09-28T07:36:27.539Z",
     "identityOrdinal": 1
    },
    "status": "backlog",
@@ -5313,7 +5497,7 @@
     "source": "conjunto-backlog",
     "sourceIndex": 77,
     "sourceSha256": "4b1edd3c9cf061630901d26c512a39e0227a67556a64d509168ea18cb887c330",
-    "importedAt": "2026-09-02T14:33:01.784Z",
+    "importedAt": "2026-09-28T07:36:27.539Z",
     "identityOrdinal": 1
    },
    "status": "backlog",
@@ -5368,7 +5552,7 @@
     "source": "conjunto-backlog",
     "sourceIndex": 78,
     "sourceSha256": "4b1edd3c9cf061630901d26c512a39e0227a67556a64d509168ea18cb887c330",
-    "importedAt": "2026-09-02T14:33:01.784Z",
+    "importedAt": "2026-09-28T07:36:27.539Z",
     "identityOrdinal": 1
    },
    "status": "backlog",
@@ -5423,7 +5607,7 @@
     "source": "conjunto-backlog",
     "sourceIndex": 79,
     "sourceSha256": "4b1edd3c9cf061630901d26c512a39e0227a67556a64d509168ea18cb887c330",
-    "importedAt": "2026-09-02T14:33:01.784Z",
+    "importedAt": "2026-09-28T07:36:27.539Z",
     "identityOrdinal": 1
    },
    "status": "backlog",
@@ -5478,7 +5662,7 @@
     "source": "conjunto-backlog",
     "sourceIndex": 80,
     "sourceSha256": "4b1edd3c9cf061630901d26c512a39e0227a67556a64d509168ea18cb887c330",
-    "importedAt": "2026-09-02T14:33:01.784Z",
+    "importedAt": "2026-09-28T07:36:27.539Z",
     "identityOrdinal": 1
    },
    "status": "backlog",
@@ -5533,7 +5717,7 @@
     "source": "conjunto-backlog",
     "sourceIndex": 81,
     "sourceSha256": "4b1edd3c9cf061630901d26c512a39e0227a67556a64d509168ea18cb887c330",
-    "importedAt": "2026-09-02T14:33:01.784Z",
+    "importedAt": "2026-09-28T07:36:27.539Z",
     "identityOrdinal": 1
    },
    "status": "backlog",
@@ -5588,7 +5772,7 @@
     "source": "conjunto-backlog",
     "sourceIndex": 82,
     "sourceSha256": "4b1edd3c9cf061630901d26c512a39e0227a67556a64d509168ea18cb887c330",
-    "importedAt": "2026-09-02T14:33:01.784Z",
+    "importedAt": "2026-09-28T07:36:27.539Z",
     "identityOrdinal": 1
    },
    "status": "backlog",
@@ -5643,7 +5827,7 @@
     "source": "conjunto-backlog",
     "sourceIndex": 83,
     "sourceSha256": "4b1edd3c9cf061630901d26c512a39e0227a67556a64d509168ea18cb887c330",
-    "importedAt": "2026-09-02T14:33:01.784Z",
+    "importedAt": "2026-09-28T07:36:27.539Z",
     "identityOrdinal": 1
    },
    "status": "backlog",
@@ -5698,7 +5882,7 @@
     "source": "conjunto-backlog",
     "sourceIndex": 84,
     "sourceSha256": "4b1edd3c9cf061630901d26c512a39e0227a67556a64d509168ea18cb887c330",
-    "importedAt": "2026-09-02T14:33:01.784Z",
+    "importedAt": "2026-09-28T07:36:27.539Z",
     "identityOrdinal": 1
    },
    "status": "backlog",
@@ -5753,7 +5937,7 @@
     "source": "conjunto-backlog",
     "sourceIndex": 85,
     "sourceSha256": "4b1edd3c9cf061630901d26c512a39e0227a67556a64d509168ea18cb887c330",
-    "importedAt": "2026-09-02T14:33:01.784Z",
+    "importedAt": "2026-09-28T07:36:27.539Z",
     "identityOrdinal": 1
    },
    "status": "backlog",
@@ -5808,7 +5992,7 @@
     "source": "conjunto-backlog",
     "sourceIndex": 86,
     "sourceSha256": "4b1edd3c9cf061630901d26c512a39e0227a67556a64d509168ea18cb887c330",
-    "importedAt": "2026-09-02T14:33:01.784Z",
+    "importedAt": "2026-09-28T07:36:27.539Z",
     "identityOrdinal": 1
    },
    "status": "backlog",
@@ -5863,7 +6047,7 @@
     "source": "conjunto-backlog",
     "sourceIndex": 87,
     "sourceSha256": "4b1edd3c9cf061630901d26c512a39e0227a67556a64d509168ea18cb887c330",
-    "importedAt": "2026-09-02T14:33:01.784Z",
+    "importedAt": "2026-09-28T07:36:27.539Z",
     "identityOrdinal": 1
    },
    "status": "backlog",
@@ -5918,7 +6102,7 @@
     "source": "conjunto-backlog",
     "sourceIndex": 88,
     "sourceSha256": "4b1edd3c9cf061630901d26c512a39e0227a67556a64d509168ea18cb887c330",
-    "importedAt": "2026-09-02T14:33:01.784Z",
+    "importedAt": "2026-09-28T07:36:27.539Z",
     "identityOrdinal": 1
    },
    "status": "backlog",
@@ -5973,7 +6157,7 @@
     "source": "conjunto-backlog",
     "sourceIndex": 89,
     "sourceSha256": "4b1edd3c9cf061630901d26c512a39e0227a67556a64d509168ea18cb887c330",
-    "importedAt": "2026-09-02T14:33:01.784Z",
+    "importedAt": "2026-09-28T07:36:27.539Z",
     "identityOrdinal": 1
    },
    "status": "backlog",
@@ -6028,7 +6212,7 @@
     "source": "conjunto-backlog",
     "sourceIndex": 90,
     "sourceSha256": "4b1edd3c9cf061630901d26c512a39e0227a67556a64d509168ea18cb887c330",
-    "importedAt": "2026-09-02T14:33:01.784Z",
+    "importedAt": "2026-09-28T07:36:27.539Z",
     "identityOrdinal": 1
    },
    "status": "backlog",
@@ -6083,7 +6267,7 @@
     "source": "conjunto-backlog",
     "sourceIndex": 91,
     "sourceSha256": "4b1edd3c9cf061630901d26c512a39e0227a67556a64d509168ea18cb887c330",
-    "importedAt": "2026-09-02T14:33:01.784Z",
+    "importedAt": "2026-09-28T07:36:27.539Z",
     "identityOrdinal": 1
    },
    "status": "backlog",
@@ -6138,7 +6322,7 @@
     "source": "conjunto-backlog",
     "sourceIndex": 92,
     "sourceSha256": "4b1edd3c9cf061630901d26c512a39e0227a67556a64d509168ea18cb887c330",
-    "importedAt": "2026-09-02T14:33:01.784Z",
+    "importedAt": "2026-09-28T07:36:27.539Z",
     "identityOrdinal": 1
    },
    "status": "backlog",
@@ -6193,7 +6377,7 @@
     "source": "conjunto-backlog",
     "sourceIndex": 93,
     "sourceSha256": "4b1edd3c9cf061630901d26c512a39e0227a67556a64d509168ea18cb887c330",
-    "importedAt": "2026-09-02T14:33:01.784Z",
+    "importedAt": "2026-09-28T07:36:27.539Z",
     "identityOrdinal": 1
    },
    "status": "backlog",
@@ -6248,7 +6432,7 @@
     "source": "conjunto-backlog",
     "sourceIndex": 94,
     "sourceSha256": "4b1edd3c9cf061630901d26c512a39e0227a67556a64d509168ea18cb887c330",
-    "importedAt": "2026-09-02T14:33:01.784Z",
+    "importedAt": "2026-09-28T07:36:27.539Z",
     "identityOrdinal": 1
    },
    "status": "backlog",
@@ -6303,7 +6487,7 @@
     "source": "conjunto-backlog",
     "sourceIndex": 95,
     "sourceSha256": "4b1edd3c9cf061630901d26c512a39e0227a67556a64d509168ea18cb887c330",
-    "importedAt": "2026-09-02T14:33:01.784Z",
+    "importedAt": "2026-09-28T07:36:27.539Z",
     "identityOrdinal": 1
    },
    "status": "backlog",
@@ -6358,7 +6542,7 @@
     "source": "conjunto-backlog",
     "sourceIndex": 96,
     "sourceSha256": "4b1edd3c9cf061630901d26c512a39e0227a67556a64d509168ea18cb887c330",
-    "importedAt": "2026-09-02T14:33:01.784Z",
+    "importedAt": "2026-09-28T07:36:27.539Z",
     "identityOrdinal": 1
    },
    "status": "backlog",
@@ -6413,7 +6597,7 @@
     "source": "conjunto-backlog",
     "sourceIndex": 97,
     "sourceSha256": "4b1edd3c9cf061630901d26c512a39e0227a67556a64d509168ea18cb887c330",
-    "importedAt": "2026-09-02T14:33:01.784Z",
+    "importedAt": "2026-09-28T07:36:27.539Z",
     "identityOrdinal": 1
    },
    "status": "backlog",
@@ -6468,7 +6652,7 @@
     "source": "conjunto-backlog",
     "sourceIndex": 98,
     "sourceSha256": "4b1edd3c9cf061630901d26c512a39e0227a67556a64d509168ea18cb887c330",
-    "importedAt": "2026-09-02T14:33:01.784Z",
+    "importedAt": "2026-09-28T07:36:27.539Z",
     "identityOrdinal": 1
    },
    "status": "backlog",
@@ -6523,7 +6707,7 @@
     "source": "conjunto-backlog",
     "sourceIndex": 99,
     "sourceSha256": "4b1edd3c9cf061630901d26c512a39e0227a67556a64d509168ea18cb887c330",
-    "importedAt": "2026-09-02T14:33:01.784Z",
+    "importedAt": "2026-09-28T07:36:27.539Z",
     "identityOrdinal": 1
    },
    "status": "backlog",
@@ -6578,7 +6762,7 @@
     "source": "conjunto-backlog",
     "sourceIndex": 100,
     "sourceSha256": "4b1edd3c9cf061630901d26c512a39e0227a67556a64d509168ea18cb887c330",
-    "importedAt": "2026-09-02T14:33:01.784Z",
+    "importedAt": "2026-09-28T07:36:27.539Z",
     "identityOrdinal": 1
    },
    "status": "backlog",
@@ -6633,7 +6817,7 @@
     "source": "conjunto-backlog",
     "sourceIndex": 101,
     "sourceSha256": "4b1edd3c9cf061630901d26c512a39e0227a67556a64d509168ea18cb887c330",
-    "importedAt": "2026-09-02T14:33:01.784Z",
+    "importedAt": "2026-09-28T07:36:27.539Z",
     "identityOrdinal": 1
    },
    "status": "backlog",
@@ -6688,7 +6872,7 @@
     "source": "conjunto-backlog",
     "sourceIndex": 102,
     "sourceSha256": "4b1edd3c9cf061630901d26c512a39e0227a67556a64d509168ea18cb887c330",
-    "importedAt": "2026-09-02T14:33:01.784Z",
+    "importedAt": "2026-09-28T07:36:27.539Z",
     "identityOrdinal": 1
    },
    "status": "backlog",
@@ -6743,7 +6927,7 @@
     "source": "conjunto-backlog",
     "sourceIndex": 103,
     "sourceSha256": "4b1edd3c9cf061630901d26c512a39e0227a67556a64d509168ea18cb887c330",
-    "importedAt": "2026-09-02T14:33:01.784Z",
+    "importedAt": "2026-09-28T07:36:27.539Z",
     "identityOrdinal": 1
    },
    "status": "backlog",
@@ -6798,7 +6982,7 @@
     "source": "conjunto-backlog",
     "sourceIndex": 104,
     "sourceSha256": "4b1edd3c9cf061630901d26c512a39e0227a67556a64d509168ea18cb887c330",
-    "importedAt": "2026-09-02T14:33:01.784Z",
+    "importedAt": "2026-09-28T07:36:27.539Z",
     "identityOrdinal": 1
    },
    "status": "backlog",
@@ -6853,7 +7037,7 @@
     "source": "conjunto-backlog",
     "sourceIndex": 105,
     "sourceSha256": "4b1edd3c9cf061630901d26c512a39e0227a67556a64d509168ea18cb887c330",
-    "importedAt": "2026-09-02T14:33:01.784Z",
+    "importedAt": "2026-09-28T07:36:27.539Z",
     "identityOrdinal": 1
    },
    "status": "backlog",
@@ -6908,7 +7092,7 @@
     "source": "conjunto-backlog",
     "sourceIndex": 106,
     "sourceSha256": "4b1edd3c9cf061630901d26c512a39e0227a67556a64d509168ea18cb887c330",
-    "importedAt": "2026-09-02T14:33:01.784Z",
+    "importedAt": "2026-09-28T07:36:27.539Z",
     "identityOrdinal": 1
    },
    "status": "backlog",
@@ -6963,7 +7147,7 @@
     "source": "conjunto-backlog",
     "sourceIndex": 107,
     "sourceSha256": "4b1edd3c9cf061630901d26c512a39e0227a67556a64d509168ea18cb887c330",
-    "importedAt": "2026-09-02T14:33:01.784Z",
+    "importedAt": "2026-09-28T07:36:27.539Z",
     "identityOrdinal": 1
    },
    "status": "backlog",
@@ -7018,7 +7202,7 @@
     "source": "conjunto-backlog",
     "sourceIndex": 108,
     "sourceSha256": "4b1edd3c9cf061630901d26c512a39e0227a67556a64d509168ea18cb887c330",
-    "importedAt": "2026-09-02T14:33:01.784Z",
+    "importedAt": "2026-09-28T07:36:27.539Z",
     "identityOrdinal": 1
    },
    "status": "backlog",
@@ -7073,7 +7257,7 @@
     "source": "conjunto-backlog",
     "sourceIndex": 109,
     "sourceSha256": "4b1edd3c9cf061630901d26c512a39e0227a67556a64d509168ea18cb887c330",
-    "importedAt": "2026-09-02T14:33:01.784Z",
+    "importedAt": "2026-09-28T07:36:27.539Z",
     "identityOrdinal": 1
    },
    "status": "backlog",
@@ -7128,7 +7312,7 @@
     "source": "conjunto-backlog",
     "sourceIndex": 110,
     "sourceSha256": "4b1edd3c9cf061630901d26c512a39e0227a67556a64d509168ea18cb887c330",
-    "importedAt": "2026-09-02T14:33:01.784Z",
+    "importedAt": "2026-09-28T07:36:27.539Z",
     "identityOrdinal": 1
    },
    "status": "backlog",
@@ -7183,7 +7367,7 @@
     "source": "conjunto-backlog",
     "sourceIndex": 111,
     "sourceSha256": "4b1edd3c9cf061630901d26c512a39e0227a67556a64d509168ea18cb887c330",
-    "importedAt": "2026-09-02T14:33:01.784Z",
+    "importedAt": "2026-09-28T07:36:27.539Z",
     "identityOrdinal": 1
    },
    "status": "backlog",
@@ -7238,7 +7422,7 @@
     "source": "conjunto-backlog",
     "sourceIndex": 112,
     "sourceSha256": "4b1edd3c9cf061630901d26c512a39e0227a67556a64d509168ea18cb887c330",
-    "importedAt": "2026-09-02T14:33:01.784Z",
+    "importedAt": "2026-09-28T07:36:27.539Z",
     "identityOrdinal": 1
    },
    "status": "backlog",
@@ -7293,7 +7477,7 @@
     "source": "conjunto-backlog",
     "sourceIndex": 113,
     "sourceSha256": "4b1edd3c9cf061630901d26c512a39e0227a67556a64d509168ea18cb887c330",
-    "importedAt": "2026-09-02T14:33:01.784Z",
+    "importedAt": "2026-09-28T07:36:27.539Z",
     "identityOrdinal": 1
    },
    "status": "backlog",
@@ -7348,7 +7532,7 @@
     "source": "conjunto-backlog",
     "sourceIndex": 114,
     "sourceSha256": "4b1edd3c9cf061630901d26c512a39e0227a67556a64d509168ea18cb887c330",
-    "importedAt": "2026-09-02T14:33:01.784Z",
+    "importedAt": "2026-09-28T07:36:27.539Z",
     "identityOrdinal": 1
    },
    "status": "backlog",
@@ -7405,7 +7589,7 @@
     "source": "conjunto",
     "sourceIndex": 0,
     "sourceSha256": "673b29e593ff6f6a6a0a19f1b96111d971f21e824c0e2cc02130b3596213dfab",
-    "importedAt": "2026-09-02T14:33:01.784Z",
+    "importedAt": "2026-09-28T07:36:27.539Z",
     "identityOrdinal": 1
    },
    "status": "backlog",
@@ -7460,7 +7644,7 @@
     "source": "conjunto",
     "sourceIndex": 1,
     "sourceSha256": "673b29e593ff6f6a6a0a19f1b96111d971f21e824c0e2cc02130b3596213dfab",
-    "importedAt": "2026-09-02T14:33:01.784Z",
+    "importedAt": "2026-09-28T07:36:27.539Z",
     "identityOrdinal": 1
    },
    "status": "backlog",
@@ -7515,7 +7699,7 @@
     "source": "conjunto",
     "sourceIndex": 2,
     "sourceSha256": "673b29e593ff6f6a6a0a19f1b96111d971f21e824c0e2cc02130b3596213dfab",
-    "importedAt": "2026-09-02T14:33:01.784Z",
+    "importedAt": "2026-09-28T07:36:27.539Z",
     "identityOrdinal": 1
    },
    "status": "backlog",
@@ -7570,7 +7754,7 @@
     "source": "conjunto",
     "sourceIndex": 3,
     "sourceSha256": "673b29e593ff6f6a6a0a19f1b96111d971f21e824c0e2cc02130b3596213dfab",
-    "importedAt": "2026-09-02T14:33:01.784Z",
+    "importedAt": "2026-09-28T07:36:27.539Z",
     "identityOrdinal": 1
    },
    "status": "backlog",
@@ -7625,7 +7809,7 @@
     "source": "conjunto",
     "sourceIndex": 4,
     "sourceSha256": "673b29e593ff6f6a6a0a19f1b96111d971f21e824c0e2cc02130b3596213dfab",
-    "importedAt": "2026-09-02T14:33:01.784Z",
+    "importedAt": "2026-09-28T07:36:27.539Z",
     "identityOrdinal": 1
    },
    "status": "backlog",
@@ -7680,7 +7864,7 @@
     "source": "conjunto",
     "sourceIndex": 5,
     "sourceSha256": "673b29e593ff6f6a6a0a19f1b96111d971f21e824c0e2cc02130b3596213dfab",
-    "importedAt": "2026-09-02T14:33:01.784Z",
+    "importedAt": "2026-09-28T07:36:27.539Z",
     "identityOrdinal": 1
    },
    "status": "backlog",
@@ -7735,7 +7919,7 @@
     "source": "conjunto",
     "sourceIndex": 6,
     "sourceSha256": "673b29e593ff6f6a6a0a19f1b96111d971f21e824c0e2cc02130b3596213dfab",
-    "importedAt": "2026-09-02T14:33:01.784Z",
+    "importedAt": "2026-09-28T07:36:27.539Z",
     "identityOrdinal": 1
    },
    "status": "backlog",
@@ -7790,7 +7974,7 @@
     "source": "conjunto",
     "sourceIndex": 7,
     "sourceSha256": "673b29e593ff6f6a6a0a19f1b96111d971f21e824c0e2cc02130b3596213dfab",
-    "importedAt": "2026-09-02T14:33:01.784Z",
+    "importedAt": "2026-09-28T07:36:27.539Z",
     "identityOrdinal": 1
    },
    "status": "backlog",
@@ -7845,7 +8029,7 @@
     "source": "conjunto",
     "sourceIndex": 8,
     "sourceSha256": "673b29e593ff6f6a6a0a19f1b96111d971f21e824c0e2cc02130b3596213dfab",
-    "importedAt": "2026-09-02T14:33:01.784Z",
+    "importedAt": "2026-09-28T07:36:27.539Z",
     "identityOrdinal": 1
    },
    "status": "backlog",
@@ -7900,7 +8084,7 @@
     "source": "conjunto",
     "sourceIndex": 9,
     "sourceSha256": "673b29e593ff6f6a6a0a19f1b96111d971f21e824c0e2cc02130b3596213dfab",
-    "importedAt": "2026-09-02T14:33:01.784Z",
+    "importedAt": "2026-09-28T07:36:27.539Z",
     "identityOrdinal": 1
    },
    "status": "backlog",
@@ -7955,7 +8139,7 @@
     "source": "conjunto",
     "sourceIndex": 10,
     "sourceSha256": "673b29e593ff6f6a6a0a19f1b96111d971f21e824c0e2cc02130b3596213dfab",
-    "importedAt": "2026-09-02T14:33:01.784Z",
+    "importedAt": "2026-09-28T07:36:27.539Z",
     "identityOrdinal": 1
    },
    "status": "backlog",
@@ -8010,7 +8194,7 @@
     "source": "conjunto",
     "sourceIndex": 11,
     "sourceSha256": "673b29e593ff6f6a6a0a19f1b96111d971f21e824c0e2cc02130b3596213dfab",
-    "importedAt": "2026-09-02T14:33:01.784Z",
+    "importedAt": "2026-09-28T07:36:27.539Z",
     "identityOrdinal": 1
    },
    "status": "backlog",
@@ -8065,7 +8249,7 @@
     "source": "conjunto",
     "sourceIndex": 12,
     "sourceSha256": "673b29e593ff6f6a6a0a19f1b96111d971f21e824c0e2cc02130b3596213dfab",
-    "importedAt": "2026-09-02T14:33:01.784Z",
+    "importedAt": "2026-09-28T07:36:27.539Z",
     "identityOrdinal": 1
    },
    "status": "backlog",
@@ -8120,7 +8304,7 @@
     "source": "conjunto",
     "sourceIndex": 13,
     "sourceSha256": "673b29e593ff6f6a6a0a19f1b96111d971f21e824c0e2cc02130b3596213dfab",
-    "importedAt": "2026-09-02T14:33:01.784Z",
+    "importedAt": "2026-09-28T07:36:27.539Z",
     "identityOrdinal": 1
    },
    "status": "backlog",
@@ -8175,7 +8359,7 @@
     "source": "conjunto",
     "sourceIndex": 14,
     "sourceSha256": "673b29e593ff6f6a6a0a19f1b96111d971f21e824c0e2cc02130b3596213dfab",
-    "importedAt": "2026-09-02T14:33:01.784Z",
+    "importedAt": "2026-09-28T07:36:27.539Z",
     "identityOrdinal": 1
    },
    "status": "backlog",
@@ -8230,7 +8414,7 @@
     "source": "conjunto",
     "sourceIndex": 15,
     "sourceSha256": "673b29e593ff6f6a6a0a19f1b96111d971f21e824c0e2cc02130b3596213dfab",
-    "importedAt": "2026-09-02T14:33:01.784Z",
+    "importedAt": "2026-09-28T07:36:27.539Z",
     "identityOrdinal": 1
    },
    "status": "backlog",
@@ -8285,7 +8469,7 @@
     "source": "conjunto",
     "sourceIndex": 16,
     "sourceSha256": "673b29e593ff6f6a6a0a19f1b96111d971f21e824c0e2cc02130b3596213dfab",
-    "importedAt": "2026-09-02T14:33:01.784Z",
+    "importedAt": "2026-09-28T07:36:27.539Z",
     "identityOrdinal": 1
    },
    "status": "backlog",
@@ -8340,7 +8524,7 @@
     "source": "conjunto",
     "sourceIndex": 17,
     "sourceSha256": "673b29e593ff6f6a6a0a19f1b96111d971f21e824c0e2cc02130b3596213dfab",
-    "importedAt": "2026-09-02T14:33:01.784Z",
+    "importedAt": "2026-09-28T07:36:27.539Z",
     "identityOrdinal": 1
    },
    "status": "backlog",
@@ -8395,7 +8579,7 @@
     "source": "conjunto",
     "sourceIndex": 18,
     "sourceSha256": "673b29e593ff6f6a6a0a19f1b96111d971f21e824c0e2cc02130b3596213dfab",
-    "importedAt": "2026-09-02T14:33:01.784Z",
+    "importedAt": "2026-09-28T07:36:27.539Z",
     "identityOrdinal": 1
    },
    "status": "backlog",
@@ -8452,7 +8636,7 @@
     "source": "conjunto",
     "sourceIndex": 19,
     "sourceSha256": "673b29e593ff6f6a6a0a19f1b96111d971f21e824c0e2cc02130b3596213dfab",
-    "importedAt": "2026-09-02T14:33:01.784Z",
+    "importedAt": "2026-09-28T07:36:27.539Z",
     "identityOrdinal": 1
    },
    "status": "backlog",
@@ -8509,7 +8693,7 @@
     "source": "conjunto",
     "sourceIndex": 20,
     "sourceSha256": "673b29e593ff6f6a6a0a19f1b96111d971f21e824c0e2cc02130b3596213dfab",
-    "importedAt": "2026-09-02T14:33:01.784Z",
+    "importedAt": "2026-09-28T07:36:27.539Z",
     "identityOrdinal": 1
    },
    "status": "backlog",
@@ -8566,7 +8750,7 @@
     "source": "conjunto",
     "sourceIndex": 21,
     "sourceSha256": "673b29e593ff6f6a6a0a19f1b96111d971f21e824c0e2cc02130b3596213dfab",
-    "importedAt": "2026-09-02T14:33:01.784Z",
+    "importedAt": "2026-09-28T07:36:27.539Z",
     "identityOrdinal": 1
    },
    "status": "backlog",
@@ -8623,7 +8807,7 @@
     "source": "conjunto",
     "sourceIndex": 22,
     "sourceSha256": "673b29e593ff6f6a6a0a19f1b96111d971f21e824c0e2cc02130b3596213dfab",
-    "importedAt": "2026-09-02T14:33:01.784Z",
+    "importedAt": "2026-09-28T07:36:27.539Z",
     "identityOrdinal": 1
    },
    "status": "backlog",
@@ -8680,7 +8864,7 @@
     "source": "conjunto",
     "sourceIndex": 23,
     "sourceSha256": "673b29e593ff6f6a6a0a19f1b96111d971f21e824c0e2cc02130b3596213dfab",
-    "importedAt": "2026-09-02T14:33:01.784Z",
+    "importedAt": "2026-09-28T07:36:27.539Z",
     "identityOrdinal": 1
    },
    "status": "backlog",
@@ -8735,7 +8919,7 @@
     "source": "conjunto",
     "sourceIndex": 24,
     "sourceSha256": "673b29e593ff6f6a6a0a19f1b96111d971f21e824c0e2cc02130b3596213dfab",
-    "importedAt": "2026-09-02T14:33:01.784Z",
+    "importedAt": "2026-09-28T07:36:27.539Z",
     "identityOrdinal": 1
    },
    "status": "backlog",
@@ -8792,7 +8976,7 @@
     "source": "conjunto",
     "sourceIndex": 25,
     "sourceSha256": "673b29e593ff6f6a6a0a19f1b96111d971f21e824c0e2cc02130b3596213dfab",
-    "importedAt": "2026-09-02T14:33:01.784Z",
+    "importedAt": "2026-09-28T07:36:27.539Z",
     "identityOrdinal": 1
    },
    "status": "backlog",
@@ -8847,7 +9031,7 @@
     "source": "conjunto",
     "sourceIndex": 26,
     "sourceSha256": "673b29e593ff6f6a6a0a19f1b96111d971f21e824c0e2cc02130b3596213dfab",
-    "importedAt": "2026-09-02T14:33:01.784Z",
+    "importedAt": "2026-09-28T07:36:27.539Z",
     "identityOrdinal": 1
    },
    "status": "backlog",
@@ -8902,7 +9086,7 @@
     "source": "conjunto",
     "sourceIndex": 27,
     "sourceSha256": "673b29e593ff6f6a6a0a19f1b96111d971f21e824c0e2cc02130b3596213dfab",
-    "importedAt": "2026-09-02T14:33:01.784Z",
+    "importedAt": "2026-09-28T07:36:27.539Z",
     "identityOrdinal": 1
    },
    "status": "backlog",
@@ -8957,7 +9141,7 @@
     "source": "conjunto",
     "sourceIndex": 28,
     "sourceSha256": "673b29e593ff6f6a6a0a19f1b96111d971f21e824c0e2cc02130b3596213dfab",
-    "importedAt": "2026-09-02T14:33:01.784Z",
+    "importedAt": "2026-09-28T07:36:27.539Z",
     "identityOrdinal": 1
    },
    "status": "backlog",
@@ -9012,7 +9196,7 @@
     "source": "conjunto",
     "sourceIndex": 29,
     "sourceSha256": "673b29e593ff6f6a6a0a19f1b96111d971f21e824c0e2cc02130b3596213dfab",
-    "importedAt": "2026-09-02T14:33:01.784Z",
+    "importedAt": "2026-09-28T07:36:27.539Z",
     "identityOrdinal": 1
    },
    "status": "backlog",
@@ -9069,7 +9253,7 @@
     "source": "conjunto",
     "sourceIndex": 30,
     "sourceSha256": "673b29e593ff6f6a6a0a19f1b96111d971f21e824c0e2cc02130b3596213dfab",
-    "importedAt": "2026-09-02T14:33:01.784Z",
+    "importedAt": "2026-09-28T07:36:27.539Z",
     "identityOrdinal": 1
    },
    "status": "backlog",
@@ -9124,7 +9308,7 @@
     "source": "conjunto",
     "sourceIndex": 31,
     "sourceSha256": "673b29e593ff6f6a6a0a19f1b96111d971f21e824c0e2cc02130b3596213dfab",
-    "importedAt": "2026-09-02T14:33:01.784Z",
+    "importedAt": "2026-09-28T07:36:27.539Z",
     "identityOrdinal": 1
    },
    "status": "backlog",
@@ -9181,7 +9365,7 @@
     "source": "conjunto",
     "sourceIndex": 32,
     "sourceSha256": "673b29e593ff6f6a6a0a19f1b96111d971f21e824c0e2cc02130b3596213dfab",
-    "importedAt": "2026-09-02T14:33:01.784Z",
+    "importedAt": "2026-09-28T07:36:27.539Z",
     "identityOrdinal": 1
    },
    "status": "backlog",
@@ -9236,7 +9420,7 @@
     "source": "conjunto",
     "sourceIndex": 33,
     "sourceSha256": "673b29e593ff6f6a6a0a19f1b96111d971f21e824c0e2cc02130b3596213dfab",
-    "importedAt": "2026-09-02T14:33:01.784Z",
+    "importedAt": "2026-09-28T07:36:27.539Z",
     "identityOrdinal": 1
    },
    "status": "backlog",
@@ -9293,7 +9477,7 @@
     "source": "conjunto",
     "sourceIndex": 34,
     "sourceSha256": "673b29e593ff6f6a6a0a19f1b96111d971f21e824c0e2cc02130b3596213dfab",
-    "importedAt": "2026-09-02T14:33:01.784Z",
+    "importedAt": "2026-09-28T07:36:27.539Z",
     "identityOrdinal": 1
    },
    "status": "backlog",
@@ -9348,7 +9532,7 @@
     "source": "conjunto",
     "sourceIndex": 35,
     "sourceSha256": "673b29e593ff6f6a6a0a19f1b96111d971f21e824c0e2cc02130b3596213dfab",
-    "importedAt": "2026-09-02T14:33:01.784Z",
+    "importedAt": "2026-09-28T07:36:27.539Z",
     "identityOrdinal": 1
    },
    "status": "backlog",
@@ -9405,7 +9589,7 @@
     "source": "conjunto",
     "sourceIndex": 36,
     "sourceSha256": "673b29e593ff6f6a6a0a19f1b96111d971f21e824c0e2cc02130b3596213dfab",
-    "importedAt": "2026-09-02T14:33:01.784Z",
+    "importedAt": "2026-09-28T07:36:27.539Z",
     "identityOrdinal": 1
    },
    "status": "backlog",
@@ -9460,7 +9644,7 @@
     "source": "conjunto",
     "sourceIndex": 37,
     "sourceSha256": "673b29e593ff6f6a6a0a19f1b96111d971f21e824c0e2cc02130b3596213dfab",
-    "importedAt": "2026-09-02T14:33:01.784Z",
+    "importedAt": "2026-09-28T07:36:27.539Z",
     "identityOrdinal": 1
    },
    "status": "backlog",
@@ -9517,7 +9701,7 @@
     "source": "conjunto",
     "sourceIndex": 38,
     "sourceSha256": "673b29e593ff6f6a6a0a19f1b96111d971f21e824c0e2cc02130b3596213dfab",
-    "importedAt": "2026-09-02T14:33:01.784Z",
+    "importedAt": "2026-09-28T07:36:27.539Z",
     "identityOrdinal": 1
    },
    "status": "backlog",
@@ -9572,7 +9756,7 @@
     "source": "conjunto",
     "sourceIndex": 39,
     "sourceSha256": "673b29e593ff6f6a6a0a19f1b96111d971f21e824c0e2cc02130b3596213dfab",
-    "importedAt": "2026-09-02T14:33:01.784Z",
+    "importedAt": "2026-09-28T07:36:27.539Z",
     "identityOrdinal": 1
    },
    "status": "backlog",
@@ -9629,7 +9813,7 @@
     "source": "conjunto",
     "sourceIndex": 40,
     "sourceSha256": "673b29e593ff6f6a6a0a19f1b96111d971f21e824c0e2cc02130b3596213dfab",
-    "importedAt": "2026-09-02T14:33:01.784Z",
+    "importedAt": "2026-09-28T07:36:27.539Z",
     "identityOrdinal": 1
    },
    "status": "backlog",
@@ -9684,7 +9868,7 @@
     "source": "conjunto",
     "sourceIndex": 41,
     "sourceSha256": "673b29e593ff6f6a6a0a19f1b96111d971f21e824c0e2cc02130b3596213dfab",
-    "importedAt": "2026-09-02T14:33:01.784Z",
+    "importedAt": "2026-09-28T07:36:27.539Z",
     "identityOrdinal": 1
    },
    "status": "backlog",
@@ -9741,7 +9925,7 @@
     "source": "conjunto",
     "sourceIndex": 42,
     "sourceSha256": "673b29e593ff6f6a6a0a19f1b96111d971f21e824c0e2cc02130b3596213dfab",
-    "importedAt": "2026-09-02T14:33:01.784Z",
+    "importedAt": "2026-09-28T07:36:27.539Z",
     "identityOrdinal": 1
    },
    "status": "backlog",
@@ -9796,7 +9980,7 @@
     "source": "conjunto",
     "sourceIndex": 43,
     "sourceSha256": "673b29e593ff6f6a6a0a19f1b96111d971f21e824c0e2cc02130b3596213dfab",
-    "importedAt": "2026-09-02T14:33:01.784Z",
+    "importedAt": "2026-09-28T07:36:27.539Z",
     "identityOrdinal": 1
    },
    "status": "backlog",
@@ -9853,7 +10037,7 @@
     "source": "conjunto",
     "sourceIndex": 44,
     "sourceSha256": "673b29e593ff6f6a6a0a19f1b96111d971f21e824c0e2cc02130b3596213dfab",
-    "importedAt": "2026-09-02T14:33:01.784Z",
+    "importedAt": "2026-09-28T07:36:27.539Z",
     "identityOrdinal": 1
    },
    "status": "backlog",
@@ -9908,7 +10092,7 @@
     "source": "conjunto",
     "sourceIndex": 45,
     "sourceSha256": "673b29e593ff6f6a6a0a19f1b96111d971f21e824c0e2cc02130b3596213dfab",
-    "importedAt": "2026-09-02T14:33:01.784Z",
+    "importedAt": "2026-09-28T07:36:27.539Z",
     "identityOrdinal": 1
    },
    "status": "backlog",
@@ -9965,7 +10149,7 @@
     "source": "conjunto",
     "sourceIndex": 46,
     "sourceSha256": "673b29e593ff6f6a6a0a19f1b96111d971f21e824c0e2cc02130b3596213dfab",
-    "importedAt": "2026-09-02T14:33:01.784Z",
+    "importedAt": "2026-09-28T07:36:27.539Z",
     "identityOrdinal": 1
    },
    "status": "backlog",
@@ -10020,7 +10204,7 @@
     "source": "conjunto",
     "sourceIndex": 47,
     "sourceSha256": "673b29e593ff6f6a6a0a19f1b96111d971f21e824c0e2cc02130b3596213dfab",
-    "importedAt": "2026-09-02T14:33:01.784Z",
+    "importedAt": "2026-09-28T07:36:27.539Z",
     "identityOrdinal": 1
    },
    "status": "backlog",
@@ -10077,7 +10261,7 @@
     "source": "conjunto",
     "sourceIndex": 48,
     "sourceSha256": "673b29e593ff6f6a6a0a19f1b96111d971f21e824c0e2cc02130b3596213dfab",
-    "importedAt": "2026-09-02T14:33:01.784Z",
+    "importedAt": "2026-09-28T07:36:27.539Z",
     "identityOrdinal": 1
    },
    "status": "backlog",
@@ -10132,7 +10316,7 @@
     "source": "conjunto",
     "sourceIndex": 49,
     "sourceSha256": "673b29e593ff6f6a6a0a19f1b96111d971f21e824c0e2cc02130b3596213dfab",
-    "importedAt": "2026-09-02T14:33:01.784Z",
+    "importedAt": "2026-09-28T07:36:27.539Z",
     "identityOrdinal": 1
    },
    "status": "aceptado",
@@ -10190,7 +10374,7 @@
     "source": "conjunto",
     "sourceIndex": 50,
     "sourceSha256": "673b29e593ff6f6a6a0a19f1b96111d971f21e824c0e2cc02130b3596213dfab",
-    "importedAt": "2026-09-02T14:33:01.784Z",
+    "importedAt": "2026-09-28T07:36:27.539Z",
     "identityOrdinal": 1
    },
    "status": "aceptado",
@@ -10248,7 +10432,7 @@
     "source": "conjunto",
     "sourceIndex": 51,
     "sourceSha256": "673b29e593ff6f6a6a0a19f1b96111d971f21e824c0e2cc02130b3596213dfab",
-    "importedAt": "2026-09-02T14:33:01.784Z",
+    "importedAt": "2026-09-28T07:36:27.539Z",
     "identityOrdinal": 1
    },
    "status": "backlog",
@@ -10303,7 +10487,7 @@
     "source": "conjunto",
     "sourceIndex": 52,
     "sourceSha256": "673b29e593ff6f6a6a0a19f1b96111d971f21e824c0e2cc02130b3596213dfab",
-    "importedAt": "2026-09-02T14:33:01.784Z",
+    "importedAt": "2026-09-28T07:36:27.539Z",
     "identityOrdinal": 1
    },
    "status": "backlog",
@@ -10358,7 +10542,7 @@
     "source": "conjunto",
     "sourceIndex": 53,
     "sourceSha256": "673b29e593ff6f6a6a0a19f1b96111d971f21e824c0e2cc02130b3596213dfab",
-    "importedAt": "2026-09-02T14:33:01.784Z",
+    "importedAt": "2026-09-28T07:36:27.539Z",
     "identityOrdinal": 1
    },
    "status": "backlog",
@@ -10413,7 +10597,7 @@
     "source": "conjunto",
     "sourceIndex": 54,
     "sourceSha256": "673b29e593ff6f6a6a0a19f1b96111d971f21e824c0e2cc02130b3596213dfab",
-    "importedAt": "2026-09-02T14:33:01.784Z",
+    "importedAt": "2026-09-28T07:36:27.539Z",
     "identityOrdinal": 1
    },
    "status": "backlog",
@@ -10468,7 +10652,7 @@
     "source": "conjunto",
     "sourceIndex": 55,
     "sourceSha256": "673b29e593ff6f6a6a0a19f1b96111d971f21e824c0e2cc02130b3596213dfab",
-    "importedAt": "2026-09-02T14:33:01.784Z",
+    "importedAt": "2026-09-28T07:36:27.539Z",
     "identityOrdinal": 1
    },
    "status": "backlog",
@@ -10523,7 +10707,7 @@
     "source": "conjunto",
     "sourceIndex": 56,
     "sourceSha256": "673b29e593ff6f6a6a0a19f1b96111d971f21e824c0e2cc02130b3596213dfab",
-    "importedAt": "2026-09-02T14:33:01.784Z",
+    "importedAt": "2026-09-28T07:36:27.539Z",
     "identityOrdinal": 1
    },
    "status": "backlog",
@@ -10578,7 +10762,7 @@
     "source": "conjunto",
     "sourceIndex": 57,
     "sourceSha256": "673b29e593ff6f6a6a0a19f1b96111d971f21e824c0e2cc02130b3596213dfab",
-    "importedAt": "2026-09-02T14:33:01.784Z",
+    "importedAt": "2026-09-28T07:36:27.539Z",
     "identityOrdinal": 1
    },
    "status": "backlog",
@@ -10633,7 +10817,7 @@
     "source": "conjunto",
     "sourceIndex": 58,
     "sourceSha256": "673b29e593ff6f6a6a0a19f1b96111d971f21e824c0e2cc02130b3596213dfab",
-    "importedAt": "2026-09-02T14:33:01.784Z",
+    "importedAt": "2026-09-28T07:36:27.539Z",
     "identityOrdinal": 1
    },
    "status": "backlog",
@@ -10688,7 +10872,7 @@
     "source": "conjunto",
     "sourceIndex": 59,
     "sourceSha256": "673b29e593ff6f6a6a0a19f1b96111d971f21e824c0e2cc02130b3596213dfab",
-    "importedAt": "2026-09-02T14:33:01.784Z",
+    "importedAt": "2026-09-28T07:36:27.539Z",
     "identityOrdinal": 1
    },
    "status": "backlog",
@@ -10743,7 +10927,7 @@
     "source": "conjunto",
     "sourceIndex": 60,
     "sourceSha256": "673b29e593ff6f6a6a0a19f1b96111d971f21e824c0e2cc02130b3596213dfab",
-    "importedAt": "2026-09-02T14:33:01.784Z",
+    "importedAt": "2026-09-28T07:36:27.539Z",
     "identityOrdinal": 1
    },
    "status": "backlog",
@@ -10798,7 +10982,7 @@
     "source": "conjunto",
     "sourceIndex": 61,
     "sourceSha256": "673b29e593ff6f6a6a0a19f1b96111d971f21e824c0e2cc02130b3596213dfab",
-    "importedAt": "2026-09-02T14:33:01.784Z",
+    "importedAt": "2026-09-28T07:36:27.539Z",
     "identityOrdinal": 1
    },
    "status": "backlog",
@@ -10853,7 +11037,7 @@
     "source": "conjunto",
     "sourceIndex": 62,
     "sourceSha256": "673b29e593ff6f6a6a0a19f1b96111d971f21e824c0e2cc02130b3596213dfab",
-    "importedAt": "2026-09-02T14:33:01.784Z",
+    "importedAt": "2026-09-28T07:36:27.539Z",
     "identityOrdinal": 1
    },
    "status": "backlog",
@@ -10908,7 +11092,7 @@
     "source": "conjunto",
     "sourceIndex": 63,
     "sourceSha256": "673b29e593ff6f6a6a0a19f1b96111d971f21e824c0e2cc02130b3596213dfab",
-    "importedAt": "2026-09-02T14:33:01.784Z",
+    "importedAt": "2026-09-28T07:36:27.539Z",
     "identityOrdinal": 1
    },
    "status": "backlog",
@@ -10963,7 +11147,7 @@
     "source": "conjunto",
     "sourceIndex": 64,
     "sourceSha256": "673b29e593ff6f6a6a0a19f1b96111d971f21e824c0e2cc02130b3596213dfab",
-    "importedAt": "2026-09-02T14:33:01.784Z",
+    "importedAt": "2026-09-28T07:36:27.539Z",
     "identityOrdinal": 1
    },
    "status": "backlog",
@@ -11018,7 +11202,7 @@
     "source": "conjunto",
     "sourceIndex": 65,
     "sourceSha256": "673b29e593ff6f6a6a0a19f1b96111d971f21e824c0e2cc02130b3596213dfab",
-    "importedAt": "2026-09-02T14:33:01.784Z",
+    "importedAt": "2026-09-28T07:36:27.539Z",
     "identityOrdinal": 1
    },
    "status": "backlog",
@@ -11073,7 +11257,7 @@
     "source": "conjunto",
     "sourceIndex": 66,
     "sourceSha256": "673b29e593ff6f6a6a0a19f1b96111d971f21e824c0e2cc02130b3596213dfab",
-    "importedAt": "2026-09-02T14:33:01.784Z",
+    "importedAt": "2026-09-28T07:36:27.539Z",
     "identityOrdinal": 1
    },
    "status": "backlog",
@@ -11128,7 +11312,7 @@
     "source": "conjunto",
     "sourceIndex": 67,
     "sourceSha256": "673b29e593ff6f6a6a0a19f1b96111d971f21e824c0e2cc02130b3596213dfab",
-    "importedAt": "2026-09-02T14:33:01.784Z",
+    "importedAt": "2026-09-28T07:36:27.539Z",
     "identityOrdinal": 1
    },
    "status": "backlog",
@@ -11183,7 +11367,7 @@
     "source": "conjunto",
     "sourceIndex": 68,
     "sourceSha256": "673b29e593ff6f6a6a0a19f1b96111d971f21e824c0e2cc02130b3596213dfab",
-    "importedAt": "2026-09-02T14:33:01.784Z",
+    "importedAt": "2026-09-28T07:36:27.539Z",
     "identityOrdinal": 1
    },
    "status": "backlog",
@@ -11238,7 +11422,7 @@
     "source": "conjunto",
     "sourceIndex": 69,
     "sourceSha256": "673b29e593ff6f6a6a0a19f1b96111d971f21e824c0e2cc02130b3596213dfab",
-    "importedAt": "2026-09-02T14:33:01.784Z",
+    "importedAt": "2026-09-28T07:36:27.539Z",
     "identityOrdinal": 1
    },
    "status": "backlog",
@@ -11293,7 +11477,7 @@
     "source": "conjunto",
     "sourceIndex": 70,
     "sourceSha256": "673b29e593ff6f6a6a0a19f1b96111d971f21e824c0e2cc02130b3596213dfab",
-    "importedAt": "2026-09-02T14:33:01.784Z",
+    "importedAt": "2026-09-28T07:36:27.539Z",
     "identityOrdinal": 1
    },
    "status": "backlog",
@@ -11348,7 +11532,7 @@
     "source": "conjunto",
     "sourceIndex": 71,
     "sourceSha256": "673b29e593ff6f6a6a0a19f1b96111d971f21e824c0e2cc02130b3596213dfab",
-    "importedAt": "2026-09-02T14:33:01.784Z",
+    "importedAt": "2026-09-28T07:36:27.539Z",
     "identityOrdinal": 1
    },
    "status": "backlog",
@@ -11403,7 +11587,7 @@
     "source": "conjunto",
     "sourceIndex": 72,
     "sourceSha256": "673b29e593ff6f6a6a0a19f1b96111d971f21e824c0e2cc02130b3596213dfab",
-    "importedAt": "2026-09-02T14:33:01.784Z",
+    "importedAt": "2026-09-28T07:36:27.539Z",
     "identityOrdinal": 1
    },
    "status": "backlog",
@@ -11458,7 +11642,7 @@
     "source": "conjunto",
     "sourceIndex": 73,
     "sourceSha256": "673b29e593ff6f6a6a0a19f1b96111d971f21e824c0e2cc02130b3596213dfab",
-    "importedAt": "2026-09-02T14:33:01.784Z",
+    "importedAt": "2026-09-28T07:36:27.539Z",
     "identityOrdinal": 1
    },
    "status": "backlog",
@@ -11513,7 +11697,7 @@
     "source": "conjunto",
     "sourceIndex": 74,
     "sourceSha256": "673b29e593ff6f6a6a0a19f1b96111d971f21e824c0e2cc02130b3596213dfab",
-    "importedAt": "2026-09-02T14:33:01.784Z",
+    "importedAt": "2026-09-28T07:36:27.539Z",
     "identityOrdinal": 1
    },
    "status": "backlog",
@@ -11568,7 +11752,7 @@
     "source": "conjunto",
     "sourceIndex": 75,
     "sourceSha256": "673b29e593ff6f6a6a0a19f1b96111d971f21e824c0e2cc02130b3596213dfab",
-    "importedAt": "2026-09-02T14:33:01.784Z",
+    "importedAt": "2026-09-28T07:36:27.539Z",
     "identityOrdinal": 1
    },
    "status": "backlog",
@@ -11623,7 +11807,7 @@
     "source": "conjunto",
     "sourceIndex": 76,
     "sourceSha256": "673b29e593ff6f6a6a0a19f1b96111d971f21e824c0e2cc02130b3596213dfab",
-    "importedAt": "2026-09-02T14:33:01.784Z",
+    "importedAt": "2026-09-28T07:36:27.539Z",
     "identityOrdinal": 1
    },
    "status": "backlog",
@@ -11678,7 +11862,7 @@
     "source": "conjunto",
     "sourceIndex": 77,
     "sourceSha256": "673b29e593ff6f6a6a0a19f1b96111d971f21e824c0e2cc02130b3596213dfab",
-    "importedAt": "2026-09-02T14:33:01.784Z",
+    "importedAt": "2026-09-28T07:36:27.539Z",
     "identityOrdinal": 1
    },
    "status": "backlog",
@@ -11733,7 +11917,7 @@
     "source": "conjunto",
     "sourceIndex": 78,
     "sourceSha256": "673b29e593ff6f6a6a0a19f1b96111d971f21e824c0e2cc02130b3596213dfab",
-    "importedAt": "2026-09-02T14:33:01.784Z",
+    "importedAt": "2026-09-28T07:36:27.539Z",
     "identityOrdinal": 1
    },
    "status": "backlog",
@@ -11788,7 +11972,7 @@
     "source": "conjunto",
     "sourceIndex": 79,
     "sourceSha256": "673b29e593ff6f6a6a0a19f1b96111d971f21e824c0e2cc02130b3596213dfab",
-    "importedAt": "2026-09-02T14:33:01.784Z",
+    "importedAt": "2026-09-28T07:36:27.539Z",
     "identityOrdinal": 1
    },
    "status": "backlog",
@@ -11843,7 +12027,7 @@
     "source": "conjunto",
     "sourceIndex": 80,
     "sourceSha256": "673b29e593ff6f6a6a0a19f1b96111d971f21e824c0e2cc02130b3596213dfab",
-    "importedAt": "2026-09-02T14:33:01.784Z",
+    "importedAt": "2026-09-28T07:36:27.539Z",
     "identityOrdinal": 1
    },
    "status": "backlog",
@@ -11898,7 +12082,7 @@
     "source": "conjunto",
     "sourceIndex": 81,
     "sourceSha256": "673b29e593ff6f6a6a0a19f1b96111d971f21e824c0e2cc02130b3596213dfab",
-    "importedAt": "2026-09-02T14:33:01.784Z",
+    "importedAt": "2026-09-28T07:36:27.539Z",
     "identityOrdinal": 1
    },
    "status": "backlog",
@@ -11953,7 +12137,7 @@
     "source": "conjunto",
     "sourceIndex": 82,
     "sourceSha256": "673b29e593ff6f6a6a0a19f1b96111d971f21e824c0e2cc02130b3596213dfab",
-    "importedAt": "2026-09-02T14:33:01.784Z",
+    "importedAt": "2026-09-28T07:36:27.539Z",
     "identityOrdinal": 1
    },
    "status": "backlog",
@@ -12008,7 +12192,7 @@
     "source": "conjunto",
     "sourceIndex": 83,
     "sourceSha256": "673b29e593ff6f6a6a0a19f1b96111d971f21e824c0e2cc02130b3596213dfab",
-    "importedAt": "2026-09-02T14:33:01.784Z",
+    "importedAt": "2026-09-28T07:36:27.539Z",
     "identityOrdinal": 1
    },
    "status": "backlog",
@@ -12063,7 +12247,7 @@
     "source": "conjunto",
     "sourceIndex": 84,
     "sourceSha256": "673b29e593ff6f6a6a0a19f1b96111d971f21e824c0e2cc02130b3596213dfab",
-    "importedAt": "2026-09-02T14:33:01.784Z",
+    "importedAt": "2026-09-28T07:36:27.539Z",
     "identityOrdinal": 1
    },
    "status": "backlog",
@@ -12118,7 +12302,7 @@
     "source": "conjunto",
     "sourceIndex": 85,
     "sourceSha256": "673b29e593ff6f6a6a0a19f1b96111d971f21e824c0e2cc02130b3596213dfab",
-    "importedAt": "2026-09-02T14:33:01.784Z",
+    "importedAt": "2026-09-28T07:36:27.539Z",
     "identityOrdinal": 1
    },
    "status": "backlog",
@@ -12173,7 +12357,7 @@
     "source": "conjunto",
     "sourceIndex": 86,
     "sourceSha256": "673b29e593ff6f6a6a0a19f1b96111d971f21e824c0e2cc02130b3596213dfab",
-    "importedAt": "2026-09-02T14:33:01.784Z",
+    "importedAt": "2026-09-28T07:36:27.539Z",
     "identityOrdinal": 1
    },
    "status": "backlog",
@@ -12228,7 +12412,7 @@
     "source": "conjunto",
     "sourceIndex": 87,
     "sourceSha256": "673b29e593ff6f6a6a0a19f1b96111d971f21e824c0e2cc02130b3596213dfab",
-    "importedAt": "2026-09-02T14:33:01.784Z",
+    "importedAt": "2026-09-28T07:36:27.539Z",
     "identityOrdinal": 1
    },
    "status": "backlog",
@@ -12283,7 +12467,7 @@
     "source": "conjunto",
     "sourceIndex": 88,
     "sourceSha256": "673b29e593ff6f6a6a0a19f1b96111d971f21e824c0e2cc02130b3596213dfab",
-    "importedAt": "2026-09-02T14:33:01.784Z",
+    "importedAt": "2026-09-28T07:36:27.539Z",
     "identityOrdinal": 1
    },
    "status": "backlog",
@@ -12338,7 +12522,7 @@
     "source": "conjunto",
     "sourceIndex": 89,
     "sourceSha256": "673b29e593ff6f6a6a0a19f1b96111d971f21e824c0e2cc02130b3596213dfab",
-    "importedAt": "2026-09-02T14:33:01.784Z",
+    "importedAt": "2026-09-28T07:36:27.539Z",
     "identityOrdinal": 1
    },
    "status": "backlog",
@@ -12393,7 +12577,7 @@
     "source": "conjunto",
     "sourceIndex": 90,
     "sourceSha256": "673b29e593ff6f6a6a0a19f1b96111d971f21e824c0e2cc02130b3596213dfab",
-    "importedAt": "2026-09-02T14:33:01.784Z",
+    "importedAt": "2026-09-28T07:36:27.539Z",
     "identityOrdinal": 1
    },
    "status": "backlog",
@@ -12448,7 +12632,7 @@
     "source": "conjunto",
     "sourceIndex": 91,
     "sourceSha256": "673b29e593ff6f6a6a0a19f1b96111d971f21e824c0e2cc02130b3596213dfab",
-    "importedAt": "2026-09-02T14:33:01.784Z",
+    "importedAt": "2026-09-28T07:36:27.539Z",
     "identityOrdinal": 1
    },
    "status": "backlog",
@@ -12503,7 +12687,7 @@
     "source": "conjunto",
     "sourceIndex": 92,
     "sourceSha256": "673b29e593ff6f6a6a0a19f1b96111d971f21e824c0e2cc02130b3596213dfab",
-    "importedAt": "2026-09-02T14:33:01.784Z",
+    "importedAt": "2026-09-28T07:36:27.539Z",
     "identityOrdinal": 1
    },
    "status": "backlog",
@@ -12558,7 +12742,7 @@
     "source": "conjunto",
     "sourceIndex": 93,
     "sourceSha256": "673b29e593ff6f6a6a0a19f1b96111d971f21e824c0e2cc02130b3596213dfab",
-    "importedAt": "2026-09-02T14:33:01.784Z",
+    "importedAt": "2026-09-28T07:36:27.539Z",
     "identityOrdinal": 1
    },
    "status": "backlog",
@@ -12613,7 +12797,7 @@
     "source": "conjunto",
     "sourceIndex": 94,
     "sourceSha256": "673b29e593ff6f6a6a0a19f1b96111d971f21e824c0e2cc02130b3596213dfab",
-    "importedAt": "2026-09-02T14:33:01.784Z",
+    "importedAt": "2026-09-28T07:36:27.539Z",
     "identityOrdinal": 1
    },
    "status": "backlog",
@@ -12668,7 +12852,7 @@
     "source": "conjunto",
     "sourceIndex": 95,
     "sourceSha256": "673b29e593ff6f6a6a0a19f1b96111d971f21e824c0e2cc02130b3596213dfab",
-    "importedAt": "2026-09-02T14:33:01.784Z",
+    "importedAt": "2026-09-28T07:36:27.539Z",
     "identityOrdinal": 1
    },
    "status": "backlog",
@@ -12723,7 +12907,7 @@
     "source": "conjunto",
     "sourceIndex": 96,
     "sourceSha256": "673b29e593ff6f6a6a0a19f1b96111d971f21e824c0e2cc02130b3596213dfab",
-    "importedAt": "2026-09-02T14:33:01.784Z",
+    "importedAt": "2026-09-28T07:36:27.539Z",
     "identityOrdinal": 1
    },
    "status": "backlog",
@@ -12778,7 +12962,7 @@
     "source": "conjunto",
     "sourceIndex": 97,
     "sourceSha256": "673b29e593ff6f6a6a0a19f1b96111d971f21e824c0e2cc02130b3596213dfab",
-    "importedAt": "2026-09-02T14:33:01.784Z",
+    "importedAt": "2026-09-28T07:36:27.539Z",
     "identityOrdinal": 1
    },
    "status": "backlog",
@@ -12833,7 +13017,7 @@
     "source": "conjunto",
     "sourceIndex": 98,
     "sourceSha256": "673b29e593ff6f6a6a0a19f1b96111d971f21e824c0e2cc02130b3596213dfab",
-    "importedAt": "2026-09-02T14:33:01.784Z",
+    "importedAt": "2026-09-28T07:36:27.539Z",
     "identityOrdinal": 1
    },
    "status": "backlog",
@@ -12888,7 +13072,7 @@
     "source": "conjunto",
     "sourceIndex": 99,
     "sourceSha256": "673b29e593ff6f6a6a0a19f1b96111d971f21e824c0e2cc02130b3596213dfab",
-    "importedAt": "2026-09-02T14:33:01.784Z",
+    "importedAt": "2026-09-28T07:36:27.539Z",
     "identityOrdinal": 1
    },
    "status": "backlog",
@@ -12943,7 +13127,7 @@
     "source": "conjunto",
     "sourceIndex": 100,
     "sourceSha256": "673b29e593ff6f6a6a0a19f1b96111d971f21e824c0e2cc02130b3596213dfab",
-    "importedAt": "2026-09-02T14:33:01.784Z",
+    "importedAt": "2026-09-28T07:36:27.539Z",
     "identityOrdinal": 1
    },
    "status": "backlog",
@@ -12998,7 +13182,7 @@
     "source": "conjunto",
     "sourceIndex": 101,
     "sourceSha256": "673b29e593ff6f6a6a0a19f1b96111d971f21e824c0e2cc02130b3596213dfab",
-    "importedAt": "2026-09-02T14:33:01.784Z",
+    "importedAt": "2026-09-28T07:36:27.539Z",
     "identityOrdinal": 1
    },
    "status": "backlog",
@@ -13053,7 +13237,7 @@
     "source": "conjunto",
     "sourceIndex": 102,
     "sourceSha256": "673b29e593ff6f6a6a0a19f1b96111d971f21e824c0e2cc02130b3596213dfab",
-    "importedAt": "2026-09-02T14:33:01.784Z",
+    "importedAt": "2026-09-28T07:36:27.539Z",
     "identityOrdinal": 1
    },
    "status": "backlog",
@@ -13108,7 +13292,7 @@
     "source": "conjunto",
     "sourceIndex": 103,
     "sourceSha256": "673b29e593ff6f6a6a0a19f1b96111d971f21e824c0e2cc02130b3596213dfab",
-    "importedAt": "2026-09-02T14:33:01.784Z",
+    "importedAt": "2026-09-28T07:36:27.539Z",
     "identityOrdinal": 1
    },
    "status": "backlog",
@@ -13163,7 +13347,7 @@
     "source": "conjunto",
     "sourceIndex": 104,
     "sourceSha256": "673b29e593ff6f6a6a0a19f1b96111d971f21e824c0e2cc02130b3596213dfab",
-    "importedAt": "2026-09-02T14:33:01.784Z",
+    "importedAt": "2026-09-28T07:36:27.539Z",
     "identityOrdinal": 1
    },
    "status": "backlog",
@@ -13218,7 +13402,7 @@
     "source": "conjunto",
     "sourceIndex": 105,
     "sourceSha256": "673b29e593ff6f6a6a0a19f1b96111d971f21e824c0e2cc02130b3596213dfab",
-    "importedAt": "2026-09-02T14:33:01.784Z",
+    "importedAt": "2026-09-28T07:36:27.539Z",
     "identityOrdinal": 1
    },
    "status": "backlog",
@@ -13273,7 +13457,7 @@
     "source": "conjunto",
     "sourceIndex": 106,
     "sourceSha256": "673b29e593ff6f6a6a0a19f1b96111d971f21e824c0e2cc02130b3596213dfab",
-    "importedAt": "2026-09-02T14:33:01.784Z",
+    "importedAt": "2026-09-28T07:36:27.539Z",
     "identityOrdinal": 1
    },
    "status": "backlog",
@@ -13328,7 +13512,7 @@
     "source": "conjunto",
     "sourceIndex": 107,
     "sourceSha256": "673b29e593ff6f6a6a0a19f1b96111d971f21e824c0e2cc02130b3596213dfab",
-    "importedAt": "2026-09-02T14:33:01.784Z",
+    "importedAt": "2026-09-28T07:36:27.539Z",
     "identityOrdinal": 1
    },
    "status": "backlog",
@@ -13383,7 +13567,7 @@
     "source": "conjunto",
     "sourceIndex": 108,
     "sourceSha256": "673b29e593ff6f6a6a0a19f1b96111d971f21e824c0e2cc02130b3596213dfab",
-    "importedAt": "2026-09-02T14:33:01.784Z",
+    "importedAt": "2026-09-28T07:36:27.539Z",
     "identityOrdinal": 1
    },
    "status": "backlog",
@@ -13438,7 +13622,7 @@
     "source": "conjunto",
     "sourceIndex": 109,
     "sourceSha256": "673b29e593ff6f6a6a0a19f1b96111d971f21e824c0e2cc02130b3596213dfab",
-    "importedAt": "2026-09-02T14:33:01.784Z",
+    "importedAt": "2026-09-28T07:36:27.539Z",
     "identityOrdinal": 1
    },
    "status": "backlog",
@@ -13493,7 +13677,7 @@
     "source": "conjunto",
     "sourceIndex": 110,
     "sourceSha256": "673b29e593ff6f6a6a0a19f1b96111d971f21e824c0e2cc02130b3596213dfab",
-    "importedAt": "2026-09-02T14:33:01.784Z",
+    "importedAt": "2026-09-28T07:36:27.539Z",
     "identityOrdinal": 1
    },
    "status": "backlog",
@@ -13548,7 +13732,7 @@
     "source": "conjunto",
     "sourceIndex": 111,
     "sourceSha256": "673b29e593ff6f6a6a0a19f1b96111d971f21e824c0e2cc02130b3596213dfab",
-    "importedAt": "2026-09-02T14:33:01.784Z",
+    "importedAt": "2026-09-28T07:36:27.539Z",
     "identityOrdinal": 1
    },
    "status": "backlog",
@@ -13603,7 +13787,7 @@
     "source": "conjunto",
     "sourceIndex": 112,
     "sourceSha256": "673b29e593ff6f6a6a0a19f1b96111d971f21e824c0e2cc02130b3596213dfab",
-    "importedAt": "2026-09-02T14:33:01.784Z",
+    "importedAt": "2026-09-28T07:36:27.539Z",
     "identityOrdinal": 1
    },
    "status": "backlog",
@@ -13658,7 +13842,7 @@
     "source": "conjunto",
     "sourceIndex": 113,
     "sourceSha256": "673b29e593ff6f6a6a0a19f1b96111d971f21e824c0e2cc02130b3596213dfab",
-    "importedAt": "2026-09-02T14:33:01.784Z",
+    "importedAt": "2026-09-28T07:36:27.539Z",
     "identityOrdinal": 1
    },
    "status": "backlog",
@@ -13713,7 +13897,7 @@
     "source": "conjunto",
     "sourceIndex": 114,
     "sourceSha256": "673b29e593ff6f6a6a0a19f1b96111d971f21e824c0e2cc02130b3596213dfab",
-    "importedAt": "2026-09-02T14:33:01.784Z",
+    "importedAt": "2026-09-28T07:36:27.539Z",
     "identityOrdinal": 1
    },
    "status": "backlog",
@@ -13768,7 +13952,7 @@
     "source": "conjunto",
     "sourceIndex": 115,
     "sourceSha256": "673b29e593ff6f6a6a0a19f1b96111d971f21e824c0e2cc02130b3596213dfab",
-    "importedAt": "2026-09-02T14:33:01.784Z",
+    "importedAt": "2026-09-28T07:36:27.539Z",
     "identityOrdinal": 1
    },
    "status": "backlog",
@@ -13823,7 +14007,7 @@
     "source": "conjunto",
     "sourceIndex": 116,
     "sourceSha256": "673b29e593ff6f6a6a0a19f1b96111d971f21e824c0e2cc02130b3596213dfab",
-    "importedAt": "2026-09-02T14:33:01.784Z",
+    "importedAt": "2026-09-28T07:36:27.539Z",
     "identityOrdinal": 1
    },
    "status": "backlog",
@@ -13878,7 +14062,7 @@
     "source": "conjunto",
     "sourceIndex": 117,
     "sourceSha256": "673b29e593ff6f6a6a0a19f1b96111d971f21e824c0e2cc02130b3596213dfab",
-    "importedAt": "2026-09-02T14:33:01.784Z",
+    "importedAt": "2026-09-28T07:36:27.539Z",
     "identityOrdinal": 1
    },
    "status": "backlog",
@@ -13933,7 +14117,7 @@
     "source": "conjunto",
     "sourceIndex": 118,
     "sourceSha256": "673b29e593ff6f6a6a0a19f1b96111d971f21e824c0e2cc02130b3596213dfab",
-    "importedAt": "2026-09-02T14:33:01.784Z",
+    "importedAt": "2026-09-28T07:36:27.539Z",
     "identityOrdinal": 1
    },
    "status": "backlog",
@@ -13988,7 +14172,7 @@
     "source": "conjunto",
     "sourceIndex": 119,
     "sourceSha256": "673b29e593ff6f6a6a0a19f1b96111d971f21e824c0e2cc02130b3596213dfab",
-    "importedAt": "2026-09-02T14:33:01.784Z",
+    "importedAt": "2026-09-28T07:36:27.539Z",
     "identityOrdinal": 1
    },
    "status": "backlog",
@@ -14043,7 +14227,7 @@
     "source": "conjunto",
     "sourceIndex": 120,
     "sourceSha256": "673b29e593ff6f6a6a0a19f1b96111d971f21e824c0e2cc02130b3596213dfab",
-    "importedAt": "2026-09-02T14:33:01.784Z",
+    "importedAt": "2026-09-28T07:36:27.539Z",
     "identityOrdinal": 1
    },
    "status": "backlog",
@@ -14098,7 +14282,7 @@
     "source": "conjunto",
     "sourceIndex": 121,
     "sourceSha256": "673b29e593ff6f6a6a0a19f1b96111d971f21e824c0e2cc02130b3596213dfab",
-    "importedAt": "2026-09-02T14:33:01.784Z",
+    "importedAt": "2026-09-28T07:36:27.539Z",
     "identityOrdinal": 1
    },
    "status": "backlog",
@@ -14153,7 +14337,7 @@
     "source": "conjunto",
     "sourceIndex": 122,
     "sourceSha256": "673b29e593ff6f6a6a0a19f1b96111d971f21e824c0e2cc02130b3596213dfab",
-    "importedAt": "2026-09-02T14:33:01.784Z",
+    "importedAt": "2026-09-28T07:36:27.539Z",
     "identityOrdinal": 1
    },
    "status": "backlog",
@@ -14208,7 +14392,7 @@
     "source": "conjunto",
     "sourceIndex": 123,
     "sourceSha256": "673b29e593ff6f6a6a0a19f1b96111d971f21e824c0e2cc02130b3596213dfab",
-    "importedAt": "2026-09-02T14:33:01.784Z",
+    "importedAt": "2026-09-28T07:36:27.539Z",
     "identityOrdinal": 1
    },
    "status": "backlog",
@@ -14263,7 +14447,7 @@
     "source": "conjunto",
     "sourceIndex": 124,
     "sourceSha256": "673b29e593ff6f6a6a0a19f1b96111d971f21e824c0e2cc02130b3596213dfab",
-    "importedAt": "2026-09-02T14:33:01.784Z",
+    "importedAt": "2026-09-28T07:36:27.539Z",
     "identityOrdinal": 1
    },
    "status": "backlog",
@@ -14318,7 +14502,7 @@
     "source": "conjunto",
     "sourceIndex": 125,
     "sourceSha256": "673b29e593ff6f6a6a0a19f1b96111d971f21e824c0e2cc02130b3596213dfab",
-    "importedAt": "2026-09-02T14:33:01.784Z",
+    "importedAt": "2026-09-28T07:36:27.539Z",
     "identityOrdinal": 1
    },
    "status": "backlog",
@@ -14373,7 +14557,7 @@
     "source": "conjunto",
     "sourceIndex": 126,
     "sourceSha256": "673b29e593ff6f6a6a0a19f1b96111d971f21e824c0e2cc02130b3596213dfab",
-    "importedAt": "2026-09-02T14:33:01.784Z",
+    "importedAt": "2026-09-28T07:36:27.539Z",
     "identityOrdinal": 1
    },
    "status": "backlog",
@@ -14428,7 +14612,7 @@
     "source": "conjunto",
     "sourceIndex": 127,
     "sourceSha256": "673b29e593ff6f6a6a0a19f1b96111d971f21e824c0e2cc02130b3596213dfab",
-    "importedAt": "2026-09-02T14:33:01.784Z",
+    "importedAt": "2026-09-28T07:36:27.539Z",
     "identityOrdinal": 1
    },
    "status": "backlog",
@@ -14483,7 +14667,7 @@
     "source": "conjunto",
     "sourceIndex": 128,
     "sourceSha256": "673b29e593ff6f6a6a0a19f1b96111d971f21e824c0e2cc02130b3596213dfab",
-    "importedAt": "2026-09-02T14:33:01.784Z",
+    "importedAt": "2026-09-28T07:36:27.539Z",
     "identityOrdinal": 1
    },
    "status": "backlog",
@@ -14538,7 +14722,7 @@
     "source": "conjunto",
     "sourceIndex": 129,
     "sourceSha256": "673b29e593ff6f6a6a0a19f1b96111d971f21e824c0e2cc02130b3596213dfab",
-    "importedAt": "2026-09-02T14:33:01.784Z",
+    "importedAt": "2026-09-28T07:36:27.539Z",
     "identityOrdinal": 1
    },
    "status": "backlog",
@@ -14593,7 +14777,7 @@
     "source": "conjunto",
     "sourceIndex": 130,
     "sourceSha256": "673b29e593ff6f6a6a0a19f1b96111d971f21e824c0e2cc02130b3596213dfab",
-    "importedAt": "2026-09-02T14:33:01.784Z",
+    "importedAt": "2026-09-28T07:36:27.539Z",
     "identityOrdinal": 1
    },
    "status": "backlog",
@@ -14648,7 +14832,7 @@
     "source": "conjunto",
     "sourceIndex": 131,
     "sourceSha256": "673b29e593ff6f6a6a0a19f1b96111d971f21e824c0e2cc02130b3596213dfab",
-    "importedAt": "2026-09-02T14:33:01.784Z",
+    "importedAt": "2026-09-28T07:36:27.539Z",
     "identityOrdinal": 1
    },
    "status": "backlog",
@@ -14703,7 +14887,7 @@
     "source": "conjunto",
     "sourceIndex": 132,
     "sourceSha256": "673b29e593ff6f6a6a0a19f1b96111d971f21e824c0e2cc02130b3596213dfab",
-    "importedAt": "2026-09-02T14:33:01.784Z",
+    "importedAt": "2026-09-28T07:36:27.539Z",
     "identityOrdinal": 1
    },
    "status": "backlog",
@@ -14758,7 +14942,7 @@
     "source": "conjunto",
     "sourceIndex": 133,
     "sourceSha256": "673b29e593ff6f6a6a0a19f1b96111d971f21e824c0e2cc02130b3596213dfab",
-    "importedAt": "2026-09-02T14:33:01.784Z",
+    "importedAt": "2026-09-28T07:36:27.539Z",
     "identityOrdinal": 1
    },
    "status": "backlog",
@@ -14807,343 +14991,13 @@
    "links": []
   },
   {
-   "id": "ed-pl-646323e7347908f0",
-   "kind": "plan",
-   "provenance": {
-    "source": "conjunto",
-    "sourceIndex": 134,
-    "sourceSha256": "673b29e593ff6f6a6a0a19f1b96111d971f21e824c0e2cc02130b3596213dfab",
-    "importedAt": "2026-09-02T14:33:01.784Z",
-    "identityOrdinal": 1
-   },
-   "status": "backlog",
-   "statusLiteral": "Backlog",
-   "type": "nuevo",
-   "typeLiteral": "Nuevo",
-   "brand": {
-    "slug": "xtone",
-    "line": null,
-    "literal": "Xtone"
-   },
-   "market": "ES",
-   "marketLiteral": "ES",
-   "language": "es",
-   "month": {
-    "year": 2026,
-    "month": 7,
-    "yearSource": "date",
-    "literal": "07 Julio"
-   },
-   "writingDate": null,
-   "publicationDate": "2026-07-14",
-   "warnings": [],
-   "theme": "Inspiración estival - 1",
-   "subtheme": "Cocinas y cenadores exteriores",
-   "keyword": "encimera para cocina exterior",
-   "title": "Encimera para cocina exterior: qué material elegir",
-   "url": null,
-   "brief": {
-    "text": "FORMATO: guía de elección con tabla comparativa (porcelánico vs. granito vs. hormigón). INTENCIÓN: comercial-informacional (compara materiales antes de decidir). ÁNGULO DE MARCA: la cocina/cenador exterior exige una superficie que aguante sol directo, lluvia, manchas de grasa y choque térmico sin perder color ni rayarse; el porcelánico de gran formato XTONE encaja por resistencia a la intemperie, baja absorción de agua, ligereza (clave para islas y barras voladizas) y formato XXL que reduce juntas en encimeras largas de cenador. POR QUÉ ESTE MES: julio = inspiración para vivir el exterior y la cocina/cenador es el corazón de la segunda residencia y la terraza. ESTRUCTURA: criterios de elección (resistencia UV, absorción, espesor, formato, acabado antideslizante en zona de barbacoa) + tabla comparativa + 2-3 ambientes de ejemplo + CTA a acabados tipo piedra/cemento. KW SECUNDARIAS: cocina exterior de obra, material para encimera exterior, encimera porcelánico exterior, superficie resistente sol y lluvia. EVITAR: no convertirlo en ficha de producto; mantener criterio editorial comparativo.\n\nAlternativas de título: Encimera para cocina exterior en porcelánico de gran formato; Cómo elegir la encimera de tu cocina exterior\nKW principal: encimera para cocina exterior",
-    "normalizedLength": 1281,
-    "sha256": "61f48a7ff6cf35de48fadea33f7fcd5113b7532343f1e5964ae750dbd705542e"
-   },
-   "intent": null,
-   "cluster": null,
-   "objective": null,
-   "hypothesis": null,
-   "impact": null,
-   "effort": null,
-   "owner": null,
-   "author": null,
-   "reviewer": null,
-   "dependencies": [],
-   "successKpi": null,
-   "measurements": [],
-   "links": []
-  },
-  {
-   "id": "ed-pl-ceb380fbc7bf1e19",
-   "kind": "plan",
-   "provenance": {
-    "source": "conjunto",
-    "sourceIndex": 135,
-    "sourceSha256": "673b29e593ff6f6a6a0a19f1b96111d971f21e824c0e2cc02130b3596213dfab",
-    "importedAt": "2026-09-02T14:33:01.784Z",
-    "identityOrdinal": 1
-   },
-   "status": "backlog",
-   "statusLiteral": "Backlog",
-   "type": "nuevo",
-   "typeLiteral": "Nuevo",
-   "brand": {
-    "slug": "xtone",
-    "line": null,
-    "literal": "Xtone"
-   },
-   "market": "ES",
-   "marketLiteral": "ES",
-   "language": "es",
-   "month": {
-    "year": 2026,
-    "month": 8,
-    "yearSource": "date",
-    "literal": "08 Agosto"
-   },
-   "writingDate": null,
-   "publicationDate": "2026-08-11",
-   "warnings": [],
-   "theme": "Inspiración estival - 2",
-   "subtheme": "Proyectos singulares (casas con piscinas)",
-   "keyword": "porcelánico para piscinas",
-   "title": "Porcelánico para piscinas: coronación, playa y pavimento",
-   "url": null,
-   "brief": {
-    "text": "FORMATO: galería de proyectos comentada (3-6 proyectos reales o renders) con ficha técnica por solución. INTENCIÓN: inspiracional con sesgo técnico (arquitecto/promotor y particular de obra nueva). ÁNGULO DE MARCA: el porcelánico de gran formato resuelve con un único material la coronación, el pavimento de la zona de playa y el solado perimetral, logrando continuidad estética dentro y fuera del agua que el gres fragmentado tradicional no consigue; argumentos técnicos de Xtone: resistencia a cloro y sal, baja absorción y acabados antideslizantes para zona húmeda. NOTA TÉCNICA: aclarar que el porcelánico es ideal para coronación, playa y perímetro; para el vaso sumergido remitir a la solución/recomendación del fabricante (no prometer impermeabilización del vaso). POR QUÉ ESTE MES: agosto y 'proyectos singulares con piscinas' es el escaparate aspiracional perfecto para slabs en exterior. KW SECUNDARIAS: coronación de piscina porcelánico, pavimento antideslizante piscina, piscina de diseño gran formato, acabado piedra exterior piscina. EVITAR: keyword anterior 'revestimiento porcelánico para piscinas' (awkward y baja intención); usar 'porcelánico para piscinas'.\n\nAlternativas de título: Piscinas con porcelánico de gran formato: ideas y proyectos; Cómo revestir una piscina con porcelánico de gran formato\nKW principal: porcelánico para piscinas",
-    "normalizedLength": 1360,
-    "sha256": "5f7168ceccc16f49a89f32725a5340b778342d0a0f62748c7bf95a74bc069e5a"
-   },
-   "intent": null,
-   "cluster": null,
-   "objective": null,
-   "hypothesis": null,
-   "impact": null,
-   "effort": null,
-   "owner": null,
-   "author": null,
-   "reviewer": null,
-   "dependencies": [],
-   "successKpi": null,
-   "measurements": [],
-   "links": []
-  },
-  {
-   "id": "ed-pl-da555f81e2b5d77b",
-   "kind": "plan",
-   "provenance": {
-    "source": "conjunto",
-    "sourceIndex": 136,
-    "sourceSha256": "673b29e593ff6f6a6a0a19f1b96111d971f21e824c0e2cc02130b3596213dfab",
-    "importedAt": "2026-09-02T14:33:01.784Z",
-    "identityOrdinal": 1
-   },
-   "status": "backlog",
-   "statusLiteral": "Backlog",
-   "type": "nuevo",
-   "typeLiteral": "Nuevo",
-   "brand": {
-    "slug": "xtone",
-    "line": null,
-    "literal": "Xtone"
-   },
-   "market": "ES",
-   "marketLiteral": "ES",
-   "language": "es",
-   "month": {
-    "year": 2026,
-    "month": 9,
-    "yearSource": "date",
-    "literal": "09 Septiembre"
-   },
-   "writingDate": null,
-   "publicationDate": "2026-09-08",
-   "warnings": [],
-   "theme": "Rehabilitación y reformas",
-   "subtheme": "Pavimentos y revestimientos",
-   "keyword": "reformar el suelo sin obra",
-   "title": "Reformar el suelo sin obra con porcelánico de bajo espesor",
-   "url": null,
-   "brief": {
-    "text": "FORMATO: guía paso a paso de reforma sin demolición + FAQ de objeciones. INTENCIÓN: informacional-transaccional (quien planifica reforma busca soluciones rápidas, limpias y económicas). ÁNGULO DE MARCA: en rehabilitación el coste y los escombros de levantar el suelo son el gran freno; el porcelánico de gran formato y bajo espesor permite instalar sobre el pavimento existente (suma pocos milímetros de cota) y revestir paredes sin demolición, reduciendo obra, polvo, plazos y residuos, con continuidad estética suelo-pared. POR QUÉ ESTE MES: 'pavimentos y revestimientos' del bloque de reformas y público que reforma en septiembre tras el verano. ESTRUCTURA: requisitos del soporte (planitud, adherencia, fisuras), espesores, juntas, acabados continuos, pasos de la instalación. FAQ: ¿qué pasa con la cota de las puertas?, ¿aguanta el tránsito?, ¿peso sobre el forjado?, ¿se puede en baño/cocina? KW SECUNDARIAS: porcelánico bajo espesor, suelo sobre suelo, revestir pared sin obra, gran formato para reforma, reforma sin escombros. EVITAR: prometer 'cero obra' absoluto; matizar casos donde el soporte sí exige preparación.\n\nAlternativas de título: Pavimento sobre pavimento: reformar el suelo sin obra; Renovar suelo y paredes sin obra con gran formato\nKW principal: reformar el suelo sin obra",
-    "normalizedLength": 1297,
-    "sha256": "2a58b0dba5dc3e9ea6cd9f13b7e99a357fdb9afe63b1ad24ee93a1f06f724575"
-   },
-   "intent": null,
-   "cluster": null,
-   "objective": null,
-   "hypothesis": null,
-   "impact": null,
-   "effort": null,
-   "owner": null,
-   "author": null,
-   "reviewer": null,
-   "dependencies": [],
-   "successKpi": null,
-   "measurements": [],
-   "links": []
-  },
-  {
-   "id": "ed-pl-b5cb2a5fa6b41ccf",
-   "kind": "plan",
-   "provenance": {
-    "source": "conjunto",
-    "sourceIndex": 137,
-    "sourceSha256": "673b29e593ff6f6a6a0a19f1b96111d971f21e824c0e2cc02130b3596213dfab",
-    "importedAt": "2026-09-02T14:33:01.784Z",
-    "identityOrdinal": 1
-   },
-   "status": "backlog",
-   "statusLiteral": "Backlog",
-   "type": "nuevo",
-   "typeLiteral": "Nuevo",
-   "brand": {
-    "slug": "xtone",
-    "line": null,
-    "literal": "Xtone"
-   },
-   "market": "ES",
-   "marketLiteral": "ES",
-   "language": "es",
-   "month": {
-    "year": 2026,
-    "month": 10,
-    "yearSource": "date",
-    "literal": "10 Octubre"
-   },
-   "writingDate": null,
-   "publicationDate": "2026-10-13",
-   "warnings": [],
-   "theme": "Diseño funcional",
-   "subtheme": "Fachadas y envolventes arquitectónicas",
-   "keyword": "fachada ventilada porcelánico",
-   "title": "Fachada ventilada de porcelánico: cómo funciona y ventajas",
-   "url": null,
-   "brief": {
-    "text": "FORMATO: artículo explicativo técnico con diagrama de capas + listado de ventajas y casos de aplicación. INTENCIÓN: informacional técnica (cómo funciona, capas, ventajas energéticas). ÁNGULO DE MARCA: la fachada ventilada con slabs de gran formato es territorio natural de Xtone: la ligereza del porcelánico (XLIGHT) permite paneles XXL con menos anclajes y menos juntas, una envolvente continua tipo piedra/mármol/cemento que aporta cámara ventilada (mejora térmica), resistencia a la intemperie y estabilidad de color. PÚBLICO: arquitecto/prescriptor y promotor; tono técnico pero divulgativo. ESTRUCTURA: diagrama subestructura + aislamiento + cámara de aire + placa porcelánica; ventajas (eficiencia, durabilidad, mantenimiento, estética); casos de aplicación (obra nueva y rehabilitación de fachada). KW SECUNDARIAS: sistema fachada ventilada, ventajas fachada ventilada, porcelánico gran formato fachada, envolvente arquitectónica, rehabilitación de fachada. EVITAR: que se solape con el post de bajo espesor de septiembre; aquí el foco es exterior/envolvente y eficiencia energética, no reforma interior.\n\nAlternativas de título: Fachada ventilada en porcelánico de gran formato XXL; Sistema de fachada ventilada con porcelánico: guía técnica\nKW principal: fachada ventilada porcelánico",
-    "normalizedLength": 1293,
-    "sha256": "1e3f6a695188053868c54db4b856116f0827bfcdbd9dcc8018c56d8a5eec5015"
-   },
-   "intent": null,
-   "cluster": null,
-   "objective": null,
-   "hypothesis": null,
-   "impact": null,
-   "effort": null,
-   "owner": null,
-   "author": null,
-   "reviewer": null,
-   "dependencies": [],
-   "successKpi": null,
-   "measurements": [],
-   "links": []
-  },
-  {
-   "id": "ed-pl-cb46b455ded0e08d",
-   "kind": "plan",
-   "provenance": {
-    "source": "conjunto",
-    "sourceIndex": 138,
-    "sourceSha256": "673b29e593ff6f6a6a0a19f1b96111d971f21e824c0e2cc02130b3596213dfab",
-    "importedAt": "2026-09-02T14:33:01.784Z",
-    "identityOrdinal": 1
-   },
-   "status": "backlog",
-   "statusLiteral": "Backlog",
-   "type": "nuevo",
-   "typeLiteral": "Nuevo",
-   "brand": {
-    "slug": "xtone",
-    "line": null,
-    "literal": "Xtone"
-   },
-   "market": "ES",
-   "marketLiteral": "ES",
-   "language": "es",
-   "month": {
-    "year": 2026,
-    "month": 11,
-    "yearSource": "date",
-    "literal": "11 Noviembre"
-   },
-   "writingDate": null,
-   "publicationDate": "2026-11-10",
-   "warnings": [],
-   "theme": "Confort, eficiencia y bienestar en interiores",
-   "subtheme": "Salones",
-   "keyword": "salón efecto mármol",
-   "title": "Salón con efecto mármol Calacatta: ideas y ambientes",
-   "url": null,
-   "brief": {
-    "text": "FORMATO: listicle inspiracional (ideas/ambientes) con criterio técnico de acabado y mantenimiento por propuesta. INTENCIÓN: inspiracional-comercial. ÁNGULO DE MARCA: aprovecha la mayor oportunidad real de GSC de la marca (calacatta gold clk 434/pos 5.2; calacatta viola clk 364/pos 7) para captar intención decorativa de salón con un acabado que Xtone fabrica en gran formato. DIFERENCIAL: paneles XXL sin juntas para frentes de chimenea, paredes de TV y revestimientos de salón con la veta del mármol continua, imposible con baldosa pequeña; además ventaja de limpieza y nula porosidad frente al mármol natural. POR QUÉ ESTE MES: 'Salones' del bloque de confort y bienestar (temporada de interior, otoño/invierno). ESTRUCTURA: 6-8 ideas (pared de TV, frente de chimenea, zócalo continuo, mesa/consola, contraste mate vs. pulido), cada una con el acabado concreto recomendado. KW SECUNDARIAS: calacatta gold, calacatta viola, pared de TV porcelánico, frente de chimenea mármol, revestimiento salón gran formato. EVITAR: la keyword anterior 'salón con mármol calacatta' mezclaba acabado de marca; usar 'salón efecto mármol' como editorial y dejar calacatta como secundaria.\n\nAlternativas de título: Cómo decorar el salón con efecto mármol sin recargar; Pared de TV y chimenea en porcelánico efecto mármol\nKW principal: salón efecto mármol",
-    "normalizedLength": 1337,
-    "sha256": "aa1a7c6af0093d072d70bece53740c61ee23e8391907e76308659d5698ace07a"
-   },
-   "intent": null,
-   "cluster": null,
-   "objective": null,
-   "hypothesis": null,
-   "impact": null,
-   "effort": null,
-   "owner": null,
-   "author": null,
-   "reviewer": null,
-   "dependencies": [],
-   "successKpi": null,
-   "measurements": [],
-   "links": []
-  },
-  {
-   "id": "ed-pl-956fb5e627cd4f78",
-   "kind": "plan",
-   "provenance": {
-    "source": "conjunto",
-    "sourceIndex": 139,
-    "sourceSha256": "673b29e593ff6f6a6a0a19f1b96111d971f21e824c0e2cc02130b3596213dfab",
-    "importedAt": "2026-09-02T14:33:01.784Z",
-    "identityOrdinal": 1
-   },
-   "status": "backlog",
-   "statusLiteral": "Backlog",
-   "type": "nuevo",
-   "typeLiteral": "Nuevo",
-   "brand": {
-    "slug": "xtone",
-    "line": null,
-    "literal": "Xtone"
-   },
-   "market": "ES",
-   "marketLiteral": "ES",
-   "language": "es",
-   "month": {
-    "year": 2026,
-    "month": 12,
-    "yearSource": "date",
-    "literal": "12 Diciembre"
-   },
-   "writingDate": null,
-   "publicationDate": "2026-12-08",
-   "warnings": [],
-   "theme": "Navidad y tendencias 2027",
-   "subtheme": "Tendencias de diseño para el próximo año",
-   "keyword": "tendencias en revestimientos 2027",
-   "title": "Tendencias en revestimientos y materiales para 2027",
-   "url": null,
-   "brief": {
-    "text": "FORMATO: artículo de tendencias (trends) con 6-8 claves, cada una ilustrada con un acabado concreto de la marca (no listado genérico). INTENCIÓN: informacional-inspiracional, alto valor de marca y enlazable (linkable asset de cierre de año). ÁNGULO DE MARCA: cierre de año posicionando los acabados estrella de Xtone como protagonistas del 2027, anclados en queries y búsqueda interna reales: mármoles Calacatta Gold/Viola, piedras como Altissima, tonos cálidos como Liem Dark y neutros como Moon Grey/Glem White. DIFERENCIAL: tendencias aterrizadas en superficie real (color, veta, gran formato, continuidad suelo-pared-mobiliario, exterior-interior), no un tablero genérico de Pinterest. ESTRUCTURA: cada tendencia = claim + por qué + acabado de la marca que la encarna + dónde aplicarla. KW SECUNDARIAS: tendencias diseño interiores 2027, colores tendencia 2027, gran formato tendencia, efecto mármol 2027, materiales para revestimiento 2027. EVITAR: jerga 'superficies' poco buscada en la KW principal; usar 'revestimientos' que es término de búsqueda más natural. No prometer datos de volumen que no tenemos.\n\nAlternativas de título: Materiales 2027: mármol, piedra y porcelánico de gran formato; Tendencias de diseño 2027: acabados que marcarán el año\nKW principal: tendencias en revestimientos 2027",
-    "normalizedLength": 1305,
-    "sha256": "8302f49c9b796dca1b77e10c61d5a15786d3197498eda1108fa2c3d1e830b1dd"
-   },
-   "intent": null,
-   "cluster": null,
-   "objective": null,
-   "hypothesis": null,
-   "impact": null,
-   "effort": null,
-   "owner": null,
-   "author": null,
-   "reviewer": null,
-   "dependencies": [],
-   "successKpi": null,
-   "measurements": [],
-   "links": []
-  },
-  {
    "id": "ed-pl-3e0bfed47a074415",
    "kind": "plan",
    "provenance": {
     "source": "conjunto",
     "sourceIndex": 140,
     "sourceSha256": "673b29e593ff6f6a6a0a19f1b96111d971f21e824c0e2cc02130b3596213dfab",
-    "importedAt": "2026-09-02T14:33:01.784Z",
+    "importedAt": "2026-09-28T07:36:27.539Z",
     "identityOrdinal": 1
    },
    "status": "backlog",
@@ -15198,7 +15052,7 @@
     "source": "conjunto",
     "sourceIndex": 141,
     "sourceSha256": "673b29e593ff6f6a6a0a19f1b96111d971f21e824c0e2cc02130b3596213dfab",
-    "importedAt": "2026-09-02T14:33:01.784Z",
+    "importedAt": "2026-09-28T07:36:27.539Z",
     "identityOrdinal": 1
    },
    "status": "backlog",
@@ -15253,7 +15107,7 @@
     "source": "conjunto",
     "sourceIndex": 142,
     "sourceSha256": "673b29e593ff6f6a6a0a19f1b96111d971f21e824c0e2cc02130b3596213dfab",
-    "importedAt": "2026-09-02T14:33:01.784Z",
+    "importedAt": "2026-09-28T07:36:27.539Z",
     "identityOrdinal": 1
    },
    "status": "backlog",
@@ -15308,7 +15162,7 @@
     "source": "conjunto",
     "sourceIndex": 143,
     "sourceSha256": "673b29e593ff6f6a6a0a19f1b96111d971f21e824c0e2cc02130b3596213dfab",
-    "importedAt": "2026-09-02T14:33:01.784Z",
+    "importedAt": "2026-09-28T07:36:27.539Z",
     "identityOrdinal": 1
    },
    "status": "backlog",
@@ -15363,7 +15217,7 @@
     "source": "conjunto",
     "sourceIndex": 144,
     "sourceSha256": "673b29e593ff6f6a6a0a19f1b96111d971f21e824c0e2cc02130b3596213dfab",
-    "importedAt": "2026-09-02T14:33:01.784Z",
+    "importedAt": "2026-09-28T07:36:27.539Z",
     "identityOrdinal": 1
    },
    "status": "backlog",
@@ -15418,7 +15272,7 @@
     "source": "conjunto",
     "sourceIndex": 145,
     "sourceSha256": "673b29e593ff6f6a6a0a19f1b96111d971f21e824c0e2cc02130b3596213dfab",
-    "importedAt": "2026-09-02T14:33:01.784Z",
+    "importedAt": "2026-09-28T07:36:27.539Z",
     "identityOrdinal": 1
    },
    "status": "backlog",
@@ -15465,6 +15319,501 @@
    "successKpi": null,
    "measurements": [],
    "links": []
+  },
+  {
+   "id": "ed-ps-e63c2c66460c91e0",
+   "kind": "plan",
+   "provenance": {
+    "source": "plan-sheet",
+    "sourceIndex": 13,
+    "sourceSha256": "ba4c17eda90eda4af30c5830e2502b52f9dff42c7d4bc302b6573fc464226cfc",
+    "importedAt": "2026-09-28T07:36:27.539Z",
+    "identityOrdinal": 1
+   },
+   "status": "backlog",
+   "statusLiteral": "Backlog",
+   "type": "nuevo",
+   "typeLiteral": "Nuevo",
+   "brand": {
+    "slug": "xtone",
+    "line": null,
+    "literal": "Xtone"
+   },
+   "market": "ES",
+   "marketLiteral": "ES",
+   "language": "es",
+   "month": {
+    "year": 2026,
+    "month": 7,
+    "yearSource": "calendar",
+    "literal": "07 Julio"
+   },
+   "writingDate": null,
+   "publicationDate": null,
+   "warnings": [],
+   "theme": "Inspiración estival - 1",
+   "subtheme": "Tendencias en diseño hotelero",
+   "keyword": "diseño hotelero tendencias",
+   "title": "Tendencias en diseño hotelero: materiales y acabados para hoteles",
+   "url": null,
+   "brief": {
+    "text": "SEO Title: Tendencias en diseño hotelero: materiales y acabados para hoteles | XTONE\nKeyword: diseño hotelero tendencias\nKeyword principal: diseño hotelero tendencias\nKeywords objetivo: definir en el research (la marca no posiciona keywords claras para este tema).\nSlug: tendencias-diseno-hotelero-materiales-acabados-hoteles\nMetadescription: Tendencias en diseño hotelero: materiales y acabados para hoteles con XTONE. Descubre claves, ideas y consejos para acertar.\nCategoría: Contract / hostelería · (a confirmar con la taxonomía real del blog de XTONE)\n\nBRIEF — H1: Tendencias en diseño hotelero: materiales y acabados para hoteles\n1. SOBRE QUÉ\nTendencias en diseño hotelero. Grandes formatos XTONE como tendencia en el contract hotelero: suelos, paredes y fachadas.\nUsar de forma natural: diseño hotelero tendencias.\n2. DÓNDE VA EL TEXTO\nPost NUEVO en el apartado editorial de Xtone (blog/trendbook).\n3. ESTRUCTURA Y LONGITUD\nSin objetivo rígido de palabras (orientativo 700–1.100; 1.200–1.500 si es pilar). Intro (40–60 pal.: qué es y para quién). 1 H2 por subtema, 1–2 párrafos cada uno. H2 = afirmación concreta entendible en la 1ª frase. Cerrar con 4–6 FAQs reales de respuesta breve. Sin relleno.\n4. DATOS PARA SER CITABLE (IA y buscadores)\nCada afirmación con un dato concreto + fuente (medida, formato, material, norma, %). Frases que se entiendan solas, sin relleno. Nombrar \"Xtone\" de forma consistente. [Verificar cifras y gama antes de publicar].\n5. ENLACES\nEnlazar el post con (y usar como inspiración / referencia interna):\n· /into — https://www.xtone-surface.com/into\n· /blog/PREMIOS%20XTONE_2025 — https://www.xtone-surface.com/blog/PREMIOS%20XTONE_2025\n· /blog/calacatta-trend — https://www.xtone-surface.com/blog/calacatta-trend\nEnlazar también a la ficha/categoría de producto relacionada de Xtone cuando proceda.",
+    "normalizedLength": 1836,
+    "sha256": "34d4e003bae7dc041331ffb3da11974448dd8d4c523216384f07f3b1bb2e9eab"
+   },
+   "intent": null,
+   "cluster": null,
+   "objective": null,
+   "hypothesis": null,
+   "impact": null,
+   "effort": null,
+   "owner": null,
+   "author": null,
+   "reviewer": null,
+   "dependencies": [],
+   "successKpi": null,
+   "measurements": [],
+   "links": []
+  },
+  {
+   "id": "ed-ps-8d282ad580979e12",
+   "kind": "plan",
+   "provenance": {
+    "source": "plan-sheet",
+    "sourceIndex": 14,
+    "sourceSha256": "ba4c17eda90eda4af30c5830e2502b52f9dff42c7d4bc302b6573fc464226cfc",
+    "importedAt": "2026-09-28T07:36:27.539Z",
+    "identityOrdinal": 1
+   },
+   "status": "backlog",
+   "statusLiteral": "Backlog",
+   "type": "nuevo",
+   "typeLiteral": "Nuevo",
+   "brand": {
+    "slug": "xtone",
+    "line": null,
+    "literal": "Xtone"
+   },
+   "market": "ES",
+   "marketLiteral": "ES",
+   "language": "es",
+   "month": {
+    "year": 2026,
+    "month": 7,
+    "yearSource": "calendar",
+    "literal": "07 Julio"
+   },
+   "writingDate": null,
+   "publicationDate": null,
+   "warnings": [],
+   "theme": "Inspiración estival - 1",
+   "subtheme": "Tendencias en diseño hotelero",
+   "keyword": "baños de hotel diseño",
+   "title": "Baños de hotel: ideas de diseño para una experiencia premium",
+   "url": null,
+   "brief": {
+    "text": "SEO Title: Baños de hotel: ideas de diseño para una experiencia premium | XTONE\nKeyword: baños de hotel diseño\nKeyword principal: baños de hotel diseño\nKeywords objetivo: definir en el research (la marca no posiciona keywords claras para este tema).\nSlug: banos-hotel-ideas-diseno-experiencia-premium\nMetadescription: Baños de hotel: ideas de diseño para una experiencia premium con XTONE. Descubre claves, ideas y consejos para acertar.\nCategoría: Contract / hostelería · (a confirmar con la taxonomía real del blog de XTONE)\n\nBRIEF — H1: Baños de hotel: ideas de diseño para una experiencia premium\n1. SOBRE QUÉ\nTendencias en diseño hotelero. Trasladar el lujo hotelero al baño con superficies XTONE de gran formato (efecto continuo, menos juntas).\nUsar de forma natural: baños de hotel diseño.\n2. DÓNDE VA EL TEXTO\nPost NUEVO en el apartado editorial de Xtone (blog/trendbook).\n3. ESTRUCTURA Y LONGITUD\nSin objetivo rígido de palabras (orientativo 700–1.100; 1.200–1.500 si es pilar). Intro (40–60 pal.: qué es y para quién). 1 H2 por subtema, 1–2 párrafos cada uno. H2 = afirmación concreta entendible en la 1ª frase. Cerrar con 4–6 FAQs reales de respuesta breve. Sin relleno.\n4. DATOS PARA SER CITABLE (IA y buscadores)\nCada afirmación con un dato concreto + fuente (medida, formato, material, norma, %). Frases que se entiendan solas, sin relleno. Nombrar \"Xtone\" de forma consistente. [Verificar cifras y gama antes de publicar].\n5. ENLACES\nEnlazar el post con (y usar como inspiración / referencia interna):\n· /into — https://www.xtone-surface.com/into\n· /blog/PREMIOS%20XTONE_2025 — https://www.xtone-surface.com/blog/PREMIOS%20XTONE_2025\n· /blog/calacatta-trend — https://www.xtone-surface.com/blog/calacatta-trend\nEnlazar también a la ficha/categoría de producto relacionada de Xtone cuando proceda.",
+    "normalizedLength": 1811,
+    "sha256": "5d9ef34706ef0abd2ef49f04bf62f6b22920ea444eb1776c9f56e61b64749201"
+   },
+   "intent": null,
+   "cluster": null,
+   "objective": null,
+   "hypothesis": null,
+   "impact": null,
+   "effort": null,
+   "owner": null,
+   "author": null,
+   "reviewer": null,
+   "dependencies": [],
+   "successKpi": null,
+   "measurements": [],
+   "links": []
+  },
+  {
+   "id": "ed-ps-2ca21ea1efd8eadd",
+   "kind": "plan",
+   "provenance": {
+    "source": "plan-sheet",
+    "sourceIndex": 15,
+    "sourceSha256": "ba4c17eda90eda4af30c5830e2502b52f9dff42c7d4bc302b6573fc464226cfc",
+    "importedAt": "2026-09-28T07:36:27.539Z",
+    "identityOrdinal": 1
+   },
+   "status": "backlog",
+   "statusLiteral": "Backlog",
+   "type": "nuevo",
+   "typeLiteral": "Nuevo",
+   "brand": {
+    "slug": "xtone",
+    "line": null,
+    "literal": "Xtone"
+   },
+   "market": "ES",
+   "marketLiteral": "ES",
+   "language": "es",
+   "month": {
+    "year": 2026,
+    "month": 7,
+    "yearSource": "calendar",
+    "literal": "07 Julio"
+   },
+   "writingDate": null,
+   "publicationDate": null,
+   "warnings": [],
+   "theme": "Inspiración estival - 1",
+   "subtheme": "Tendencias en diseño hotelero",
+   "keyword": "revestimientos hotel lobby",
+   "title": "Lobbies y zonas comunes de hotel: revestimientos de alto tránsito",
+   "url": null,
+   "brief": {
+    "text": "SEO Title: Lobbies y zonas comunes de hotel: revestimientos de alto tránsito | XTONE\nKeyword: revestimientos hotel lobby\nKeyword principal: revestimientos hotel lobby\nKeywords objetivo: definir en el research (la marca no posiciona keywords claras para este tema).\nSlug: lobbies-zonas-comunes-hotel-revestimientos-alto-transito\nMetadescription: Lobbies y zonas comunes de hotel: revestimientos de alto tránsito con XTONE. Descubre claves, ideas y consejos para acertar.\nCategoría: Contract / hostelería · (a confirmar con la taxonomía real del blog de XTONE)\n\nBRIEF — H1: Lobbies y zonas comunes de hotel: revestimientos de alto tránsito\n1. SOBRE QUÉ\nTendencias en diseño hotelero. Pavimentos y revestimientos XTONE de gran formato para zonas nobles de hotel de alto tránsito.\nUsar de forma natural: revestimientos hotel lobby.\n2. DÓNDE VA EL TEXTO\nPost NUEVO en el apartado editorial de Xtone (blog/trendbook).\n3. ESTRUCTURA Y LONGITUD\nSin objetivo rígido de palabras (orientativo 700–1.100; 1.200–1.500 si es pilar). Intro (40–60 pal.: qué es y para quién). 1 H2 por subtema, 1–2 párrafos cada uno. H2 = afirmación concreta entendible en la 1ª frase. Cerrar con 4–6 FAQs reales de respuesta breve. Sin relleno.\n4. DATOS PARA SER CITABLE (IA y buscadores)\nCada afirmación con un dato concreto + fuente (medida, formato, material, norma, %). Frases que se entiendan solas, sin relleno. Nombrar \"Xtone\" de forma consistente. [Verificar cifras y gama antes de publicar].\n5. ENLACES\nEnlazar el post con (y usar como inspiración / referencia interna):\n· /into — https://www.xtone-surface.com/into\n· /blog/PREMIOS%20XTONE_2025 — https://www.xtone-surface.com/blog/PREMIOS%20XTONE_2025\n· /blog/calacatta-trend — https://www.xtone-surface.com/blog/calacatta-trend\nEnlazar también a la ficha/categoría de producto relacionada de Xtone cuando proceda.",
+    "normalizedLength": 1842,
+    "sha256": "ef8e9fa1454da63ce5c612fe03a3247a062c93f3102418e2ec97e43209405499"
+   },
+   "intent": null,
+   "cluster": null,
+   "objective": null,
+   "hypothesis": null,
+   "impact": null,
+   "effort": null,
+   "owner": null,
+   "author": null,
+   "reviewer": null,
+   "dependencies": [],
+   "successKpi": null,
+   "measurements": [],
+   "links": []
+  },
+  {
+   "id": "ed-ps-ff39481f521fbf43",
+   "kind": "plan",
+   "provenance": {
+    "source": "plan-sheet",
+    "sourceIndex": 38,
+    "sourceSha256": "ba4c17eda90eda4af30c5830e2502b52f9dff42c7d4bc302b6573fc464226cfc",
+    "importedAt": "2026-09-28T07:36:27.539Z",
+    "identityOrdinal": 1
+   },
+   "status": "backlog",
+   "statusLiteral": "Backlog",
+   "type": "nuevo",
+   "typeLiteral": "Nuevo",
+   "brand": {
+    "slug": "xtone",
+    "line": null,
+    "literal": "Xtone"
+   },
+   "market": "ES",
+   "marketLiteral": "ES",
+   "language": "es",
+   "month": {
+    "year": 2026,
+    "month": 8,
+    "yearSource": "calendar",
+    "literal": "08 Agosto"
+   },
+   "writingDate": null,
+   "publicationDate": null,
+   "warnings": [],
+   "theme": "Inspiración estival - 2",
+   "subtheme": "Materiales resistentes para exterior",
+   "keyword": "porcelanico gran formato exterior",
+   "title": "Porcelánico de gran formato para exteriores: resistencia y durabilidad",
+   "url": null,
+   "brief": {
+    "text": "SEO Title: Porcelánico de gran formato para exteriores: resistencia y durabilidad | XTONE\nKeyword: porcelanico gran formato exterior, porcelanico taj mahal, taj mahal porcelanico\nKeyword principal: porcelanico gran formato exterior\nKeywords objetivo (que la marca ya posiciona, emparejadas a este tema · GSC, sin volumen):\n· porcelanico taj mahal — pos. #1\n· taj mahal porcelanico — pos. #1\n· porcelanico xtone — pos. #1\n· porcelanico para fachadas — pos. #4\n· porcelánico calacatta gold — pos. #1\n· gres porcelanico — pos. #8\nSlug: porcelanico-gran-formato-exteriores-resistencia-durabilidad\nMetadescription: Porcelánico de gran formato para exteriores: resistencia y durabilidad con XTONE. Descubre claves, ideas y consejos para acertar.\nCategoría: Pavimentos · (a confirmar con la taxonomía real del blog de XTONE)\n\nBRIEF — H1: Porcelánico de gran formato para exteriores: resistencia y durabilidad\n1. SOBRE QUÉ\nMateriales resistentes para exterior. Slabs XTONE resistentes a heladas, UV y manchas para el outdoor\nUsar de forma natural: porcelanico gran formato exterior, porcelanico taj mahal, taj mahal porcelanico, porcelanico xtone, porcelanico para fachadas.\n2. DÓNDE VA EL TEXTO\nPost NUEVO en el apartado editorial de Xtone (blog/trendbook).\n3. ESTRUCTURA Y LONGITUD\nSin objetivo rígido de palabras (orientativo 700–1.100; 1.200–1.500 si es pilar). Intro (40–60 pal.: qué es y para quién). 1 H2 por subtema, 1–2 párrafos cada uno. H2 = afirmación concreta entendible en la 1ª frase. Cerrar con 4–6 FAQs reales de respuesta breve. Sin relleno.\n4. DATOS PARA SER CITABLE (IA y buscadores)\nCada afirmación con un dato concreto + fuente (medida, formato, material, norma, %). Frases que se entiendan solas, sin relleno. Nombrar \"Xtone\" de forma consistente. [Verificar cifras y gama antes de publicar].\n5. ENLACES\nEnlazar el post con (y usar como inspiración / referencia interna):\n· /into — https://www.xtone-surface.com/into\n· /blog/PREMIOS%20XTONE_2025 — https://www.xtone-surface.com/blog/PREMIOS%20XTONE_2025\n· /blog/calacatta-trend — https://www.xtone-surface.com/blog/calacatta-trend\nEnlazar también a la ficha/categoría de producto relacionada de Xtone cuando proceda.",
+    "normalizedLength": 2181,
+    "sha256": "26abb567bef2a70319d917a74beb0ca22528b44f3e73bb88ba8bac451ecc9a19"
+   },
+   "intent": null,
+   "cluster": null,
+   "objective": null,
+   "hypothesis": null,
+   "impact": null,
+   "effort": null,
+   "owner": null,
+   "author": null,
+   "reviewer": null,
+   "dependencies": [],
+   "successKpi": null,
+   "measurements": [],
+   "links": []
+  },
+  {
+   "id": "ed-ps-2a6fe1bb32b4eba8",
+   "kind": "plan",
+   "provenance": {
+    "source": "plan-sheet",
+    "sourceIndex": 39,
+    "sourceSha256": "ba4c17eda90eda4af30c5830e2502b52f9dff42c7d4bc302b6573fc464226cfc",
+    "importedAt": "2026-09-28T07:36:27.539Z",
+    "identityOrdinal": 1
+   },
+   "status": "backlog",
+   "statusLiteral": "Backlog",
+   "type": "nuevo",
+   "typeLiteral": "Nuevo",
+   "brand": {
+    "slug": "xtone",
+    "line": null,
+    "literal": "Xtone"
+   },
+   "market": "ES",
+   "marketLiteral": "ES",
+   "language": "es",
+   "month": {
+    "year": 2026,
+    "month": 8,
+    "yearSource": "calendar",
+    "literal": "08 Agosto"
+   },
+   "writingDate": null,
+   "publicationDate": null,
+   "warnings": [],
+   "theme": "Inspiración estival - 2",
+   "subtheme": "Materiales resistentes para exterior",
+   "keyword": "pavimento exterior antideslizante",
+   "title": "Pavimentos de exterior antideslizantes en gran formato",
+   "url": null,
+   "brief": {
+    "text": "SEO Title: Pavimentos de exterior antideslizantes en gran formato | XTONE\nKeyword: pavimento exterior antideslizante, porcelanico fachada exterior, porcelanico para fachada exterior\nKeyword principal: pavimento exterior antideslizante\nKeywords objetivo (que la marca ya posiciona, emparejadas a este tema · GSC, sin volumen):\n· porcelanico fachada exterior — pos. #7\n· porcelanico para fachada exterior — pos. #2\n· porcelánico exterior fachada — pos. #7\n· porcelanico gran formato fachada — pos. #8\n· grés porcelânico exterior — pos. #8\n· porcelanosa gran formato — pos. #9\nSlug: pavimentos-exterior-antideslizantes-gran-formato\nMetadescription: Pavimentos de exterior antideslizantes en gran formato con XTONE. Descubre claves, ideas y consejos para acertar.\nCategoría: Pavimentos · (a confirmar con la taxonomía real del blog de XTONE)\n\nBRIEF — H1: Pavimentos de exterior antideslizantes en gran formato\n1. SOBRE QUÉ\nMateriales resistentes para exterior. Suelos de gran formato seguros para zonas de piscina y terraza\nUsar de forma natural: pavimento exterior antideslizante, porcelanico fachada exterior, porcelanico para fachada exterior, porcelánico exterior fachada, porcelanico gran formato fachada.\n2. DÓNDE VA EL TEXTO\nPost NUEVO en el apartado editorial de Xtone (blog/trendbook).\n3. ESTRUCTURA Y LONGITUD\nSin objetivo rígido de palabras (orientativo 700–1.100; 1.200–1.500 si es pilar). Intro (40–60 pal.: qué es y para quién). 1 H2 por subtema, 1–2 párrafos cada uno. H2 = afirmación concreta entendible en la 1ª frase. Cerrar con 4–6 FAQs reales de respuesta breve. Sin relleno.\n4. DATOS PARA SER CITABLE (IA y buscadores)\nCada afirmación con un dato concreto + fuente (medida, formato, material, norma, %). Frases que se entiendan solas, sin relleno. Nombrar \"Xtone\" de forma consistente. [Verificar cifras y gama antes de publicar].\n5. ENLACES\nEnlazar el post con (y usar como inspiración / referencia interna):\n· /into — https://www.xtone-surface.com/into\n· /blog/PREMIOS%20XTONE_2025 — https://www.xtone-surface.com/blog/PREMIOS%20XTONE_2025\n· /blog/calacatta-trend — https://www.xtone-surface.com/blog/calacatta-trend\nEnlazar también a la ficha/categoría de producto relacionada de Xtone cuando proceda.",
+    "normalizedLength": 2221,
+    "sha256": "332e46740cbfc6de88781f5f778ad74b54bc3b2cf1bf4f7329e77c24db5f8457"
+   },
+   "intent": null,
+   "cluster": null,
+   "objective": null,
+   "hypothesis": null,
+   "impact": null,
+   "effort": null,
+   "owner": null,
+   "author": null,
+   "reviewer": null,
+   "dependencies": [],
+   "successKpi": null,
+   "measurements": [],
+   "links": []
+  },
+  {
+   "id": "ed-ps-b4cad5698572fa11",
+   "kind": "plan",
+   "provenance": {
+    "source": "plan-sheet",
+    "sourceIndex": 40,
+    "sourceSha256": "ba4c17eda90eda4af30c5830e2502b52f9dff42c7d4bc302b6573fc464226cfc",
+    "importedAt": "2026-09-28T07:36:27.539Z",
+    "identityOrdinal": 1
+   },
+   "status": "backlog",
+   "statusLiteral": "Backlog",
+   "type": "nuevo",
+   "typeLiteral": "Nuevo",
+   "brand": {
+    "slug": "xtone",
+    "line": null,
+    "literal": "Xtone"
+   },
+   "market": "ES",
+   "marketLiteral": "ES",
+   "language": "es",
+   "month": {
+    "year": 2026,
+    "month": 8,
+    "yearSource": "calendar",
+    "literal": "08 Agosto"
+   },
+   "writingDate": null,
+   "publicationDate": null,
+   "warnings": [],
+   "theme": "Inspiración estival - 2",
+   "subtheme": "Materiales resistentes para exterior",
+   "keyword": "revestimiento fachada exterior resistente",
+   "title": "Revestimientos de fachada resistentes para clima mediterráneo",
+   "url": null,
+   "brief": {
+    "text": "SEO Title: Revestimientos de fachada resistentes para clima mediterráneo | XTONE\nKeyword: revestimiento fachada exterior resistente, porcelanico fachada exterior, porcelanico fachada\nKeyword principal: revestimiento fachada exterior resistente\nKeywords objetivo (que la marca ya posiciona, emparejadas a este tema · GSC, sin volumen):\n· porcelanico fachada exterior — pos. #7\n· porcelanico fachada — pos. #2\n· porcelanico para fachada exterior — pos. #2\n· porcelánico exterior fachada — pos. #7\n· fachada porcelanico — pos. #6\n· revestimiento porcelánico pared interior — pos. #7\nSlug: revestimientos-fachada-resistentes-clima-mediterraneo\nMetadescription: Revestimientos de fachada resistentes para clima mediterráneo con XTONE. Descubre claves, ideas y consejos para acertar.\nCategoría: Revestimientos y cerámica · (a confirmar con la taxonomía real del blog de XTONE)\n\nBRIEF — H1: Revestimientos de fachada resistentes para clima mediterráneo\n1. SOBRE QUÉ\nMateriales resistentes para exterior. Gran formato que aguanta sal, sol y humedad en costa\nUsar de forma natural: revestimiento fachada exterior resistente, porcelanico fachada exterior, porcelanico fachada, porcelanico para fachada exterior, porcelánico exterior fachada.\n2. DÓNDE VA EL TEXTO\nPost NUEVO en el apartado editorial de Xtone (blog/trendbook).\n3. ESTRUCTURA Y LONGITUD\nSin objetivo rígido de palabras (orientativo 700–1.100; 1.200–1.500 si es pilar). Intro (40–60 pal.: qué es y para quién). 1 H2 por subtema, 1–2 párrafos cada uno. H2 = afirmación concreta entendible en la 1ª frase. Cerrar con 4–6 FAQs reales de respuesta breve. Sin relleno.\n4. DATOS PARA SER CITABLE (IA y buscadores)\nCada afirmación con un dato concreto + fuente (medida, formato, material, norma, %). Frases que se entiendan solas, sin relleno. Nombrar \"Xtone\" de forma consistente. [Verificar cifras y gama antes de publicar].\n5. ENLACES\nEnlazar el post con (y usar como inspiración / referencia interna):\n· /into — https://www.xtone-surface.com/into\n· /blog/PREMIOS%20XTONE_2025 — https://www.xtone-surface.com/blog/PREMIOS%20XTONE_2025\n· /blog/calacatta-trend — https://www.xtone-surface.com/blog/calacatta-trend\nEnlazar también a la ficha/categoría de producto relacionada de Xtone cuando proceda.",
+    "normalizedLength": 2246,
+    "sha256": "8fb316155379afce41430e9d64166be20c657a97ef8640539c164077d035a69c"
+   },
+   "intent": null,
+   "cluster": null,
+   "objective": null,
+   "hypothesis": null,
+   "impact": null,
+   "effort": null,
+   "owner": null,
+   "author": null,
+   "reviewer": null,
+   "dependencies": [],
+   "successKpi": null,
+   "measurements": [],
+   "links": []
+  },
+  {
+   "id": "ed-ps-41581f803745968c",
+   "kind": "plan",
+   "provenance": {
+    "source": "plan-sheet",
+    "sourceIndex": 57,
+    "sourceSha256": "ba4c17eda90eda4af30c5830e2502b52f9dff42c7d4bc302b6573fc464226cfc",
+    "importedAt": "2026-09-28T07:36:27.539Z",
+    "identityOrdinal": 1
+   },
+   "status": "backlog",
+   "statusLiteral": "Backlog",
+   "type": "nuevo",
+   "typeLiteral": "Nuevo",
+   "brand": {
+    "slug": "xtone",
+    "line": null,
+    "literal": "Xtone"
+   },
+   "market": "ES",
+   "marketLiteral": "ES",
+   "language": "es",
+   "month": {
+    "year": 2026,
+    "month": 9,
+    "yearSource": "calendar",
+    "literal": "09 Septiembre"
+   },
+   "writingDate": null,
+   "publicationDate": null,
+   "warnings": [],
+   "theme": "Rehabilitación y reformas",
+   "subtheme": "Soluciones para ganar espacio",
+   "keyword": "gran formato ganar espacio",
+   "title": "Gran formato para ganar espacio visual en reformas",
+   "url": null,
+   "brief": {
+    "text": "SEO Title: Gran formato para ganar espacio visual en reformas | XTONE\nKeyword: gran formato ganar espacio, porcelanico gran formato fachada, porcelanosa gran formato\nKeyword principal: gran formato ganar espacio\nKeywords objetivo (que la marca ya posiciona, emparejadas a este tema · GSC, sin volumen):\n· porcelanico gran formato fachada — pos. #8\n· porcelanosa gran formato — pos. #9\nSlug: gran-formato-ganar-espacio-visual-reformas\nMetadescription: Gran formato para ganar espacio visual en reformas con XTONE. Descubre claves, ideas y consejos para acertar.\nCategoría: Reformas · (a confirmar con la taxonomía real del blog de XTONE)\n\nBRIEF — H1: Gran formato para ganar espacio visual en reformas\n1. SOBRE QUÉ\nSoluciones para ganar espacio. Menos juntas y piezas grandes que amplían visualmente las estancias\nUsar de forma natural: gran formato ganar espacio, porcelanico gran formato fachada, porcelanosa gran formato.\n2. DÓNDE VA EL TEXTO\nPost NUEVO en el apartado editorial de Xtone (blog/trendbook).\n3. ESTRUCTURA Y LONGITUD\nSin objetivo rígido de palabras (orientativo 700–1.100; 1.200–1.500 si es pilar). Intro (40–60 pal.: qué es y para quién). 1 H2 por subtema, 1–2 párrafos cada uno. H2 = afirmación concreta entendible en la 1ª frase. Cerrar con 4–6 FAQs reales de respuesta breve. Sin relleno.\n4. DATOS PARA SER CITABLE (IA y buscadores)\nCada afirmación con un dato concreto + fuente (medida, formato, material, norma, %). Frases que se entiendan solas, sin relleno. Nombrar \"Xtone\" de forma consistente. [Verificar cifras y gama antes de publicar].\n5. ENLACES\nEnlazar el post con (y usar como inspiración / referencia interna):\n· /into — https://www.xtone-surface.com/into\n· /blog/PREMIOS%20XTONE_2025 — https://www.xtone-surface.com/blog/PREMIOS%20XTONE_2025\n· /blog/calacatta-trend — https://www.xtone-surface.com/blog/calacatta-trend\nEnlazar también a la ficha/categoría de producto relacionada de Xtone cuando proceda.",
+    "normalizedLength": 1938,
+    "sha256": "ec23bbcaed0f9ec75e1cc435136753408f50d347a8b64208c89d467d89a86505"
+   },
+   "intent": null,
+   "cluster": null,
+   "objective": null,
+   "hypothesis": null,
+   "impact": null,
+   "effort": null,
+   "owner": null,
+   "author": null,
+   "reviewer": null,
+   "dependencies": [],
+   "successKpi": null,
+   "measurements": [],
+   "links": []
+  },
+  {
+   "id": "ed-ps-1f77b898cf754301",
+   "kind": "plan",
+   "provenance": {
+    "source": "plan-sheet",
+    "sourceIndex": 58,
+    "sourceSha256": "ba4c17eda90eda4af30c5830e2502b52f9dff42c7d4bc302b6573fc464226cfc",
+    "importedAt": "2026-09-28T07:36:27.539Z",
+    "identityOrdinal": 1
+   },
+   "status": "backlog",
+   "statusLiteral": "Backlog",
+   "type": "nuevo",
+   "typeLiteral": "Nuevo",
+   "brand": {
+    "slug": "xtone",
+    "line": null,
+    "literal": "Xtone"
+   },
+   "market": "ES",
+   "marketLiteral": "ES",
+   "language": "es",
+   "month": {
+    "year": 2026,
+    "month": 9,
+    "yearSource": "calendar",
+    "literal": "09 Septiembre"
+   },
+   "writingDate": null,
+   "publicationDate": null,
+   "warnings": [],
+   "theme": "Rehabilitación y reformas",
+   "subtheme": "Soluciones para ganar espacio",
+   "keyword": "suelo y pared mismo material",
+   "title": "Revestir paredes y suelo con el mismo material para agrandar el espacio",
+   "url": null,
+   "brief": {
+    "text": "SEO Title: Revestir paredes y suelo con el mismo material para agrandar el espacio | XTONE\nKeyword: suelo y pared mismo material, revestimiento porcelánico pared interior\nKeyword principal: suelo y pared mismo material\nKeywords objetivo (que la marca ya posiciona, emparejadas a este tema · GSC, sin volumen):\n· revestimiento porcelánico pared interior — pos. #7\nSlug: revestir-paredes-suelo-mismo-material-agrandar-espacio\nMetadescription: Revestir paredes y suelo con el mismo material para agrandar el espacio con XTONE. Descubre claves, ideas y consejos para acertar.\nCategoría: Pavimentos · (a confirmar con la taxonomía real del blog de XTONE)\n\nBRIEF — H1: Revestir paredes y suelo con el mismo material para agrandar el espacio\n1. SOBRE QUÉ\nSoluciones para ganar espacio. Continuidad de superficie para dar sensación de amplitud\nUsar de forma natural: suelo y pared mismo material, revestimiento porcelánico pared interior.\n2. DÓNDE VA EL TEXTO\nPost NUEVO en el apartado editorial de Xtone (blog/trendbook).\n3. ESTRUCTURA Y LONGITUD\nSin objetivo rígido de palabras (orientativo 700–1.100; 1.200–1.500 si es pilar). Intro (40–60 pal.: qué es y para quién). 1 H2 por subtema, 1–2 párrafos cada uno. H2 = afirmación concreta entendible en la 1ª frase. Cerrar con 4–6 FAQs reales de respuesta breve. Sin relleno.\n4. DATOS PARA SER CITABLE (IA y buscadores)\nCada afirmación con un dato concreto + fuente (medida, formato, material, norma, %). Frases que se entiendan solas, sin relleno. Nombrar \"Xtone\" de forma consistente. [Verificar cifras y gama antes de publicar].\n5. ENLACES\nEnlazar el post con (y usar como inspiración / referencia interna):\n· /into — https://www.xtone-surface.com/into\n· /blog/PREMIOS%20XTONE_2025 — https://www.xtone-surface.com/blog/PREMIOS%20XTONE_2025\n· /blog/calacatta-trend — https://www.xtone-surface.com/blog/calacatta-trend\nEnlazar también a la ficha/categoría de producto relacionada de Xtone cuando proceda.",
+    "normalizedLength": 1945,
+    "sha256": "92ec11acc97e7a1b29e09f46a504d1216845e0117abc5df1d1867fa8af1e2a1c"
+   },
+   "intent": null,
+   "cluster": null,
+   "objective": null,
+   "hypothesis": null,
+   "impact": null,
+   "effort": null,
+   "owner": null,
+   "author": null,
+   "reviewer": null,
+   "dependencies": [],
+   "successKpi": null,
+   "measurements": [],
+   "links": []
+  },
+  {
+   "id": "ed-ps-f024a2ef84d6c309",
+   "kind": "plan",
+   "provenance": {
+    "source": "plan-sheet",
+    "sourceIndex": 59,
+    "sourceSha256": "ba4c17eda90eda4af30c5830e2502b52f9dff42c7d4bc302b6573fc464226cfc",
+    "importedAt": "2026-09-28T07:36:27.539Z",
+    "identityOrdinal": 1
+   },
+   "status": "backlog",
+   "statusLiteral": "Backlog",
+   "type": "nuevo",
+   "typeLiteral": "Nuevo",
+   "brand": {
+    "slug": "xtone",
+    "line": null,
+    "literal": "Xtone"
+   },
+   "market": "ES",
+   "marketLiteral": "ES",
+   "language": "es",
+   "month": {
+    "year": 2026,
+    "month": 9,
+    "yearSource": "calendar",
+    "literal": "09 Septiembre"
+   },
+   "writingDate": null,
+   "publicationDate": null,
+   "warnings": [],
+   "theme": "Rehabilitación y reformas",
+   "subtheme": "Soluciones para ganar espacio",
+   "keyword": "encimera frente integrado",
+   "title": "Encimeras y frentes integrados: cocinas que ganan metros",
+   "url": null,
+   "brief": {
+    "text": "SEO Title: Encimeras y frentes integrados: cocinas que ganan metros | XTONE\nKeyword: encimera frente integrado, xtone encimeras, encimera xtone\nKeyword principal: encimera frente integrado\nKeywords objetivo (que la marca ya posiciona, emparejadas a este tema · GSC, sin volumen):\n· xtone encimeras — pos. #2\n· encimera xtone — pos. #2\n· encimeras xtone — pos. #2\n· encimera taj mahal — pos. #2\n· encimeras porcelanosa xtone — pos. #2\n· encimera calacatta gold — pos. #3\nSlug: encimeras-frentes-integrados-cocinas-ganan-metros\nMetadescription: Encimeras y frentes integrados: cocinas que ganan metros con XTONE. Descubre claves, ideas y consejos para acertar.\nCategoría: Cocinas · (a confirmar con la taxonomía real del blog de XTONE)\n\nBRIEF — H1: Encimeras y frentes integrados: cocinas que ganan metros\n1. SOBRE QUÉ\nSoluciones para ganar espacio. El gran formato unifica encimera y frente para una cocina más amplia\nUsar de forma natural: encimera frente integrado, xtone encimeras, encimera xtone, encimeras xtone, encimera taj mahal.\n2. DÓNDE VA EL TEXTO\nPost NUEVO en el apartado editorial de Xtone (blog/trendbook).\n3. ESTRUCTURA Y LONGITUD\nSin objetivo rígido de palabras (orientativo 700–1.100; 1.200–1.500 si es pilar). Intro (40–60 pal.: qué es y para quién). 1 H2 por subtema, 1–2 párrafos cada uno. H2 = afirmación concreta entendible en la 1ª frase. Cerrar con 4–6 FAQs reales de respuesta breve. Sin relleno.\n4. DATOS PARA SER CITABLE (IA y buscadores)\nCada afirmación con un dato concreto + fuente (medida, formato, material, norma, %). Frases que se entiendan solas, sin relleno. Nombrar \"Xtone\" de forma consistente. [Verificar cifras y gama antes de publicar].\n5. ENLACES\nEnlazar el post con (y usar como inspiración / referencia interna):\n· /into — https://www.xtone-surface.com/into\n· /blog/PREMIOS%20XTONE_2025 — https://www.xtone-surface.com/blog/PREMIOS%20XTONE_2025\n· /blog/calacatta-trend — https://www.xtone-surface.com/blog/calacatta-trend\nEnlazar también a la ficha/categoría de producto relacionada de Xtone cuando proceda.",
+    "normalizedLength": 2051,
+    "sha256": "3a8067a41028c019a4043878e922bc0fcdeeee8b48a6639fed5eb33be28becdd"
+   },
+   "intent": null,
+   "cluster": null,
+   "objective": null,
+   "hypothesis": null,
+   "impact": null,
+   "effort": null,
+   "owner": null,
+   "author": null,
+   "reviewer": null,
+   "dependencies": [],
+   "successKpi": null,
+   "measurements": [],
+   "links": []
   }
  ],
  "slots": [
@@ -15474,7 +15823,7 @@
     "source": "conjunto-propuestas",
     "sourceIndex": 0,
     "sourceSha256": "3c627a31d5c979b6733275f0cda7f14b0cb14dc65c03eff82191d68a73bd256c",
-    "importedAt": "2026-09-02T14:33:01.784Z",
+    "importedAt": "2026-09-28T07:36:27.539Z",
     "identityOrdinal": 1
    },
    "status": "backlog",
@@ -15543,7 +15892,7 @@
     "source": "conjunto-propuestas",
     "sourceIndex": 1,
     "sourceSha256": "3c627a31d5c979b6733275f0cda7f14b0cb14dc65c03eff82191d68a73bd256c",
-    "importedAt": "2026-09-02T14:33:01.784Z",
+    "importedAt": "2026-09-28T07:36:27.539Z",
     "identityOrdinal": 1
    },
    "status": "backlog",
@@ -15612,7 +15961,7 @@
     "source": "conjunto-propuestas",
     "sourceIndex": 2,
     "sourceSha256": "3c627a31d5c979b6733275f0cda7f14b0cb14dc65c03eff82191d68a73bd256c",
-    "importedAt": "2026-09-02T14:33:01.784Z",
+    "importedAt": "2026-09-28T07:36:27.539Z",
     "identityOrdinal": 1
    },
    "status": "backlog",
@@ -15681,7 +16030,7 @@
     "source": "conjunto-propuestas",
     "sourceIndex": 3,
     "sourceSha256": "3c627a31d5c979b6733275f0cda7f14b0cb14dc65c03eff82191d68a73bd256c",
-    "importedAt": "2026-09-02T14:33:01.784Z",
+    "importedAt": "2026-09-28T07:36:27.539Z",
     "identityOrdinal": 1
    },
    "status": "backlog",
@@ -15750,7 +16099,7 @@
     "source": "conjunto-propuestas",
     "sourceIndex": 4,
     "sourceSha256": "3c627a31d5c979b6733275f0cda7f14b0cb14dc65c03eff82191d68a73bd256c",
-    "importedAt": "2026-09-02T14:33:01.784Z",
+    "importedAt": "2026-09-28T07:36:27.539Z",
     "identityOrdinal": 1
    },
    "status": "backlog",
@@ -15819,7 +16168,7 @@
     "source": "conjunto-propuestas",
     "sourceIndex": 5,
     "sourceSha256": "3c627a31d5c979b6733275f0cda7f14b0cb14dc65c03eff82191d68a73bd256c",
-    "importedAt": "2026-09-02T14:33:01.784Z",
+    "importedAt": "2026-09-28T07:36:27.539Z",
     "identityOrdinal": 1
    },
    "status": "backlog",
@@ -15888,7 +16237,7 @@
     "source": "conjunto-propuestas",
     "sourceIndex": 6,
     "sourceSha256": "3c627a31d5c979b6733275f0cda7f14b0cb14dc65c03eff82191d68a73bd256c",
-    "importedAt": "2026-09-02T14:33:01.784Z",
+    "importedAt": "2026-09-28T07:36:27.539Z",
     "identityOrdinal": 1
    },
    "status": "backlog",
@@ -15957,7 +16306,7 @@
     "source": "conjunto-propuestas",
     "sourceIndex": 7,
     "sourceSha256": "3c627a31d5c979b6733275f0cda7f14b0cb14dc65c03eff82191d68a73bd256c",
-    "importedAt": "2026-09-02T14:33:01.784Z",
+    "importedAt": "2026-09-28T07:36:27.539Z",
     "identityOrdinal": 1
    },
    "status": "backlog",
@@ -16026,7 +16375,7 @@
     "source": "conjunto-propuestas",
     "sourceIndex": 8,
     "sourceSha256": "3c627a31d5c979b6733275f0cda7f14b0cb14dc65c03eff82191d68a73bd256c",
-    "importedAt": "2026-09-02T14:33:01.784Z",
+    "importedAt": "2026-09-28T07:36:27.539Z",
     "identityOrdinal": 1
    },
    "status": "backlog",
@@ -16095,7 +16444,7 @@
     "source": "conjunto-propuestas",
     "sourceIndex": 9,
     "sourceSha256": "3c627a31d5c979b6733275f0cda7f14b0cb14dc65c03eff82191d68a73bd256c",
-    "importedAt": "2026-09-02T14:33:01.784Z",
+    "importedAt": "2026-09-28T07:36:27.539Z",
     "identityOrdinal": 1
    },
    "status": "backlog",
@@ -16164,7 +16513,7 @@
     "source": "conjunto-propuestas",
     "sourceIndex": 10,
     "sourceSha256": "3c627a31d5c979b6733275f0cda7f14b0cb14dc65c03eff82191d68a73bd256c",
-    "importedAt": "2026-09-02T14:33:01.784Z",
+    "importedAt": "2026-09-28T07:36:27.539Z",
     "identityOrdinal": 1
    },
    "status": "backlog",
@@ -16233,7 +16582,7 @@
     "source": "conjunto-propuestas",
     "sourceIndex": 11,
     "sourceSha256": "3c627a31d5c979b6733275f0cda7f14b0cb14dc65c03eff82191d68a73bd256c",
-    "importedAt": "2026-09-02T14:33:01.784Z",
+    "importedAt": "2026-09-28T07:36:27.539Z",
     "identityOrdinal": 1
    },
    "status": "backlog",
@@ -16302,7 +16651,7 @@
     "source": "conjunto-propuestas",
     "sourceIndex": 12,
     "sourceSha256": "3c627a31d5c979b6733275f0cda7f14b0cb14dc65c03eff82191d68a73bd256c",
-    "importedAt": "2026-09-02T14:33:01.784Z",
+    "importedAt": "2026-09-28T07:36:27.539Z",
     "identityOrdinal": 1
    },
    "status": "backlog",
@@ -16371,7 +16720,7 @@
     "source": "conjunto-propuestas",
     "sourceIndex": 13,
     "sourceSha256": "3c627a31d5c979b6733275f0cda7f14b0cb14dc65c03eff82191d68a73bd256c",
-    "importedAt": "2026-09-02T14:33:01.784Z",
+    "importedAt": "2026-09-28T07:36:27.539Z",
     "identityOrdinal": 1
    },
    "status": "backlog",
@@ -16440,7 +16789,7 @@
     "source": "conjunto-propuestas",
     "sourceIndex": 14,
     "sourceSha256": "3c627a31d5c979b6733275f0cda7f14b0cb14dc65c03eff82191d68a73bd256c",
-    "importedAt": "2026-09-02T14:33:01.784Z",
+    "importedAt": "2026-09-28T07:36:27.539Z",
     "identityOrdinal": 1
    },
    "status": "backlog",
@@ -16509,7 +16858,7 @@
     "source": "conjunto-propuestas",
     "sourceIndex": 15,
     "sourceSha256": "3c627a31d5c979b6733275f0cda7f14b0cb14dc65c03eff82191d68a73bd256c",
-    "importedAt": "2026-09-02T14:33:01.784Z",
+    "importedAt": "2026-09-28T07:36:27.539Z",
     "identityOrdinal": 1
    },
    "status": "backlog",
@@ -16578,7 +16927,7 @@
     "source": "conjunto-propuestas",
     "sourceIndex": 16,
     "sourceSha256": "3c627a31d5c979b6733275f0cda7f14b0cb14dc65c03eff82191d68a73bd256c",
-    "importedAt": "2026-09-02T14:33:01.784Z",
+    "importedAt": "2026-09-28T07:36:27.539Z",
     "identityOrdinal": 1
    },
    "status": "backlog",
@@ -16647,7 +16996,7 @@
     "source": "conjunto-propuestas",
     "sourceIndex": 17,
     "sourceSha256": "3c627a31d5c979b6733275f0cda7f14b0cb14dc65c03eff82191d68a73bd256c",
-    "importedAt": "2026-09-02T14:33:01.784Z",
+    "importedAt": "2026-09-28T07:36:27.539Z",
     "identityOrdinal": 1
    },
    "status": "backlog",
@@ -16716,7 +17065,7 @@
     "source": "conjunto-propuestas",
     "sourceIndex": 18,
     "sourceSha256": "3c627a31d5c979b6733275f0cda7f14b0cb14dc65c03eff82191d68a73bd256c",
-    "importedAt": "2026-09-02T14:33:01.784Z",
+    "importedAt": "2026-09-28T07:36:27.539Z",
     "identityOrdinal": 1
    },
    "status": "backlog",
@@ -16785,7 +17134,7 @@
     "source": "conjunto-propuestas",
     "sourceIndex": 19,
     "sourceSha256": "3c627a31d5c979b6733275f0cda7f14b0cb14dc65c03eff82191d68a73bd256c",
-    "importedAt": "2026-09-02T14:33:01.784Z",
+    "importedAt": "2026-09-28T07:36:27.539Z",
     "identityOrdinal": 1
    },
    "status": "backlog",
@@ -16854,7 +17203,7 @@
     "source": "conjunto-propuestas",
     "sourceIndex": 20,
     "sourceSha256": "3c627a31d5c979b6733275f0cda7f14b0cb14dc65c03eff82191d68a73bd256c",
-    "importedAt": "2026-09-02T14:33:01.784Z",
+    "importedAt": "2026-09-28T07:36:27.539Z",
     "identityOrdinal": 1
    },
    "status": "backlog",
@@ -16923,7 +17272,7 @@
     "source": "conjunto-propuestas",
     "sourceIndex": 21,
     "sourceSha256": "3c627a31d5c979b6733275f0cda7f14b0cb14dc65c03eff82191d68a73bd256c",
-    "importedAt": "2026-09-02T14:33:01.784Z",
+    "importedAt": "2026-09-28T07:36:27.539Z",
     "identityOrdinal": 1
    },
    "status": "backlog",
@@ -16992,7 +17341,7 @@
     "source": "conjunto-propuestas",
     "sourceIndex": 22,
     "sourceSha256": "3c627a31d5c979b6733275f0cda7f14b0cb14dc65c03eff82191d68a73bd256c",
-    "importedAt": "2026-09-02T14:33:01.784Z",
+    "importedAt": "2026-09-28T07:36:27.539Z",
     "identityOrdinal": 1
    },
    "status": "backlog",
@@ -17061,7 +17410,7 @@
     "source": "conjunto-propuestas",
     "sourceIndex": 23,
     "sourceSha256": "3c627a31d5c979b6733275f0cda7f14b0cb14dc65c03eff82191d68a73bd256c",
-    "importedAt": "2026-09-02T14:33:01.784Z",
+    "importedAt": "2026-09-28T07:36:27.539Z",
     "identityOrdinal": 1
    },
    "status": "backlog",
@@ -17130,7 +17479,7 @@
     "source": "conjunto-propuestas",
     "sourceIndex": 24,
     "sourceSha256": "3c627a31d5c979b6733275f0cda7f14b0cb14dc65c03eff82191d68a73bd256c",
-    "importedAt": "2026-09-02T14:33:01.784Z",
+    "importedAt": "2026-09-28T07:36:27.539Z",
     "identityOrdinal": 1
    },
    "status": "backlog",
@@ -17199,7 +17548,7 @@
     "source": "conjunto-propuestas",
     "sourceIndex": 25,
     "sourceSha256": "3c627a31d5c979b6733275f0cda7f14b0cb14dc65c03eff82191d68a73bd256c",
-    "importedAt": "2026-09-02T14:33:01.784Z",
+    "importedAt": "2026-09-28T07:36:27.539Z",
     "identityOrdinal": 1
    },
    "status": "backlog",
@@ -17268,7 +17617,7 @@
     "source": "conjunto-propuestas",
     "sourceIndex": 26,
     "sourceSha256": "3c627a31d5c979b6733275f0cda7f14b0cb14dc65c03eff82191d68a73bd256c",
-    "importedAt": "2026-09-02T14:33:01.784Z",
+    "importedAt": "2026-09-28T07:36:27.539Z",
     "identityOrdinal": 1
    },
    "status": "backlog",
@@ -17337,7 +17686,7 @@
     "source": "conjunto-propuestas",
     "sourceIndex": 27,
     "sourceSha256": "3c627a31d5c979b6733275f0cda7f14b0cb14dc65c03eff82191d68a73bd256c",
-    "importedAt": "2026-09-02T14:33:01.784Z",
+    "importedAt": "2026-09-28T07:36:27.539Z",
     "identityOrdinal": 1
    },
    "status": "backlog",
@@ -17406,7 +17755,7 @@
     "source": "conjunto-propuestas",
     "sourceIndex": 28,
     "sourceSha256": "3c627a31d5c979b6733275f0cda7f14b0cb14dc65c03eff82191d68a73bd256c",
-    "importedAt": "2026-09-02T14:33:01.784Z",
+    "importedAt": "2026-09-28T07:36:27.539Z",
     "identityOrdinal": 1
    },
    "status": "backlog",
@@ -17475,7 +17824,7 @@
     "source": "conjunto-propuestas",
     "sourceIndex": 29,
     "sourceSha256": "3c627a31d5c979b6733275f0cda7f14b0cb14dc65c03eff82191d68a73bd256c",
-    "importedAt": "2026-09-02T14:33:01.784Z",
+    "importedAt": "2026-09-28T07:36:27.539Z",
     "identityOrdinal": 1
    },
    "status": "backlog",
@@ -17544,7 +17893,7 @@
     "source": "conjunto-propuestas",
     "sourceIndex": 30,
     "sourceSha256": "3c627a31d5c979b6733275f0cda7f14b0cb14dc65c03eff82191d68a73bd256c",
-    "importedAt": "2026-09-02T14:33:01.784Z",
+    "importedAt": "2026-09-28T07:36:27.539Z",
     "identityOrdinal": 1
    },
    "status": "backlog",
@@ -17613,7 +17962,7 @@
     "source": "conjunto-propuestas",
     "sourceIndex": 31,
     "sourceSha256": "3c627a31d5c979b6733275f0cda7f14b0cb14dc65c03eff82191d68a73bd256c",
-    "importedAt": "2026-09-02T14:33:01.784Z",
+    "importedAt": "2026-09-28T07:36:27.539Z",
     "identityOrdinal": 1
    },
    "status": "backlog",
@@ -17682,7 +18031,7 @@
     "source": "conjunto-propuestas",
     "sourceIndex": 32,
     "sourceSha256": "3c627a31d5c979b6733275f0cda7f14b0cb14dc65c03eff82191d68a73bd256c",
-    "importedAt": "2026-09-02T14:33:01.784Z",
+    "importedAt": "2026-09-28T07:36:27.539Z",
     "identityOrdinal": 1
    },
    "status": "backlog",
@@ -17751,7 +18100,7 @@
     "source": "conjunto-propuestas",
     "sourceIndex": 33,
     "sourceSha256": "3c627a31d5c979b6733275f0cda7f14b0cb14dc65c03eff82191d68a73bd256c",
-    "importedAt": "2026-09-02T14:33:01.784Z",
+    "importedAt": "2026-09-28T07:36:27.539Z",
     "identityOrdinal": 1
    },
    "status": "backlog",
@@ -17817,8 +18166,8 @@
  ],
  "report": {
   "schemaVersion": "editorial.v1",
-  "importedAt": "2026-09-02T14:33:01.784Z",
-  "inputFingerprint": "d7d3b5fc8c8ee1cf9c9d9bf364f99ad514231c82caf536d2b93e0e88c12206d0",
+  "importedAt": "2026-09-28T07:36:27.539Z",
+  "inputFingerprint": "5d7f7a0a51a4cd0470e89d369692e399ac4db80a53ac0fe9c887b9f1a94727ca",
   "archives": [
    {
     "key": "calendario-2026",
@@ -17826,7 +18175,7 @@
     "sha256": "7255c673bdaee766a6c74d302f902969b4b226c250cf1e966ca31e24bcbb0187",
     "byteLength": 6959,
     "schema": "v1.calendario{months[].events[],themes[]}",
-    "importedAt": "2026-09-02T14:33:01.784Z",
+    "importedAt": "2026-09-28T07:36:27.539Z",
     "expectedCount": 39,
     "importedCount": 39,
     "rejectedCount": 0,
@@ -17838,7 +18187,7 @@
     "sha256": "4b1edd3c9cf061630901d26c512a39e0227a67556a64d509168ea18cb887c330",
     "byteLength": 351895,
     "schema": "v1.planEditorialRow[13]",
-    "importedAt": "2026-09-02T14:33:01.784Z",
+    "importedAt": "2026-09-28T07:36:27.539Z",
     "expectedCount": 115,
     "importedCount": 115,
     "rejectedCount": 0,
@@ -17850,9 +18199,21 @@
     "sha256": "673b29e593ff6f6a6a0a19f1b96111d971f21e824c0e2cc02130b3596213dfab",
     "byteLength": 364534,
     "schema": "v1.planEditorialRow[13]",
-    "importedAt": "2026-09-02T14:33:01.784Z",
+    "importedAt": "2026-09-28T07:36:27.539Z",
     "expectedCount": 146,
     "importedCount": 146,
+    "rejectedCount": 0,
+    "status": "ok"
+   },
+   {
+    "key": "plan-sheet",
+    "fileName": "plan-sheet.json",
+    "sha256": "ba4c17eda90eda4af30c5830e2502b52f9dff42c7d4bc302b6573fc464226cfc",
+    "byteLength": 214768,
+    "schema": "plan-sheet.v1{brands[],rows[13]}",
+    "importedAt": "2026-09-28T07:36:27.539Z",
+    "expectedCount": 9,
+    "importedCount": 9,
     "rejectedCount": 0,
     "status": "ok"
    },
@@ -17862,7 +18223,7 @@
     "sha256": "3c627a31d5c979b6733275f0cda7f14b0cb14dc65c03eff82191d68a73bd256c",
     "byteLength": 37859,
     "schema": "v1.planEditorialSlot{propuestas[]}",
-    "importedAt": "2026-09-02T14:33:01.784Z",
+    "importedAt": "2026-09-28T07:36:27.539Z",
     "expectedCount": 34,
     "importedCount": 34,
     "rejectedCount": 0,
@@ -17871,6 +18232,8 @@
   ],
   "rejections": [],
   "warnings": [
+   "Calendario tomado de la hoja «Calendario 2026» para xtone: 12 huecos; sustituye 4 eventos V1.",
+   "Plan de xtone tomado de la hoja «plan_editorial_seo.xlsx»: 9 piezas; sustituye 6 piezas del plan V1.",
    "El literal \"slot\" no es único: 28 valores para 34 huecos. Se usan IDs derivados, nunca el literal.",
    "Marcas sin evento en el calendario: krion."
   ],
@@ -17927,7 +18290,13 @@
     "literal": "Xtone",
     "slug": "xtone",
     "line": null,
-    "occurrences": 26
+    "occurrences": 35
+   },
+   {
+    "literal": "XTONE",
+    "slug": "xtone",
+    "line": null,
+    "occurrences": 12
    }
   ],
   "brandsWithoutEvents": [
@@ -17963,6 +18332,21 @@
     "titulo": 0,
     "url": 48,
     "notas": 0
+   },
+   "plan-sheet": {
+    "estado": 0,
+    "fechaRedaccion": 9,
+    "fechaPublicacion": 9,
+    "tipo": 0,
+    "marca": 0,
+    "pais": 0,
+    "mesEstimado": 0,
+    "tematica": 0,
+    "subtematica": 0,
+    "keywordPrincipal": 0,
+    "titulo": 0,
+    "url": 9,
+    "notas": 0
    }
   },
   "duplicates": {
@@ -17975,6 +18359,11 @@
     "keywords": 4,
     "titles": 0,
     "urls": 18
+   },
+   "plan-sheet": {
+    "keywords": 0,
+    "titles": 0,
+    "urls": 0
    }
   },
   "briefs": {
@@ -17987,6 +18376,11 @@
     "count": 146,
     "totalChars": 281433,
     "totalNormalizedChars": 281432
+   },
+   "plan-sheet": {
+    "count": 9,
+    "totalChars": 18071,
+    "totalNormalizedChars": 18071
    }
   },
   "identityCollisions": 0

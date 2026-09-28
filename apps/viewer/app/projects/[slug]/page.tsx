@@ -19,7 +19,7 @@ import {
   REPORT_TABS,
   type ReportTab,
 } from "@/components/report/brand-report";
-import { getBrandReport, reportFilters } from "@/lib/brand-report";
+import { editorialCalendar, editorialOrigin, editorialPlanRows, getBrandReport, reportFilters } from "@/lib/brand-report";
 import { resolveReportTab } from "@/components/report/report-tab";
 
 const chapterCopy = {
@@ -81,6 +81,9 @@ export default async function ProjectPage({
           baseHref={`/projects/${slugResult.data}`}
           query={query}
           controlsInHeader={!present}
+          editorialOrigin={editorialOrigin(slugResult.data)}
+          editorialCalendar={editorialCalendar(slugResult.data)}
+          editorialPieces={editorialPlanRows(slugResult.data)}
         />
       );
       /* El proveedor envuelve también la cabecera: periodo y mercado viven en

@@ -1524,3 +1524,100 @@ No se reescriben decisiones antiguas. Si una cambia, se añade una nueva entrada
   user-agent de Chrome normal, porque el proxy (D-048) responde 403 a
   «HeadlessChrome».
 
+## D-050 · La hoja «Plan editorial» del equipo sustituye al plan V1, marca a marca
+
+- Fecha: 2026-09-28.
+- Estado: vigente.
+- Contexto: el equipo mantiene el plan vivo en un xlsx (`plan_editorial_seo.xlsx`,
+  hoja «Plan editorial», mismas trece columnas que el plan V1). El plan V1 de
+  Xtone (6 piezas de `conjunto.json`) ya no coincide con el del equipo (9 piezas).
+- Decisión: nueva fuente `plan-sheet`. `pnpm editorial:import-sheet -- --file <xlsx>
+  --brand <slug>` guarda el snapshot en `packages/editorial/data/sources/plan-sheet.json`
+  (todas las filas, más el hash del xlsx) y regenera el dataset. Solo las marcas
+  activadas (`brands`, acumulativas entre ejecuciones) toman su plan de la hoja y
+  pierden el plan V1; las demás siguen igual. IDs `ed-ps-…` y procedencia
+  `plan-sheet`. `import:v1` también lee el snapshot, así que no se pierde al reimportar.
+- Ficha de marca: si la marca tiene hoja, la pestaña Plan editorial muestra solo el
+  plan de la hoja (no suma el backlog V1) y cruza con Google todas sus piezas, aunque
+  su mes haya pasado (máx. 20); la nota indica la fuente. A la derecha del título,
+  enlace «Plan editorial general» a `/editorial/calendario`.
+- Piloto: Xtone. Para otra marca, volver a ejecutar con `--brand <slug>` y el xlsx vigente.
+
+## D-051 · Calendario de publicación de la marca desde la hoja «Calendario AAAA»
+
+- Fecha: 2026-09-28.
+- Estado: vigente.
+- Contexto: el xlsx del equipo trae, además del plan, la hoja «Calendario 2026» con
+  los huecos «POST <MARCA>» y «NEWS <MARCA>» por día. El calendario V1 de Xtone tenía
+  4 POST (uno con fecha distinta: 8 sep frente a 29 sep en la hoja).
+- Decisión: `import:sheet` también lee esa hoja y guarda sus huecos en el snapshot
+  (`calendar`). Para las marcas activadas (D-050), sustituyen a los eventos V1; se
+  ignoran las celdas con fórmula (son títulos de piezas con fecha de publicación).
+  Las semanas partidas se asignan al mes anterior o siguiente según el día.
+- Ficha de marca: encima de la tabla del plan, tira horizontal desplazable de días
+  (`PublicationSlider`), mes a mes, con punto relleno para Post y hueco para
+  Newsletter, piezas del plan por mes, hoy marcado y apertura en el mes actual.
+- Pendiente para otras marcas: «PG» (Porcelanosa Grupo) y «AC» no se resuelven
+  como alias; revisar al activarlas.
+
+## D-052 · La lista del plan en la ficha arranca en el mes en curso
+
+- Fecha: 2026-09-28.
+- Estado: vigente.
+- Decisión: la tabla del plan editorial de la ficha de marca muestra solo las piezas
+  del mes en curso en adelante (y las que no tienen mes), ordenadas por mes. La nota
+  indica cuántas piezas de meses anteriores se ocultan. El calendario de publicación
+  sigue cubriendo todos los meses.
+
+## D-053 · Reprogramación de piezas por curación, no editando la hoja importada
+
+- Fecha: 2026-09-28.
+- Estado: vigente.
+- Contexto: el responsable pide pasar las piezas de Xtone de julio y agosto, sin
+  publicar, a noviembre y diciembre para completar el plan.
+- Decisión: el cambio se guarda como curación (`data/curation/editorial-curation.json`,
+  con versión, autor y nota), no en el snapshot de la hoja. Así queda trazable y
+  sobrevive a reimportar el xlsx mientras no cambien keyword, título ni mes de la
+  fila (el ID depende de ellos). Si el equipo actualiza el mes en el Excel, la hoja
+  vuelve a mandar y la curación queda huérfana.
+- Cachés: las claves del informe de marca (`cachedLive` en el visor y `remember` en
+  el repositorio) incluyen ahora el mes de cada pieza. Antes, un cambio de fecha no
+  se veía hasta que caducaba la caché (6 h).
+
+## D-054 · Vista «Mes completo» en el calendario de publicación
+
+- Fecha: 2026-09-28.
+- Estado: vigente.
+- Decisión: el calendario de la ficha de marca tiene dos vistas con conmutador
+  «Tira / Mes completo». La vista de mes muestra cuadrículas lunes-domingo compactas,
+  tres meses a la vista en escritorio (dos en tableta, uno en móvil), deslizables con
+  snap y con las mismas flechas (avanzan de mes en mes), con etiquetas «Post» y «News»
+  y el número de piezas en la cabecera de cada mes, sin listar sus títulos (ya están
+  en la tabla). Al cambiar de vista se conserva el mes que se estaba mirando. La vista por
+  defecto sigue siendo la tira.
+
+## D-055 · La tabla del plan en la ficha usa las columnas de la hoja del equipo
+
+- Fecha: 2026-09-28.
+- Estado: vigente.
+- Decisión: la tabla del plan editorial de la ficha de marca muestra las trece
+  columnas de la hoja, en su orden: Estado, Fecha redacción, Fecha publicación,
+  Tipo, Marca, País, Mes, Temática, Subtema, Keyword principal, Título, URL (si
+  existe) y Notas / Brief (desplegable). Los datos salen del dataset editorial con
+  la curación aplicada (`editorialPlanRows`), no del informe de Google.
+- Las columnas de Google (posición, clics, impresiones) salen de la tabla. El
+  informe sigue cruzando el plan con Search Console para las lecturas del resumen.
+- Se mantiene D-052: la lista arranca en el mes en curso.
+
+## D-056 · Tabla del plan compacta: las trece columnas caben en escritorio
+
+- Fecha: 2026-09-28.
+- Estado: vigente.
+- Decisión: desde 1024 px la tabla del plan de la ficha usa `table-layout: fixed`
+  con anchos por columna, letra de 12 px, celdas de 8×6 px, cabeceras que parten
+  línea, fechas dd/mm/aa y URL recortada con puntos suspensivos. Sin desplazamiento
+  horizontal a 1440 px (1118 px útiles). Por debajo de 1024 px se mantiene el
+  desplazamiento dentro de la tabla.
+- El brief se abre en un panel emergente centrado (Popover API nativa, sin JS), así
+  no ensancha la columna y no lo recorta el contenedor con scroll.
+

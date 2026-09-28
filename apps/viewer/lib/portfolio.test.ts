@@ -41,8 +41,8 @@ describe("getPortfolio", () => {
     const plan = data.brands.reduce((total, brand) => total + brand.editorial.planPieces, 0);
     const events = data.brands.reduce((total, brand) => total + brand.editorial.calendarEvents, 0);
     expect(backlog).toBe(115);
-    expect(plan).toBe(146);
-    expect(events).toBe(39);
+    expect(plan).toBe(149); // V1 con el plan de Xtone sustituido por la hoja (D-050)
+    expect(events).toBe(47);
     expect(data.editorialPlanningYear).toBe(2026);
   });
 

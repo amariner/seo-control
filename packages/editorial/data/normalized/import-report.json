@@ -1,7 +1,7 @@
 {
   "schemaVersion": "editorial.v1",
-  "importedAt": "2026-09-02T14:33:01.784Z",
-  "inputFingerprint": "d7d3b5fc8c8ee1cf9c9d9bf364f99ad514231c82caf536d2b93e0e88c12206d0",
+  "importedAt": "2026-09-28T07:36:27.539Z",
+  "inputFingerprint": "5d7f7a0a51a4cd0470e89d369692e399ac4db80a53ac0fe9c887b9f1a94727ca",
   "archives": [
     {
       "key": "calendario-2026",
@@ -9,7 +9,7 @@
       "sha256": "7255c673bdaee766a6c74d302f902969b4b226c250cf1e966ca31e24bcbb0187",
       "byteLength": 6959,
       "schema": "v1.calendario{months[].events[],themes[]}",
-      "importedAt": "2026-09-02T14:33:01.784Z",
+      "importedAt": "2026-09-28T07:36:27.539Z",
       "expectedCount": 39,
       "importedCount": 39,
       "rejectedCount": 0,
@@ -21,7 +21,7 @@
       "sha256": "4b1edd3c9cf061630901d26c512a39e0227a67556a64d509168ea18cb887c330",
       "byteLength": 351895,
       "schema": "v1.planEditorialRow[13]",
-      "importedAt": "2026-09-02T14:33:01.784Z",
+      "importedAt": "2026-09-28T07:36:27.539Z",
       "expectedCount": 115,
       "importedCount": 115,
       "rejectedCount": 0,
@@ -33,9 +33,21 @@
       "sha256": "673b29e593ff6f6a6a0a19f1b96111d971f21e824c0e2cc02130b3596213dfab",
       "byteLength": 364534,
       "schema": "v1.planEditorialRow[13]",
-      "importedAt": "2026-09-02T14:33:01.784Z",
+      "importedAt": "2026-09-28T07:36:27.539Z",
       "expectedCount": 146,
       "importedCount": 146,
+      "rejectedCount": 0,
+      "status": "ok"
+    },
+    {
+      "key": "plan-sheet",
+      "fileName": "plan-sheet.json",
+      "sha256": "ba4c17eda90eda4af30c5830e2502b52f9dff42c7d4bc302b6573fc464226cfc",
+      "byteLength": 214768,
+      "schema": "plan-sheet.v1{brands[],rows[13]}",
+      "importedAt": "2026-09-28T07:36:27.539Z",
+      "expectedCount": 9,
+      "importedCount": 9,
       "rejectedCount": 0,
       "status": "ok"
     },
@@ -45,7 +57,7 @@
       "sha256": "3c627a31d5c979b6733275f0cda7f14b0cb14dc65c03eff82191d68a73bd256c",
       "byteLength": 37859,
       "schema": "v1.planEditorialSlot{propuestas[]}",
-      "importedAt": "2026-09-02T14:33:01.784Z",
+      "importedAt": "2026-09-28T07:36:27.539Z",
       "expectedCount": 34,
       "importedCount": 34,
       "rejectedCount": 0,
@@ -54,6 +66,8 @@
   ],
   "rejections": [],
   "warnings": [
+    "Calendario tomado de la hoja «Calendario 2026» para xtone: 12 huecos; sustituye 4 eventos V1.",
+    "Plan de xtone tomado de la hoja «plan_editorial_seo.xlsx»: 9 piezas; sustituye 6 piezas del plan V1.",
     "El literal \"slot\" no es único: 28 valores para 34 huecos. Se usan IDs derivados, nunca el literal.",
     "Marcas sin evento en el calendario: krion."
   ],
@@ -110,7 +124,13 @@
       "literal": "Xtone",
       "slug": "xtone",
       "line": null,
-      "occurrences": 26
+      "occurrences": 35
+    },
+    {
+      "literal": "XTONE",
+      "slug": "xtone",
+      "line": null,
+      "occurrences": 12
     }
   ],
   "brandsWithoutEvents": [
@@ -146,6 +166,21 @@
       "titulo": 0,
       "url": 48,
       "notas": 0
+    },
+    "plan-sheet": {
+      "estado": 0,
+      "fechaRedaccion": 9,
+      "fechaPublicacion": 9,
+      "tipo": 0,
+      "marca": 0,
+      "pais": 0,
+      "mesEstimado": 0,
+      "tematica": 0,
+      "subtematica": 0,
+      "keywordPrincipal": 0,
+      "titulo": 0,
+      "url": 9,
+      "notas": 0
     }
   },
   "duplicates": {
@@ -158,6 +193,11 @@
       "keywords": 4,
       "titles": 0,
       "urls": 18
+    },
+    "plan-sheet": {
+      "keywords": 0,
+      "titles": 0,
+      "urls": 0
     }
   },
   "briefs": {
@@ -170,6 +210,11 @@
       "count": 146,
       "totalChars": 281433,
       "totalNormalizedChars": 281432
+    },
+    "plan-sheet": {
+      "count": 9,
+      "totalChars": 18071,
+      "totalNormalizedChars": 18071
     }
   },
   "identityCollisions": 0

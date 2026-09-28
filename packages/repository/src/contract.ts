@@ -74,7 +74,7 @@ export type BrandReportRequest = {
   /** `all`, un mercado Tier 1 o uno de los mercados adicionales de la marca (D-039). */
   market: MarketCode | "all" | (string & {});
   range: import("@seo/contracts").ReportRangeInput;
-  editorial: ReadonlyArray<{ id: string; month: string | null; title: string; type: string; status: string; keyword: string | null }>;
+  editorial: ReadonlyArray<{ id: string; month: string | null; title: string; type: string; status: string; keyword: string | null; current?: boolean }>;
 };
 
 /**

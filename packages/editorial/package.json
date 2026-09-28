@@ -15,7 +15,8 @@
     "lint": "tsc --noEmit",
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
-    "import:v1": "tsx scripts/import-v1.ts"
+    "import:v1": "tsx scripts/import-v1.ts",
+    "import:sheet": "tsx scripts/import-sheet.ts"
   },
   "dependencies": {
     "@seo/contracts": "workspace:*",
@@ -23,6 +24,7 @@
   },
   "devDependencies": {
     "@types/node": "^24.10.1",
+    "exceljs": "^4.4.0",
     "tsx": "^4.23.13",
     "typescript": "6.0.3",
     "vitest": "^4.1.11"
