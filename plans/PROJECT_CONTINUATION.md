@@ -2,21 +2,21 @@
 
 Última actualización: 28 de septiembre de 2026 (pestaña «Informes» con presentación y PDF, D-073).
 
-## Pestaña «Informes»: presentación y PDF · D-073 (2026-09-28, sin commit)
+## Pestaña «Informes»: presentación y PDF · D-073 (2026-09-28, en producción, e7d733a)
 
 - Hecho: `lib/project-report.ts` (+ pruebas), `components/report/project-deck*.tsx|css`, ruta
   `app/projects/[slug]/informe` (con `loading.tsx` propio) y pestaña `?tab=informes`.
 - Reanudar: revisar con el usuario el contenido de cada apartado; después, guardar cada informe
   en el archivo `/reports` y la exportación HTML autocontenida (P7).
 
-## Pestaña «Páginas» con KPIs y análisis · D-072 (2026-09-28, sin commit)
+## Pestaña «Páginas» con KPIs y análisis · D-072 (2026-09-28, en producción, e7d733a)
 
 - Hecho: `apps/viewer/lib/page-analysis.ts` (+ pruebas) y `components/report/page-kpis.tsx`.
   Cuatro tarjetas, tabla con filtros por tipo/carpeta y, debajo, reparto por tipo y por carpeta
   de idioma (raíz = «España (raíz)»). «Ganan/pierden» filtran la tabla (filtro «Tendencia») y
   «URLs duplicadas» abre un brief copiable (`page-kpi-actions.tsx`). Retiradas «Páginas con conversiones» y «Páginas por
   revisar». Solo muestra GSC del informe; sin cambios de contrato ni de repositorio.
-- Reanudar: commit y despliegue junto a D-067…D-071. Pendiente decidir si se elimina
+- Pendiente decidir si se elimina
   `convertingPages` del contrato (ya no se pinta).
 
 ## Crawl local y «Estado del sitio» · D-070 (2026-09-28, sin commit)

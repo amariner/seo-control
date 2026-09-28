@@ -1041,4 +1041,7 @@
   ruta `/projects/xtone/informe` con 7 apartados de datos reales y aclaración por apartado. PDF
   por impresión del navegador como la V1: comprobado con Chrome headless (8 páginas A4
   apaisadas: portada + 7). Typecheck y 140 pruebas del visor en verde. Sin commit ni despliegue.
+- Commit e7d733a en main, subido a GitHub y desplegado con `vercel deploy --prod --yes` (Ready,
+  alias seo-dashboard-viewer.vercel.app). Producción pide el login de Google; no se revisó con
+  sesión iniciada.
 
