@@ -1,6 +1,6 @@
 import { Fragment, type ReactNode } from "react";
 import Link from "next/link";
-import { ArrowUpRight, Database, Info, X } from "lucide-react";
+import { ArrowUpRight, Database, Info } from "lucide-react";
 import { findBrand, type BrandReport, type ReportKpi } from "@seo/contracts";
 import { Notice } from "@seo/ui";
 import { ReportDataTable, type ReportDataRow } from "./data-table";
@@ -14,7 +14,9 @@ import { BingLogo, GoogleLogo } from "./google-logo";
 import { InfoHint } from "./info-hint";
 import { ExpandableList, ExpandableTable } from "./expandable-table";
 import { MoversList } from "./movers-list";
-import { PublicationSlider, type PublicationEvent } from "./publication-slider";
+import type { PublicationEvent } from "./publication-slider";
+import { EditorialPlan } from "./editorial-plan";
+import { Url } from "./url-label";
 import type { EditorialPlanRow } from "@/lib/brand-report";
 import { FilteredList } from "./filtered-list";
 import { KeywordKpis } from "./keyword-kpis";
@@ -134,21 +136,6 @@ function signedPercent(change: number) {
   return size >= 1000
     ? `${sign}${number(size / 1000, 1)}k %`
     : `${sign}${number(size, 1)} %`;
-}
-function Url({ value }: { value: string | null }) {
-  if (!value) return <span className="muted">—</span>;
-  let label = value;
-  try {
-    const parsed = new URL(value);
-    label = decodeURI(parsed.pathname) + parsed.search;
-  } catch {
-    /* La fuente también devuelve rutas relativas. */
-  }
-  return (
-    <span className="brand-url" title={value}>
-      {label}
-    </span>
-  );
 }
 function Section({
   id,
@@ -1824,37 +1811,6 @@ function Migration({ report }: { report: BrandReport }) {
     </Section>
   );
 }
-const monthLabel = (month: string | null) =>
-  month
-    ? new Date(`${month}-01T00:00:00Z`).toLocaleDateString("es-ES", {
-        month: "short",
-        year: "numeric",
-        timeZone: "UTC",
-      })
-    : "Sin mes";
-const dash = (value: string | null) =>
-  value ? value : <span className="muted">—</span>;
-/** Fecha corta dd/mm/aa para la tabla compacta del plan. */
-const shortDate = (value: string | null) =>
-  value ? `${value.slice(8, 10)}/${value.slice(5, 7)}/${value.slice(2, 4)}` : dash(null);
-
-/** Columnas de la hoja «Plan editorial» del equipo, en su orden (D-055). */
-const EDITORIAL_COLUMNS = [
-  { key: "status", label: "Estado" },
-  { key: "writingDate", label: "Fecha redacción" },
-  { key: "publicationDate", label: "Fecha publicación" },
-  { key: "type", label: "Tipo" },
-  { key: "brand", label: "Marca" },
-  { key: "market", label: "País" },
-  { key: "month", label: "Mes" },
-  { key: "theme", label: "Temática" },
-  { key: "subtheme", label: "Subtema" },
-  { key: "keyword", label: "Keyword principal" },
-  { key: "title", label: "Título" },
-  { key: "url", label: "URL (si existe)" },
-  { key: "brief", label: "Notas / Brief", sortable: false },
-];
-
 function Editorial({
   report,
   pieces,
@@ -1866,17 +1822,6 @@ function Editorial({
   origin?: { label: string; sheet: boolean };
   calendar?: { events: PublicationEvent[]; source: string };
 }) {
-  const piecesByMonth: Record<string, string[]> = {};
-  for (const item of pieces)
-    if (item.month)
-      (piecesByMonth[item.month] ??= []).push(item.title ?? item.id);
-  // La lista arranca en el mes en curso: lo pendiente de publicar, en orden (D-052).
-  const today = new Date().toISOString().slice(0, 10);
-  const currentMonth = today.slice(0, 7);
-  const upcoming = pieces
-    .filter((item) => !item.month || item.month >= currentMonth)
-    .sort((a, b) => (a.month ?? "9999").localeCompare(b.month ?? "9999"));
-  const earlier = pieces.length - upcoming.length;
   return (
     <Section
       id="editorial"
@@ -1889,88 +1834,11 @@ function Editorial({
         </Link>
       }
     >
-      {calendar && calendar.events.length > 0 && (
-        <PublicationSlider
-          events={calendar.events}
-          piecesByMonth={piecesByMonth}
-          today={today}
-          source={calendar.source}
-        />
-      )}
-      <ReportDataTable
-        id="editorial"
+      <EditorialPlan
+        pieces={pieces}
         caption={`Plan editorial de ${findBrand(report.brand)?.name ?? report.brand}`}
-        searchPlaceholder="Buscar pieza, keyword, URL o brief…"
-        columns={EDITORIAL_COLUMNS}
-        rows={upcoming.map((item) =>
-          row(
-            item.id,
-            {
-              status: item.status,
-              writingDate: item.writingDate,
-              publicationDate: item.publicationDate,
-              type: item.type,
-              brand: item.brand,
-              market: item.market,
-              month: item.month,
-              theme: item.theme,
-              subtheme: item.subtheme,
-              keyword: item.keyword,
-              title: item.title,
-              url: item.url,
-              brief: item.brief,
-            },
-            {
-              writingDate: shortDate(item.writingDate),
-              publicationDate: shortDate(item.publicationDate),
-              market: dash(item.market),
-              month: monthLabel(item.month),
-              theme: dash(item.theme),
-              subtheme: dash(item.subtheme),
-              keyword: dash(item.keyword),
-              title: dash(item.title),
-              url: item.url ? (
-                <a href={item.url} target="_blank" rel="noreferrer">
-                  <Url value={item.url} />
-                </a>
-              ) : (
-                dash(null)
-              ),
-              brief: item.brief ? (
-                <>
-                  <button
-                    type="button"
-                    className="brand-brief-open"
-                    popoverTarget={`brief-${item.id}`}
-                  >
-                    Ver brief
-                  </button>
-                  <div
-                    id={`brief-${item.id}`}
-                    popover="auto"
-                    className="brand-brief-panel"
-                  >
-                    <header>
-                      <strong>{item.title ?? item.keyword}</strong>
-                      <button
-                        type="button"
-                        popoverTarget={`brief-${item.id}`}
-                        popoverTargetAction="hide"
-                        aria-label="Cerrar brief"
-                      >
-                        <X size={16} aria-hidden />
-                      </button>
-                    </header>
-                    <div>{item.brief}</div>
-                  </div>
-                </>
-              ) : (
-                dash(null)
-              ),
-            },
-          ),
-        )}
-        note={`${earlier ? `Desde ${new Date(`${currentMonth}-01T00:00:00Z`).toLocaleDateString("es-ES", { month: "long", year: "numeric", timeZone: "UTC" })}: ${earlier === 1 ? "se oculta 1 pieza" : `se ocultan ${earlier} piezas`} de meses anteriores. ` : ""}${origin ? `Fuente: ${origin.label}.` : ""}`}
+        origin={origin}
+        calendar={calendar}
       />
     </Section>
   );

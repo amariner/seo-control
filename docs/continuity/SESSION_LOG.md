@@ -957,3 +957,27 @@
   (seo-dashboard-viewer-juuhkm9il, Ready, alias seo-dashboard-viewer.vercel.app). `next build`
   local en verde antes del despliegue. curl sin sesión → 429 (challenge del Firewall, D-048);
   la comprobación visual en producción requiere la sesión de Google del responsable.
+
+## 2026-09-28 · Plan editorial general con las ocho marcas (D-057)
+
+- `pnpm editorial:import-sheet` con las ocho marcas: plan 149 → 61, calendario 47 → 71
+  (4 huecos sin marca fuera). Alias «PG» y «AC».
+- `/editorial/calendario` rehecho con el patrón de la ficha de Xtone y color por marca;
+  filtro por marca en la URL. Ficha de Xtone sin cambios visuales (color de acento).
+- Verificado en el navegador (tira, mes completo, filtro Noken, bloques temáticos, sin
+  desbordamiento). Typecheck y `pnpm test` en verde (visor 127, editorial 48). Sin commit.
+- Revisión a pantalla completa: la URL del plan ya no invade «Notas / Brief» (min-width
+  heredado de `.brand-url`), bloques temáticos sin estirarse y botón «Copiar» en el panel
+  del brief (texto plano con el título; `components/report/brief-copy.tsx`).
+- D-058: tabla del plan general en una línea con scroll horizontal (2148 px de tabla en
+  1278 px de recuadro a 1600 px de ventana; filas de 34 px, sin desbordar la página).
+- D-059: filtros (marca, estado, tipo, país, mes, subtema) bajo el encabezado del plan
+  general y «Temas del semestre» rediseñado entre calendario y tabla. Verificado a 1440 px
+  (filtro estado+marca → 3 filas, chips con enlace a `?subtheme=`) y 375 px (sin
+  desbordamiento; temas deslizables). Typecheck y 127 pruebas del visor en verde.
+- D-060: filtros dentro de la tabla (`ReportDataTable.filters`) y temas en lista bajo la
+  tabla; retirada la barra de filtros superior y las tarjetas. Verificado (Noken + Backlog
+  → 3 de 26, barra en una línea a 1600 px, sin desbordamiento a 375 px). `pnpm test` en verde.
+- D-061: temas del semestre como línea de tiempo (raíl, mes en curso destacado, etiquetas
+  de subtema, piezas por mes con colores de marca). Verificado en el navegador; typecheck en verde.
+- Commit de D-057…D-061 en main y push a GitHub. Sin desplegar a producción.

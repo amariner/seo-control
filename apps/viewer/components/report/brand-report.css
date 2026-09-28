@@ -1649,10 +1649,10 @@
   border-radius: 50%;
 }
 .pub-dot.is-post {
-  background: var(--ds-accent);
+  background: var(--pub-color, var(--ds-accent));
 }
 .pub-dot.is-news {
-  box-shadow: inset 0 0 0 1.5px var(--ds-accent);
+  box-shadow: inset 0 0 0 1.5px var(--pub-color, var(--ds-accent));
 }
 .pub-tag {
   font-size: 10px;
@@ -1759,12 +1759,12 @@
   white-space: nowrap;
 }
 .pub-chip.is-post {
-  background: var(--ds-accent);
+  background: var(--pub-color, var(--ds-accent));
   color: var(--ds-surface, #fff);
 }
 .pub-chip.is-news {
-  box-shadow: inset 0 0 0 1px var(--ds-accent);
-  color: var(--ds-accent);
+  box-shadow: inset 0 0 0 1px var(--pub-color, var(--ds-accent));
+  color: var(--pub-color, var(--ds-accent));
 }
 @media (max-width: 1100px) {
   .pub-grid-month {
@@ -1806,6 +1806,8 @@
 }
 #editorial-table .brand-url {
   display: block;
+  min-width: 0;
+  max-width: 100%;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -1893,10 +1895,102 @@
 .brand-brief-panel > header button:hover {
   color: var(--ds-ink);
 }
+.brand-brief-panel > header strong {
+  flex: 1;
+}
+.brand-brief-panel > header .brand-brief-copy {
+  display: inline-flex;
+  gap: 6px;
+  width: auto;
+  padding: 0 10px;
+  border: 1px solid var(--ds-line);
+  font: inherit;
+  font-size: 12px;
+  white-space: nowrap;
+}
+.brand-brief-panel > header .brand-brief-copy:hover {
+  border-color: var(--ds-line-strong);
+}
 .brand-brief-panel > div {
   padding: 14px 16px 18px;
   overflow: auto;
   font-size: 13px;
   line-height: 1.6;
   white-space: pre-wrap;
+}
+
+/* Plan editorial general (D-057): un color por marca en el calendario y la tabla. */
+.pub-slider.is-multi .pub-legend .pub-dot.is-post {
+  background: var(--ds-ink);
+}
+.pub-slider.is-multi .pub-legend .pub-dot.is-news {
+  box-shadow: inset 0 0 0 1.5px var(--ds-ink);
+}
+.pub-slider.is-multi .pub-day.is-marked {
+  background: transparent;
+}
+.pub-slider.is-multi .pub-cell.is-marked {
+  border-color: var(--ds-line-strong);
+  background: transparent;
+}
+.pub-slider.is-multi .pub-day.is-marked .pub-num,
+.pub-slider.is-multi .pub-cell.is-marked .pub-num {
+  color: var(--ds-ink);
+}
+.pub-slider.is-multi .pub-tag {
+  color: var(--ds-muted);
+  font-weight: 600;
+}
+.pub-slider.is-multi .pub-marks {
+  flex-wrap: wrap;
+  justify-content: center;
+  max-width: 30px;
+}
+.pub-slider.is-multi .pub-chip {
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+.plan-brand {
+  display: inline-flex;
+  align-items: flex-start;
+  gap: 5px;
+  overflow-wrap: normal;
+  word-break: normal;
+}
+/* Plan general: una fila por pieza en una sola línea y desplazamiento horizontal
+   dentro de la tabla (D-058). */
+.plan-general #editorial-table {
+  table-layout: auto;
+  width: max-content;
+  min-width: 100%;
+}
+.plan-general #editorial-table th,
+.plan-general #editorial-table td {
+  width: auto;
+  white-space: nowrap;
+  vertical-align: middle;
+}
+.plan-general #editorial-table td:not(.report-data-numeric) {
+  min-width: 0;
+  overflow-wrap: normal;
+}
+.plan-general #editorial-table .brand-url {
+  max-width: 280px;
+  line-height: inherit;
+  font-size: inherit;
+}
+.plan-general .plan-brand {
+  align-items: center;
+}
+.plan-general .plan-brand::before {
+  margin-top: 0;
+}
+.plan-brand::before {
+  content: "";
+  flex: none;
+  width: 8px;
+  height: 8px;
+  margin-top: 4px;
+  border-radius: 2px;
+  background: var(--brand-color, var(--ds-graphite));
 }

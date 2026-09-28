@@ -113,11 +113,14 @@ export function normalizeBriefText(text: string) {
 const BRAND_ALIASES: Array<{ match: RegExp; slug: EditorialBrandSlug }> = [
   { match: /^porcelanosa\b/i, slug: "porcelanosa" },
   { match: /^porce\b/i, slug: "porcelanosa" },
+  // «PG» (Porcelanosa Grupo) y «AC» solo aparecen en la hoja «Calendario» del equipo.
+  { match: /^pg$/i, slug: "porcelanosa" },
   { match: /^noken\b/i, slug: "noken" },
   { match: /^e-?comm?erce\b/i, slug: "ecommerce" },
   { match: /^(store|tienda)\b/i, slug: "ecommerce" },
   { match: /^butech\b/i, slug: "butech" },
   { match: /^(l\W)?antic\s*colonial\b/i, slug: "antic-colonial" },
+  { match: /^ac$/i, slug: "antic-colonial" },
   { match: /^krion\b/i, slug: "krion" },
   { match: /^x-?tone\b/i, slug: "xtone" },
   { match: /^gamadecor\b/i, slug: "gamadecor" },

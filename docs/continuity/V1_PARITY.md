@@ -116,7 +116,7 @@ actual solo utiliza calendario y backlog. V2 no debe confundir “no montado” 
 - [x] Generar IDs estables; no usar índice de array, `slot`, título o URL como clave.
 - [x] Normalizar alias de marca sin perder el literal de fuente.
 - [x] Registrar las ocho marcas incluso cuando una no tenga eventos.
-- [x] Año/mes dinámicos, calendario de escritorio y agenda móvil.
+- [x] Año/mes dinámicos, calendario de escritorio y agenda móvil. Desde D-057, calendario deslizable «Tira / Mes completo» (uno a tres meses según ancho) en lugar de rejilla anual y agenda.
 - [x] Estado de filtros compartible por URL; preferencias de columnas solo locales.
 - [x] CSV equivalente respecto a campos, encoding, separador, filtro y orden.
       Diferencia deliberada: se prefija `'` a las celdas que empiezan por `=`, `+`

@@ -1621,3 +1621,78 @@ No se reescriben decisiones antiguas. Si una cambia, se añade una nueva entrada
 - El brief se abre en un panel emergente centrado (Popover API nativa, sin JS), así
   no ensancha la columna y no lo recorta el contenedor con scroll.
 
+
+## D-057 · Plan editorial general con el patrón de la ficha y un color por marca
+
+- Fecha: 2026-09-28.
+- Estado: vigente.
+- Contexto: el responsable aprueba el plan de Xtone en la ficha (D-050…D-056) y pide
+  el mismo formato en el plan general, con las ocho marcas y un color por marca.
+- Decisión: se activan las ocho marcas desde la hoja del equipo
+  (`plan_editorial_seo.xlsx`, mismo sha256): 61 piezas sustituyen las 146 del plan V1 y
+  71 huecos de «Calendario 2026» sustituyen los 39 eventos V1. Las fichas de marca pasan
+  también a la hoja (sin backlog V1 en su tabla). El backlog y las propuestas V1 siguen en
+  sus pestañas.
+- Alias nuevos «PG» → Porcelanosa (Porcelanosa Grupo) y «AC» → Antic Colonial. Quedan
+  fuera 4 huecos sin marca («RESUMEN LDF» y tres de Cersaie).
+- `/editorial/calendario` («Plan editorial general»): leyenda-filtro de marca (`?brand=`),
+  el mismo `PublicationSlider` (Tira / Mes completo) con puntos y etiquetas del color de
+  cada marca (código de dos letras), y la misma tabla de 13 columnas desde el mes en curso
+  con la marca coloreada. Componente común `components/report/editorial-plan.tsx`.
+  Bloques temáticos plegados debajo; los enlaces `?event=`/`?piece=` siguen abriendo el
+  detalle. Se retiran la rejilla anual, la agenda y los selectores de año/mes (los cubre el
+  calendario deslizable).
+- Paleta `BRAND_COLORS` con tonos distintos (≥ 4,5:1 sobre blanco, sin verde, ámbar ni
+  rojo, reservados a estados).
+
+## D-058 · Tabla del plan general en una línea con desplazamiento horizontal
+
+- Fecha: 2026-09-28.
+- Estado: vigente.
+- Decisión: en `/editorial/calendario` la tabla del plan deja el `table-layout: fixed` de
+  D-056: cada celda en una sola línea (`nowrap`), columnas a su ancho natural y
+  desplazamiento horizontal dentro del recuadro de la tabla (la página no desborda). La
+  URL se recorta a 280 px. La ficha de marca mantiene la tabla compacta de D-056.
+
+## D-059 · Filtros bajo el encabezado y «Temas del semestre» en el plan general
+
+- Fecha: 2026-09-28.
+- Estado: sustituida por D-060 el mismo día.
+- Decisión: se retira la leyenda de marcas con recuentos. Bajo el encabezado del plan
+  general van seis filtros en la URL (`EditorialToolbar`): Marca, Estado, Tipo, País,
+  Mes (desde el mes en curso) y Subtema. La marca filtra también el calendario; el resto
+  solo la tabla. En móvil los filtros quedan plegados.
+- Los bloques temáticos pasan a «Temas del semestre», entre el calendario y la tabla:
+  una tarjeta por mes en línea de tiempo (el mes en curso destacado, los pasados
+  atenuados), título y subtítulo del tema, barra con las piezas del mes por color de
+  marca y subtemas como chips con recuento que filtran la tabla (`?subtheme=`).
+- Cambiar el estado de una pieza no se hace en el visor (solo lectura): la curación de
+  estado sigue en el workbench (`savePieceCuration`), pendiente de confirmar con el
+  responsable cómo quiere acceder a ella.
+
+## D-060 · Filtros dentro de la tabla y temas en lista sobria bajo ella
+
+- Fecha: 2026-09-28.
+- Estado: vigente (sustituye a D-059).
+- Contexto: el responsable encuentra recargados la barra de filtros bajo el encabezado y
+  las tarjetas de temas.
+- Decisión: `ReportDataTable` (`@seo/ui`) admite `filters` (clave, etiqueta, opciones):
+  desplegables compactos en la barra de la tabla, junto a la búsqueda, que filtran en el
+  cliente por coincidencia exacta con `values[key]`, con «Limpiar». El plan general los
+  activa (`filterable`): Marca, Estado, Tipo, País, Mes y Subtema, con opciones sacadas
+  de las filas visibles. A 1600 px la barra cabe en una línea. `?brand=` sigue valiendo
+  para los enlaces existentes.
+- «Temas del semestre» baja debajo de la tabla como lista: mes, tema y subtemas en texto,
+  el mes en curso marcado con un punto de acento y los pasados atenuados. Sin tarjetas,
+  chips ni recuentos.
+- Cambiar el estado sigue fuera del visor (ver D-059), pendiente de respuesta.
+
+## D-061 · Temas del semestre como línea de tiempo sobria
+
+- Fecha: 2026-09-28.
+- Estado: vigente (amplía D-060).
+- Decisión: la lista de temas bajo la tabla gana un raíl vertical con un punto por mes
+  (gris los pasados, hueco los siguientes, relleno con halo el mes en curso, cuya fila
+  lleva fondo de acento suave y «Este mes»), el subtítulo del tema tras «·», los subtemas
+  como etiquetas suaves y, a la derecha, las piezas del mes con puntos del color de las
+  marcas que las firman (desglose en `title`).

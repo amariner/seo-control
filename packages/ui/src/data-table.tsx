@@ -43,6 +43,13 @@ export type ReportDataRow = {
   cells?: Record<string, ReactNode>;
 };
 
+/** Filtro de columna en la barra de la tabla: coincidencia exacta con `values[key]`. */
+export type ReportDataFilter = {
+  key: string;
+  label: string;
+  options: Array<{ value: string; label: string }>;
+};
+
 export type ReportDataTableProps = {
   id: string;
   caption: string;
@@ -52,6 +59,7 @@ export type ReportDataTableProps = {
   showSearch?: boolean;
   pageSize?: 10 | 25 | 50 | 100;
   note?: ReactNode;
+  filters?: ReportDataFilter[];
 };
 
 const features = tableFeatures({
@@ -95,8 +103,11 @@ export function ReportDataTable({
   showSearch = true,
   pageSize = 10,
   note,
+  filters = [],
 }: ReportDataTableProps) {
   const [query, setQuery] = useState("");
+  const [selected, setSelected] = useState<Record<string, string>>({});
+  const activeFilters = Object.entries(selected).filter(([, value]) => value);
   const [anchor, setAnchor] = useState<string | null>(null);
   const printing = usePrintTable();
   const normalizedQuery = normalizeReportSearch(query);
@@ -116,10 +127,15 @@ export function ReportDataTable({
     () =>
       indexedRows
         .filter(
-          (entry) => !normalizedQuery || entry.search.includes(normalizedQuery),
+          (entry) =>
+            (!normalizedQuery || entry.search.includes(normalizedQuery)) &&
+            Object.entries(selected).every(
+              ([key, value]) =>
+                !value || String(entry.row.values[key] ?? "") === value,
+            ),
         )
         .map((entry) => entry.row),
-    [indexedRows, normalizedQuery],
+    [indexedRows, normalizedQuery, selected],
   );
   const tableColumns = useMemo<ColumnDef<typeof features, ReportDataRow>[]>(
     () =>
@@ -204,6 +220,10 @@ export function ReportDataTable({
     setQuery(value);
     table.firstPage();
   }
+  function updateFilter(key: string, value: string) {
+    setSelected((current) => ({ ...current, [key]: value }));
+    table.firstPage();
+  }
 
   return (
     <div className="report-data" id={`${id}-panel`}>
@@ -231,6 +251,38 @@ export function ReportDataTable({
                 onClick={() => updateSearch("")}
               >
                 <X size={17} aria-hidden="true" />
+              </button>
+            )}
+          </div>
+        )}
+        {filters.length > 0 && (
+          <div className="report-data-filters" role="group" aria-label={`Filtros de ${caption}`}>
+            {filters.map((filter) => (
+              <select
+                key={filter.key}
+                className={selected[filter.key] ? "is-active" : undefined}
+                aria-label={filter.label}
+                value={selected[filter.key] ?? ""}
+                onChange={(event) => updateFilter(filter.key, event.target.value)}
+              >
+                <option value="">{filter.label}</option>
+                {filter.options.map((option) => (
+                  <option key={option.value} value={option.value}>
+                    {option.label}
+                  </option>
+                ))}
+              </select>
+            ))}
+            {activeFilters.length > 0 && (
+              <button
+                type="button"
+                className="report-data-reset"
+                onClick={() => {
+                  setSelected({});
+                  table.firstPage();
+                }}
+              >
+                Limpiar
               </button>
             )}
           </div>

@@ -33,6 +33,10 @@ describe("normalización de campos V1", () => {
     expect(normalizeBrand("Xtone")).toEqual({ slug: "xtone", line: null, literal: "Xtone" });
     expect(normalizeBrand("Antic Colonial").slug).toBe("antic-colonial");
     expect(normalizeBrand("L'Antic Colonial").slug).toBe("antic-colonial");
+    // Abreviaturas de la hoja «Calendario» del equipo (D-057).
+    expect(normalizeBrand("PG").slug).toBe("porcelanosa");
+    expect(normalizeBrand("AC").slug).toBe("antic-colonial");
+    expect(normalizeBrand("PGX").slug).toBeNull();
     expect(normalizeBrand("Marca desconocida")).toEqual({ slug: null, line: null, literal: "Marca desconocida" });
     expect(normalizeBrand("")).toEqual({ slug: null, line: null, literal: "" });
   });

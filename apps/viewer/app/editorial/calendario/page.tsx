@@ -1,98 +1,54 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { EDITORIAL_BRANDS, MONTH_NAMES_ES } from "@seo/contracts";
-import { buildAgenda, buildMonthCells } from "@seo/editorial";
-import { DataPanel, EmptyState, Notice, StatusBadge } from "@seo/ui";
+import { Notice, StatusBadge } from "@seo/ui";
 import { DetailPanel } from "@/components/editorial/detail-panel";
 import { EditorialFrame } from "@/components/editorial/editorial-frame";
 import { PieceDetail, statusBadge } from "@/components/editorial/piece-detail";
-import { brandColor, brandName, brandShortCode, findEvent, findPiece, hrefWith, pieceCurationMeta, queryCalendar, relatedForEvent, type SearchInput } from "@/lib/editorial";
+import { EditorialPlan } from "@/components/report/editorial-plan";
+import { ThemeTimeline } from "@/components/editorial/theme-timeline";
+import { generalCalendar, generalPlanRows } from "@/lib/brand-report";
+import { brandName, findEvent, findPiece, getEditorial, hrefWith, parseBrand, pieceCurationMeta, relatedForEvent, type SearchInput } from "@/lib/editorial";
 
-export const metadata: Metadata = { title: "Calendario editorial" };
+export const metadata: Metadata = { title: "Plan editorial general" };
 
-const WEEKDAYS = ["L", "M", "X", "J", "V", "S", "D"];
 const BASE = "/editorial/calendario";
 
+/**
+ * Plan editorial general (D-057): el mismo calendario de publicación y la misma
+ * tabla de la ficha de marca, con las ocho marcas y un color por marca. Los
+ * filtros viven en la barra de la tabla (D-060); `?brand=` se mantiene para los
+ * enlaces desde proyectos y portafolio.
+ */
 export default async function CalendarPage({ searchParams }: { searchParams: Promise<SearchInput> }) {
   const input = await searchParams;
-  const { dataset, brand, year, years, month, view, months, events, themes } = queryCalendar(input);
+  const dataset = getEditorial();
+  const brand = parseBrand(input);
   const eventId = Array.isArray(input.event) ? input.event[0] : input.event;
   const pieceId = Array.isArray(input.piece) ? input.piece[0] : input.piece;
   const selectedEvent = findEvent(eventId);
   const selectedPiece = findPiece(pieceId);
   const related = selectedEvent ? relatedForEvent(selectedEvent) : null;
   const closeHref = hrefWith(BASE, input, { event: null, piece: null });
-  const countsByBrand = new Map(dataset.brands.map((item) => [item.slug, brand === "all" ? item.calendarEvents : events.filter((event) => event.brand.slug === item.slug).length]));
-  const visibleMonths = view === "month" ? months.filter((item) => item.month === month) : months;
-  const agenda = buildAgenda(view === "month" ? events.filter((event) => event.month === month) : events);
+  const pieces = generalPlanRows(brand);
+  const calendar = generalCalendar(brand);
+  const importedAt = dataset.report.importedAt.slice(0, 10);
+  const label = brand === "all" ? "Plan editorial de las ocho marcas" : `Plan editorial de ${brandName(brand, brand)}`;
 
   return (
-    <EditorialFrame dataset={dataset} current={BASE} title="Calendario editorial general" description={`Publicaciones y temas de ${year}. Filtra por marca y consulta cada pieza.`}>
-      {dataset.report.brandsWithoutEvents.length ? <Notice tone="info" className="ds-no-print" >Marcas sin evento en el calendario importado: {dataset.report.brandsWithoutEvents.map((slug) => brandName(slug, slug)).join(", ")}.</Notice> : null}
+    <EditorialFrame dataset={dataset} current={BASE} title="Plan editorial general" description="Calendario de publicación y plan de las ocho marcas con las columnas de la hoja del equipo. Cada marca tiene su color.">
+      {dataset.report.brandsWithoutEvents.length ? <Notice tone="info" className="ds-no-print">Marcas sin evento en el calendario importado: {dataset.report.brandsWithoutEvents.map((slug) => brandName(slug, slug)).join(", ")}.</Notice> : null}
 
-      <div className="editorial-toolbar" role="group" aria-label="Vista del calendario">
-        <div className="field"><span>Vista</span><div className="segmented"><Link className={view === "year" ? "segment-active" : ""} href={hrefWith(BASE, input, { view: "year", month: null })} aria-current={view === "year" ? "true" : undefined}>Anual</Link><Link className={view === "month" ? "segment-active" : ""} href={hrefWith(BASE, input, { view: "month", month: month ?? months[0]?.month ?? null })} aria-current={view === "month" ? "true" : undefined}>Mensual</Link></div></div>
-        {years.length > 1 ? <div className="field"><span>Año</span><div className="segmented">{years.map((item) => <Link key={item} className={item === year ? "segment-active" : ""} href={hrefWith(BASE, input, { year: item, month: null })}>{item}</Link>)}</div></div> : null}
-        {view === "month" ? <div className="field"><span>Mes</span><div className="segmented">{months.map((item) => <Link key={item.month} className={item.month === month ? "segment-active" : ""} href={hrefWith(BASE, input, { view: "month", month: item.month })}>{MONTH_NAMES_ES[item.month]?.slice(0, 3)}</Link>)}</div></div> : null}
-        <div className="toolbar-actions"><span className="result-count"><strong>{events.length}</strong> eventos · {brand === "all" ? "todas las marcas" : brandName(brand, brand)}</span><a className="ds-button" href={`/api/v1/editorial/calendar?year=${year}${brand !== "all" ? `&brand=${brand}` : ""}`}>JSON del calendario</a></div>
-      </div>
-
-      <div className="calendar-layout">
-        <section aria-label={`Calendario ${year}`}>
-          {visibleMonths.length === 0 ? <EmptyState title="Sin meses planificados">El snapshot importado no contiene eventos para este año.</EmptyState> : null}
-          <div className={view === "month" ? "calendar-single" : "calendar-year"}>
-            {visibleMonths.map((item) => {
-              const cells = buildMonthCells(item.year, item.month, events);
-              const monthEvents = events.filter((event) => event.month === item.month);
-              return (
-                <article className="calendar-month" key={`${item.year}-${item.month}`} aria-labelledby={`mes-${item.month}`}>
-                  <div className="calendar-month-head"><h2 id={`mes-${item.month}`} className="ds-h3"><Link href={hrefWith(BASE, input, { view: "month", month: item.month })}>{MONTH_NAMES_ES[item.month]} {item.year}</Link></h2><small>{monthEvents.length} publicaciones</small></div>
-                  <div className="calendar-weekdays" aria-hidden>{WEEKDAYS.map((day, index) => <span key={`${day}-${index}`}>{day}</span>)}</div>
-                  <div className="calendar-cells" role="list">
-                    {cells.map((cell, index) => cell.day === null ? <div className="calendar-cell calendar-cell-empty" key={`empty-${index}`} aria-hidden /> : (
-                      <div className={`calendar-cell ${cell.weekday >= 5 ? "calendar-cell-weekend" : ""}`} key={cell.date} role="listitem" aria-label={`${cell.day} de ${MONTH_NAMES_ES[item.month]}${cell.events.length ? `, ${cell.events.length} publicaciones` : ""}`}>
-                        <span className="calendar-day">{cell.day}</span>
-                        {cell.events.length ? <div className="calendar-events">{cell.events.map((event) => <Link key={event.id} href={hrefWith(BASE, input, { event: event.id, piece: null })} scroll={false} className={`event-chip ${event.id === selectedEvent?.id ? "event-chip-active" : ""}`} style={{ "--brand-color": brandColor(event.brand.slug) } as React.CSSProperties} title={`${event.label} · ${event.date}`} aria-label={`${brandName(event.brand.slug, event.brand.literal)}${event.sequence ? ` ${event.sequence}` : ""}, ${cell.day} de ${MONTH_NAMES_ES[item.month]}`}>{view === "month" ? `${brandName(event.brand.slug, event.brand.literal)}${event.sequence ? ` · ${event.sequence}` : ""}` : `${brandShortCode(event.brand.slug, event.brand.literal)}${event.sequence ? `·${event.sequence}` : ""}`}</Link>)}</div> : null}
-                      </div>
-                    ))}
-                  </div>
-                </article>
-              );
-            })}
-          </div>
-
-          <section className="calendar-agenda" aria-label="Agenda cronológica">
-            {agenda.length === 0 ? <EmptyState title="Sin publicaciones con estos filtros" /> : agenda.map((day) => {
-              const date = new Date(`${day.date}T00:00:00Z`);
-              return <div className="agenda-day" key={day.date}><time dateTime={day.date}>{date.getUTCDate()} {MONTH_NAMES_ES[date.getUTCMonth() + 1]?.slice(0, 3)}<small>{date.toLocaleDateString("es-ES", { weekday: "long", timeZone: "UTC" })}</small></time><div>{day.events.map((event) => <Link key={event.id} href={hrefWith(BASE, input, { event: event.id, piece: null })} scroll={false} className={`event-chip ${event.id === selectedEvent?.id ? "event-chip-active" : ""}`} style={{ "--brand-color": brandColor(event.brand.slug) } as React.CSSProperties}>{brandName(event.brand.slug, event.brand.literal)}{event.sequence ? ` · ${event.sequence}` : ""} <span className="ds-meta" style={{ marginLeft: "auto" }}>{event.label}</span></Link>)}</div></div>;
-            })}
-          </section>
-
-          <nav className="calendar-legend" aria-label="Leyenda y filtro por marca">
-            <Link href={hrefWith(BASE, input, { brand: null, event: null })} className={brand === "all" ? "legend-active" : ""} aria-current={brand === "all" ? "true" : undefined}>Todas <span className="legend-count">{dataset.calendar.events.filter((event) => event.year === year).length}</span></Link>
-            {EDITORIAL_BRANDS.map((item) => {
-              const count = countsByBrand.get(item.slug) ?? 0;
-              return <Link key={item.slug} href={hrefWith(BASE, input, { brand: brand === item.slug ? null : item.slug, event: null })} className={`${brand === item.slug ? "legend-active" : ""} ${count === 0 ? "legend-zero" : ""}`} aria-current={brand === item.slug ? "true" : undefined} style={{ "--brand-color": brandColor(item.slug) } as React.CSSProperties}><span className="legend-swatch" aria-hidden />{item.name}<span className="legend-count" title={`${count} publicaciones en ${year}`}>{count}</span>{count === 0 ? <span className="ds-sr-only">sin eventos</span> : null}</Link>;
-            })}
-          </nav>
-        </section>
-
-        <aside aria-labelledby="temas-titulo">
-          <h2 id="temas-titulo" className="ds-h3" style={{ marginBottom: 10 }}>Bloques temáticos {year}</h2>
-          <div className="theme-blocks">
-            {themes.length === 0 ? <EmptyState title="Sin bloques temáticos" /> : themes.map((theme) => (
-              <details className={`theme-block ${theme.month === month ? "theme-block-active" : ""}`} key={theme.id} open={theme.month === month || (month === null && theme.month === selectedEvent?.month)}>
-                <summary><span className="theme-month">{String(theme.month).padStart(2, "0")}</span><span>{theme.theme}</span><StatusBadge tone="outline">{theme.subthemes.length}</StatusBadge></summary>
-                <ul>{theme.subthemes.map((subtheme) => <li key={subtheme}><Link href={hrefWith("/editorial/backlog", {}, { theme: theme.theme, q: subtheme })}>{subtheme}</Link></li>)}</ul>
-              </details>
-            ))}
-          </div>
-          <DataPanel mineral style={{ marginTop: 16, padding: 14 }}>
-            <p className="ds-meta" style={{ margin: 0 }}>Piezas relacionadas por marca y mes: <strong>{dataset.backlog.length}</strong> en backlog y <strong>{dataset.plan.length}</strong> en el plan histórico. Siguen siendo fuentes distintas hasta la decisión editorial.</p>
-            <Link className="ds-evidence" href="/editorial/backlog" style={{ marginTop: 8, display: "inline-flex" }}>Abrir backlog y plan</Link>
-          </DataPanel>
-        </aside>
-      </div>
+      <section className="plan-general" aria-label={label}>
+        <EditorialPlan
+          pieces={pieces}
+          caption={label}
+          origin={{ label: `hoja «Plan editorial» del equipo, importada el ${importedAt}` }}
+          calendar={calendar}
+          filterable
+          after={<ThemeTimeline themes={dataset.calendar.themes} pieces={pieces} currentMonth={new Date().toISOString().slice(0, 7)} />}
+        />
+      </section>
+      <p className="plan-general-foot ds-meta"><a className="ds-evidence" href={`/api/v1/editorial/calendar${brand !== "all" ? `?brand=${brand}` : ""}`}>JSON del calendario</a></p>
 
       {selectedEvent && related ? (
         <DetailPanel title={`${brandName(selectedEvent.brand.slug, selectedEvent.brand.literal)}${selectedEvent.sequence ? ` · publicación ${selectedEvent.sequence}` : ""}`} closeHref={closeHref}>

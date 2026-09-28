@@ -21,16 +21,20 @@ export function getEditorial(): EditorialDataset {
   return getEffectiveEditorialDataset();
 }
 
-/** Colores de marca del calendario: neutros minerales; nunca verde, ámbar ni rojo. */
+/**
+ * Un color distinto por marca en el calendario y el plan general (D-057). Tonos
+ * medios con contraste ≥ 4,5:1 sobre blanco; se evitan verde, ámbar y rojo,
+ * reservados a los estados.
+ */
 export const BRAND_COLORS: Record<EditorialBrandSlug, string> = {
-  porcelanosa: "#101516",
-  noken: "#4b5bd6",
-  ecommerce: "#6b7f9e",
-  butech: "#7c8683",
-  "antic-colonial": "#8a6d5c",
-  krion: "#9aa3a0",
-  xtone: "#3d4a5c",
-  gamadecor: "#a07c9a",
+  porcelanosa: "#1e3a8a",
+  noken: "#7c3aed",
+  ecommerce: "#0e7490",
+  butech: "#7c5b4a",
+  "antic-colonial": "#b4533a",
+  krion: "#0369a1",
+  xtone: "#475569",
+  gamadecor: "#a21caf",
 };
 
 export function brandColor(slug: EditorialBrandSlug | null) {

@@ -29,22 +29,23 @@ describe("dataset servido por el visor", () => {
   const dataset = getEditorial();
 
   it("expone los recuentos de control de la importación V1", () => {
-    // 39 eventos V1 − 4 de Xtone + 12 huecos de Xtone en la hoja «Calendario 2026» (D-051).
-    expect(dataset.calendar.events).toHaveLength(47);
+    // Las ocho marcas toman su calendario de la hoja «Calendario 2026» (D-051, D-057):
+    // 75 huecos − 4 posts de eventos sin marca (LDF, Cersaie) sustituyen los 39 eventos V1.
+    expect(dataset.calendar.events).toHaveLength(71);
     expect(dataset.backlog).toHaveLength(115);
-    // 146 del plan V1 − 6 de Xtone + 9 de la hoja del equipo (D-050).
-    expect(dataset.plan).toHaveLength(149);
+    // Las 61 filas de la hoja del equipo sustituyen los 146 del plan V1 (D-050, D-057).
+    expect(dataset.plan).toHaveLength(61);
     expect(dataset.slots).toHaveLength(34);
     expect(dataset.slots.reduce((total, slot) => total + slot.proposals.length, 0)).toBe(68);
     expect(dataset.brands).toHaveLength(8);
     expect(dataset.mode).toBe("v1-import");
   });
 
-  it("toma el plan de Xtone de la hoja del equipo y conserva el V1 del resto (D-050)", () => {
+  it("toma el plan de las ocho marcas de la hoja del equipo (D-050, D-057)", () => {
     const xtone = dataset.plan.filter((piece) => piece.brand.slug === "xtone");
     expect(xtone).toHaveLength(9);
-    expect(xtone.every((piece) => piece.provenance.source === "plan-sheet" && piece.id.startsWith("ed-ps-"))).toBe(true);
-    expect(dataset.plan.filter((piece) => piece.brand.slug !== "xtone").every((piece) => piece.provenance.source === "conjunto")).toBe(true);
+    expect(dataset.plan.every((piece) => piece.provenance.source === "plan-sheet" && piece.id.startsWith("ed-ps-"))).toBe(true);
+    expect(dataset.calendar.events.every((event) => event.provenance.source === "plan-sheet")).toBe(true);
   });
 
   it("conserva los briefs completos con su hash", () => {
@@ -58,8 +59,8 @@ describe("dataset servido por el visor", () => {
 describe("filtros compartibles y CSV", () => {
   it("separa backlog y plan como fuentes distintas", () => {
     expect(queryPieces({ kind: "backlog" }).items).toHaveLength(115);
-    expect(queryPieces({ kind: "plan" }).items).toHaveLength(149);
-    expect(queryPieces({}).items).toHaveLength(264);
+    expect(queryPieces({ kind: "plan" }).items).toHaveLength(61);
+    expect(queryPieces({}).items).toHaveLength(176);
   });
 
   it("aplica marca, mercado y búsqueda sin acentos", () => {
@@ -74,7 +75,7 @@ describe("filtros compartibles y CSV", () => {
   it("ignora valores de filtro inválidos en lugar de fallar", () => {
     expect(parseBrand({ brand: "marca-inexistente" })).toBe("all");
     expect(parseSort({ sort: "columna-falsa", dir: "raro" })).toEqual({ sort: "month", dir: "asc" });
-    expect(queryPieces({ month: "99" }).items).toHaveLength(264);
+    expect(queryPieces({ month: "99" }).items).toHaveLength(176);
   });
 
   it("exporta exactamente las filas visibles, en el mismo orden", () => {
@@ -114,9 +115,10 @@ describe("calendario", () => {
 
   it("filtra eventos por marca conservando las ocho marcas en el resumen", () => {
     const filtered = queryCalendar({ brand: "porcelanosa" });
-    expect(filtered.events).toHaveLength(11);
+    // 11 posts y 6 newsletters «PG» (Porcelanosa Grupo).
+    expect(filtered.events).toHaveLength(17);
     expect(filtered.dataset.brands).toHaveLength(8);
-    expect(filtered.dataset.brands.find((brand) => brand.slug === "krion")?.calendarEvents).toBe(0);
+    expect(filtered.dataset.brands.find((brand) => brand.slug === "krion")?.calendarEvents).toBe(10);
   });
 });
 

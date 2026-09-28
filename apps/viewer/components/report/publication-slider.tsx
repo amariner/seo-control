@@ -1,9 +1,13 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, type CSSProperties } from "react";
 import { CalendarDays, ChevronLeft, ChevronRight, GalleryHorizontal } from "lucide-react";
 
-export type PublicationEvent = { date: string; type: string; label: string };
+/** `brand`, `code` y `color` solo en el plan general, con varias marcas a la vez (D-057). */
+export type PublicationEvent = { date: string; type: string; label: string; brand?: string; code?: string; color?: string };
+
+const tint = (event: PublicationEvent) => (event.color ? ({ "--pub-color": event.color } as CSSProperties) : undefined);
+const kind = (event: PublicationEvent) => (event.type === "POST" ? "Post" : "News");
 
 const WEEKDAYS = ["D", "L", "M", "X", "J", "V", "S"];
 const WEEK_HEAD = ["Lun", "Mar", "Mié", "Jue", "Vie", "Sáb", "Dom"];
@@ -89,9 +93,11 @@ export function PublicationSlider({
   };
   const posts = events.filter((event) => event.type === "POST").length;
   const news = events.length - posts;
+  const multi = events.some((event) => event.color);
+  const slotText = (slot: PublicationEvent) => (multi ? `${slot.brand} · ${kind(slot)}` : slot.label);
 
   return (
-    <div className="pub-slider">
+    <div className={`pub-slider${multi ? " is-multi" : ""}`}>
       <div className="pub-slider-head">
         <div>
           <h3>Calendario de publicación</h3>
@@ -150,12 +156,13 @@ export function PublicationSlider({
                       key={day.date}
                       role="gridcell"
                       className={`pub-cell${day.weekday === 0 || day.weekday === 6 ? " is-weekend" : ""}${day.date === today ? " is-today" : ""}${slots.length ? " is-marked" : ""}`}
-                      aria-label={slots.length ? `${day.day} de ${MONTHS[month.month - 1]}: ${slots.map((slot) => slot.label).join(" · ")}` : undefined}
+                      aria-label={slots.length ? `${day.day} de ${MONTHS[month.month - 1]}: ${slots.map(slotText).join(" · ")}` : undefined}
+                      title={multi && slots.length ? slots.map(slotText).join("\n") : undefined}
                     >
                       <span className="pub-num">{day.day}</span>
                       {slots.map((slot) => (
-                        <span key={slot.label} className={`pub-chip ${slot.type === "POST" ? "is-post" : "is-news"}`}>
-                          {slot.type === "POST" ? "Post" : "News"}
+                        <span key={slot.label} className={`pub-chip ${slot.type === "POST" ? "is-post" : "is-news"}`} style={tint(slot)}>
+                          {multi ? slot.code : kind(slot)}
                         </span>
                       ))}
                     </div>
@@ -176,7 +183,7 @@ export function PublicationSlider({
             <ol className="pub-days">
               {month.days.map((day) => {
                 const slots = byDate.get(day.date) ?? [];
-                const label = slots.map((slot) => slot.label).join(" · ");
+                const label = slots.map(slotText).join(" · ");
                 return (
                   <li
                     key={day.date}
@@ -190,12 +197,12 @@ export function PublicationSlider({
                     <span className="pub-num">{day.day}</span>
                     <span className="pub-marks">
                       {slots.map((slot) => (
-                        <i key={slot.label} className={`pub-dot ${slot.type === "POST" ? "is-post" : "is-news"}`} aria-hidden />
+                        <i key={slot.label} className={`pub-dot ${slot.type === "POST" ? "is-post" : "is-news"}`} style={tint(slot)} aria-hidden />
                       ))}
                     </span>
                     {slots.length > 0 && (
                       <span className="pub-tag" aria-hidden>
-                        {slots.map((slot) => (slot.type === "POST" ? "Post" : "News")).join(" + ")}
+                        {multi ? (slots.length > 1 ? `${slots.length}` : slots[0]!.code) : slots.map(kind).join(" + ")}
                       </span>
                     )}
                   </li>
