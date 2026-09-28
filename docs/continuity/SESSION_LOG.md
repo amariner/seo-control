@@ -981,3 +981,15 @@
 - D-061: temas del semestre como línea de tiempo (raíl, mes en curso destacado, etiquetas
   de subtema, piezas por mes con colores de marca). Verificado en el navegador; typecheck en verde.
 - Commit de D-057…D-061 en main y push a GitHub. Sin desplegar a producción.
+- D-062: cabecera simple en el plan general, sin segundo separador, «Backlog y plan»
+  retirado (redirección a `/editorial/calendario`) y temas con más aire. Verificado en el
+  navegador; typecheck y pruebas del visor en verde. Sin commit.
+- D-063: esquinas rectas en temas y filtros; filtros con etiqueta interna en su propia
+  línea. Verificado (Estado = Backlog → 25 piezas; todo a 40 px). `pnpm test` en verde. Sin commit.
+- D-064: revisados los estados del xlsx (sin cambios en el fichero); el plan general muestra
+  las 61 piezas y el filtro Publicadas / No publicadas (6 / 55). Estado con punto de color.
+  `pnpm test` en verde. Sin commit.
+- D-064 ajustado: retirado el conmutador Publicadas / No publicadas; Estado pasa a primer filtro (Publicado → 6 piezas). Sin commit.
+- D-065: filtros compactos y sutiles (32 px, borde fino, ancho del valor). Pruebas en verde. Sin commit.
+- D-066: filtros al lado del buscador mientras quepan (una línea a 1600 px, dos a 1100 px). Sin commit.
+- Commit de D-062…D-066 en main y push a GitHub. Sin desplegar.

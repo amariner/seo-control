@@ -48,6 +48,8 @@ export type ReportDataFilter = {
   key: string;
   label: string;
   options: Array<{ value: string; label: string }>;
+  /** Texto de la opción sin filtro («Todos» por defecto). */
+  allLabel?: string;
 };
 
 export type ReportDataTableProps = {
@@ -258,20 +260,24 @@ export function ReportDataTable({
         {filters.length > 0 && (
           <div className="report-data-filters" role="group" aria-label={`Filtros de ${caption}`}>
             {filters.map((filter) => (
-              <select
+              <label
                 key={filter.key}
-                className={selected[filter.key] ? "is-active" : undefined}
-                aria-label={filter.label}
-                value={selected[filter.key] ?? ""}
-                onChange={(event) => updateFilter(filter.key, event.target.value)}
+                className={`report-data-filter${selected[filter.key] ? " is-active" : ""}`}
               >
-                <option value="">{filter.label}</option>
-                {filter.options.map((option) => (
-                  <option key={option.value} value={option.value}>
-                    {option.label}
-                  </option>
-                ))}
-              </select>
+                <span>{filter.label}</span>
+                <select
+                  value={selected[filter.key] ?? ""}
+                  onChange={(event) => updateFilter(filter.key, event.target.value)}
+                  aria-controls={`${id}-table`}
+                >
+                  <option value="">{filter.allLabel ?? "Todos"}</option>
+                  {filter.options.map((option) => (
+                    <option key={option.value} value={option.value}>
+                      {option.label}
+                    </option>
+                  ))}
+                </select>
+              </label>
             ))}
             {activeFilters.length > 0 && (
               <button

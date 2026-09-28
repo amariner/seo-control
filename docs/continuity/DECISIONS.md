@@ -1696,3 +1696,57 @@ No se reescriben decisiones antiguas. Si una cambia, se añade una nueva entrada
   lleva fondo de acento suave y «Este mes»), el subtítulo del tema tras «·», los subtemas
   como etiquetas suaves y, a la derecha, las piezas del mes con puntos del color de las
   marcas que las firman (desglose en `title`).
+
+## D-062 · Cabecera simple, sin «Backlog y plan» y temas con más aire
+
+- Fecha: 2026-09-28.
+- Estado: vigente.
+- Decisión: el plan general usa la cabecera de la ficha de marca (`EditorialFrame`
+  con `simple`): «Plan editorial» | «Ocho marcas del grupo» y una línea de meta con la
+  hoja y la fecha de importación, sin entradilla ni sello. Se quita el borde superior del
+  calendario (segundo separador bajo las pestañas).
+- «Backlog y plan» se retira por ahora: sin pestaña, y `/editorial/backlog` redirige a
+  `/editorial/calendario` (con `?piece=` si lo traía). La vista está en 806e612 si se
+  recupera; el CSV y los datos del backlog siguen en la API.
+- Temas del semestre con más aire: filas de 20 px de margen vertical, 12 px entre tema y
+  subtemas, etiquetas más holgadas y sin línea junto al mes en curso.
+
+## D-063 · Esquinas rectas y filtros con etiqueta en la tabla del plan general
+
+- Fecha: 2026-09-28.
+- Estado: vigente (remata D-060 y D-062).
+- Decisión: sin esquinas redondeadas en los temas del semestre (filas y etiquetas de
+  subtema) ni en la barra de la tabla con filtros. Cada filtro es una caja recta de 40 px
+  con la etiqueta dentro («Estado») y el valor a su derecha («Todos» / «Backlog»); activo
+  en acento. Búsqueda («Buscar en el plan…») y «Filas» con la misma altura y borde recto,
+  en la primera línea; los filtros en su propia línea debajo, con «Limpiar».
+
+## D-064 · El plan general muestra también lo publicado; Estado como primer filtro
+
+- Fecha: 2026-09-28.
+- Estado: vigente (acota D-052 a la ficha de marca).
+- Contexto: la hoja del equipo (mismo xlsx, sha256 14009804…) trae cinco estados:
+  Backlog 42, Redactando 7, Publicado 6, Aceptado 5 y 1 fila sin estado. Los 6 publicados
+  son de junio a agosto y la tabla los ocultaba por arrancar en el mes en curso.
+- Decisión: la tabla del plan general incluye todos los meses (61 piezas, `showPast`); la
+  ficha de marca sigue desde el mes en curso. Estado es el primer filtro de la tabla
+  (el conmutador «Publicadas / No publicadas» se probó y se retiró a petición del
+  responsable el mismo día). El estado lleva un punto: verde publicado, acento en marcha
+  (Aceptado, Redactando, En revisión, Programado), hueco en Backlog y gris sin estado.
+
+## D-065 · Filtros de la tabla compactos y sutiles
+
+- Fecha: 2026-09-28.
+- Estado: vigente (afina D-063).
+- Decisión: filtros, búsqueda y «Filas» a 32 px, borde fino (`--ds-line`), fondo
+  transparente, texto de 12 px y chevron pequeño; el desplegable mide lo que su valor
+  (`field-sizing: content`, 44–170 px) en lugar de la opción más larga. Activo en acento
+  suave; contorno de foco solo con teclado.
+
+## D-066 · Filtros al lado del buscador mientras quepan
+
+- Fecha: 2026-09-28.
+- Estado: vigente (afina D-063/D-065).
+- Decisión: en la barra de la tabla, buscador (240 px) y filtros van en la misma línea;
+  «Filas» se alinea a la derecha. Si no caben, los filtros bajan de línea solos (flex-wrap).
+  A 1600 px todo cabe en una línea de 32 px; a 1100 px pasa a dos.

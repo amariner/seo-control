@@ -21,6 +21,11 @@ const dash = (value: string | null) => (value ? value : <span className="muted">
 /** Fecha corta dd/mm/aa para la tabla compacta del plan. */
 const shortDate = (value: string | null) => (value ? `${value.slice(8, 10)}/${value.slice(5, 7)}/${value.slice(2, 4)}` : dash(null));
 
+const PUBLISHED = "Publicado";
+/** Tono del estado: publicado en positivo, en marcha en acento, el resto neutro. */
+const statusTone = (status: string) =>
+  status === PUBLISHED ? "done" : status === "Aceptado" || status === "Redactando" || status === "En revisión" || status === "Programado" ? "doing" : status === "Sin estado" ? "none" : "todo";
+
 /** Columnas de la hoja «Plan editorial» del equipo, en su orden (D-055). */
 const EDITORIAL_COLUMNS = [
   { key: "status", label: "Estado" },
@@ -50,6 +55,7 @@ export function EditorialPlan({
   calendar,
   calendarPieces = pieces,
   filterable = false,
+  showPast = false,
   after,
 }: {
   pieces: EditorialPlanRow[];
@@ -60,6 +66,8 @@ export function EditorialPlan({
   calendarPieces?: EditorialPlanRow[];
   /** Filtros de columna en la barra de la tabla (plan general, D-060). */
   filterable?: boolean;
+  /** Incluye los meses anteriores (plan general, D-064); la ficha arranca en el mes en curso. */
+  showPast?: boolean;
   /** Contenido debajo de la tabla (temas del plan general). */
   after?: ReactNode;
 }) {
@@ -69,7 +77,7 @@ export function EditorialPlan({
   const today = new Date().toISOString().slice(0, 10);
   const currentMonth = today.slice(0, 7);
   const upcoming = pieces
-    .filter((item) => !item.month || item.month >= currentMonth)
+    .filter((item) => showPast || !item.month || item.month >= currentMonth)
     .sort((a, b) => (a.month ?? "9999").localeCompare(b.month ?? "9999") || (a.publicationDate ?? "9999").localeCompare(b.publicationDate ?? "9999"));
   const earlier = pieces.length - upcoming.length;
   const options = (pickValue: (row: EditorialPlanRow) => string | null, label: (value: string) => string = (value) => value) =>
@@ -79,8 +87,8 @@ export function EditorialPlan({
   const brands = options((row) => row.brand);
   const filters = filterable
     ? [
-        ...(brands.length > 1 ? [{ key: "brand", label: "Marca", options: brands }] : []),
         { key: "status", label: "Estado", options: options((row) => row.status) },
+        ...(brands.length > 1 ? [{ key: "brand", label: "Marca", options: brands, allLabel: "Todas" }] : []),
         { key: "type", label: "Tipo", options: options((row) => row.type) },
         { key: "market", label: "País", options: options((row) => row.market) },
         { key: "month", label: "Mes", options: options((row) => row.month, (value) => monthLabel(value)) },
@@ -93,7 +101,7 @@ export function EditorialPlan({
       <ReportDataTable
         id="editorial"
         caption={caption}
-        searchPlaceholder="Buscar pieza, marca, keyword, URL o brief…"
+        searchPlaceholder={filterable ? "Buscar en el plan…" : "Buscar pieza, marca, keyword, URL o brief…"}
         columns={EDITORIAL_COLUMNS}
         filters={filters}
         rows={upcoming.map((item) =>
@@ -115,6 +123,7 @@ export function EditorialPlan({
               brief: item.brief,
             },
             {
+              status: <span className={`plan-status is-${statusTone(item.status)}`}>{item.status}</span>,
               writingDate: shortDate(item.writingDate),
               publicationDate: shortDate(item.publicationDate),
               brand: item.brandColor ? (

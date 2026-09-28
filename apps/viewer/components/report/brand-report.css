@@ -1994,3 +1994,23 @@
   border-radius: 2px;
   background: var(--brand-color, var(--ds-graphite));
 }
+
+/* Estado de la pieza en la tabla del plan (D-064). */
+.plan-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  white-space: nowrap;
+}
+.plan-status::before {
+  content: "";
+  flex: none;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  box-shadow: inset 0 0 0 1.5px var(--ds-line-strong);
+}
+.plan-status.is-done { color: var(--ds-positive); }
+.plan-status.is-done::before { background: var(--ds-positive); box-shadow: none; }
+.plan-status.is-doing::before { background: var(--ds-accent); box-shadow: none; }
+.plan-status.is-none { color: var(--ds-muted); }

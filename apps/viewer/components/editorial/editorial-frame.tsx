@@ -7,17 +7,31 @@ import { AppShell } from "@/components/app-shell";
 
 const tabs = [
   { href: "/editorial/calendario", label: "Calendario" },
-  { href: "/editorial/backlog", label: "Backlog y plan" },
   { href: "/editorial/propuestas", label: "Propuestas" },
 ] as const;
 
-export function EditorialFrame({ dataset, current, title, description, aside, children }: { dataset: EditorialDataset; current: (typeof tabs)[number]["href"]; title: string; description: string; aside?: ReactNode; children: ReactNode }) {
+/**
+ * `simple`: cabecera como la de la ficha de marca (D-062): título, apunte a la
+ * derecha tras la barra y una línea de meta, sin entradilla ni sello de importación.
+ */
+export function EditorialFrame({ dataset, current, title, description, aside, simple, children }: { dataset: EditorialDataset; current: (typeof tabs)[number]["href"] | "/editorial/backlog"; title: string; description: string; aside?: ReactNode; simple?: { note: string; meta: ReactNode }; children: ReactNode }) {
   const imported = new Date(dataset.generatedAt);
   const archives = dataset.report.archives;
   const allOk = archives.every((archive) => archive.status === "ok") && dataset.report.rejections.length === 0;
   return (
     <AppShell generatedAt={dataset.generatedAt} showGlobalFilters={false}>
       <main className="page editorial-page" id="contenido">
+        {simple ? (
+          <header className="brand-header editorial-simple-header">
+            <div>
+              <div className="brand-title">
+                <h1>{title}</h1>
+                <span>{simple.note}</span>
+              </div>
+              <p className="brand-domain">{simple.meta}</p>
+            </div>
+          </header>
+        ) : (
         <header className="page-heading">
           <div>
             <p className="eyebrow">Ocho marcas del grupo</p>
@@ -32,6 +46,7 @@ export function EditorialFrame({ dataset, current, title, description, aside, ch
             </div>
           )}
         </header>
+        )}
         <nav className="editorial-tabs" aria-label="Secciones editoriales">
           {tabs.map(({ href, label }) => <Link key={href} href={href} className={`editorial-tab ${href === current ? "editorial-tab-active" : ""}`} aria-current={href === current ? "page" : undefined}>{label}</Link>)}
         </nav>

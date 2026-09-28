@@ -35,7 +35,13 @@ export default async function CalendarPage({ searchParams }: { searchParams: Pro
   const label = brand === "all" ? "Plan editorial de las ocho marcas" : `Plan editorial de ${brandName(brand, brand)}`;
 
   return (
-    <EditorialFrame dataset={dataset} current={BASE} title="Plan editorial general" description="Calendario de publicación y plan de las ocho marcas con las columnas de la hoja del equipo. Cada marca tiene su color.">
+    <EditorialFrame
+      dataset={dataset}
+      current={BASE}
+      title="Plan editorial"
+      description="Calendario de publicación y plan de las ocho marcas."
+      simple={{ note: "Ocho marcas del grupo", meta: <>Hoja «Plan editorial» del equipo<span aria-hidden>·</span>importada el {new Date(dataset.report.importedAt).toLocaleDateString("es-ES", { day: "numeric", month: "long", year: "numeric" })}</> }}
+    >
       {dataset.report.brandsWithoutEvents.length ? <Notice tone="info" className="ds-no-print">Marcas sin evento en el calendario importado: {dataset.report.brandsWithoutEvents.map((slug) => brandName(slug, slug)).join(", ")}.</Notice> : null}
 
       <section className="plan-general" aria-label={label}>
@@ -45,6 +51,7 @@ export default async function CalendarPage({ searchParams }: { searchParams: Pro
           origin={{ label: `hoja «Plan editorial» del equipo, importada el ${importedAt}` }}
           calendar={calendar}
           filterable
+          showPast
           after={<ThemeTimeline themes={dataset.calendar.themes} pieces={pieces} currentMonth={new Date().toISOString().slice(0, 7)} />}
         />
       </section>
@@ -66,7 +73,7 @@ export default async function CalendarPage({ searchParams }: { searchParams: Pro
             )}
           </section>
           <section className="detail-section"><h3>Piezas candidatas · backlog ({related.backlog.length})</h3>{related.backlog.length ? <ul className="detail-list">{related.backlog.map((piece) => <li key={piece.id}><Link href={hrefWith(BASE, input, { piece: piece.id })} scroll={false}>{piece.title ?? piece.keyword ?? "Sin título"}<small>{statusBadge(piece)} · {piece.theme ?? "sin temática"}</small></Link></li>)}</ul> : <p className="pending">Ninguna fila del backlog coincide con esta marca y mes.</p>}</section>
-          <section className="detail-section"><h3>Plan histórico ({related.plan.length})</h3>{related.plan.length ? <ul className="detail-list">{related.plan.slice(0, 12).map((piece) => <li key={piece.id}><Link href={hrefWith(BASE, input, { piece: piece.id })} scroll={false}>{piece.title ?? piece.keyword ?? "Sin título"}<small>{piece.typeLiteral} · {piece.market ?? piece.marketLiteral}</small></Link></li>)}{related.plan.length > 12 ? <li><Link className="ds-evidence" href={hrefWith("/editorial/backlog", {}, { kind: "plan", brand: selectedEvent.brand.slug, month: selectedEvent.month })}>Ver las {related.plan.length} filas</Link></li> : null}</ul> : <p className="pending">Sin filas del plan histórico para esta marca y mes.</p>}</section>
+          <section className="detail-section"><h3>Plan histórico ({related.plan.length})</h3>{related.plan.length ? <ul className="detail-list">{related.plan.slice(0, 12).map((piece) => <li key={piece.id}><Link href={hrefWith(BASE, input, { piece: piece.id })} scroll={false}>{piece.title ?? piece.keyword ?? "Sin título"}<small>{piece.typeLiteral} · {piece.market ?? piece.marketLiteral}</small></Link></li>)}</ul> : <p className="pending">Sin filas del plan histórico para esta marca y mes.</p>}</section>
           <section className="detail-section"><h3>Huecos con propuestas ({related.slots.length})</h3>{related.slots.length ? <ul className="detail-list">{related.slots.map((slot) => <li key={slot.id}><Link href={hrefWith("/editorial/propuestas", {}, { brand: slot.brand.slug, month: slot.month.month, q: slot.slotLiteral })}>{slot.slotLiteral}<small>{slot.proposals.length} alternativas · {slot.theme}</small></Link></li>)}</ul> : <p className="pending">Sin huecos de propuestas para esta marca y mes.</p>}</section>
           <section className="detail-section"><h3>Procedencia</h3><p>Evento {selectedEvent.provenance.sourceIndex + 1} de <code>calendario-2026.json</code> · sha256 <code>{selectedEvent.provenance.sourceSha256.slice(0, 12)}…</code>.</p></section>
         </DetailPanel>

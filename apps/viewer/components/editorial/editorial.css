@@ -321,28 +321,33 @@
 /* Plan editorial general (D-057, D-059) */
 .plan-general { margin-bottom: 12px; }
 .plan-general-foot { margin: 0 0 24px; }
-/* Temas del semestre (D-060, D-061): línea de tiempo sobria bajo la tabla */
-.themes { margin: 32px 0 8px; }
-.themes h3 { margin: 0 0 10px; font: 550 14px/1.4 var(--ds-font-sans); color: var(--ds-ink); }
+/* Cabecera simple como la ficha de marca y sin segundo separador (D-062). */
+.editorial-page .editorial-simple-header { padding-bottom: 22px; }
+.plan-general .pub-slider { border-top: 0; padding-top: 8px; }
+
+/* Temas del semestre (D-060…D-062): línea de tiempo sobria bajo la tabla */
+.themes { margin: 48px 0 16px; }
+.themes h3 { margin: 0 0 16px; font: 550 15px/1.4 var(--ds-font-sans); color: var(--ds-ink); }
 .themes-list { margin: 0; padding: 0; list-style: none; }
-.themes-list > li { position: relative; display: grid; grid-template-columns: 20px 112px minmax(0, 1fr) auto; gap: 6px 14px; align-items: start; padding: 12px 12px 12px 0; border-radius: var(--ds-radius-sm); font-size: 13px; line-height: 1.5; }
+.themes-list > li { position: relative; display: grid; grid-template-columns: 24px 136px minmax(0, 1fr) auto; gap: 8px 20px; align-items: start; padding: 20px 16px 20px 0; border-radius: 0; font-size: 13px; line-height: 1.5; }
 .themes-list > li + li { border-top: 1px solid var(--ds-line); }
+.themes-list > li.is-current + li { border-top-color: transparent; }
 /* Raíl vertical con un punto por mes: relleno el mes en curso, hueco los siguientes. */
 .themes-rail { position: relative; align-self: stretch; }
-.themes-rail::before { content: ""; position: absolute; top: -12px; bottom: -12px; left: 9px; width: 1px; background: var(--ds-line); }
-.themes-list > li:first-child .themes-rail::before { top: 10px; }
-.themes-list > li:last-child .themes-rail::before { bottom: calc(100% - 10px); }
-.themes-rail::after { content: ""; position: absolute; top: 5px; left: 5px; width: 9px; height: 9px; border-radius: 50%; background: #fff; box-shadow: inset 0 0 0 1.5px var(--ds-line-strong); }
+.themes-rail::before { content: ""; position: absolute; top: -20px; bottom: -20px; left: 11px; width: 1px; background: var(--ds-line); }
+.themes-list > li:first-child .themes-rail::before { top: 12px; }
+.themes-list > li:last-child .themes-rail::before { bottom: calc(100% - 12px); }
+.themes-rail::after { content: ""; position: absolute; top: 5px; left: 7px; width: 9px; height: 9px; border-radius: 50%; background: #fff; box-shadow: inset 0 0 0 1.5px var(--ds-line-strong); }
 .themes-list > li.is-past .themes-rail::after { background: var(--ds-line-strong); box-shadow: none; }
 .themes-list > li.is-current .themes-rail::after { background: var(--ds-accent); box-shadow: 0 0 0 4px var(--ds-accent-soft); }
-.themes-list > li.is-current { background: linear-gradient(90deg, transparent 0 20px, var(--ds-accent-soft) 20px); }
-.themes-month { display: grid; gap: 2px; padding-left: 4px; color: var(--ds-ink); font-size: 12px; font-weight: 600; letter-spacing: 0.03em; text-transform: uppercase; }
+.themes-list > li.is-current { border-top-color: transparent; background: linear-gradient(90deg, transparent 0 24px, var(--ds-accent-soft) 24px); }
+.themes-month { display: grid; gap: 4px; padding-left: 8px; color: var(--ds-ink); font-size: 12px; font-weight: 600; letter-spacing: 0.03em; text-transform: uppercase; }
 .themes-month em { font-style: normal; font-size: 11px; font-weight: 600; letter-spacing: 0; text-transform: none; color: var(--ds-accent); }
-.themes-body { display: grid; gap: 7px; min-width: 0; }
-.themes-body strong { font-weight: 550; color: var(--ds-ink); }
+.themes-body { display: grid; gap: 12px; min-width: 0; }
+.themes-body strong { font-size: 14px; font-weight: 550; color: var(--ds-ink); }
 .themes-body strong span { font-weight: 400; color: var(--ds-muted); }
-.themes-tags { display: flex; flex-wrap: wrap; gap: 4px 5px; margin: 0; padding: 0; list-style: none; }
-.themes-tags li { padding: 1px 8px; border-radius: 999px; background: var(--ds-surface-subtle); color: var(--ds-text); font-size: 12px; line-height: 1.6; }
+.themes-tags { display: flex; flex-wrap: wrap; gap: 8px; margin: 0; padding: 0; list-style: none; }
+.themes-tags li { padding: 3px 10px; border-radius: 0; background: var(--ds-surface-subtle); color: var(--ds-text); font-size: 12px; line-height: 1.6; }
 .themes-list > li.is-current .themes-tags li { background: #fff; }
 .themes-count { display: inline-flex; align-items: center; gap: 8px; padding-top: 1px; color: var(--ds-muted); font-size: 12px; white-space: nowrap; font-variant-numeric: tabular-nums; }
 .themes-dots { display: inline-flex; }

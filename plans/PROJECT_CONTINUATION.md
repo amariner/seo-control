@@ -2,13 +2,14 @@
 
 Última actualización: 24 de septiembre de 2026 (shadcn/ui y dashboard-01 en el visor, D-044, rama `feat/shadcn-dashboard`).
 
-## Plan editorial general con las ocho marcas · D-057…D-061 (2026-09-28, en main, sin desplegar)
+## Plan editorial general con las ocho marcas · D-057…D-066 (2026-09-28, en main, sin desplegar)
 
 - Hecho: las ocho marcas activadas desde `plan_editorial_seo.xlsx` (61 piezas, 71 huecos);
   alias «PG»/«AC». `/editorial/calendario` usa `components/report/editorial-plan.tsx`
   (calendario Tira/Mes completo + tabla de 13 columnas) con color por marca
   (`BRAND_COLORS`) y filtro `?brand=`. La ficha de marca usa el mismo componente.
-- D-058/D-060: tabla en una línea con scroll horizontal; filtros dentro de la tabla;
+- D-058…D-066: tabla en una línea con scroll horizontal y todas las piezas (también publicadas);
+  filtros compactos junto al buscador (Estado primero); cabecera simple; sin «Backlog y plan»;
   temas en lista bajo la tabla (`components/editorial/theme-timeline.tsx`); botón «Copiar» en el brief.
 - Reanudar: decidir con el responsable cómo cambiar el estado (el visor es de solo lectura;
   el workbench ya cura estados), revisión visual, commit y `vercel deploy --prod`; decidir si
