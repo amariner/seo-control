@@ -8,7 +8,8 @@
     "./tokens.css": "./src/tokens.css",
     "./echarts-theme": "./src/echarts-theme.ts",
     "./data-table": "./src/data-table.tsx",
-    "./skeleton": "./src/skeleton.tsx"
+    "./skeleton": "./src/skeleton.tsx",
+    "./data-table-model": "./src/data-table-model.ts"
   },
   "scripts": {
     "build": "tsc --noEmit",

@@ -13,6 +13,7 @@
   "dependencies": {
     "@seo/contracts": "workspace:*",
     "@seo/editorial": "workspace:*",
+    "@seo/editorial-ui": "workspace:*",
     "@seo/local-data": "workspace:*",
     "@seo/sync": "workspace:*",
     "@seo/ui": "workspace:*",

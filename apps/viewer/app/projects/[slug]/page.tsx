@@ -19,7 +19,7 @@ import {
   REPORT_TABS,
   type ReportTab,
 } from "@/components/report/brand-report";
-import { editorialCalendar, editorialOrigin, editorialPlanRows, getBrandReport, reportFilters } from "@/lib/brand-report";
+import { editorialOrigin, getBrandReport, projectEditorial, reportFilters } from "@/lib/brand-report";
 import { resolveReportTab } from "@/components/report/report-tab";
 
 const chapterCopy = {
@@ -66,6 +66,7 @@ export default async function ProjectPage({
         tabs.map((item) => item.key),
       );
       const { present } = reportFilters(rawFilters);
+      const editorial = await projectEditorial(slugResult.data);
       const query = new URLSearchParams(
         Object.entries(rawFilters).flatMap(([key, value]) =>
           key === "tab" || key === "chapter" || value === undefined
@@ -82,8 +83,9 @@ export default async function ProjectPage({
           query={query}
           controlsInHeader={!present}
           editorialOrigin={editorialOrigin(slugResult.data)}
-          editorialCalendar={editorialCalendar(slugResult.data)}
-          editorialPieces={editorialPlanRows(slugResult.data)}
+          editorialCalendar={editorial.calendar}
+          editorialPieces={editorial.pieces}
+          editorialThemes={editorial.themes}
         />
       );
       /* El proveedor envuelve también la cabecera: periodo y mercado viven en

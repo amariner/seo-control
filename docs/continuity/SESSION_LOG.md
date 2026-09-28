@@ -993,3 +993,18 @@
 - D-065: filtros compactos y sutiles (32 px, borde fino, ancho del valor). Pruebas en verde. Sin commit.
 - D-066: filtros al lado del buscador mientras quepan (una línea a 1600 px, dos a 1100 px). Sin commit.
 - Commit de D-062…D-066 en main y push a GitHub. Sin desplegar.
+
+## 2026-09-28 · Plan editorial compartido y edición en el visor (D-067)
+
+- Visor y workbench levantados en local (3000 y 3001; el workbench lo servía otra sesión).
+- `@seo/editorial-ui`: plan (calendario + tabla + temas) movido desde el visor, CSS extraído a
+  `editorial-plan.css`; workbench `/editorial/plan` con el mismo componente.
+- Visor: estado y fecha de publicación editables en el plan general; cambios en la bandeja
+  (`editorial_inbox`, Postgres o fichero local); piezas con fecha en el calendario; pestaña
+  Editorial de Xtone = plan filtrado en solo lectura con enlace a editar.
+- Sincronización: `pnpm editorial:pull`, pedida en el chat (el panel del workbench se retiró a petición del responsable); guarda de permisos del visor
+  reescrita (un único Server Action, a la bandeja) y acciones del workbench en su embudo.
+- Verificado en el navegador el circuito completo; typecheck, pruebas y build del visor en verde.
+  Datos de prueba revertidos. Sin commit ni despliegue. Falta `DATABASE_URL` (Neon Frankfurt).
+- D-068: pestaña Editorial de Xtone = plan general filtrado (filtros, todos los meses, temas, color de marca); enlace «Ver plan general» a todas las marcas. Verificado en el navegador; typecheck y 127 pruebas del visor en verde.
+- D-069: «Exportar a Excel» en la tabla del plan (general, Xtone, workbench) con búsqueda y filtros de la tabla; comprobado Xtone + Mes nov 2026 → 3 filas en tabla y en el .xlsx; workbench Backlog + «porcelanico» → 15. Typecheck y pruebas en verde.

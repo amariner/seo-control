@@ -1,0 +1,39 @@
+{
+  "name": "@seo/editorial-ui",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts",
+    "./plan": "./src/editorial-plan.tsx",
+    "./theme-timeline": "./src/theme-timeline.tsx",
+    "./url-label": "./src/url-label.tsx",
+    "./brief-copy": "./src/brief-copy.tsx",
+    "./publication-slider": "./src/publication-slider.tsx",
+    "./editorial-plan.css": "./src/editorial-plan.css",
+    "./plan-editors": "./src/plan-editors.tsx",
+    "./plan-xlsx": "./src/plan-xlsx.ts"
+  },
+  "scripts": {
+    "build": "tsc --noEmit",
+    "lint": "tsc --noEmit",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run --passWithNoTests"
+  },
+  "dependencies": {
+    "@seo/contracts": "workspace:*",
+    "@seo/ui": "workspace:*",
+    "exceljs": "^4.4.0",
+    "lucide-react": "^1.39.0",
+    "react": "^19.2.8",
+    "react-dom": "^19.2.8"
+  },
+  "devDependencies": {
+    "@seo/editorial": "workspace:*",
+    "@types/node": "^24.10.1",
+    "@types/react": "^19.2.14",
+    "@types/react-dom": "^19.2.3",
+    "typescript": "6.0.3",
+    "vitest": "^4.1.11"
+  }
+}

@@ -221,6 +221,28 @@
   cursor: pointer;
 }
 
+/* Exportación de lo que se ve (búsqueda y filtros), a la derecha de «Filas». */
+.report-data-export {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 32px;
+  padding: 0 10px;
+  border: 1px solid var(--ds-line);
+  color: var(--ds-ink);
+  font-size: 12px;
+  text-decoration: none;
+  white-space: nowrap;
+}
+.report-data-export:hover {
+  border-color: var(--ds-line-strong);
+  background: var(--ds-surface-subtle);
+}
+.report-data-export:focus-visible {
+  outline: 2px solid var(--ds-accent);
+  outline-offset: 1px;
+}
+
 .report-data-scroll {
   max-width: 100%;
   max-height: 660px;

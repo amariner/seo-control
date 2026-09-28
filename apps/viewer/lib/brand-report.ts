@@ -1,6 +1,7 @@
-import { BRAND_REPORT_VERSION, EDITORIAL_BRANDS, EDITORIAL_STATUS_LABELS, EDITORIAL_TYPE_LABELS, type BrandSlug, type BrandReport, type EditorialBrandSlug, type EditorialPiece } from "@seo/contracts";
+import { BRAND_REPORT_VERSION, type BrandSlug, type BrandReport } from "@seo/contracts";
+import { fromPlanSheet as sheetFor, generalCalendar, generalPlanRows } from "@seo/editorial-ui";
 import { resolveRepository } from "@seo/repository";
-import { brandColor, brandName, brandShortCode, getEditorial } from "./editorial";
+import { getEditorial, getLiveEditorial } from "./editorial";
 import { cachedLive } from "./live-cache";
 
 export type ReportSearch = Record<string, string | string[] | undefined>;
@@ -27,8 +28,7 @@ export function reportFilters(input: ReportSearch) {
 }
 
 /** La marca toma su plan de la hoja «Plan editorial» del equipo (D-050). */
-const fromPlanSheet = (slug: BrandSlug | EditorialBrandSlug) =>
-  getEditorial().plan.some((piece) => piece.brand.slug === slug && piece.provenance.source === "plan-sheet");
+const fromPlanSheet = (slug: BrandSlug) => sheetFor(getEditorial(), slug);
 
 /**
  * Piezas de la marca con la búsqueda objetivo que se cruzará con Google. Si la
@@ -51,83 +51,15 @@ export function editorialTargets(slug: BrandSlug) {
     }));
 }
 
-/**
- * Filas del plan editorial de la ficha de marca con las trece columnas de la
- * hoja del equipo, en su orden (D-055). Estado, tipo y fechas ya incluyen la
- * curación del workbench.
- */
-export type EditorialPlanRow = {
-  id: string;
-  status: string;
-  writingDate: string | null;
-  publicationDate: string | null;
-  type: string;
-  brand: string;
-  /** Solo en el plan general: marca normalizada y su color (D-057). */
-  brandSlug?: EditorialBrandSlug;
-  brandColor?: string;
-  market: string | null;
-  month: string | null;
-  theme: string | null;
-  subtheme: string | null;
-  keyword: string | null;
-  title: string | null;
-  url: string | null;
-  brief: string | null;
-};
-
-const planRow = (piece: EditorialPiece, general = false): EditorialPlanRow => ({
-  id: piece.id,
-  status: piece.status === "desconocido" ? piece.statusLiteral || EDITORIAL_STATUS_LABELS.desconocido : EDITORIAL_STATUS_LABELS[piece.status],
-  writingDate: piece.writingDate,
-  publicationDate: piece.publicationDate,
-  type: piece.type === "otro" ? piece.typeLiteral || EDITORIAL_TYPE_LABELS.otro : EDITORIAL_TYPE_LABELS[piece.type],
-  brand: piece.brand.literal,
-  ...(general && piece.brand.slug ? { brandSlug: piece.brand.slug, brandColor: brandColor(piece.brand.slug) } : {}),
-  market: piece.market ?? (piece.marketLiteral || null),
-  month: piece.month.year && piece.month.month ? `${piece.month.year}-${String(piece.month.month).padStart(2, "0")}` : null,
-  theme: piece.theme,
-  subtheme: piece.subtheme,
-  keyword: piece.keyword,
-  title: piece.title,
-  url: piece.url,
-  brief: piece.brief?.text ?? null,
-});
-
-/** Piezas del plan de una marca: la hoja si la tiene (D-050); si no, plan y backlog V1. */
-const brandPlan = (slug: BrandSlug | EditorialBrandSlug) => {
-  const dataset = getEditorial();
-  return (fromPlanSheet(slug) ? dataset.plan : [...dataset.plan, ...dataset.backlog]).filter((piece) => piece.brand.slug === slug);
-};
-
-export function editorialPlanRows(slug: BrandSlug): EditorialPlanRow[] {
-  return brandPlan(slug).map((piece) => planRow(piece));
-}
+export type { EditorialPlanRow } from "@seo/editorial-ui";
 
 /**
- * Plan editorial general (D-057): las mismas filas de la ficha, de todas las
- * marcas o de una, con el color de cada marca para distinguirlas.
+ * Plan de la pestaña Editorial de un proyecto (D-067, D-068): el plan general
+ * vivo filtrado por la marca, con las mismas filas, calendario y temas.
  */
-export function generalPlanRows(brand: EditorialBrandSlug | "all"): EditorialPlanRow[] {
-  return EDITORIAL_BRANDS.filter((item) => brand === "all" || item.slug === brand).flatMap((item) => brandPlan(item.slug).map((piece) => planRow(piece, true)));
-}
-
-/** Huecos de publicación de todas las marcas (o de una) con nombre, código y color. */
-export function generalCalendar(brand: EditorialBrandSlug | "all") {
-  const dataset = getEditorial();
-  const events = dataset.calendar.events
-    .filter((event) => event.brand.slug !== null && (brand === "all" || event.brand.slug === brand))
-    .map((event) => ({
-      date: event.date,
-      type: event.typeLiteral.toUpperCase(),
-      label: event.label,
-      brand: brandName(event.brand.slug, event.brand.literal),
-      code: brandShortCode(event.brand.slug, event.brand.literal),
-      color: brandColor(event.brand.slug),
-    }));
-  const covered = EDITORIAL_BRANDS.filter((item) => brand === "all" || item.slug === brand);
-  const sheet = covered.every((item) => !dataset.calendar.events.some((event) => event.brand.slug === item.slug) || dataset.calendar.events.some((event) => event.brand.slug === item.slug && event.provenance.source === "plan-sheet"));
-  return { events, source: sheet ? "hoja «Calendario» del equipo" : "hoja «Calendario» del equipo y calendario V1" };
+export async function projectEditorial(slug: BrandSlug) {
+  const { dataset, pending } = await getLiveEditorial();
+  return { pieces: generalPlanRows(dataset, slug, pending), calendar: generalCalendar(dataset, slug), themes: dataset.calendar.themes };
 }
 
 /** Procedencia del plan editorial que muestra la ficha de marca. */
@@ -137,16 +69,6 @@ export function editorialOrigin(slug: BrandSlug) {
   return fromPlanSheet(slug)
     ? { label: `hoja «Plan editorial» del equipo, importada el ${importedAt}`, sheet: true }
     : { label: `plan y backlog importados de V1 el ${importedAt}`, sheet: false };
-}
-
-/** Huecos de publicación de la marca en el calendario editorial (D-051). */
-export function editorialCalendar(slug: BrandSlug) {
-  const dataset = getEditorial();
-  const events = dataset.calendar.events
-    .filter((event) => event.brand.slug === slug)
-    .map((event) => ({ date: event.date, type: event.typeLiteral.toUpperCase(), label: event.label }));
-  const sheet = dataset.calendar.events.some((event) => event.brand.slug === slug && event.provenance.source === "plan-sheet");
-  return { events, source: sheet ? "hoja «Calendario» del equipo" : "calendario importado de V1" };
 }
 
 /**

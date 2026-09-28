@@ -10,7 +10,8 @@ import type { ReactNode } from "react";
  */
 const SECTIONS = [
   { href: "/", label: "Preparación" },
-  { href: "/editorial", label: "Editorial" },
+  { href: "/editorial/plan", label: "Plan editorial" },
+  { href: "/editorial", label: "Curación" },
   { href: "/herramientas", label: "Herramientas" },
 ] as const;
 

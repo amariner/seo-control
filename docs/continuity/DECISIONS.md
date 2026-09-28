@@ -1750,3 +1750,63 @@ No se reescriben decisiones antiguas. Si una cambia, se añade una nueva entrada
 - Decisión: en la barra de la tabla, buscador (240 px) y filtros van en la misma línea;
   «Filas» se alinea a la derecha. Si no caben, los filtros bajan de línea solos (flex-wrap).
   A 1600 px todo cabe en una línea de 32 px; a 1100 px pasa a dos.
+
+## D-067 · Plan editorial compartido, edición en el visor y sincronización con el workbench
+
+- Fecha: 2026-09-28.
+- Estado: vigente (acota el invariante «el visor es de solo lectura»).
+- Contexto: el responsable quiere trabajar el plan en el workbench (con Claude Code, cruzando
+  mucha data e informes adicionales) y que al visor solo llegue el resultado filtrado; a la vez,
+  el equipo necesita cambiar en el visor el estado de una pieza y fijar su fecha de publicación.
+  El visor desplegado (Vercel) empaqueta el dataset y la curación y su disco es de solo lectura.
+- Decisión:
+  - Calendario, tabla y temas del plan pasan a `packages/editorial-ui` (`@seo/editorial-ui`) y
+    los usan visor y workbench: el workbench tiene `/editorial/plan`, copia exacta del plan
+    general del visor sobre la curación local. `/editorial` del workbench pasa a llamarse «Curación».
+  - El plan general (`/editorial/calendario`) es el único sitio donde se edita en el visor:
+    estado (sin «Sin estado») y fecha de publicación, en línea en la tabla. La pestaña Editorial
+    de un proyecto (p. ej. Xtone) es el mismo plan filtrado por marca, en solo lectura, con
+    enlace «Editar en el plan general».
+  - Una pieza con fecha de publicación entra en el calendario: ocupa el hueco POST de su marca
+    ese día o se añade como post (`generalCalendar`, marca con borde).
+  - El visor no escribe la curación. Guarda cada cambio, inmutable y con autor (email de la
+    sesión) y hora, en la bandeja `editorial_inbox` (Postgres vía `DATABASE_URL`, creada al
+    primer uso; en local, `packages/editorial/data/inbox/viewer-changes.json`, fuera de git).
+    Un único Server Action (`apps/viewer/app/editorial/actions.ts`) con `auth()` y contrato
+    cerrado (`editorialInboxEditSchema`). En Vercel sin `DATABASE_URL` el plan queda en solo
+    lectura y lo avisa.
+  - El plan del visor superpone los cambios vigentes: un cambio vale mientras sea posterior a la
+    última revisión curada de la pieza. Al traerlo, el workbench crea una revisión con la hora de
+    la sincronización; al desplegarla, el cambio deja de superponerse solo, sin borrarlo. Si el
+    workbench edita la pieza después, gana su edición. La consulta del visor solo pide lo no
+    traído o traído tras la `updatedAt` de la curación empaquetada.
+  - Visor → workbench: `pnpm editorial:pull`, que Claude Code ejecuta cuando se le pide en el chat (sin botón en el workbench), incorpora los
+    cambios a la curación y los marca como traídos; informa de los que perdieron frente al
+    workbench y de los huérfanos. Workbench → visor: commit de la curación y `vercel deploy --prod`.
+- Pendiente: crear la base de datos (Neon, región Frankfurt) y definir `DATABASE_URL` en Vercel
+  (Production) y en `apps/workbench/.env.local`. Hasta entonces producción muestra el plan en
+  solo lectura.
+
+## D-068 · La pestaña Editorial del proyecto es el plan general filtrado
+
+- Fecha: 2026-09-28.
+- Estado: vigente (sustituye en la ficha lo dicho en D-052 y D-067 sobre meses y enlace).
+- Decisión: la pestaña Editorial de un proyecto (p. ej. Xtone) usa el plan general tal cual,
+  filtrado por la marca: filtros en la tabla (sin «Marca», al haber una sola), todos los meses,
+  tabla en una línea (`.plan-general`), color de marca en calendario y tabla, y «Temas del
+  semestre» debajo. Sigue en solo lectura. El enlace pasa a «Ver plan general» y lleva a
+  `/editorial/calendario` con todas las marcas.
+
+## D-069 · Exportar a Excel el plan editorial
+
+- Fecha: 2026-09-28.
+- Estado: vigente.
+- Decisión: la tabla del plan (general, pestaña de proyecto y workbench) lleva «Exportar a
+  Excel» junto a «Filas». `ReportDataTable` acepta `exportHref` y le añade la búsqueda (`q`) y
+  los filtros activos (`f.<columna>`); el servidor aplica las mismas reglas
+  (`filterPlanRows`), así que el fichero contiene exactamente lo que se ve, en todas las páginas.
+  El `.xlsx` (`@seo/editorial-ui/plan-xlsx`, exceljs) tiene las trece columnas de la hoja del
+  equipo, fechas reales, URL como enlace, cabecera fija con autofiltro y una hoja «Procedencia»
+  (fuente, filtros, piezas, fecha y autor). Rutas: visor
+  `/api/v1/editorial/export/plan-editorial.xlsx[?brand=]` (incluye cambios pendientes del
+  visor), workbench `/api/editorial/plan.xlsx`.

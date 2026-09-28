@@ -5,6 +5,7 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import {
   editorialBrandSlugSchema,
+  editorialInboxEditSchema,
   editorialLanguageSchema,
   editorialLinkKindSchema,
   editorialPieceTypeSchema,
@@ -14,8 +15,10 @@ import {
   type EditorialCurationFields,
   type EditorialLink,
 } from "@seo/contracts";
-import { addCreatedPiece, buildPieceFromInput, upsertEventCuration, upsertPieceCuration, upsertSlotCuration, type CurationMeta, type NewPieceInput } from "@seo/editorial";
+import { addCreatedPiece, buildPieceFromInput, editPieceCuration, upsertEventCuration, upsertPieceCuration, upsertSlotCuration, type CurationMeta, type NewPieceInput } from "@seo/editorial";
 import { readCurationStore, sha256, writeCurationStore } from "@seo/editorial/curation-store";
+import type { PieceEdit, PieceEditResult } from "@seo/editorial-ui/plan-editors";
+import { getDataset } from "@/lib/editorial";
 
 /**
  * Server Actions del workbench (P1.4): único punto de escritura de la curación
@@ -121,4 +124,22 @@ export async function linkEvent(eventId: string, formData: FormData) {
   writeCurationStore(next);
   revalidatePath("/editorial");
   redirect("/editorial?section=eventos&saved=1");
+}
+
+/** Quién firma las ediciones en línea del plan; el workbench es local y no tiene sesión. */
+const CURATOR = process.env.WORKBENCH_CURATOR?.trim() || "workbench";
+
+/**
+ * Edición en línea del plan en el workbench (D-067): escribe la curación
+ * directamente, con versión e historial. Llega al visor al publicar.
+ */
+export async function editPieceInWorkbench(pieceId: string, edit: PieceEdit): Promise<PieceEditResult> {
+  const parsed = editorialInboxEditSchema.safeParse(edit);
+  if (!parsed.success) return { ok: false, error: parsed.error.issues[0]?.message ?? "Cambio no válido." };
+  const dataset = getDataset();
+  if (![...dataset.plan, ...dataset.backlog].some((piece) => piece.id === pieceId)) return { ok: false, error: "La pieza ya no está en el plan." };
+  writeCurationStore(editPieceCuration(readCurationStore(), pieceId, parsed.data, { updatedBy: CURATOR, note: "Plan editorial · edición en línea", now: new Date().toISOString() }));
+  revalidatePath("/editorial/plan");
+  revalidatePath("/editorial");
+  return { ok: true };
 }

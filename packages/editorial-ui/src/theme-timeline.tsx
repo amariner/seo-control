@@ -1,7 +1,7 @@
 import type { CSSProperties } from "react";
 import { EDITORIAL_BRANDS, type EditorialDataset } from "@seo/contracts";
-import type { EditorialPlanRow } from "@/lib/brand-report";
-import { brandColor } from "@/lib/editorial";
+import type { EditorialPlanRow } from "./rows";
+import { brandColor } from "./brands";
 
 type Theme = EditorialDataset["calendar"]["themes"][number];
 

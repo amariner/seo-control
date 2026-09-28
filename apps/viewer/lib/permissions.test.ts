@@ -13,6 +13,10 @@ import { serviceAuthorized } from "./http";
  * `POST`, un Server Action o un `import` del almacén de curación en el visor
  * rompa la suite en lugar de pasar desapercibido.
  *
+ * D-067 abre una única excepción: el Server Action de `app/editorial/actions.ts`
+ * guarda estado y fecha de publicación en la bandeja de cambios del visor. La
+ * curación sigue sin poder escribirse desde aquí.
+ *
  * Se leen los ficheros fuente a propósito: es la única forma de aseverar la
  * ausencia de un export sin ejecutar el runtime de Next ni montar un servidor.
  */
@@ -35,6 +39,9 @@ function walk(dir: string): string[] {
   return files;
 }
 
+/** Única escritura permitida al visor (D-067): la bandeja de cambios, nunca la curación. */
+const VIEWER_ACTIONS = "editorial/actions.ts";
+
 const read = (file: string) => ({ path: relative(APP_DIR, file), source: readFileSync(file, "utf8") });
 
 const ALL_FILES = walk(APP_DIR).map(read);
@@ -44,7 +51,7 @@ const SERVICE_FILES = ALL_FILES.filter((file) => file.path.startsWith("api/v1/se
 
 const exportsMethod = (source: string, method: string) => new RegExp(`export\\s+(?:async\\s+)?(?:function\\s+${method}\\b|const\\s+${method}\\b)`).test(source);
 
-describe("el visor es de solo lectura por construcción", () => {
+describe("el visor solo lee, salvo estado y fecha del plan hacia la bandeja (D-067)", () => {
   it("encuentra las rutas editoriales que debe vigilar", () => {
     expect(EDITORIAL_FILES.length).toBeGreaterThanOrEqual(9);
     expect(EDITORIAL_FILES.some((file) => file.path === "editorial/calendario/page.tsx")).toBe(true);
@@ -62,9 +69,16 @@ describe("el visor es de solo lectura por construcción", () => {
     for (const route of routes) expect(exportsMethod(route.source, "GET"), `${route.path} debería exportar GET`).toBe(true);
   });
 
-  it("no hay Server Actions en ninguna parte del visor", () => {
-    const offenders = ALL_FILES.filter((file) => /^\s*["']use server["']/m.test(file.source)).map((file) => file.path);
-    expect(offenders).toEqual([]);
+  it("solo hay un Server Action en el visor: estado y fecha a la bandeja (D-067)", () => {
+    const actions = ALL_FILES.filter((file) => /^\s*["']use server["']/m.test(file.source));
+    expect(actions.map((file) => file.path)).toEqual([VIEWER_ACTIONS]);
+    const source = actions[0]!.source;
+    const exported = [...source.matchAll(/export\s+async\s+function\s+(\w+)/g)].map((match) => match[1]);
+    expect(exported).toEqual(["editPieceFromViewer"]);
+    // Autenticado, validado con el contrato cerrado de la bandeja y escrito solo en ella.
+    expect(source.includes("await auth()")).toBe(true);
+    expect(source.includes("editorialInboxEditSchema")).toBe(true);
+    expect(source.includes("resolveEditorialInbox")).toBe(true);
   });
 
   it("el visor no importa módulos ni funciones de escritura", () => {

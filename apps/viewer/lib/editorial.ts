@@ -1,13 +1,17 @@
+import { cache } from "react";
 import { EDITORIAL_BRANDS, type EditorialBrandSlug, type EditorialDataset, type EditorialLinkKind, type EditorialPiece } from "@seo/contracts";
 import { getEffectiveEditorialDataset } from "@seo/editorial/dataset";
 import { readCurationStore } from "@seo/editorial/curation-store";
+import { resolveEditorialInbox } from "@seo/editorial/inbox-store";
+import { applyInbox, type PendingInbox } from "@seo/editorial";
 import { PIECE_SORT_KEYS, backlinksFor, buildBacklinkIndex, calendarMonths, distinctValues, filterEvents, filterPieces, filterSlots, findPieceCuration, parsePieceFilters, sortPieces, sortSlots, type PieceFilters, type PieceSortKey, type SortDirection } from "@seo/editorial";
 
 /**
- * Capa de acceso editorial del visor (solo lectura).
+ * Capa de acceso editorial del visor.
  * El dataset normalizado sustituye al JSON público de V1; en P3 la misma firma
  * apuntará a PostgreSQL sin cambiar rutas ni componentes. Ya incluye la
- * curación publicada desde el workbench (P1.4): el visor solo la lee.
+ * curación publicada desde el workbench (P1.4): el visor solo la lee. Su única
+ * escritura es estado y fecha del plan hacia la bandeja (D-067, `getLiveEditorial`).
  */
 
 export type SearchInput = Record<string, string | string[] | undefined>;
@@ -21,52 +25,27 @@ export function getEditorial(): EditorialDataset {
   return getEffectiveEditorialDataset();
 }
 
-/**
- * Un color distinto por marca en el calendario y el plan general (D-057). Tonos
- * medios con contraste ≥ 4,5:1 sobre blanco; se evitan verde, ámbar y rojo,
- * reservados a los estados.
- */
-export const BRAND_COLORS: Record<EditorialBrandSlug, string> = {
-  porcelanosa: "#1e3a8a",
-  noken: "#7c3aed",
-  ecommerce: "#0e7490",
-  butech: "#7c5b4a",
-  "antic-colonial": "#b4533a",
-  krion: "#0369a1",
-  xtone: "#475569",
-  gamadecor: "#a21caf",
-};
-
-export function brandColor(slug: EditorialBrandSlug | null) {
-  return slug ? BRAND_COLORS[slug] : "#b5bcb8";
-}
-
-export function brandName(slug: EditorialBrandSlug | null, literal: string) {
-  return EDITORIAL_BRANDS.find((brand) => brand.slug === slug)?.name ?? literal;
-}
-
-export function brandCode(slug: EditorialBrandSlug | null, literal: string) {
-  return EDITORIAL_BRANDS.find((brand) => brand.slug === slug)?.code ?? literal.slice(0, 4).toUpperCase();
-}
+/* Colores, nombres y códigos de marca: compartidos con el workbench (D-067). */
+export { BRAND_COLORS, brandCode, brandColor, brandName, brandShortCode } from "@seo/editorial-ui";
 
 /**
- * Código de dos letras para la rejilla anual, donde una celda de día mide ~40 px.
- * Evita truncar con puntos suspensivos; el nombre completo sigue en `title` y `aria-label`.
+ * Plan editorial vivo (D-067): el dataset efectivo más los cambios hechos en el
+ * visor que el workbench aún no ha incorporado. Es lo que muestran el plan
+ * general y la pestaña Editorial de cada proyecto. Una consulta por petición.
  */
-const BRAND_SHORT_CODES: Record<EditorialBrandSlug, string> = {
-  porcelanosa: "PO",
-  noken: "NK",
-  ecommerce: "EC",
-  butech: "BU",
-  "antic-colonial": "AC",
-  krion: "KR",
-  xtone: "XT",
-  gamadecor: "GD",
-};
-
-export function brandShortCode(slug: EditorialBrandSlug | null, literal: string) {
-  return slug ? BRAND_SHORT_CODES[slug] : literal.slice(0, 2).toUpperCase();
-}
+export const getLiveEditorial = cache(async (): Promise<{ dataset: EditorialDataset; pending: PendingInbox; inbox: { kind: string; detail: string } }> => {
+  const base = getEditorial();
+  const store = readCurationStore();
+  const inbox = resolveEditorialInbox();
+  try {
+    const changes = await inbox.list({ relevantAfter: store.updatedAt });
+    return { ...applyInbox(base, store, changes), inbox: { kind: inbox.kind, detail: inbox.detail } };
+  } catch (error) {
+    // Si la base de datos falla, el plan se sirve igual, sin los cambios pendientes, y se avisa.
+    console.error("[editorial] bandeja del visor no disponible", error);
+    return { dataset: base, pending: new Map(), inbox: { kind: "error", detail: "no se han podido leer los cambios pendientes del visor" } };
+  }
+});
 
 export function parseBrand(input: SearchInput): EditorialBrandSlug | "all" {
   const value = pick(input, "brand");

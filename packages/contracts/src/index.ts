@@ -3,6 +3,7 @@ export * from "./scoring";
 export * from "./taxonomy";
 export * from "./editorial";
 export * from "./editorial-curation";
+export * from "./editorial-inbox";
 export * from "./migration";
 export * from "./portfolio";
 export * from "./reconciliation";

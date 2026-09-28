@@ -4,10 +4,11 @@ import { Notice, StatusBadge } from "@seo/ui";
 import { DetailPanel } from "@/components/editorial/detail-panel";
 import { EditorialFrame } from "@/components/editorial/editorial-frame";
 import { PieceDetail, statusBadge } from "@/components/editorial/piece-detail";
-import { EditorialPlan } from "@/components/report/editorial-plan";
-import { ThemeTimeline } from "@/components/editorial/theme-timeline";
-import { generalCalendar, generalPlanRows } from "@/lib/brand-report";
-import { brandName, findEvent, findPiece, getEditorial, hrefWith, parseBrand, pieceCurationMeta, relatedForEvent, type SearchInput } from "@/lib/editorial";
+import { generalCalendar, generalPlanRows } from "@seo/editorial-ui";
+import { EditorialPlan } from "@seo/editorial-ui/plan";
+import { ThemeTimeline } from "@seo/editorial-ui/theme-timeline";
+import { brandName, findEvent, findPiece, getEditorial, getLiveEditorial, hrefWith, parseBrand, pieceCurationMeta, relatedForEvent, type SearchInput } from "@/lib/editorial";
+import { editPieceFromViewer } from "../actions";
 
 export const metadata: Metadata = { title: "Plan editorial general" };
 
@@ -29,8 +30,10 @@ export default async function CalendarPage({ searchParams }: { searchParams: Pro
   const selectedPiece = findPiece(pieceId);
   const related = selectedEvent ? relatedForEvent(selectedEvent) : null;
   const closeHref = hrefWith(BASE, input, { event: null, piece: null });
-  const pieces = generalPlanRows(brand);
-  const calendar = generalCalendar(brand);
+  const live = await getLiveEditorial();
+  const pieces = generalPlanRows(live.dataset, brand, live.pending);
+  const calendar = generalCalendar(live.dataset, brand);
+  const editable = live.inbox.kind === "postgres" || live.inbox.kind === "file";
   const importedAt = dataset.report.importedAt.slice(0, 10);
   const label = brand === "all" ? "Plan editorial de las ocho marcas" : `Plan editorial de ${brandName(brand, brand)}`;
 
@@ -42,6 +45,8 @@ export default async function CalendarPage({ searchParams }: { searchParams: Pro
       description="Calendario de publicación y plan de las ocho marcas."
       simple={{ note: "Ocho marcas del grupo", meta: <>Hoja «Plan editorial» del equipo<span aria-hidden>·</span>importada el {new Date(dataset.report.importedAt).toLocaleDateString("es-ES", { day: "numeric", month: "long", year: "numeric" })}</> }}
     >
+      {!editable ? <Notice tone="warn" className="ds-no-print">Plan en solo lectura: {live.inbox.detail}.</Notice> : null}
+      {live.pending.size ? <Notice tone="info" className="ds-no-print">{live.pending.size === 1 ? "1 pieza tiene" : `${live.pending.size} piezas tienen`} cambios hechos aquí pendientes de sincronizar con el workbench (punto ámbar junto al estado).</Notice> : null}
       {dataset.report.brandsWithoutEvents.length ? <Notice tone="info" className="ds-no-print">Marcas sin evento en el calendario importado: {dataset.report.brandsWithoutEvents.map((slug) => brandName(slug, slug)).join(", ")}.</Notice> : null}
 
       <section className="plan-general" aria-label={label}>
@@ -52,6 +57,8 @@ export default async function CalendarPage({ searchParams }: { searchParams: Pro
           calendar={calendar}
           filterable
           showPast
+          edit={editable ? editPieceFromViewer : undefined}
+          exportHref={`/api/v1/editorial/export/plan-editorial.xlsx${brand !== "all" ? `?brand=${brand}` : ""}`}
           after={<ThemeTimeline themes={dataset.calendar.themes} pieces={pieces} currentMonth={new Date().toISOString().slice(0, 7)} />}
         />
       </section>

@@ -3,8 +3,11 @@
 import { useEffect, useRef, useState, type CSSProperties } from "react";
 import { CalendarDays, ChevronLeft, ChevronRight, GalleryHorizontal } from "lucide-react";
 
-/** `brand`, `code` y `color` solo en el plan general, con varias marcas a la vez (D-057). */
-export type PublicationEvent = { date: string; type: string; label: string; brand?: string; code?: string; color?: string };
+/**
+ * `brand`, `code` y `color` solo en el plan general, con varias marcas a la vez
+ * (D-057). `title` cuando el día lo ocupa una pieza del plan con fecha (D-067).
+ */
+export type PublicationEvent = { date: string; type: string; label: string; title?: string; brand?: string; code?: string; color?: string };
 
 const tint = (event: PublicationEvent) => (event.color ? ({ "--pub-color": event.color } as CSSProperties) : undefined);
 const kind = (event: PublicationEvent) => (event.type === "POST" ? "Post" : "News");
@@ -94,7 +97,7 @@ export function PublicationSlider({
   const posts = events.filter((event) => event.type === "POST").length;
   const news = events.length - posts;
   const multi = events.some((event) => event.color);
-  const slotText = (slot: PublicationEvent) => (multi ? `${slot.brand} · ${kind(slot)}` : slot.label);
+  const slotText = (slot: PublicationEvent) => `${multi ? `${slot.brand} · ${kind(slot)}` : slot.title ? kind(slot) : slot.label}${slot.title ? `: ${slot.title}` : ""}`;
 
   return (
     <div className={`pub-slider${multi ? " is-multi" : ""}`}>
@@ -157,11 +160,11 @@ export function PublicationSlider({
                       role="gridcell"
                       className={`pub-cell${day.weekday === 0 || day.weekday === 6 ? " is-weekend" : ""}${day.date === today ? " is-today" : ""}${slots.length ? " is-marked" : ""}`}
                       aria-label={slots.length ? `${day.day} de ${MONTHS[month.month - 1]}: ${slots.map(slotText).join(" · ")}` : undefined}
-                      title={multi && slots.length ? slots.map(slotText).join("\n") : undefined}
+                      title={slots.length ? slots.map(slotText).join("\n") : undefined}
                     >
                       <span className="pub-num">{day.day}</span>
-                      {slots.map((slot) => (
-                        <span key={slot.label} className={`pub-chip ${slot.type === "POST" ? "is-post" : "is-news"}`} style={tint(slot)}>
+                      {slots.map((slot, index) => (
+                        <span key={index} className={`pub-chip${slot.title ? " is-piece" : ""} ${slot.type === "POST" ? "is-post" : "is-news"}`} style={tint(slot)}>
                           {multi ? slot.code : kind(slot)}
                         </span>
                       ))}
@@ -196,8 +199,8 @@ export function PublicationSlider({
                     </span>
                     <span className="pub-num">{day.day}</span>
                     <span className="pub-marks">
-                      {slots.map((slot) => (
-                        <i key={slot.label} className={`pub-dot ${slot.type === "POST" ? "is-post" : "is-news"}`} style={tint(slot)} aria-hidden />
+                      {slots.map((slot, index) => (
+                        <i key={index} className={`pub-dot${slot.title ? " is-piece" : ""} ${slot.type === "POST" ? "is-post" : "is-news"}`} style={tint(slot)} aria-hidden />
                       ))}
                     </span>
                     {slots.length > 0 && (

@@ -19,6 +19,7 @@ import {
   ChevronRight,
   ChevronsLeft,
   ChevronsRight,
+  Download,
   Search,
   X,
 } from "lucide-react";
@@ -62,6 +63,12 @@ export type ReportDataTableProps = {
   pageSize?: 10 | 25 | 50 | 100;
   note?: ReactNode;
   filters?: ReportDataFilter[];
+  /**
+   * Enlace de exportación. La tabla le añade la búsqueda (`q`) y los filtros
+   * activos (`f.<clave>`), para que el fichero contenga exactamente lo que se ve.
+   */
+  exportHref?: string;
+  exportLabel?: string;
 };
 
 const features = tableFeatures({
@@ -74,6 +81,16 @@ const numberFormat = new Intl.NumberFormat("es-ES", {
   useGrouping: "always" as unknown as boolean,
 });
 const pageSizes = [10, 25, 50, 100] as const;
+
+/** Enlace de exportación con la búsqueda y los filtros activos de la tabla. */
+function exportUrl(base: string, query: string, active: Array<[string, string]>): string {
+  const [path, search = ""] = base.split("?");
+  const params = new URLSearchParams(search);
+  if (query.trim()) params.set("q", query.trim());
+  for (const [key, value] of active) params.set(`f.${key}`, value);
+  const text = params.toString();
+  return text ? `${path}?${text}` : path!;
+}
 
 /** The print event must commit the complete filtered table before the browser captures it. */
 function usePrintTable(): boolean {
@@ -106,6 +123,8 @@ export function ReportDataTable({
   pageSize = 10,
   note,
   filters = [],
+  exportHref,
+  exportLabel = "Exportar a Excel",
 }: ReportDataTableProps) {
   const [query, setQuery] = useState("");
   const [selected, setSelected] = useState<Record<string, string>>({});
@@ -313,6 +332,12 @@ export function ReportDataTable({
             ))}
           </select>
         </label>
+        {exportHref && (
+          <a className="report-data-export" href={exportUrl(exportHref, query, activeFilters)} download>
+            <Download size={14} aria-hidden="true" />
+            {exportLabel}
+          </a>
+        )}
       </div>
       <div
         className="report-data-scroll"

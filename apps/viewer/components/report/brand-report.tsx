@@ -1,7 +1,7 @@
 import { Fragment, type ReactNode } from "react";
 import Link from "next/link";
 import { ArrowUpRight, Database, Info } from "lucide-react";
-import { findBrand, type BrandReport, type ReportKpi } from "@seo/contracts";
+import { findBrand, type BrandReport, type EditorialDataset, type ReportKpi } from "@seo/contracts";
 import { Notice } from "@seo/ui";
 import { ReportDataTable, type ReportDataRow } from "./data-table";
 import { EvolutionChart } from "./evolution-chart";
@@ -14,10 +14,12 @@ import { BingLogo, GoogleLogo } from "./google-logo";
 import { InfoHint } from "./info-hint";
 import { ExpandableList, ExpandableTable } from "./expandable-table";
 import { MoversList } from "./movers-list";
-import type { PublicationEvent } from "./publication-slider";
-import { EditorialPlan } from "./editorial-plan";
-import { Url } from "./url-label";
-import type { EditorialPlanRow } from "@/lib/brand-report";
+import type { EditorialPlanRow, PublicationEvent } from "@seo/editorial-ui";
+import { EditorialPlan } from "@seo/editorial-ui/plan";
+import { ThemeTimeline } from "@seo/editorial-ui/theme-timeline";
+import { Url } from "@seo/editorial-ui/url-label";
+
+type EditorialThemes = EditorialDataset["calendar"]["themes"];
 import { FilteredList } from "./filtered-list";
 import { KeywordKpis } from "./keyword-kpis";
 import { OPPORTUNITY_KINDS } from "./opportunity-kinds";
@@ -877,6 +879,7 @@ export function BrandReportView({
   editorialOrigin,
   editorialCalendar,
   editorialPieces,
+  editorialThemes,
 }: {
   report: BrandReport;
   tab: ReportTab;
@@ -886,6 +889,8 @@ export function BrandReportView({
   editorialCalendar?: { events: PublicationEvent[]; source: string };
   /** Piezas del plan con las columnas de la hoja del equipo (D-055). */
   editorialPieces?: EditorialPlanRow[];
+  /** Temas del semestre, como en el plan general (D-068). */
+  editorialThemes?: EditorialThemes;
   present: boolean;
   baseHref: string;
   query: string;
@@ -986,6 +991,7 @@ export function BrandReportView({
               pieces={editorialPieces ?? []}
               origin={editorialOrigin}
               calendar={editorialCalendar}
+              themes={editorialThemes ?? []}
             />
           )}
         </div>
@@ -1816,30 +1822,39 @@ function Editorial({
   pieces,
   origin,
   calendar,
+  themes,
 }: {
   report: BrandReport;
   pieces: EditorialPlanRow[];
   origin?: { label: string; sheet: boolean };
   calendar?: { events: PublicationEvent[]; source: string };
+  themes: EditorialThemes;
 }) {
   return (
     <Section
       id="editorial"
       title="Plan editorial"
-      subtitle="Piezas previstas con las columnas de la hoja del equipo."
+      subtitle="El plan editorial general filtrado por esta marca."
       action={
         <Link className="brand-link" href="/editorial/calendario">
-          Plan editorial general
+          Ver plan general
           <ArrowUpRight size={14} aria-hidden />
         </Link>
       }
     >
-      <EditorialPlan
-        pieces={pieces}
-        caption={`Plan editorial de ${findBrand(report.brand)?.name ?? report.brand}`}
-        origin={origin}
-        calendar={calendar}
-      />
+      {/* Mismo plan que /editorial/calendario (D-068): filtros, todos los meses y temas. */}
+      <div className="plan-general">
+        <EditorialPlan
+          pieces={pieces}
+          caption={`Plan editorial de ${findBrand(report.brand)?.name ?? report.brand}`}
+          origin={origin}
+          calendar={calendar}
+          filterable
+          showPast
+          exportHref={`/api/v1/editorial/export/plan-editorial.xlsx?brand=${report.brand}`}
+          after={<ThemeTimeline themes={themes} pieces={pieces} currentMonth={new Date().toISOString().slice(0, 7)} />}
+        />
+      </div>
     </Section>
   );
 }

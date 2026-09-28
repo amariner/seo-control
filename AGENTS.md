@@ -28,6 +28,16 @@ Cuando el usuario diga «informe adicional», «saca un informe», «necesito un
 3. Indica siempre si el dato usado es real (dataset editorial, APIs locales) o sintético (`SyntheticConnector` mientras P3 no conecte GA4/GSC/SEMrush reales) — nunca lo mezcles sin decirlo.
 4. Esta carpeta **nunca se commitea** (`.gitignore` la excluye salvo el README de la convención). No la incluyas en un `git add`/commit aunque el usuario esté en medio de una sesión de subir cambios al repositorio.
 
+## Activador de sincronización del plan editorial (D-067)
+
+- «Trae los cambios de preview», «sincroniza antes de trabajar» o equivalente: ejecuta
+  `pnpm editorial:pull` (primero con `-- --dry-run` si hay dudas) y resume qué entró, qué se
+  descartó y por qué. Es el paso obligado antes de editar el plan en el workbench.
+- «Sincroniza con preview», «sube el plan» o equivalente: revisa el diff de
+  `packages/editorial/data/curation/editorial-curation.json`, confirma con el usuario, haz commit
+  y `vercel deploy --prod`. Al visor solo llegan el dataset y la curación: nunca informes
+  adicionales ni datos intermedios.
+
 ## Prioridades permanentes
 
 1. Decisiones trazables para gerente y equipo SEO.

@@ -1,6 +1,20 @@
 # Checkpoint operativo — SEO Dashboard V2
 
-Última actualización: 24 de septiembre de 2026 (shadcn/ui y dashboard-01 en el visor, D-044, rama `feat/shadcn-dashboard`).
+Última actualización: 28 de septiembre de 2026 (plan editorial compartido y sincronización visor ↔ workbench, D-067).
+
+## Plan editorial compartido y sincronización visor ↔ workbench · D-067 (2026-09-28, sin commit)
+
+- Hecho: `packages/editorial-ui` (calendario, tabla, temas, editores, `generalPlanRows`,
+  `generalCalendar`, colores de marca). Visor: `/editorial/calendario` edita estado y fecha en
+  línea (`app/editorial/actions.ts` → bandeja); `getLiveEditorial()` superpone lo pendiente
+  (punto ámbar + aviso). Ficha de proyecto = plan general filtrado (mismos filtros, meses y temas; D-068), solo lectura, enlace «Ver plan general». Workbench:
+  `/editorial/plan` (mismo plan, edita la curación). La sincronización se pide en el chat; sin panel.
+  Bandeja: `packages/editorial/src/inbox*.ts` (Postgres con `DATABASE_URL`; fichero local si no).
+- Flujo: antes de trabajar en el workbench, «trae los cambios de preview» → `pnpm editorial:pull`.
+  Al terminar, «sincroniza con preview» → commit de `editorial-curation.json` + `vercel deploy --prod`.
+- Reanudar: crear Neon Frankfurt y `DATABASE_URL` en Vercel Production y en
+  `apps/workbench/.env.local` (lo tiene que hacer el responsable: acepta términos del proveedor);
+  commit y despliegue; probar un cambio real en producción y `pnpm editorial:pull`.
 
 ## Plan editorial general con las ocho marcas · D-057…D-066 (2026-09-28, en main, sin desplegar)
 

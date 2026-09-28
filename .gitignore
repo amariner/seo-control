@@ -20,3 +20,6 @@ artifacts/**
 # Se quedan siempre en local, nunca se commitean; solo el README de la convención se versiona.
 informes-adicionales/**
 !informes-adicionales/README.md
+
+# Bandeja local de cambios del visor (D-067): en producción vive en Postgres.
+packages/editorial/data/inbox/

@@ -1,11 +1,12 @@
 import type { CSSProperties, ReactNode } from "react";
 import { X } from "lucide-react";
-import type { EditorialPlanRow } from "@/lib/brand-report";
-import { ReportDataTable, type ReportDataRow } from "./data-table";
+import { ReportDataTable, type ReportDataRow } from "@seo/ui/data-table";
+import { EDITORIAL_COLUMNS, planMonthLabel, sortPlanRows, statusTone, type EditorialPlanRow } from "./rows";
 import { PublicationSlider, type PublicationEvent } from "./publication-slider";
+import { PublicationDateEditor, StatusEditor, type PieceEditAction } from "./plan-editors";
 import { BriefCopy } from "./brief-copy";
 import { Url } from "./url-label";
-import "./brand-report.css";
+import "./editorial-plan.css";
 
 const row = (id: string, values: ReportDataRow["values"], cells: ReportDataRow["cells"] = {}): ReportDataRow => ({
   id,
@@ -15,33 +16,13 @@ const row = (id: string, values: ReportDataRow["values"], cells: ReportDataRow["
     .filter((value) => value !== null)
     .join(" "),
 });
-const monthLabel = (month: string | null) =>
-  month ? new Date(`${month}-01T00:00:00Z`).toLocaleDateString("es-ES", { month: "short", year: "numeric", timeZone: "UTC" }) : "Sin mes";
+const monthLabel = planMonthLabel;
 const dash = (value: string | null) => (value ? value : <span className="muted">—</span>);
 /** Fecha corta dd/mm/aa para la tabla compacta del plan. */
 const shortDate = (value: string | null) => (value ? `${value.slice(8, 10)}/${value.slice(5, 7)}/${value.slice(2, 4)}` : dash(null));
 
-const PUBLISHED = "Publicado";
-/** Tono del estado: publicado en positivo, en marcha en acento, el resto neutro. */
-const statusTone = (status: string) =>
-  status === PUBLISHED ? "done" : status === "Aceptado" || status === "Redactando" || status === "En revisión" || status === "Programado" ? "doing" : status === "Sin estado" ? "none" : "todo";
+const when = (iso: string) => new Date(iso).toLocaleString("es-ES", { day: "numeric", month: "short", hour: "2-digit", minute: "2-digit", timeZone: "Europe/Madrid" });
 
-/** Columnas de la hoja «Plan editorial» del equipo, en su orden (D-055). */
-const EDITORIAL_COLUMNS = [
-  { key: "status", label: "Estado" },
-  { key: "writingDate", label: "Fecha redacción" },
-  { key: "publicationDate", label: "Fecha publicación" },
-  { key: "type", label: "Tipo" },
-  { key: "brand", label: "Marca" },
-  { key: "market", label: "País" },
-  { key: "month", label: "Mes" },
-  { key: "theme", label: "Temática" },
-  { key: "subtheme", label: "Subtema" },
-  { key: "keyword", label: "Keyword principal" },
-  { key: "title", label: "Título" },
-  { key: "url", label: "URL (si existe)" },
-  { key: "brief", label: "Notas / Brief", sortable: false },
-];
 
 /**
  * Calendario de publicación y tabla del plan con las columnas de la hoja del
@@ -57,6 +38,8 @@ export function EditorialPlan({
   filterable = false,
   showPast = false,
   after,
+  edit,
+  exportHref,
 }: {
   pieces: EditorialPlanRow[];
   caption: string;
@@ -70,6 +53,10 @@ export function EditorialPlan({
   showPast?: boolean;
   /** Contenido debajo de la tabla (temas del plan general). */
   after?: ReactNode;
+  /** Estado y fecha de publicación editables en la tabla (D-067); sin él, solo lectura. */
+  edit?: PieceEditAction;
+  /** Ruta del Excel del plan; la tabla le añade búsqueda y filtros activos. */
+  exportHref?: string;
 }) {
   const piecesByMonth: Record<string, string[]> = {};
   for (const item of calendarPieces) if (item.month) (piecesByMonth[item.month] ??= []).push(item.title ?? item.id);
@@ -78,7 +65,7 @@ export function EditorialPlan({
   const currentMonth = today.slice(0, 7);
   const upcoming = pieces
     .filter((item) => showPast || !item.month || item.month >= currentMonth)
-    .sort((a, b) => (a.month ?? "9999").localeCompare(b.month ?? "9999") || (a.publicationDate ?? "9999").localeCompare(b.publicationDate ?? "9999"));
+    .sort(sortPlanRows);
   const earlier = pieces.length - upcoming.length;
   const options = (pickValue: (row: EditorialPlanRow) => string | null, label: (value: string) => string = (value) => value) =>
     [...new Set(upcoming.map(pickValue).filter((value): value is string => Boolean(value)))]
@@ -102,8 +89,9 @@ export function EditorialPlan({
         id="editorial"
         caption={caption}
         searchPlaceholder={filterable ? "Buscar en el plan…" : "Buscar pieza, marca, keyword, URL o brief…"}
-        columns={EDITORIAL_COLUMNS}
+        columns={[...EDITORIAL_COLUMNS]}
         filters={filters}
+        exportHref={exportHref}
         rows={upcoming.map((item) =>
           row(
             item.id,
@@ -123,9 +111,18 @@ export function EditorialPlan({
               brief: item.brief,
             },
             {
-              status: <span className={`plan-status is-${statusTone(item.status)}`}>{item.status}</span>,
+              status: (
+                <span className="plan-status-cell">
+                  {edit ? <StatusEditor pieceId={item.id} value={item.statusKey} label={item.title ?? item.keyword ?? item.id} action={edit} /> : <span className={`plan-status is-${statusTone(item.statusKey)}`}>{item.status}</span>}
+                  {item.pending ? (
+                    <span className="plan-pending" title={`Cambio en el visor de ${item.pending.actor} (${when(item.pending.createdAt)}), pendiente de sincronizar con el workbench`}>
+                      <span className="ds-sr-only">Pendiente de sincronizar</span>
+                    </span>
+                  ) : null}
+                </span>
+              ),
               writingDate: shortDate(item.writingDate),
-              publicationDate: shortDate(item.publicationDate),
+              publicationDate: edit ? <PublicationDateEditor pieceId={item.id} value={item.publicationDate} label={item.title ?? item.keyword ?? item.id} action={edit} /> : shortDate(item.publicationDate),
               brand: item.brandColor ? (
                 <span className="plan-brand" style={{ "--brand-color": item.brandColor } as CSSProperties}>
                   {item.brand}
