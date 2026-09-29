@@ -1,17 +1,26 @@
 # Checkpoint operativo — SEO Dashboard V2
 
-Última actualización: 29 de septiembre de 2026 (workbench: Informes, aspecto del visor, roadmap rehecho, D-076…D-080).
+Última actualización: 29 de septiembre de 2026 (archivo de informes congelados y exportación HTML/CSV, D-081).
 
 ## Reanudar aquí · plan de hitos (D-078)
 
-- Hechos en esta sesión, **en main (0f555ae) y en GitHub, sin desplegar**: H1 Informes del workbench (D-076), H2 shell
+- En main (0f555ae) y en GitHub, **sin desplegar**: H1 Informes del workbench (D-076), H2 shell
   del visor en el workbench (D-077), H3 axe AA (D-078), H4 medición editorial real (D-079), H5
-  diferencias entre crawls (D-080). D-075 (resumen ejecutivo del informe) sigue también sin subir.
-- **Siguiente: H6.** `vercel deploy --prod` cuando el usuario lo confirme. Entra en el commit: `packages/reports` (código y
-  `data/published/` con 2026-Q2 de Porcelanosa, Noken y XTONE),
-  `packages/editorial/data/measurement/`, el workbench rehecho y los cambios del visor.
-- Después: H11 (archivo `/reports` con los informes congelados y exportación HTML autocontenida)
-  o H10 (bandeja de decisiones P4 sobre informes, crawl y medición). Bloqueados por el
+  diferencias entre crawls (D-080) y D-075 (resumen ejecutivo del informe).
+- **Hecho, en main y en GitHub, sin desplegar: H11 (D-081).** `/reports` abre con «Informes
+  congelados» (enlaces a presentación, PDF, HTML y CSV) y exporta cada versión como HTML
+  autocontenido y CSV con sello. Ficheros: `packages/reports/src/archive.ts`,
+  `export.ts` (+ `archive.test.ts`), `apps/viewer/lib/frozen-reports.ts`,
+  `lib/frozen-report-html.tsx`, `lib/brand-logos.ts`, `components/report/deck-document.tsx`
+  (cuerpo estático; `project-deck.tsx` es ahora el envoltorio con mandos),
+  `app/api/v1/reports/frozen/[brand]/[period]/route.ts`, `vitest.config.ts` de las dos apps.
+- **Siguiente: H6.** `vercel deploy --prod` cuando el usuario lo confirme.
+  Entra: `packages/reports` (código y `data/published/` con 2026-Q2 de Porcelanosa, Noken y
+  XTONE), `packages/editorial/data/measurement/`, el workbench rehecho y los cambios del visor.
+  Tras desplegar, comprobar en producción una descarga HTML (el trazado de CSS y logos solo se ha
+  verificado en el build local).
+- Después: H10 (bandeja de decisiones P4 sobre informes, crawl y medición). Pendiente menor de
+  P7: sello de usuario y confidencialidad en el PDF por impresión. Bloqueados por el
   responsable: H7 Neon + `DATABASE_URL`, H8 aceptación P2, H9 SEMrush.
 
 ## Informes en el workbench · D-076 (2026-09-29, sin commit)

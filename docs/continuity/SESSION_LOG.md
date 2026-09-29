@@ -1083,3 +1083,19 @@
 - Verificación: typecheck (12 tareas), pruebas de todos los paquetes en verde, build de producción
   del visor (incluye snapshots y medición en el trazado) y del workbench, axe en 78 páginas.
 - Commit 0f555ae en main y subido a GitHub a petición del usuario; sin desplegar en Vercel.
+
+## 2026-09-29 · Archivo de informes congelados y exportación HTML/CSV (H11, D-081)
+
+- H6 (despliegue) sigue esperando confirmación del usuario; se avanza H11.
+- `/reports` del visor abre con los informes congelados reales (3 de 2026-Q2) con corte, autor,
+  puntualizaciones, contrato y huella, filtros por marca/periodo/año y enlaces a presentación, PDF,
+  HTML y CSV. El archivo sintético de P2.3 queda debajo, rotulado como ejemplo.
+- Exportación HTML autocontenida (estilos y logo incrustados, sin JavaScript) y CSV por apartado,
+  los dos con sello de usuario, fecha, versión, huella y confidencialidad. El deck se separa en
+  `DeckDocument` (estático) y `ProjectDeck` (mandos).
+- Verificación: 30 pruebas de reports (6 nuevas), 127 del visor, typecheck, build de producción del
+  visor con trazado de CSS/logos, axe del visor (solo la excepción aceptada de D-045), página en
+  1440 y 375 px sin desbordamiento, HTML de XTONE abierto sin servidor y PDF de 10 páginas.
+- Arreglo lateral: vitest de las apps excluye `.next/**` (el build standalone copiaba las pruebas).
+- Enlace «Presentación» explícito en cada informe congelado de `/reports`, a petición del usuario.
+- Commit en main y subido a GitHub a petición del usuario; sin desplegar en Vercel.

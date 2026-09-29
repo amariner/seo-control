@@ -8,6 +8,8 @@ export * from "./schema";
 export * from "./curate";
 export * from "./parse";
 export * from "./project-report";
+export * from "./archive";
+export * from "./export";
 
 /**
  * Diapositivas de un informe con las puntualizaciones del equipo (D-076).

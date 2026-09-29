@@ -1,5 +1,6 @@
 import { Fragment, type ReactNode } from "react";
 import Link from "next/link";
+import { BRAND_LOGOS } from "@/lib/brand-logos";
 import {
   ArrowUpRight,
   Database,
@@ -900,10 +901,7 @@ export function BrandReportControls({
   );
 }
 
-/** Logotipos oficiales facilitados por cada marca (`public/brands`). Sin logo, el título es el nombre. */
-export const BRAND_LOGOS: Partial<Record<string, string>> = {
-  xtone: "/brands/xtone.svg",
-};
+export { BRAND_LOGOS };
 
 /** Vista compartida de datos por marca. Los diagnósticos automáticos se conservan en el contrato, pero no se publican aquí. */
 export function BrandReportView({

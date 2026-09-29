@@ -10,7 +10,9 @@
     "./published": "./src/published.ts",
     "./store": "./src/store.ts",
     "./generate": "./src/generate.ts",
-    "./measure": "./src/measure.ts"
+    "./measure": "./src/measure.ts",
+    "./archive": "./src/archive.ts",
+    "./export": "./src/export.ts"
   },
   "scripts": {
     "build": "tsc --noEmit",

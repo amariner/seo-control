@@ -50,6 +50,7 @@ const APPS = {
       { name: "reports", path: "/reports" },
       { name: "reports-filtrado", path: "/reports?year=2025&type=especial" },
       { name: "reports-vacio", path: "/reports?status=borrador" },
+      { name: "reports-congelados", path: "/reports?marca=xtone&periodo=quarter" },
       { name: "report-detail", path: "/reports/report-2026-08" },
       { name: "report-versionado", path: "/reports/report-2026-06" },
       { name: "legacy-geo", path: "/insights?from=insights-llm" },

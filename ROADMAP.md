@@ -76,8 +76,8 @@ ejecutar sin credenciales ni presupuesto nuevos.
 | H7 | Neon Frankfurt y `DATABASE_URL`: edición del plan en producción y base de P3.1 | P3.1 | el responsable crea la cuenta y acepta términos | bloqueado |
 | H8 | Sesión de aceptación P2: cinco flujos, dos retiradas y cuatro rutas «missing» | P2.4 | responsable SEO | bloqueado |
 | H9 | SEMrush en V2: ranking estable, competidores y SOV semanales | P3.3 | decisión de coste de unidades API | bloqueado |
-| H10 | Bandeja de decisiones P4 alimentada por informes, crawl y medición editorial | P4 | H4 | siguiente tras H4 |
-| H11 | Archivo `/reports` con los informes congelados y exportación HTML autocontenida | P7 | H1 | siguiente |
+| H10 | Bandeja de decisiones P4 alimentada por informes, crawl y medición editorial | P4 | H4 | siguiente |
+| H11 | Archivo `/reports` con los informes congelados y exportación HTML autocontenida | P7 | H1 | **hecho** (D-081): archivo real, HTML sin conexión y CSV con sello |
 
 Regla: un hito «hecho» cita su decisión y su verificación; uno bloqueado nombra quién
 lo desbloquea. Los hitos no sustituyen a los criterios de fase: los marcan cuando los
@@ -545,7 +545,9 @@ Objetivo: crear, revisar, aprobar, publicar y exportar una narrativa inmutable y
       Versión congelada con autor, fecha, corte, contrato y huella (D-076); faltan fe
       de erratas y promoción con aprobación.
 - [~] PDF/CSV al vuelo con usuario, fecha, versión y confidencialidad. PDF con fecha,
-      corte y versión congelada (D-073, D-076); faltan usuario, confidencialidad y CSV.
+      corte y versión congelada (D-073, D-076); HTML autocontenido y CSV de las versiones
+      congeladas con usuario, fecha, versión, huella y confidencialidad (D-081); falta el sello
+      de usuario y confidencialidad en el PDF por impresión.
 
 #### Criterios de salida P7
 

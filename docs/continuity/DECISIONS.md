@@ -2070,3 +2070,29 @@ No se reescriben decisiones antiguas. Si una cambia, se añade una nueva entrada
   (`@seo/site-audit/diff`). Solo se comparan las URL rastreadas en los dos: una URL ausente en uno
   (por el tope o el recorrido) no se da por corregida ni por rota, y sus incidencias se cuentan
   aparte como «en URL nuevas». No se publica en el visor.
+
+## D-081 · Archivo de informes congelados y exportación HTML/CSV
+
+- Fecha: 2026-09-29.
+- Estado: vigente (H11, adelanta parte de P7).
+- Decisión: `/reports` del visor abre con «Informes congelados», que sale solo del índice publicado
+  por el workbench (`buildFrozenArchive` en `@seo/reports/archive`): marca, periodo, corte, quién y
+  cuándo congeló, puntualizaciones, contrato (vigente o anterior) y huella. Filtros por marca, tipo
+  de periodo y año (`marca`, `periodo`, `anio`), que conviven con los del archivo sintético sin
+  pisarse. El archivo sintético de P2.3 queda debajo como «Archivo de ejemplo», rotulado.
+  - Una entrada existe solo si hay versión congelada: las puntualizaciones sin versión se aplican
+    al informe en vivo y no son archivo.
+  - Exportación en `/api/v1/reports/frozen/<marca>/<periodo>?format=html|csv`, solo de versiones
+    congeladas (un informe en vivo no tiene huella que citar). El HTML es autocontenido: el mismo
+    `DeckDocument` que la presentación (portada y diapositivas separadas de los mandos de cliente),
+    con `tokens.css`, `project-deck.css` y el logotipo incrustados y sin JavaScript; imprime igual
+    que la presentación. El CSV da cifras (con las dos comparaciones) y tablas por apartado.
+  - Los dos llevan el mismo sello: confidencialidad, informe, usuario de la sesión, fecha de
+    exportación, versión congelada (fecha y autor), corte, contrato y huella SHA-256. Lo que el
+    equipo ocultó en el workbench tampoco se exporta. El nombre de fichero lleva la huella corta.
+  - El CSV neutraliza fórmulas (celdas que empiezan por `=`, `@` o por `+`/`-` sin cifra detrás)
+    sin estropear variaciones como «+12 %».
+  - `react-dom/server` se carga con import dinámico en la ruta; CSS y logotipos entran en el trazado
+    del despliegue por `outputFileTracingIncludes`.
+- Vitest de las dos apps excluye `.next/**`: el build `standalone` copia allí las pruebas y hacía
+  fallar `pnpm test` tras un build local.

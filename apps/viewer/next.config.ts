@@ -11,9 +11,13 @@ const nextConfig: NextConfig = {
   /* Monorepo: el trazado de ficheros parte de la raíz para incluir los paquetes
      del workspace. La curación editorial se lee de disco en tiempo de ejecución
      y el trazado estático no la ve, así que se declara (ver curation-store.ts).
-     Igual con las versiones congeladas de los informes (D-076, reports/src/files.ts). */
+     Igual con las versiones congeladas de los informes (D-076, reports/src/files.ts)
+     y con el CSS y los logotipos que incrusta la exportación HTML (H11, lib/frozen-reports.ts). */
   outputFileTracingRoot: resolve(process.cwd(), "../.."),
-  outputFileTracingIncludes: { "/**": ["../../packages/editorial/data/curation/**", "../../packages/editorial/data/measurement/**", "../../packages/reports/data/published/**"] },
+  outputFileTracingIncludes: {
+    "/**": ["../../packages/editorial/data/curation/**", "../../packages/editorial/data/measurement/**", "../../packages/reports/data/published/**"],
+    "/api/v1/reports/frozen/**": ["../../packages/ui/src/tokens.css", "./components/report/project-deck.css", "./public/brands/**"],
+  },
   serverExternalPackages: ["postgres"],
   experimental: {
     optimizePackageImports: ["lucide-react", "echarts"],
