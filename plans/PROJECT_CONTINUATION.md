@@ -4,11 +4,10 @@
 
 ## Reanudar aquí · plan de hitos (D-078)
 
-- Hechos en esta sesión, **sin commit ni despliegue**: H1 Informes del workbench (D-076), H2 shell
+- Hechos en esta sesión, **en main (0f555ae) y en GitHub, sin desplegar**: H1 Informes del workbench (D-076), H2 shell
   del visor en el workbench (D-077), H3 axe AA (D-078), H4 medición editorial real (D-079), H5
   diferencias entre crawls (D-080). D-075 (resumen ejecutivo del informe) sigue también sin subir.
-- **Siguiente: H6.** Revisar con el usuario, commit (sin `informes-adicionales/`) y
-  `vercel deploy --prod`. Entra en el commit: `packages/reports` (código y
+- **Siguiente: H6.** `vercel deploy --prod` cuando el usuario lo confirme. Entra en el commit: `packages/reports` (código y
   `data/published/` con 2026-Q2 de Porcelanosa, Noken y XTONE),
   `packages/editorial/data/measurement/`, el workbench rehecho y los cambios del visor.
 - Después: H11 (archivo `/reports` con los informes congelados y exportación HTML autocontenida)

@@ -1082,4 +1082,4 @@
   recorrido, 0 corregidas y 2 nuevas «respuesta > 1,5 s» (tiempo medido en local, orientativo).
 - Verificación: typecheck (12 tareas), pruebas de todos los paquetes en verde, build de producción
   del visor (incluye snapshots y medición en el trazado) y del workbench, axe en 78 páginas.
-- Sin commit ni despliegue: D-075…D-080 esperan confirmación del usuario.
+- Commit 0f555ae en main y subido a GitHub a petición del usuario; sin desplegar en Vercel.
