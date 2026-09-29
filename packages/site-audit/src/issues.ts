@@ -71,7 +71,7 @@ export const CHECKS: Check[] = [
   { id: "html_heavy", label: "HTML de más de 500 KB", severity: "baja", category: "rendimiento", description: "Un HTML muy pesado retrasa el renderizado y el rastreo.", test: (p) => html(p) && p.bytes > THRESHOLDS.heavyBytes },
 ];
 
-const SEVERITY_ORDER: Record<SiteAuditSeverity, number> = { critica: 0, alta: 1, media: 2, baja: 3 };
+export const SEVERITY_ORDER: Record<SiteAuditSeverity, number> = { critica: 0, alta: 1, media: 2, baja: 3 };
 
 export type AuditResult = {
   /** Incidencias por URL, en el orden del catálogo. */

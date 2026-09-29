@@ -8,7 +8,7 @@ import {
   type DuplicateCell,
   type PageDuplicate,
   type PageTrend,
-} from "@/lib/page-analysis";
+} from "@seo/reports/page-analysis";
 import { REPORT_DATA_FILTER_EVENT } from "./data-table";
 
 /**

@@ -6,7 +6,7 @@ import { listRuns } from "@seo/site-audit/runs";
 import { Notice } from "@seo/ui";
 import { WorkbenchFrame } from "@/components/workbench-frame";
 
-export const metadata: Metadata = { title: "Crawls · Workbench" };
+export const metadata: Metadata = { title: "Crawls" };
 export const dynamic = "force-dynamic";
 
 const STATUS = { running: "En curso", complete: "Completo", stopped: "Detenido", failed: "Fallido" } as const;
@@ -22,7 +22,7 @@ export default async function CrawlsPage() {
   const disk = await diskPreflight(process.cwd());
 
   return (
-    <WorkbenchFrame eyebrow="Workbench · Técnico" title="Crawls" description="SEO on-page de las URL principales de cada proyecto. Aquí se consulta el crawl completo, URL a URL; al visor solo llega el resumen del estado del sitio." subtitle="Crawls" current="/crawls">
+    <WorkbenchFrame eyebrow="Workbench · Técnico" title="Crawls" description="SEO on-page de las URL principales de cada proyecto. Aquí se consulta el crawl completo, URL a URL; al visor solo llega el resumen del estado del sitio.">
       <p className="tool-note crawl-howto">
         Los crawls se lanzan desde el chat de Claude Code («lanza un crawl de XTONE», «crawl de 500 URL de noken.com»), que ejecuta <code>pnpm crawl</code> como proceso aparte. Recorre en anchura desde la portada, respeta robots.txt y hace 2 peticiones a la vez con pausa. Hasta {SMALL_CRAWL_MAX_URLS.toLocaleString("es-ES")} URL basta con 3 GiB libres; más exige 50 GiB (ahora hay {disk.freeGiB} GiB).
       </p>

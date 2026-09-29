@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { SITE_AUDIT_LIMITS } from "@seo/contracts";
 import type { CrawledPage, CrawlRun } from "./crawler";
+import { diffRuns } from "./diff";
 import { urlReport, urlRows } from "./explore";
 import { auditRun, isIndexable } from "./issues";
 import { parsePage } from "./parse";
@@ -172,5 +173,27 @@ describe("exploración URL a URL (D-071)", () => {
     expect(report.outlinks.find((link) => link.url === "https://e.com/otra/")).toMatchObject({ status: 404, crawled: true });
     expect(report.redirectedFrom).toEqual(["https://e.com/nf/"]);
     expect(urlReport(crawl, "https://e.com/no-existe/")).toBeNull();
+  });
+});
+
+describe("diferencias entre crawls (D-080)", () => {
+  it("separa lo corregido, lo nuevo y lo que no se puede comparar", () => {
+    const before = run([
+      page("https://e.com/"),
+      page("https://e.com/rota/", { status: 404 }),
+      page("https://e.com/fuera/"),
+    ]);
+    const after = { ...run([
+      page("https://e.com/"),
+      page("https://e.com/rota/"),
+      page("https://e.com/nueva/", { status: 404 }),
+    ]), runId: "test-2", startedAt: "2026-10-05T10:00:00.000Z" };
+    const diff = diffRuns(before, after);
+    expect(diff.urls).toMatchObject({ common: 2, added: ["https://e.com/nueva/"], removed: ["https://e.com/fuera/"] });
+    const http = diff.issues.find((issue) => issue.id === "http_4xx")!;
+    // /rota/ se corrige; /nueva/ falla, pero no estaba antes: cuenta como URL nueva, no como rotura.
+    expect(http).toMatchObject({ before: 1, after: 1, fixed: ["https://e.com/rota/"], introduced: [], inNewUrls: 1 });
+    expect(diff.totals.severeFixed).toBe(1);
+    expect(diff.changes.find((change) => change.field === "status")).toMatchObject({ url: "https://e.com/rota/", before: "404", after: "200" });
   });
 });

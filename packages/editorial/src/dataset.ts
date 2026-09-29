@@ -2,6 +2,7 @@ import { editorialDatasetSchema, type EditorialDataset } from "@seo/contracts";
 import normalized from "../data/normalized/editorial-dataset.json";
 import { applyCuration } from "./curation";
 import { readCurationStore } from "./curation-store";
+import { applyMeasurements, readMeasurementStore } from "./measurement-store";
 
 /**
  * Dataset editorial normalizado, validado una sola vez por proceso.
@@ -26,5 +27,6 @@ export function getEditorialDataset(): EditorialDataset {
  * La curación se relee de disco en cada llamada porque cambia en caliente.
  */
 export function getEffectiveEditorialDataset(): EditorialDataset {
-  return applyCuration(getEditorialDataset(), readCurationStore());
+  // Con la medición real de las piezas publicadas (P3.5, D-079), si existe.
+  return applyMeasurements(applyCuration(getEditorialDataset(), readCurationStore()), readMeasurementStore());
 }

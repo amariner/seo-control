@@ -18,11 +18,11 @@ import {
 } from "@seo/contracts";
 import { DataPanel, Notice, StatusBadge } from "@seo/ui";
 import { ReportDataTable, type ReportDataRow } from "@seo/ui/data-table";
-import { WorkbenchNav } from "@/components/workbench-frame";
+import { WorkbenchFrame } from "@/components/workbench-frame";
 import { brandLabel, candidatesForEvent, findPiece, getDataset, listPieces, pieceCurationRecord, type PieceListFilters } from "@/lib/editorial";
 import { createPiece, linkEvent, selectProposal, savePieceCuration } from "./actions";
 
-export const metadata: Metadata = { title: "Curación editorial · Workbench" };
+export const metadata: Metadata = { title: "Curación editorial" };
 
 type SearchInput = Record<string, string | string[] | undefined>;
 type Section = "piezas" | "propuestas" | "eventos";
@@ -43,22 +43,11 @@ export default async function EditorialCurationPage({ searchParams }: { searchPa
   const dataset = getDataset();
 
   return (
-    <div className="wb-shell">
-      <a href="#contenido" className="ds-skip-link">Ir al contenido</a>
-      <header className="wb-top">
-        <div className="wb-brand"><span className="wb-mark">P</span><div><strong>SEO Workbench</strong><span>Curación editorial</span></div></div>
-        <WorkbenchNav current="/editorial" />
-        <span className="local-pill">Entorno local</span>
-      </header>
-      <main className="wb-main" id="contenido">
-        <header className="wb-heading">
-          <div>
-            <p className="eyebrow">Workbench · Editorial</p>
-            <h1>Curación editorial</h1>
-            <p className="lede">Edita piezas, selecciona propuestas y vincula publicaciones. Cada cambio guarda una versión.</p>
-          </div>
-        </header>
-
+    <WorkbenchFrame
+      eyebrow="Workbench · Editorial"
+      title="Curación editorial"
+      description="Edita piezas, selecciona propuestas y vincula publicaciones. Cada cambio guarda una versión."
+    >
         {saved ? <Notice tone="info">Versión guardada. Disponible en la próxima carga del visor.</Notice> : null}
 
         <nav className="ed-tabs" aria-label="Secciones de curación">
@@ -70,8 +59,7 @@ export default async function EditorialCurationPage({ searchParams }: { searchPa
         {section === "piezas" ? <PiezasSection input={input} /> : null}
         {section === "propuestas" ? <PropuestasSection dataset={dataset} /> : null}
         {section === "eventos" ? <EventosSection dataset={dataset} /> : null}
-      </main>
-    </div>
+    </WorkbenchFrame>
   );
 }
 

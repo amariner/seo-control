@@ -1,66 +1,32 @@
-import Link from "next/link";
 import type { ReactNode } from "react";
+import { WorkbenchShell } from "./workbench-shell";
 
 /**
- * Cabecera y navegación del workbench.
- *
- * Se extrae al añadir la tercera sección (P2.3): con dos páginas la lista de
- * enlaces duplicada era tolerable; con tres, cada nueva sección obligaría a
- * tocar todos los ficheros y alguno se quedaría sin el enlace.
+ * Marco de página del workbench (D-077): shell del visor (barra lateral,
+ * cabecera fija) y la misma cabecera de página que el visor (D-049): «Título │
+ * ámbito» en una línea, descripción gris debajo y contexto a la derecha.
+ * El destino activo lo deduce la barra lateral de la ruta.
  */
-const SECTIONS = [
-  { href: "/", label: "Preparación" },
-  { href: "/editorial/plan", label: "Plan editorial" },
-  { href: "/editorial", label: "Curación" },
-  { href: "/crawls", label: "Crawls" },
-  { href: "/herramientas", label: "Herramientas" },
-] as const;
-
-export type WorkbenchSection = (typeof SECTIONS)[number]["href"];
-
-export function WorkbenchNav({ current }: { current: WorkbenchSection }) {
-  return (
-    <nav className="wb-nav" aria-label="Secciones del workbench">
-      {SECTIONS.map((section) => (
-        <Link
-          key={section.href}
-          href={section.href}
-          aria-current={section.href === current ? "page" : undefined}
-        >
-          {section.label}
-        </Link>
-      ))}
-    </nav>
-  );
-}
-
 export function WorkbenchFrame({
   eyebrow,
   title,
   description,
-  subtitle = "Utilidades locales",
-  current = "/herramientas",
+  crumb,
   aside,
   children,
 }: {
   eyebrow: string;
   title: string;
   description: string;
-  subtitle?: string;
-  current?: WorkbenchSection;
+  /** Último nivel de la ruta de la cabecera en las fichas de detalle. */
+  crumb?: string;
   aside?: ReactNode;
   children: ReactNode;
 }) {
   return (
-    <div className="wb-shell">
-      <a href="#contenido" className="ds-skip-link">Ir al contenido</a>
-      <header className="wb-top">
-        <div className="wb-brand"><span className="wb-mark">P</span><div><strong>SEO Workbench</strong><span>{subtitle}</span></div></div>
-        <WorkbenchNav current={current} />
-        <span className="local-pill">Entorno local</span>
-      </header>
-      <main className="wb-main" id="contenido">
-        <header className="wb-heading">
+    <WorkbenchShell crumb={crumb} viewerUrl={process.env.VIEWER_URL ?? "http://localhost:3000"}>
+      <main className="page wb-page" id="contenido">
+        <header className="page-heading">
           <div>
             <p className="eyebrow">{eyebrow}</p>
             <h1>{title}</h1>
@@ -70,6 +36,6 @@ export function WorkbenchFrame({
         </header>
         {children}
       </main>
-    </div>
+    </WorkbenchShell>
   );
 }

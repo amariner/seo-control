@@ -1,5 +1,6 @@
 import { BRAND_REPORT_VERSION, type BrandSlug, type BrandReport } from "@seo/contracts";
 import { fromPlanSheet as sheetFor, generalCalendar, generalPlanRows } from "@seo/editorial-ui";
+import { editorialTargetsOf } from "@seo/reports/generate";
 import { resolveRepository } from "@seo/repository";
 import { getEditorial, getLiveEditorial } from "./editorial";
 import { cachedLive } from "./live-cache";
@@ -30,25 +31,9 @@ export function reportFilters(input: ReportSearch) {
 /** La marca toma su plan de la hoja «Plan editorial» del equipo (D-050). */
 const fromPlanSheet = (slug: BrandSlug) => sheetFor(getEditorial(), slug);
 
-/**
- * Piezas de la marca con la búsqueda objetivo que se cruzará con Google. Si la
- * marca tiene hoja de plan (D-050), la hoja es el plan completo; si no, plan y
- * backlog V1 como hasta ahora.
- */
+/** Piezas de la marca con la búsqueda objetivo que se cruzará con Google (compartido con el workbench, D-076). */
 export function editorialTargets(slug: BrandSlug) {
-  const dataset = getEditorial();
-  const sheet = fromPlanSheet(slug);
-  return (sheet ? dataset.plan : [...dataset.plan, ...dataset.backlog])
-    .filter((piece) => piece.brand.slug === slug)
-    .map((piece) => ({
-      id: piece.id,
-      month: piece.month ? `${piece.month.year}-${String(piece.month.month).padStart(2, "0")}` : null,
-      title: piece.title ?? piece.keyword ?? "Pieza sin título",
-      type: piece.typeLiteral || piece.type,
-      status: piece.statusLiteral || piece.status,
-      keyword: piece.keyword,
-      current: sheet,
-    }));
+  return editorialTargetsOf(getEditorial(), slug);
 }
 
 export type { EditorialPlanRow } from "@seo/editorial-ui";

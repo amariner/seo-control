@@ -10,9 +10,10 @@ const nextConfig: NextConfig = {
   output: process.env.VERCEL ? undefined : "standalone",
   /* Monorepo: el trazado de ficheros parte de la raíz para incluir los paquetes
      del workspace. La curación editorial se lee de disco en tiempo de ejecución
-     y el trazado estático no la ve, así que se declara (ver curation-store.ts). */
+     y el trazado estático no la ve, así que se declara (ver curation-store.ts).
+     Igual con las versiones congeladas de los informes (D-076, reports/src/files.ts). */
   outputFileTracingRoot: resolve(process.cwd(), "../.."),
-  outputFileTracingIncludes: { "/**": ["../../packages/editorial/data/curation/**"] },
+  outputFileTracingIncludes: { "/**": ["../../packages/editorial/data/curation/**", "../../packages/editorial/data/measurement/**", "../../packages/reports/data/published/**"] },
   serverExternalPackages: ["postgres"],
   experimental: {
     optimizePackageImports: ["lucide-react", "echarts"],

@@ -20,7 +20,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { SidebarTrigger } from "@/components/ui/sidebar";
+import { SidebarTrigger, useSidebar } from "@/components/ui/sidebar";
 import { cn } from "@/lib/utils";
 import { useRestoreMenuFocus } from "./app-sidebar";
 import { RealtimeVisitors } from "./realtime-visitors";
@@ -39,6 +39,8 @@ export function SiteHeader({
   searchTrigger: React.Ref<HTMLButtonElement>;
 }) {
   useRestoreMenuFocus();
+  const { isMobile, openMobile } = useSidebar();
+  const menuTarget = !isMobile || openMobile;
   const header = useRef<HTMLElement>(null);
   /* Las pestañas fijas y el panel de detalle se colocan bajo la cabecera, cuya
      altura cambia cuando los filtros pasan a una segunda fila. */
@@ -81,7 +83,10 @@ export function SiteHeader({
         <SidebarTrigger
           className="-ml-3 size-10"
           aria-label="Abrir o cerrar menú"
-          aria-controls="navegacion-principal"
+          /* En móvil la navegación vive en una hoja que no existe cerrada:
+             apuntar a ella sería un id roto (axe aria-valid-attr-value). */
+          aria-controls={menuTarget ? "navegacion-principal" : undefined}
+          aria-expanded={isMobile ? openMobile : undefined}
         />
       </div>
       <div

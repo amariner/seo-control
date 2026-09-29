@@ -1,6 +1,6 @@
 # SEO Dashboard V2 — roadmap vivo de desarrollo
 
-Última actualización: 7 de septiembre de 2026.
+Última actualización: 29 de septiembre de 2026 (roadmap rehecho, D-078).
 
 ## Norte de producto
 
@@ -44,17 +44,44 @@ resultado de criterios terminados, nunca una estimación subjetiva.
 | --- | --- | --- |
 | P0 | Fundación ejecutable y continuidad entre chats | **complete** |
 | P1 | Sistema visual compartido + calendario editorial general | **complete** |
-| P2 | Paridad crítica verificada con SEO Dashboard V1 | **blocked** |
-| P3 | Datos reales fiables para Porcelanosa + Noken | **active** |
+| P2 | Paridad crítica verificada con SEO Dashboard V1 | **blocked** (79 %, decisiones del responsable) |
+| P3 | Datos reales fiables para el piloto (Porcelanosa, Noken, XTONE) | **active** |
 | P4 | Sistema operativo de decisiones y acciones | planned |
-| P5 | Inteligencia técnica, monitorización y prevención | planned |
+| P5 | Inteligencia técnica, monitorización y prevención | planned · adelantado: crawl local y «Estado del sitio» (D-070, D-071) |
 | P6 | Demanda, contenido, competencia y enlazado editorial | planned |
-| P7 | Informes ejecutivos, aprobación y exportaciones | planned |
+| P7 | Informes ejecutivos, aprobación y exportaciones | planned · adelantado: informe por proyecto, PDF, versiones congeladas y puntualizaciones (D-073…D-076) |
 | P8 | GEO/AEO y visibilidad en asistentes | planned |
 | P9 | Impacto, forecast y experimentación | planned |
-| P10 | Seguridad empresarial, rendimiento y despliegue cloud | planned |
+| P10 | Seguridad empresarial, rendimiento y despliegue cloud | planned · adelantado: login Google y bloqueo de bots (D-047, D-048) |
 | P11 | Piloto aceptado, expansión y retirada controlada de V1 | planned |
 | P12 | Diferenciación sectorial y automatización controlada | planned |
+
+## Plan de hitos · rehecho el 2026-09-29 (D-078)
+
+El roadmap por fases sigue siendo el contrato de salida; esta lista es el **orden de
+ejecución** a corto plazo. Desde el 7 de septiembre el producto ha avanzado por
+verticales pedidos por el usuario (lectura directa de GA4/GSC, informe de marca, plan
+editorial compartido, crawl local, informes), que adelantan partes de P5, P7 y P10 sin
+cerrarlas. Los hitos se ordenan por valor para gerente y equipo SEO y por si se pueden
+ejecutar sin credenciales ni presupuesto nuevos.
+
+| Hito | Qué entrega | Fase | Depende de | Estado |
+| --- | --- | --- | --- | --- |
+| H1 | Pestaña «Informes» del workbench: versiones congeladas de los trimestres, puntualizaciones por informe, sincronización con preview e informes adicionales solo en local | P7 | — | **hecho** (D-076) |
+| H2 | Workbench con el shell y el aspecto del visor; portada «Inicio» con lo pendiente de subir | P1 | — | **hecho** (D-077) |
+| H3 | Calidad: axe en visor y workbench (incluidas las pantallas nuevas) y corrección de incidencias | P10 | — | **hecho** (D-078): 0 incumplimientos WCAG salvo la excepción aceptada de D-045 |
+| H4 | Medición editorial real: ventanas de 28, 90 y 180 días por pieza publicada con Search Console | P3.5 | credenciales de lectura locales (ya disponibles) | **hecho** (D-079) |
+| H5 | Histórico y diff entre crawls de un proyecto | P5 | crawls locales | **hecho** (D-080) |
+| H6 | Llevar a producción D-070…D-077 (commit y `vercel deploy --prod`) | — | confirmación del usuario | pendiente |
+| H7 | Neon Frankfurt y `DATABASE_URL`: edición del plan en producción y base de P3.1 | P3.1 | el responsable crea la cuenta y acepta términos | bloqueado |
+| H8 | Sesión de aceptación P2: cinco flujos, dos retiradas y cuatro rutas «missing» | P2.4 | responsable SEO | bloqueado |
+| H9 | SEMrush en V2: ranking estable, competidores y SOV semanales | P3.3 | decisión de coste de unidades API | bloqueado |
+| H10 | Bandeja de decisiones P4 alimentada por informes, crawl y medición editorial | P4 | H4 | siguiente tras H4 |
+| H11 | Archivo `/reports` con los informes congelados y exportación HTML autocontenida | P7 | H1 | siguiente |
+
+Regla: un hito «hecho» cita su decisión y su verificación; uno bloqueado nombra quién
+lo desbloquea. Los hitos no sustituyen a los criterios de fase: los marcan cuando los
+cumplen.
 
 ## P0 · Fundación ejecutable y continuidad
 
@@ -302,7 +329,7 @@ responsable SEO.
 
 ## P3 · Plataforma de datos reales del piloto
 
-Estado: **active** (25%). Se activó porque `P2` agotó su trabajo de desarrollo y
+Estado: **active** (31 %, 5 de 16 criterios; D-079 cierra el primero de P3.5). Se activó porque `P2` agotó su trabajo de desarrollo y
 porque `P3` es, además, lo que desbloquea dos de sus criterios: la reconciliación
 de GA4 y GSC exige este almacén (D-027). 4 de los 16 criterios de la fase están
 terminados, los cuatro que **no** dependían de credenciales: el adapter de
@@ -401,10 +428,15 @@ reconciliados y consultables con baja latencia para Porcelanosa + Noken.
 Criterios que P1 modeló pero no pudo cerrar por falta de fuente real. No se
 reinterpretan: se cumplen aquí con el mismo alcance con que se escribieron.
 
-- [ ] Rellenar las ventanas de 28, 90 y 180 días de cada pieza editorial con
+- [x] Rellenar las ventanas de 28, 90 y 180 días de cada pieza editorial con
   medición real, conservando cobertura, corte y confianza. El contrato
   (`editorialMeasurementSchema`) y la presentación del pendiente ya existen
-  desde P1.2/P1.4; aquí solo entra el dato.
+  desde P1.2/P1.4; aquí solo entra el dato. **Hecho el 2026-09-29 (D-079)**:
+  cada pieza publicada de las marcas con Search Console se mide por su URL
+  exacta (o su keyword) frente a la misma ventana antes de publicar, con corte,
+  días cubiertos, alcance y confianza; «Resultado de lo publicado» en el plan del
+  visor, del workbench y en el informe. Se guarda en fichero
+  (`packages/editorial/data/measurement/`) hasta que exista Postgres (P3.1).
 - [ ] Cerrar el recorrido oportunidad -> pieza -> acción -> **resultado medido**
   usando la reciprocidad de `links` entregada en P1.4 (D-015), sin añadir un
   segundo almacén de la relación.
@@ -452,12 +484,17 @@ Objetivo: unificar señal, explicación, prioridad, decisión, ejecución y apre
 
 Objetivo: priorizar problemas por riesgo y valor, explicar cambios y evitar regresiones.
 
-- [ ] Publicación firmada de crawls locales y reconciliación exacta del paquete aprobado.
-- [ ] Indexabilidad, HTTP, redirects, canonical, robots, sitemap y URL Inspection curada.
+- [~] Publicación firmada de crawls locales y reconciliación exacta del paquete aprobado.
+      Publicación del resumen acotado sin firma (D-070); falta la firma.
+- [~] Indexabilidad, HTTP, redirects, canonical, robots, sitemap y URL Inspection curada.
+      Las comprueba el crawl local hasta 1.000 URL (D-070, D-071); falta URL Inspection.
 - [ ] Matriz hreflang, reciprocidad, `x-default`, indexabilidad y cobertura por template.
 - [ ] Roturas, profundidad, huérfanas, hubs, PageRank interno y rutas estratégicas.
 - [ ] CrUX/PageSpeed, Schema y accesibilidad por template.
-- [ ] Historial y diff de HTML crudo/renderizado/texto y elementos SEO críticos.
+- [~] Historial y diff de HTML crudo/renderizado/texto y elementos SEO críticos.
+      Diferencias entre crawls de elementos SEO críticos (HTTP, indexabilidad,
+      noindex, canonical, title, H1) e incidencias corregidas y nuevas (D-080);
+      falta el diff de HTML crudo y renderizado.
 - [ ] Alertas con persistencia, owner, SLA, anotación de release y causa probable.
 - [ ] Quality gates CI/CD en modo aviso; bloqueo solo tras validar falsos positivos.
 - [ ] Logs de Googlebot y bots IA cuando se habilite la extensión.
@@ -491,13 +528,24 @@ Objetivo: decidir qué crear, actualizar, consolidar o retirar y medir su result
 
 Objetivo: crear, revisar, aprobar, publicar y exportar una narrativa inmutable y trazable.
 
-- [ ] Editor Tiptap por bloques: texto, KPI, gráfico, tabla, evidencia, insight, acción y método.
-- [ ] Plantillas mensual ejecutiva, trimestral profunda y especial.
-- [ ] Índice/decision thread fijo, lectura web y estilos A4 del mismo design system.
+- [x] Editor por bloques sobre el informe generado: por apartado, mostrar u ocultar
+      cifras, gráficos, tablas y filas, nota del equipo y acciones propias con prioridad
+      (D-076, `/informes/<marca>/<periodo>` del workbench). Sustituye al editor Tiptap
+      libre, que se retira (D-077, D-078): el texto libre sin cifras enlazadas era
+      justo lo que P7 quiere evitar.
+- [~] Plantillas mensual ejecutiva, trimestral profunda y especial. Mensual y
+      trimestral comparten plantilla con resumen ejecutivo y plan de acción
+      (D-073…D-075); falta la especial y diferenciar la profundidad del trimestral.
+- [x] Índice/decision thread fijo, lectura web y estilos A4 del mismo design system.
+      Portada con índice, presentación web y PDF A4 apaisado con cabecera repetida
+      (D-073).
 - [ ] Azure OpenAI UE propone borradores solo sobre datos depurados.
 - [ ] Autor y revisor diferentes; preview privada y GitHub Environment.
-- [ ] Versiones inmutables, fe de erratas y promoción del mismo artefacto aprobado.
-- [ ] PDF/CSV al vuelo con usuario, fecha, versión y confidencialidad.
+- [~] Versiones inmutables, fe de erratas y promoción del mismo artefacto aprobado.
+      Versión congelada con autor, fecha, corte, contrato y huella (D-076); faltan fe
+      de erratas y promoción con aprobación.
+- [~] PDF/CSV al vuelo con usuario, fecha, versión y confidencialidad. PDF con fecha,
+      corte y versión congelada (D-073, D-076); faltan usuario, confidencialidad y CSV.
 
 #### Criterios de salida P7
 

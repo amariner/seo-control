@@ -4,13 +4,15 @@ import { notFound } from "next/navigation";
 import { BRANDS } from "@seo/contracts";
 import { buildSummary, urlRows } from "@seo/site-audit";
 import { SiteAuditPanel } from "@seo/site-audit/panel";
-import { loadRun, readPublished } from "@seo/site-audit/runs";
+import { diffRuns } from "@seo/site-audit/diff";
+import { listRuns, loadRun, readPublished } from "@seo/site-audit/runs";
 import { Notice } from "@seo/ui";
+import { CrawlDiffPanel } from "@/components/crawl-diff";
 import { WorkbenchFrame } from "@/components/workbench-frame";
 import { AutoRefresh } from "../../auto-refresh";
 import { CrawlUrlTable } from "../../url-table";
 
-export const metadata: Metadata = { title: "Crawl · Workbench" };
+export const metadata: Metadata = { title: "Crawl" };
 export const dynamic = "force-dynamic";
 
 /**
@@ -18,15 +20,26 @@ export const dynamic = "force-dynamic";
  * refresca; al terminar, el panel que verá el visor (resumen que se publicaría)
  * y, debajo, todas las URL del crawl completo con enlace a su ficha.
  */
-export default async function CrawlDetailPage({ params }: { params: Promise<{ project: string; runId: string }> }) {
+export default async function CrawlDetailPage({
+  params,
+  searchParams,
+}: {
+  params: Promise<{ project: string; runId: string }>;
+  searchParams: Promise<Record<string, string | string[] | undefined>>;
+}) {
   const { project, runId } = await params;
   const run = loadRun(project, runId);
   if (!run) notFound();
+  // D-080: por defecto se compara con el crawl completo anterior del proyecto; `?vs=` elige otro.
+  const vs = (await searchParams).vs;
+  const others = listRuns(run.project).filter((item) => item.runId !== run.runId && item.status !== "running" && item.status !== "failed");
+  const baseMeta = others.find((item) => item.runId === (Array.isArray(vs) ? vs[0] : vs)) ?? others.find((item) => item.startedAt < run.startedAt) ?? null;
+  const base = baseMeta && run.status !== "running" ? loadRun(run.project, baseMeta.runId) : null;
   const brand = BRANDS.find((item) => item.slug === run.project);
   const published = readPublished().audits[run.project]?.runId === run.runId;
 
   return (
-    <WorkbenchFrame eyebrow={`Workbench · Crawls · ${brand?.name ?? run.project}`} title="Estado del sitio" description={`Crawl ${run.runId} de ${run.startUrl}.`} subtitle="Crawls" current="/crawls">
+    <WorkbenchFrame eyebrow={`Workbench · Crawls · ${brand?.name ?? run.project}`} title="Estado del sitio" description={`Crawl ${run.runId} de ${run.startUrl}.`} crumb={brand?.name ?? run.project}>
       <p className="tool-note">
         <Link href="/crawls">← Todos los crawls</Link>
       </p>
@@ -47,6 +60,11 @@ export default async function CrawlDetailPage({ params }: { params: Promise<{ pr
           {published ? <Notice tone="info">Este es el crawl publicado en el visor (pestaña «Estado del sitio» del proyecto).</Notice> : <Notice tone="info">Vista previa del resumen que llegaría al visor. Para publicarlo, pídelo en el chat: «publica el crawl de {brand?.name ?? run.project}».</Notice>}
           {run.status === "stopped" ? <Notice tone="warn">Crawl detenido antes del tope: el resumen solo cubre las URL rastreadas.</Notice> : null}
           <SiteAuditPanel summary={buildSummary(run)} showPages={false} note={`${run.queuedWhenDone.toLocaleString("es-ES")} URL quedaron en cola al llegar al tope`} />
+          {base ? (
+            <CrawlDiffPanel diff={diffRuns(base, run)} project={run.project} current={run.runId} others={others.map((item) => ({ runId: item.runId, startedAt: item.startedAt }))} />
+          ) : (
+            <p className="tool-note">Es el primer crawl de {brand?.name ?? run.project}: con el siguiente aparecerá aquí qué se ha corregido y qué es nuevo.</p>
+          )}
           <section className="crawl-urls" aria-labelledby="urls-titulo">
             <h2 id="urls-titulo">URL rastreadas</h2>
             <p>Todas las URL del crawl con sus datos on-page. Abre una para ver su ficha completa: metadatos, encabezados, enlaces, hreflang, schema e incidencias explicadas.</p>

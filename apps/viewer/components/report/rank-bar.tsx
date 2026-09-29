@@ -43,6 +43,8 @@ export function RankBar({
               <span
                 className={`brand-rank-segment is-${item.key}`}
                 style={{ width: `${share(item.count)}%` }}
+                /* `aria-label` no vale en un `span` sin rol (axe aria-prohibited-attr). */
+                role="img"
                 tabIndex={0}
                 aria-label={`${item.label}: ${number.format(item.count)} ${unit}, ${Math.round(share(item.count))} %`}
               />

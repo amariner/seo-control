@@ -1,0 +1,37 @@
+{
+  "name": "@seo/reports",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts",
+    "./project-report": "./src/project-report.ts",
+    "./page-analysis": "./src/page-analysis.ts",
+    "./published": "./src/published.ts",
+    "./store": "./src/store.ts",
+    "./generate": "./src/generate.ts",
+    "./measure": "./src/measure.ts"
+  },
+  "scripts": {
+    "build": "tsc --noEmit",
+    "lint": "tsc --noEmit",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "generate": "tsx scripts/generate.ts",
+    "measure": "tsx scripts/measure-editorial.ts"
+  },
+  "dependencies": {
+    "@seo/contracts": "workspace:*",
+    "@seo/editorial": "workspace:*",
+    "@seo/editorial-ui": "workspace:*",
+    "@seo/repository": "workspace:*",
+    "@seo/site-audit": "workspace:*",
+    "zod": "^4.5.4"
+  },
+  "devDependencies": {
+    "@types/node": "^24.10.1",
+    "tsx": "^4.23.13",
+    "typescript": "6.0.3",
+    "vitest": "^4.1.11"
+  }
+}

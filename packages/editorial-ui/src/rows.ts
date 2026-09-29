@@ -1,4 +1,4 @@
-import { EDITORIAL_BRANDS, EDITORIAL_STATUS_LABELS, EDITORIAL_TYPE_LABELS, type EditorialBrandSlug, type EditorialDataset, type EditorialPiece, type EditorialStatus } from "@seo/contracts";
+import { EDITORIAL_BRANDS, EDITORIAL_STATUS_LABELS, EDITORIAL_TYPE_LABELS, type EditorialBrandSlug, type EditorialDataset, type EditorialMeasurement, type EditorialPiece, type EditorialStatus } from "@seo/contracts";
 import { normalizeReportSearch } from "@seo/ui/data-table-model";
 import { brandColor, brandName, brandShortCode } from "./brands";
 import type { PublicationEvent } from "./publication-slider";
@@ -34,6 +34,8 @@ export type EditorialPlanRow = {
   brief: string | null;
   /** Cambio hecho en el visor que el workbench aún no ha traído. */
   pending?: PendingEdit;
+  /** Medición real de lo publicado (P3.5, D-079): ventanas de 28, 90 y 180 días. */
+  measurements?: EditorialMeasurement[];
 };
 
 /** Tono del estado: publicado en positivo, en marcha en acento, el resto neutro. */
@@ -123,6 +125,8 @@ export const planRow = (piece: EditorialPiece, general = false, pending?: Pendin
   url: piece.url,
   brief: piece.brief?.text ?? null,
   ...(pending?.get(piece.id) ? { pending: pending.get(piece.id) } : {}),
+  // Solo la medición real (con procedencia); las ventanas vacías de V1 no se arrastran.
+  ...(piece.measurements.some((item) => item.scope) ? { measurements: piece.measurements } : {}),
 });
 
 const brandsOf = (brand: EditorialBrandSlug | "all") => EDITORIAL_BRANDS.filter((item) => brand === "all" || item.slug === brand);

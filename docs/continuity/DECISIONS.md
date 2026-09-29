@@ -1924,3 +1924,149 @@ No se reescriben decisiones antiguas. Si una cambia, se añade una nueva entrada
     ordenadas por prioridad (urgente, alta, media, baja) y URLs afectadas, con una ruta de
     ejemplo. El tiempo de respuesta se rotula como orientativo (medido en local).
 
+## D-075 · Informe del proyecto: resumen ejecutivo, plan de acción y lecturas sin contradicciones
+
+- Fecha: 2026-09-29.
+- Estado: vigente (amplía D-073 y D-074).
+- Decisión: el informe abre con un «Resumen ejecutivo» y cierra con un «Plan de acción», ambos
+  calculados en `apps/viewer/lib/project-report.ts` con reglas, nunca con IA.
+  - Resumen ejecutivo: veredicto del periodo (`report.verdict`, ya calculado en el repositorio y
+    sin uso hasta ahora), una idea clave por apartado con su tono, las tres primeras acciones del
+    plan y los avisos de medición (`report.dataQuality` con tono `warn`). La portada indica el
+    corte del dato y cuántos avisos hay.
+  - Plan de acción: hasta 8 acciones por prioridad (urgente, alta, media, baja), con motivo (la
+    cifra que la justifica) y área. Fuentes: `report.nextSteps` (técnico y medición → alta;
+    contenido y editorial → media), las incidencias urgentes o altas del crawl (una sola fila;
+    el detalle sigue en «Estado del sitio»), los mercados que caen más de un 50 %, las rutas
+    servidas en varias URLs (≥ 10) y la cadencia editorial.
+  - El antiguo «Resumen del periodo» pasa a llamarse «Tráfico orgánico».
+  - Lecturas corregidas: con avisos de medición no se concluye nada de las conversiones;
+    en Páginas, «ganan más URLs de las que pierden» ya no se lee como tracción si el total de
+    clics cae (tras una migración ganan las URL nuevas); Mercados agrupa todos los desplomes;
+    la migración solo explica la caída si su fecha cae en el periodo o en su comparación, y solo
+    entra en el resumen ejecutivo si es anterior al fin del periodo.
+  - Con un mercado filtrado, el reparto por mercados sigue como contexto pero no entra en el
+    resumen ejecutivo ni en el plan.
+  - Migración: fechas de las ventanas, «Revisadas que recuperan» y tabla de URLs antiguas
+    revisadas con destino, recuperación y diagnóstico, primero las que fallan.
+  - Keywords y Páginas: columna «Posición» (antes → ahora) en las tablas de tendencia.
+  - Gráficos con escala: marcas del eje (techo redondo y mitad), cifra en las barras de los
+    meses del informe y totales de clics en la leyenda de la línea.
+  - En pantalla, el aire vertical se ajusta a la altura para que cada apartado quepa en 900 px;
+    en PDF, cada apartado sigue en una hoja A4 apaisada (10 páginas en XTONE agosto 2026).
+- Motivo: en XTONE (agosto de 2026) el informe decía «el sitio gana tracción» con los clics
+  −30 %, concluía «el tráfico perdido era poco cualificado» con avisos de medición activos en
+  Analytics (tráfico directo ×15,7 frente al de buscadores, 13,7 % sin clasificar) y no mostraba que `/pt` no redirige
+  (causa probable de la caída de Portugal).
+
+## D-076 · Pestaña «Informes» del workbench: versiones congeladas, puntualizaciones e informes adicionales
+
+- Fecha: 2026-09-29.
+- Estado: vigente (amplía D-073…D-075; cierra el pendiente «guardar el informe con versión inmutable»).
+- Decisión:
+  - El generador del informe (`project-report.ts`, `page-analysis.ts`) pasa a `packages/reports`
+    (`@seo/reports`), compartido por visor y workbench. El visor lo importa desde el paquete.
+  - Un informe se identifica por marca y periodo cerrado (`xtone:2026-Q2`, `xtone:2026-08`).
+  - **Versión congelada**: el workbench pide el informe de marca del periodo a GA4 y Search Console
+    reales (`generateSnapshot`) y guarda sus entradas (informe de marca sin `searchQueries`, plan
+    editorial curado y resumen de crawl publicado), no las diapositivas: las reglas de redacción
+    mejoran sin volver a pedir datos. Se niega a congelar si una fuente falla o el corte no cubre
+    el periodo. Contenido en `packages/reports/data/published/snapshots/<marca>/<periodo>.json`
+    (≈0,4–1,1 MB, leído de disco solo al abrir el informe); índice pequeño en `reports.json`
+    (empaquetado en el build) con autor, fecha, corte, contrato y huella.
+  - **Puntualizaciones** por informe en el mismo índice: ocultar apartados, lectura SEO, cifras,
+    gráficos, tablas y filas (la fila se identifica por su primera celda, o por la acción en las
+    tablas de prioridad, y sobrevive a regenerar), una nota del equipo por apartado y acciones
+    propias con prioridad que entran en el plan y en el resumen ejecutivo. Nunca se edita una
+    cifra. Un apartado oculto desaparece también de las ideas clave del resumen. Se aplican a la
+    versión congelada y al informe en vivo del mismo periodo.
+  - Workbench: `/informes` con las ocho marcas × mes cerrado y cuatro últimos trimestres (las marcas
+    fuera del piloto aparecen sin acciones), botón «Regenerar <trimestre>» para el piloto, estado de
+    sincronización frente a HEAD, y `/informes/<marca>/<periodo>` para personalizar. CLI:
+    `pnpm report:generate -- --project <slug> --period <id>`. Credenciales de lectura en
+    `apps/workbench/.env.local` (fuera de git).
+  - Visor: la pestaña «Informes» lista el mes cerrado y los cuatro trimestres cerrados con su versión
+    y el número de puntualizaciones; `?periodo=` sirve la versión congelada con todos los mercados
+    (con un mercado filtrado, en vivo con las puntualizaciones). La portada dice «Versión congelada
+    por <autor> el <fecha>»; la nota del equipo se rotula «Puntualización del equipo SEO».
+  - Sincronización con preview: commit de `packages/reports/data/published/` y `vercel deploy --prod`,
+    pedido en el chat («sube los informes»), como el plan editorial (D-067).
+  - **Informes adicionales** en `/informes/adicionales`: lista, README, ficheros con vista previa
+    (CSV, Markdown, texto) y descarga, y «Solicitar» crea la carpeta y el README de la convención
+    con `**Estado**: solicitado`. Todo sigue en `informes-adicionales/`, fuera de git y del visor.
+
+## D-077 · El workbench adopta el shell y el aspecto del visor
+
+- Fecha: 2026-09-29.
+- Estado: vigente (sustituye la cabecera con pestañas del workbench, D-041).
+- Decisión: el workbench usa el mismo marco que el visor (D-044): barra lateral shadcn `inset`
+  sobre papel mineral, lienzo blanco, cabecera fija con ruta y «Entorno local», y la cabecera de
+  página de D-049. Montaje Tailwind v4 + shadcn idéntico (`apps/workbench/app/tailwind.css`); los
+  primitivos necesarios (`sidebar`, `button`, `sheet`, `tooltip`, `separator`, `skeleton`, `input`,
+  `badge`) se copian del visor, como propone shadcn, sobre los mismos tokens `--ds-*`.
+  - Navegación en cuatro grupos (Preparación, Editorial, Informes, Técnico) y «Abrir el visor»; el
+    destino activo se deduce de la ruta (la más larga que coincide). `WorkbenchFrame` pierde
+    `current` y `subtitle` y gana `crumb` para las fichas de detalle.
+  - La portada pasa a «Inicio»: cuatro cifras reales (plan, informes congelados, crawls, informes
+    adicionales), «Pendiente de llevar al visor» con `git status` de las tres carpetas que publica
+    el visor (curación editorial, informes, resumen de crawl) y la frase que hay que pedir en el
+    chat, actividad reciente (importación, curación, versiones congeladas, puntualizaciones,
+    crawls, informes adicionales) y el flujo de publicación con el estado real de cada etapa
+    (aprobar y firmar siguen en P5).
+  - Se retira el «Borrador de informe» de demostración (Tiptap, sin guardado ni publicación): lo
+    sustituye la pestaña «Informes» (D-076). Salen `@tiptap/react` y `@tiptap/starter-kit`.
+
+## D-078 · Roadmap rehecho: plan de hitos ejecutables y calidad AA de las dos apps
+
+- Fecha: 2026-09-29.
+- Estado: vigente.
+- Decisión: el roadmap conserva fases, identificadores y criterios de salida, pero añade un «Plan de
+  hitos» (H1…H11) que ordena la ejecución a corto plazo por valor y por si se puede hacer sin
+  credenciales ni presupuesto nuevos, y dice quién desbloquea cada hito bloqueado. El mapa de fases
+  anota lo que D-047…D-077 adelantaron de P5, P7 y P10 sin cerrarlas. En P7, el criterio «Editor
+  Tiptap por bloques» se sustituye por el editor de puntualizaciones sobre el informe generado
+  (D-076): el texto libre sin cifras enlazadas es lo que P7 quiere evitar.
+  - H3 (calidad): axe cubre ahora las pantallas nuevas (informes del workbench, informe congelado,
+    pestaña Informes, plan del workbench, crawls, 404) y se corrigen: regiones desplazables sin foco
+    (`ScrollRegion`), `aria-controls` roto del botón de menú del visor en móvil, `aria-label` en
+    `span` sin rol de la barra de posiciones (`role="img"`), barra lateral como región con nombre, y
+    páginas 404 propias en las dos apps (antes, la de Next sin `main` ni contraste). Las rutas de
+    ejemplo `/pages/page-1` y `/queries/…` usaban identificadores sintéticos: se auditan como 404.
+  - Excepción aceptada: el pie del gráfico de evolución en grafito (3,75:1) es una petición expresa
+    del usuario (D-045) y no se cambia sin su permiso; axe lo sigue marcando.
+
+## D-079 · Medición editorial real en ventanas de 28, 90 y 180 días
+
+- Fecha: 2026-09-29.
+- Estado: vigente (cierra el primer criterio de P3.5).
+- Decisión: cada pieza en estado «publicado» con fecha se mide con Search Console real: clics,
+  impresiones y posición de su URL exacta (con o sin barra final, sin parámetros) o, sin URL, de su
+  keyword con el filtro del informe de marca, en los 28, 90 y 180 días desde la publicación frente a
+  los mismos días justo antes. Una ventana sin terminar queda «en curso» con los días cubiertos;
+  una sin empezar, «pendiente». Nunca se extrapola. Confianza: baja en curso o con < 10
+  impresiones; media con keyword o < 100 impresiones; alta en el resto. Las piezas con fecha en el
+  backlog no se miden: una fecha en un plan no es una publicación.
+  - `editorialMeasurementSchema` gana campos opcionales (`cutoff`, `coveredDays`, `scope`,
+    `confidence`, `impressions`, `baselineImpressions`, `position`). La medición vive en
+    `packages/editorial/data/measurement/editorial-measurements.json` (se regenera entera) y
+    `getEffectiveEditorialDataset()` la aplica sobre la curación; el visor la empaqueta.
+  - Se genera con «Medir publicaciones» en `/editorial/plan` del workbench o `pnpm editorial:measure`
+    (`@seo/reports/measure`, `measureEditorialPieces` en `@seo/repository`). Llega al visor con
+    «sube el plan».
+  - Se ve en «Resultado de lo publicado» (`@seo/editorial-ui/plan-measurements`) bajo el plan
+    general, el plan de la ficha de proyecto y el plan del workbench, y en el informe: la tabla
+    «Publicado en el periodo» usa los clics de 28 días frente a los 28 anteriores y la lectura SEO
+    dice cuántas piezas ganan clics.
+  - Primer resultado (corte 2026-09-26): 5 piezas medidas, 6 ventanas cerradas y 9 en curso; la de
+    Gamadecor queda sin medir (sin Search Console en V2).
+
+## D-080 · Diferencias entre crawls de un proyecto
+
+- Fecha: 2026-09-29.
+- Estado: vigente (adelanta parte de P5).
+- Decisión: la ficha de un crawl en el workbench compara con el crawl completo anterior del mismo
+  proyecto (o el elegido con `?vs=`): incidencias corregidas y nuevas, URL que entran y salen del
+  recorrido y cambios URL a URL de HTTP, indexabilidad, noindex, canonical, title y H1
+  (`@seo/site-audit/diff`). Solo se comparan las URL rastreadas en los dos: una URL ausente en uno
+  (por el tope o el recorrido) no se da por corregida ni por rota, y sus incidencias se cuentan
+  aparte como «en URL nuevas». No se publica en el visor.

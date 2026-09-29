@@ -1,6 +1,44 @@
 # Checkpoint operativo — SEO Dashboard V2
 
-Última actualización: 28 de septiembre de 2026 (pestaña «Informes» con presentación y PDF, D-073).
+Última actualización: 29 de septiembre de 2026 (workbench: Informes, aspecto del visor, roadmap rehecho, D-076…D-080).
+
+## Reanudar aquí · plan de hitos (D-078)
+
+- Hechos en esta sesión, **sin commit ni despliegue**: H1 Informes del workbench (D-076), H2 shell
+  del visor en el workbench (D-077), H3 axe AA (D-078), H4 medición editorial real (D-079), H5
+  diferencias entre crawls (D-080). D-075 (resumen ejecutivo del informe) sigue también sin subir.
+- **Siguiente: H6.** Revisar con el usuario, commit (sin `informes-adicionales/`) y
+  `vercel deploy --prod`. Entra en el commit: `packages/reports` (código y
+  `data/published/` con 2026-Q2 de Porcelanosa, Noken y XTONE),
+  `packages/editorial/data/measurement/`, el workbench rehecho y los cambios del visor.
+- Después: H11 (archivo `/reports` con los informes congelados y exportación HTML autocontenida)
+  o H10 (bandeja de decisiones P4 sobre informes, crawl y medición). Bloqueados por el
+  responsable: H7 Neon + `DATABASE_URL`, H8 aceptación P2, H9 SEMrush.
+
+## Informes en el workbench · D-076 (2026-09-29, sin commit)
+
+- `packages/reports` (`@seo/reports`): `project-report.ts` y `page-analysis.ts` (movidos del visor),
+  `periods.ts`, `schema.ts`, `curate.ts`, `generate.ts` (congelar con GA4/GSC reales), `store.ts`
+  (escritura y estado frente a HEAD), `published.ts` (lectura en el visor), `measure.ts` (D-079).
+- Datos: `data/published/reports.json` (índice empaquetado) y `data/published/snapshots/<marca>/<periodo>.json`.
+- Workbench: `/informes`, `/informes/<marca>/<periodo>`, `/informes/adicionales[/<proyecto>/<carpeta>]`,
+  descarga en `/informes/adicionales/fichero`. Credenciales de lectura en `apps/workbench/.env.local`.
+- Visor: `?periodo=` en `/projects/<slug>/informe` sirve la versión congelada (todos los mercados) y
+  aplica las puntualizaciones; la pestaña «Informes» lista mes y cuatro trimestres cerrados.
+- CLI: `pnpm report:generate -- --project <slug> --period 2026-Q2`.
+
+## Workbench con el aspecto del visor · D-077 (2026-09-29, sin commit)
+
+- `app/tailwind.css`, `components/ui/*` (copias shadcn), `components/workbench-shell.tsx`,
+  `components/workbench-frame.tsx` (con `crumb`), portada «Inicio» (`app/page.tsx`,
+  `lib/sync-status.ts`). Retirado `components/report-editor.tsx` y Tiptap.
+
+## Medición editorial y diff de crawls · D-079, D-080 (2026-09-29, sin commit)
+
+- Medición: `measureEditorialPieces` (`@seo/repository`), `@seo/editorial/measurement-store`,
+  `@seo/editorial-ui/plan-measurements`, botón «Medir publicaciones» en `/editorial/plan` del
+  workbench, `pnpm editorial:measure`.
+- Diff: `@seo/site-audit/diff` y `components/crawl-diff.tsx` en la ficha del crawl (`?vs=`).
 
 ## Pestaña «Informes»: presentación y PDF · D-073 (2026-09-28, en producción, e7d733a)
 
@@ -8,8 +46,14 @@
   `app/projects/[slug]/informe` (con `loading.tsx` propio) y pestaña `?tab=informes`.
 - D-074: lectura SEO por apartado, barras mes a mes en el resumen, tendencias en Keywords y
   Páginas, publicado/próximo en Plan editorial y tareas en Estado del sitio (en producción, 71bad15).
-- Reanudar: seguir revisando el informe con el usuario; después, guardar cada informe en el
-  archivo `/reports` y la exportación HTML autocontenida (P7).
+- D-075 (2026-09-29, sin commit): «Resumen ejecutivo» al principio (veredicto, clave por
+  apartado, 3 prioridades, avisos de medición) y «Plan de acción» al final (≤ 8 acciones con
+  prioridad, motivo y área); lecturas corregidas (migración fuera del periodo, Páginas tras
+  migración, mercados agrupados, conversiones con avisos); Migración con tabla de URLs revisadas
+  y diagnóstico; posición en las tendencias; gráficos con escala. Verificado en local
+  (1440×900, 375 px, PDF de 10 páginas con Chrome headless).
+- Reanudar: revisar D-075 con el usuario, commit y `vercel deploy --prod`; después, guardar cada
+  informe en el archivo `/reports` y la exportación HTML autocontenida (P7).
 
 ## Pestaña «Páginas» con KPIs y análisis · D-072 (2026-09-28, en producción, e7d733a)
 

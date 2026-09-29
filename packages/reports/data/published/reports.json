@@ -1,0 +1,36 @@
+{
+ "schemaVersion": 1,
+ "updatedAt": "2026-09-29T11:36:50.091Z",
+ "reports": {
+  "noken:2026-Q2": {
+   "snapshot": {
+    "reportVersion": "2026-09-24.16",
+    "generatedAt": "2026-09-29T11:36:23.976Z",
+    "generatedBy": "Andreu Mariner",
+    "cutoff": "2026-09-26",
+    "file": "snapshots/noken/2026-Q2.json",
+    "sha256": "bbb39b2247d60df46eeebe140917b3b072ca9f9bb5ba3086bb9fdcfc7ba7a983"
+   }
+  },
+  "porcelanosa:2026-Q2": {
+   "snapshot": {
+    "reportVersion": "2026-09-24.16",
+    "generatedAt": "2026-09-29T11:35:55.849Z",
+    "generatedBy": "Andreu Mariner",
+    "cutoff": "2026-09-26",
+    "file": "snapshots/porcelanosa/2026-Q2.json",
+    "sha256": "cda52565cbc32f8863b3bafd30d754f845089ccf3680b1ae5af9a447e5d2c3b5"
+   }
+  },
+  "xtone:2026-Q2": {
+   "snapshot": {
+    "reportVersion": "2026-09-24.16",
+    "generatedAt": "2026-09-29T11:36:38.301Z",
+    "generatedBy": "Andreu Mariner",
+    "cutoff": "2026-09-26",
+    "file": "snapshots/xtone/2026-Q2.json",
+    "sha256": "b4b05ec8c55db300f361464bf3431ff67a07018d8c6c8f27510bab3c65b6db4b"
+   }
+  }
+ }
+}

@@ -34,8 +34,10 @@ Cuando el usuario diga «informe adicional», «saca un informe», «necesito un
   `pnpm editorial:pull` (primero con `-- --dry-run` si hay dudas) y resume qué entró, qué se
   descartó y por qué. Es el paso obligado antes de editar el plan en el workbench.
 - «Sincroniza con preview», «sube el plan» o equivalente: revisa el diff de
-  `packages/editorial/data/curation/editorial-curation.json`, confirma con el usuario, haz commit
-  y `vercel deploy --prod`. Al visor solo llegan el dataset y la curación: nunca informes
+  `packages/editorial/data/curation/editorial-curation.json` y de la medición
+  (`packages/editorial/data/measurement/`, D-079), confirma con el usuario, haz commit
+  y `vercel deploy --prod`. «Mide las publicaciones»: `pnpm editorial:measure` o el botón del
+  plan del workbench. Al visor solo llegan el dataset y la curación: nunca informes
   adicionales ni datos intermedios.
 
 ## Activador de crawls (D-070)
@@ -45,6 +47,19 @@ Cuando el usuario diga «informe adicional», «saca un informe», «necesito un
   `/crawls` del workbench, que ya no lanza crawls (D-071). Resume incidencias al terminar.
 - «Publica el crawl de <proyecto>»: `pnpm crawl:publish -- --project <slug> [--run <id>]` y, si el
   usuario lo confirma, commit y despliegue. Al visor solo va el resumen acotado, nunca el crawl.
+
+## Activador de informes (D-076)
+
+- «Regenera los informes de <periodo>» / «congela el <trimestre> de <marca>»: botón en `/informes`
+  del workbench o `pnpm report:generate -- --project <slug> --period <2026-Q2|2026-08>`. Solo datos
+  reales (GA4/GSC con las credenciales de `apps/workbench/.env.local`); si una fuente falla, no se
+  congela.
+- «Sube los informes» / «sincroniza los informes con preview»: revisa el diff de
+  `packages/reports/data/published/` (índice `reports.json` y `snapshots/`), resume qué cambia por
+  informe, confirma con el usuario, haz commit y `vercel deploy --prod`. Nunca incluyas
+  `informes-adicionales/` ni datos de prueba.
+- «Haz el informe adicional <proyecto>/<fecha-tema>»: completa la solicitud creada desde
+  `/informes/adicionales` siguiendo el activador de informes adicionales.
 
 ## Prioridades permanentes
 

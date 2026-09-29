@@ -15,6 +15,7 @@
     "@seo/db": "workspace:*",
     "@seo/editorial": "workspace:*",
     "@seo/editorial-ui": "workspace:*",
+    "@seo/reports": "workspace:*",
     "@seo/repository": "workspace:*",
     "@seo/site-audit": "workspace:*",
     "@seo/sync": "workspace:*",

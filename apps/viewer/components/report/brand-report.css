@@ -1749,6 +1749,9 @@
   color: var(--ds-ink);
   font-weight: 500;
 }
+.brand-report-notes {
+  color: var(--ds-muted);
+}
 .brand-report-link {
   display: inline-flex;
   align-items: center;

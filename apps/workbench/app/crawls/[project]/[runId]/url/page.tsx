@@ -8,7 +8,7 @@ import { loadRun } from "@seo/site-audit/runs";
 import { Notice } from "@seo/ui";
 import { WorkbenchFrame } from "@/components/workbench-frame";
 
-export const metadata: Metadata = { title: "URL del crawl · Workbench" };
+export const metadata: Metadata = { title: "URL del crawl" };
 export const dynamic = "force-dynamic";
 
 const fmt = (value: number) => value.toLocaleString("es-ES");
@@ -69,7 +69,7 @@ export default async function CrawlUrlPage({ params, searchParams }: { params: P
     );
 
   return (
-    <WorkbenchFrame eyebrow={`Workbench · Crawls · ${run.domain}`} title={row.path} description={row.title ?? "Sin title"} subtitle="Crawls" current="/crawls">
+    <WorkbenchFrame eyebrow={`Workbench · Crawls · ${run.domain}`} title={row.path} description={row.title ?? "Sin title"} crumb={run.domain}>
       <div className="url-head">
         <Link href={base}>← Crawl del {new Date(run.startedAt).toLocaleString("es-ES", { day: "numeric", month: "short", hour: "2-digit", minute: "2-digit", timeZone: "Europe/Madrid" })}</Link>
         <a href={page.url} target="_blank" rel="noreferrer">

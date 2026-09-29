@@ -7,6 +7,7 @@ import { PieceDetail, statusBadge } from "@/components/editorial/piece-detail";
 import { generalCalendar, generalPlanRows } from "@seo/editorial-ui";
 import { EditorialPlan } from "@seo/editorial-ui/plan";
 import { ThemeTimeline } from "@seo/editorial-ui/theme-timeline";
+import { PlanMeasurements } from "@seo/editorial-ui/plan-measurements";
 import { brandName, findEvent, findPiece, getEditorial, getLiveEditorial, hrefWith, parseBrand, pieceCurationMeta, relatedForEvent, type SearchInput } from "@/lib/editorial";
 import { editPieceFromViewer } from "../actions";
 
@@ -59,7 +60,7 @@ export default async function CalendarPage({ searchParams }: { searchParams: Pro
           showPast
           edit={editable ? editPieceFromViewer : undefined}
           exportHref={`/api/v1/editorial/export/plan-editorial.xlsx${brand !== "all" ? `?brand=${brand}` : ""}`}
-          after={<ThemeTimeline themes={dataset.calendar.themes} pieces={pieces} currentMonth={new Date().toISOString().slice(0, 7)} />}
+          after={<><PlanMeasurements rows={pieces} /><ThemeTimeline themes={dataset.calendar.themes} pieces={pieces} currentMonth={new Date().toISOString().slice(0, 7)} /></>}
         />
       </section>
       <p className="plan-general-foot ds-meta"><a className="ds-evidence" href={`/api/v1/editorial/calendar${brand !== "all" ? `?brand=${brand}` : ""}`}>JSON del calendario</a></p>

@@ -1050,3 +1050,36 @@
 - Informe trimestral de XTONE (Q2 2026) revisado en presentación y en PDF (Chrome headless,
   8 páginas, un apartado por página). Typecheck y pruebas del visor en verde. Commit 71bad15,
   subido a GitHub y desplegado en producción (Ready, alias seo-dashboard-viewer.vercel.app).
+
+## 2026-09-29 · Informe: resumen ejecutivo, plan de acción y lecturas corregidas (D-075)
+
+- Revisión del informe mensual de XTONE (agosto de 2026): lecturas que se contradecían con las
+  cifras (Páginas «gana tracción» con clics −30 %), conversiones interpretadas con avisos de
+  medición activos, veredicto, próximos pasos y calidad del dato sin usar, Migración medio vacía
+  y gráficos sin escala.
+- Hecho: resumen ejecutivo y plan de acción, lecturas corregidas, tabla de URLs migradas con
+  diagnóstico (`/pt` sin redirección), posición en tendencias, ejes con escala, ajuste del alto
+  en pantalla. Informes mensual, trimestral y filtrado por España revisados en el navegador;
+  PDF con Chrome headless: 10 páginas, un apartado por hoja. Typecheck (11 paquetes) y 144
+  pruebas del visor en verde (3 nuevas). Sin commit ni despliegue.
+
+## 2026-09-29 · Workbench: Informes, aspecto del visor, roadmap rehecho y tres hitos (D-076…D-080)
+
+- H1 · Pestaña «Informes» del workbench (D-076): `@seo/reports` (generador compartido, versiones
+  congeladas, puntualizaciones), `/informes` con las ocho marcas, `/informes/<marca>/<periodo>`
+  para personalizar, informes adicionales solo en local y `pnpm report:generate`. Trimestre
+  2026-Q2 congelado con datos reales para Porcelanosa, Noken y XTONE; puntualización de prueba
+  verificada en el visor (apartado oculto, nota, acción del equipo) y retirada después.
+- H2 · Workbench con el shell del visor (D-077): barra lateral shadcn, cabecera, «Inicio» con lo
+  pendiente de subir (git status) y actividad; se retira el borrador Tiptap de demostración.
+  1440 y 375 px sin desbordamiento; hoja móvil verificada.
+- Roadmap rehecho (D-078) con plan de hitos H1…H11. H3: axe en las dos apps con las pantallas
+  nuevas; 0 incumplimientos WCAG salvo la excepción aceptada de D-045 (pie en grafito).
+- H4 · Medición editorial real (D-079): 5 piezas publicadas medidas con Search Console (30
+  consultas), en el plan del visor, del workbench y en el informe. Q2 regenerado con ella.
+- H5 · Diferencias entre crawls (D-080) en la ficha del crawl. Segundo crawl real de XTONE
+  (20260929-113915-11c5, 200 URL, sin publicar): 197 URL comparables, 3 nuevas, 3 fuera del
+  recorrido, 0 corregidas y 2 nuevas «respuesta > 1,5 s» (tiempo medido en local, orientativo).
+- Verificación: typecheck (12 tareas), pruebas de todos los paquetes en verde, build de producción
+  del visor (incluye snapshots y medición en el trazado) y del workbench, axe en 78 páginas.
+- Sin commit ni despliegue: D-075…D-080 esperan confirmación del usuario.

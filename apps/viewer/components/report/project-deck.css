@@ -11,12 +11,14 @@ html:has(.deck) {
   position: relative;
   display: flex;
   flex-direction: column;
-  gap: 22px;
+  /* El aire vertical se ajusta a la altura: en un portátil de 900 px cada
+     apartado cabe en una pantalla. */
+  gap: clamp(14px, 2.4vh, 22px);
   box-sizing: border-box;
   min-height: 100vh;
   max-width: 1280px;
   margin: 0 auto;
-  padding: 72px 64px 56px;
+  padding: clamp(36px, 6vh, 72px) 64px clamp(28px, 4.5vh, 56px);
   scroll-snap-align: start;
   border-bottom: 1px solid var(--ds-line);
 }
@@ -161,7 +163,7 @@ html:has(.deck) {
 .deck-spark svg {
   display: block;
   width: 100%;
-  height: clamp(120px, 20vh, 200px);
+  height: clamp(110px, 17vh, 200px);
   overflow: visible;
 }
 .deck-spark polyline {
@@ -226,7 +228,7 @@ html:has(.deck) {
   text-align: left;
 }
 .deck-list td {
-  padding: 9px 12px 9px 0;
+  padding: 7px 12px 7px 0;
   border-bottom: 1px solid var(--ds-line);
   vertical-align: top;
 }
@@ -272,6 +274,27 @@ html:has(.deck) {
   text-transform: uppercase;
 }
 
+/* Puntualización del equipo SEO (D-076): texto escrito en el workbench, no una regla. */
+.deck-comment {
+  margin: 0;
+  padding: 12px 18px;
+  border-left: 3px solid var(--ds-accent, var(--ds-ink));
+  background: color-mix(in srgb, var(--ds-accent, var(--ds-ink)) 7%, transparent);
+  color: var(--ds-ink);
+  font-size: clamp(14px, 1.15vw, 16px);
+  line-height: 1.5;
+  white-space: pre-line;
+}
+.deck-comment strong {
+  display: block;
+  margin-bottom: 4px;
+  color: var(--ds-muted);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
 /* Gráficos */
 .deck-charts {
   display: grid;
@@ -293,7 +316,7 @@ html:has(.deck) {
   display: block;
   width: 100%;
   height: auto;
-  max-height: 32vh;
+  max-height: 24vh;
 }
 .deck-bars-axis {
   stroke: var(--ds-line);
@@ -345,6 +368,156 @@ html:has(.deck) {
 .deck-list td.deck-empty {
   color: var(--ds-muted);
   font-style: italic;
+}
+/* Rutas largas: se parten antes que desbordar la tabla. */
+.deck-list td:first-child {
+  overflow-wrap: anywhere;
+}
+.deck-list-note {
+  margin: 8px 0 0;
+  color: var(--ds-muted);
+  font-size: 12px;
+  line-height: 1.45;
+}
+
+/* Escalas de los gráficos (D-075) */
+.deck-grid {
+  stroke: var(--ds-line);
+  stroke-width: 1;
+}
+.deck-spark-plot {
+  position: relative;
+  padding-left: 40px;
+}
+.deck-tick {
+  position: absolute;
+  left: 0;
+  transform: translateY(-50%);
+  color: var(--ds-muted);
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+}
+.deck-bars-tick {
+  fill: var(--ds-muted);
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
+}
+.deck-bars-value {
+  fill: var(--ds-ink);
+  font-size: 13px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+.deck-cover-warn {
+  color: var(--ds-warning);
+  font-weight: 500;
+}
+
+/* Resumen ejecutivo (D-075) */
+.deck-verdict {
+  padding: 18px 22px;
+  border-left: 4px solid var(--ds-warning);
+  background: var(--ds-warning-soft);
+}
+.deck-verdict.is-bad {
+  border-left-color: var(--ds-danger);
+  background: var(--ds-danger-soft);
+}
+.deck-verdict.is-good {
+  border-left-color: var(--ds-positive);
+  background: var(--ds-positive-soft);
+}
+.deck-verdict-headline {
+  margin: 0;
+  color: var(--ds-ink);
+  font: 500 clamp(22px, 2.2vw, 30px) / 1.25 var(--ds-font-sans);
+  letter-spacing: -0.02em;
+}
+.deck-verdict-detail {
+  margin: 6px 0 0;
+  color: var(--ds-text);
+  font-size: clamp(15px, 1.25vw, 17px);
+}
+.deck-summary {
+  display: grid;
+  grid-template-columns: 1.15fr 1fr;
+  gap: 40px;
+  align-items: start;
+}
+.deck-subtitle {
+  margin: 0 0 8px;
+  color: var(--ds-ink);
+  font-size: 15px;
+  font-weight: 500;
+}
+.deck-points {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border-top: 1px solid var(--ds-line);
+}
+.deck-points li {
+  position: relative;
+  display: grid;
+  grid-template-columns: 140px 1fr;
+  gap: 12px;
+  padding: 10px 0 10px 18px;
+  border-bottom: 1px solid var(--ds-line);
+  font-size: 15px;
+  line-height: 1.45;
+}
+.deck-points li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 17px;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--ds-muted);
+}
+.deck-points li.is-good::before {
+  background: var(--ds-positive);
+}
+.deck-points li.is-bad::before {
+  background: var(--ds-danger);
+}
+.deck-points strong {
+  color: var(--ds-ink);
+  font-weight: 500;
+}
+.deck-points span {
+  color: var(--ds-text);
+}
+.deck-summary-side {
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+}
+.deck-warnings {
+  padding: 12px 16px;
+  border-left: 3px solid var(--ds-warning);
+  background: var(--ds-warning-soft);
+  color: var(--ds-ink);
+  font-size: 13px;
+  line-height: 1.45;
+}
+.deck-warnings strong {
+  display: block;
+  margin-bottom: 4px;
+  color: var(--ds-warning);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+.deck-warnings ul {
+  margin: 0;
+  padding-left: 18px;
+}
+.deck-warnings li + li {
+  margin-top: 4px;
 }
 
 /* Mandos */
@@ -411,8 +584,13 @@ html:has(.deck) {
     min-height: auto;
     padding: 40px 16px 72px;
   }
-  .deck-lists.is-pair {
+  .deck-lists.is-pair,
+  .deck-summary {
     grid-template-columns: 1fr;
+  }
+  .deck-points li {
+    grid-template-columns: 1fr;
+    gap: 2px;
   }
   .deck-metric {
     padding-left: 0;
@@ -488,6 +666,14 @@ html:has(.deck) {
     font-size: 8px;
     margin-bottom: 2px;
   }
+  .deck-comment {
+    font-size: 11px;
+    padding: 7px 10px;
+  }
+  .deck-comment strong {
+    font-size: 8px;
+    margin-bottom: 2px;
+  }
   .deck-notes {
     grid-template-columns: 1fr 1fr;
     gap: 10px;
@@ -530,12 +716,59 @@ html:has(.deck) {
     grid-template-columns: 1fr 1fr;
     gap: 24px;
   }
+  .deck-verdict {
+    padding: 8px 12px;
+  }
+  .deck-verdict-headline {
+    font-size: 16px;
+  }
+  .deck-verdict-detail {
+    margin-top: 2px;
+    font-size: 11px;
+  }
+  /* Como las tablas emparejadas: la regla de móvil también alcanza al PDF. */
+  .deck-summary {
+    grid-template-columns: 1.15fr 1fr;
+    gap: 24px;
+  }
+  .deck-points li {
+    grid-template-columns: 105px 1fr;
+    gap: 8px;
+    padding: 5px 0 5px 12px;
+    font-size: 10.5px;
+  }
+  .deck-points li::before {
+    top: 9px;
+    width: 6px;
+    height: 6px;
+  }
+  .deck-warnings {
+    padding: 6px 10px;
+    font-size: 9px;
+  }
+  .deck-warnings strong {
+    font-size: 8px;
+    margin-bottom: 2px;
+  }
+  .deck-list-note {
+    margin-top: 4px;
+    font-size: 8.5px;
+  }
+  .deck-tick {
+    font-size: 8.5px;
+  }
+  .deck-spark-plot {
+    padding-left: 28px;
+  }
   .deck-metric,
   .deck-list tr,
   .deck-spark,
   .deck-bars,
   .deck-reading,
-  .deck-note {
+  .deck-note,
+  .deck-verdict,
+  .deck-points li,
+  .deck-warnings {
     break-inside: avoid;
   }
   .deck-foot {

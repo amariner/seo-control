@@ -10,7 +10,8 @@
     "./normalize": "./src/normalize.ts",
     "./curation-store": "./src/curation-store.ts",
     "./inbox-store": "./src/inbox-store.ts",
-    "./inbox-sync": "./src/inbox-sync.ts"
+    "./inbox-sync": "./src/inbox-sync.ts",
+    "./measurement-store": "./src/measurement-store.ts"
   },
   "scripts": {
     "build": "tsc --noEmit",

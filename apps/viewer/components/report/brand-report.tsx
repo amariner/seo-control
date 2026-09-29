@@ -9,9 +9,7 @@ import {
 } from "lucide-react";
 import {
   findBrand,
-  presetRange,
   type BrandReport,
-  type ReportPreset,
   type EditorialDataset,
   type ReportKpi,
   type SiteAuditSummary,
@@ -31,6 +29,7 @@ import { MoversList } from "./movers-list";
 import type { EditorialPlanRow, PublicationEvent } from "@seo/editorial-ui";
 import { EditorialPlan } from "@seo/editorial-ui/plan";
 import { ThemeTimeline } from "@seo/editorial-ui/theme-timeline";
+import { PlanMeasurements } from "@seo/editorial-ui/plan-measurements";
 import { Url } from "@seo/editorial-ui/url-label";
 import { SiteAuditPanel } from "@seo/site-audit/panel";
 
@@ -48,7 +47,16 @@ import {
   pageTrendOf,
   rootLabelOf,
   type PageGroup,
-} from "@/lib/page-analysis";
+} from "@seo/reports/page-analysis";
+import {
+  closedQuarters,
+  curationCount,
+  lastClosedMonth,
+  periodIdOf,
+  reportIdOf,
+  type ReportPeriod,
+} from "@seo/reports";
+import { getPublishedReports } from "@seo/reports/published";
 import { OPPORTUNITY_KINDS } from "./opportunity-kinds";
 import {
   ReportPendingZone,
@@ -1771,42 +1779,40 @@ function Reports({
     const search = next.toString();
     return `${baseHref}/informe${search ? `?${search}` : ""}`;
   };
-  const closed: Array<{
-    preset: ReportPreset;
-    name: (start: string) => string;
-  }> = [
-    {
-      preset: "mes",
-      name: (start) =>
-        `Informe mensual · ${new Date(`${start}T00:00:00Z`).toLocaleDateString("es-ES", { month: "long", year: "numeric", timeZone: "UTC" })}`,
-    },
-    {
-      preset: "trimestre",
-      name: (start) =>
-        `Informe trimestral · ${Math.floor(Number(start.slice(5, 7)) / 3) + 1}.º trimestre ${start.slice(0, 4)}`,
-    },
-  ];
+  // D-076: mes cerrado y los cuatro últimos trimestres cerrados, con su
+  // versión congelada en el workbench si la hay y sus puntualizaciones.
+  const today = new Date().toISOString().slice(0, 10);
+  const published = getPublishedReports().reports;
   type ReportRow = {
     key: string;
     name: string;
     start: string;
     end: string;
     params: Record<string, string>;
+    status: string;
+    notes: number;
   };
-  const rows: ReportRow[] = closed.flatMap(({ preset, name }): ReportRow[] => {
-    const range = presetRange(preset, report.cutoff);
-    return range
-      ? [
-          {
-            key: preset,
-            name: name(range.start),
-            start: range.start,
-            end: range.end,
-            params: { range: preset },
-          },
-        ]
-      : [];
-  });
+  const rowOf = (period: ReportPeriod, kind: string): ReportRow => {
+    const item = published[reportIdOf(report.brand, period.id)];
+    const frozen = item?.snapshot && report.market === "all";
+    return {
+      key: period.id,
+      name: `${kind} · ${period.label}`,
+      start: period.start,
+      end: period.end,
+      params: { periodo: period.id },
+      status: frozen
+        ? `Versión del ${date(item.snapshot!.generatedAt.slice(0, 10))}`
+        : "En vivo",
+      notes: curationCount(item?.curation),
+    };
+  };
+  const rows: ReportRow[] = [
+    rowOf(lastClosedMonth(today), "Informe mensual"),
+    ...closedQuarters(today, 4).map((period) =>
+      rowOf(period, "Informe trimestral"),
+    ),
+  ].filter((item) => item.end <= report.cutoff);
   const w = report.window;
   if (!rows.some((item) => item.start === w.start && item.end === w.end)) {
     const params: Record<string, string> = {};
@@ -1814,19 +1820,24 @@ function Reports({
       const value = current.get(key);
       if (value) params[key] = value;
     }
+    const periodId = periodIdOf(w.start, w.end);
     rows.push({
       key: "actual",
       name: `Periodo seleccionado · ${w.label}`,
       start: w.start,
       end: w.end,
       params,
+      status: "En vivo",
+      notes: periodId
+        ? curationCount(published[reportIdOf(report.brand, periodId)]?.curation)
+        : 0,
     });
   }
   return (
     <Section
       id="informes"
       title="Informes"
-      subtitle="Recopilación de los apartados del proyecto, con las cifras clave y una aclaración breve por apartado."
+      subtitle="Resumen ejecutivo, cifras clave y lectura SEO de cada apartado del proyecto y plan de acción priorizado, redactados con reglas a partir de los datos."
     >
       <div className="brand-reports-wrap">
         <table className="brand-reports">
@@ -1835,6 +1846,7 @@ function Reports({
               <th>Informe</th>
               <th>Periodo</th>
               <th>Mercado</th>
+              <th>Versión</th>
               <th>Presentación</th>
               <th>PDF</th>
             </tr>
@@ -1849,6 +1861,16 @@ function Reports({
                   {date(item.start)} – {date(item.end)}
                 </td>
                 <td>{market}</td>
+                <td>
+                  {item.status}
+                  {item.notes ? (
+                    <span className="brand-report-notes">
+                      {" "}
+                      · {item.notes}{" "}
+                      {item.notes === 1 ? "puntualización" : "puntualizaciones"}
+                    </span>
+                  ) : null}
+                </td>
                 <td>
                   <a
                     className="brand-report-link"
@@ -1880,6 +1902,9 @@ function Reports({
         El PDF se genera con la impresión del navegador: elige «Guardar como
         PDF» en el diálogo. El mercado es el seleccionado arriba; el periodo
         anterior y el año pasado se comparan igual que en el resto del proyecto.
+        Los trimestres con «Versión» se congelaron en el workbench con sus
+        cifras de ese día (solo para todos los mercados); las puntualizaciones
+        las escribe el equipo SEO y se aplican también al informe en vivo.
       </p>
     </Section>
   );
@@ -2107,11 +2132,14 @@ function Editorial({
           showPast
           exportHref={`/api/v1/editorial/export/plan-editorial.xlsx?brand=${report.brand}`}
           after={
-            <ThemeTimeline
-              themes={themes}
-              pieces={pieces}
-              currentMonth={new Date().toISOString().slice(0, 7)}
-            />
+            <>
+              <PlanMeasurements rows={pieces} showBrand={false} />
+              <ThemeTimeline
+                themes={themes}
+                pieces={pieces}
+                currentMonth={new Date().toISOString().slice(0, 7)}
+              />
+            </>
           }
         />
       </div>

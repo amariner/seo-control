@@ -1,6 +1,6 @@
 import type { ReactNode } from "react";
 import type { BrandReport } from "@seo/contracts";
-import type { PageAnalysis } from "@/lib/page-analysis";
+import type { PageAnalysis } from "@seo/reports/page-analysis";
 import { InfoHint } from "./info-hint";
 import { DuplicatesDialog, TrendFilterButton } from "./page-kpi-actions";
 import { RankBar } from "./rank-bar";

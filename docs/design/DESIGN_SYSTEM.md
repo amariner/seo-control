@@ -281,3 +281,21 @@ screen. Its essence, now shared through global classes:
   period and market pickers live in the header; the data cut-off stays under
   the report title. The header live indicator uses `--ds-live` (a blinking
   light-green dot) only when GA4 Realtime returns data; otherwise it is grey.
+
+## Workbench on the viewer shell · D-077 (2026-09-29)
+
+- The workbench uses the viewer's shell (D-044): shadcn `Sidebar` with the
+  `inset` variant on mineral paper, white canvas, sticky header with the
+  sidebar trigger, a `Workbench / <section> / <detail>` path and an
+  «Entorno local» pill. Same Tailwind v4 + shadcn setup (`app/tailwind.css`),
+  every shadcn token mapped to a `--ds-*` token; no new colours.
+- Navigation groups: Preparación (Inicio), Editorial (Plan editorial,
+  Curación), Informes (Informes, Adicionales), Técnico (Crawls, Herramientas),
+  plus «Abrir el visor». The brand block reads «SEO Workbench · Porcelanosa ·
+  local» so the two apps are never confused.
+- Page heading follows D-049: «Título │ ámbito» on one line, grey description
+  below (max 760 px measure), context on the right. KPI tiles, panels and tables
+  reuse the viewer's card, border and radius values; buttons are the outline
+  style with a cobalt primary.
+- Checked at 1440 and 375 px: no page-level horizontal overflow; table overflow
+  stays inside its region; the mobile sheet closes on navigation.

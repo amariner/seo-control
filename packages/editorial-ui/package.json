@@ -12,7 +12,8 @@
     "./publication-slider": "./src/publication-slider.tsx",
     "./editorial-plan.css": "./src/editorial-plan.css",
     "./plan-editors": "./src/plan-editors.tsx",
-    "./plan-xlsx": "./src/plan-xlsx.ts"
+    "./plan-xlsx": "./src/plan-xlsx.ts",
+    "./plan-measurements": "./src/plan-measurements.tsx"
   },
   "scripts": {
     "build": "tsc --noEmit",

@@ -90,6 +90,18 @@ export const editorialMeasurementSchema = z.object({
   metricKey: z.string().nullable(),
   measuredAt: z.string().date().nullable(),
   interpretation: z.string().nullable(),
+  // P3.5 (D-079): procedencia de la medición real. Opcionales para que el
+  // dataset importado de V1, que no los trae, siga validando.
+  /** Último día con dato de la fuente cuando se midió. */
+  cutoff: z.string().date().nullable().optional(),
+  /** Días de la ventana con dato: `result` de una ventana en curso cubre solo estos. */
+  coveredDays: z.number().int().nonnegative().optional(),
+  /** Qué se midió: la URL exacta de la pieza o, sin URL, su keyword. */
+  scope: z.enum(["url", "keyword"]).optional(),
+  confidence: z.enum(["alta", "media", "baja"]).optional(),
+  impressions: z.number().nullable().optional(),
+  baselineImpressions: z.number().nullable().optional(),
+  position: z.number().nullable().optional(),
 });
 
 export const editorialProvenanceSchema = z.object({
@@ -279,6 +291,7 @@ export type EditorialStatus = z.infer<typeof editorialStatusSchema>;
 export type EditorialPieceType = z.infer<typeof editorialPieceTypeSchema>;
 export type EditorialBrandRef = z.infer<typeof editorialBrandRefSchema>;
 export type EditorialPiece = z.infer<typeof editorialPieceSchema>;
+export type EditorialMeasurement = z.infer<typeof editorialMeasurementSchema>;
 export type EditorialCalendarEvent = z.infer<typeof editorialCalendarEventSchema>;
 export type EditorialThemeBlock = z.infer<typeof editorialThemeBlockSchema>;
 export type EditorialProposal = z.infer<typeof editorialProposalSchema>;
@@ -322,3 +335,20 @@ export const EDITORIAL_TYPE_LABELS: Record<EditorialPieceType, string> = {
 };
 
 export const MONTH_NAMES_ES = ["", "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"] as const;
+
+/**
+ * Mediciones editoriales publicadas (P3.5, D-079): ventanas de 28, 90 y 180
+ * días por pieza publicada, calculadas en el workbench con Search Console
+ * real. Fichero aparte del dataset y de la curación: se regenera entero.
+ */
+export const editorialMeasurementStoreSchema = z.object({
+  schemaVersion: z.literal(1),
+  generatedAt: z.string().datetime(),
+  generatedBy: z.string(),
+  source: z.literal("gsc"),
+  cutoff: z.string().date().nullable(),
+  pieces: z.record(z.string(), z.array(editorialMeasurementSchema)),
+  /** Piezas publicadas que no se pudieron medir y por qué. */
+  skipped: z.array(z.object({ id: z.string(), reason: z.string() })),
+});
+export type EditorialMeasurementStore = z.infer<typeof editorialMeasurementStoreSchema>;
