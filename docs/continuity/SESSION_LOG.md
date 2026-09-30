@@ -1158,4 +1158,4 @@
 - Verificación: typecheck, editorial 57 (2 nuevas) / editorial-ui 4 / reports 33 / visor 127 /
   workbench 5; edición real en workbench (curación con autor y nota, mes intacto) y en visor
   (bandeja local con `writingDate`, `editorial:pull --dry-run` la resume); datos de prueba retirados.
-- Commit 7aa475b en main, subido y desplegado (, Ready).
+- Commit 7aa475b en main, subido y desplegado (dpl_4p2wWNoRwoh2RkKMuVKVu2XZXgY9, Ready).
