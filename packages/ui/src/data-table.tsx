@@ -87,7 +87,8 @@ const features = tableFeatures({
 const numberFormat = new Intl.NumberFormat("es-ES", {
   useGrouping: "always" as unknown as boolean,
 });
-const pageSizes = [10, 25, 50, 100] as const;
+/** Tamaños de página; los grandes permiten ver el plan entero de una vez. */
+const pageSizes = [10, 25, 50, 100, 500, 1000, 50000] as const;
 
 /** Enlace de exportación con la búsqueda y los filtros activos de la tabla. */
 function exportUrl(base: string, query: string, active: Array<[string, string]>): string {
@@ -345,7 +346,7 @@ export function ReportDataTable({
           >
             {pageSizes.map((size) => (
               <option key={size} value={size}>
-                {size}
+                {size.toLocaleString("es-ES", { useGrouping: "always" as unknown as boolean })}
               </option>
             ))}
           </select>

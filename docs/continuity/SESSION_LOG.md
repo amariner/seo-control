@@ -1159,3 +1159,9 @@
   workbench 5; edición real en workbench (curación con autor y nota, mes intacto) y en visor
   (bandeja local con `writingDate`, `editorial:pull --dry-run` la resume); datos de prueba retirados.
 - Commit 7aa475b en main, subido y desplegado (dpl_4p2wWNoRwoh2RkKMuVKVu2XZXgY9, Ready).
+
+## 2026-09-30 · Filas por página: 500, 1.000 y 50.000
+
+- A petición del usuario, el selector «Filas» de la tabla compartida (`packages/ui/src/data-table.tsx`,
+  plan editorial incluido) y el paginador editorial del visor ofrecen también 500, 1.000 y 50.000.
+- Verificación: typecheck, ui 4 / visor 127 / workbench 5; plan con 500 filas muestra 1–112 de 112.
