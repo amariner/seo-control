@@ -1137,4 +1137,5 @@
   piezas: la V1 no tiene propuestas.
 - Verificación: typecheck (12 tareas), editorial 55 (1 nueva), editorial-ui 4, reports 33, visor 127
   (recuentos del dataset actualizados), workbench 5; plan del workbench y del visor con 112 piezas.
-  Sin commit.
+- «Sube el plan» a petición del usuario: commit 3a38554 en main, subido a GitHub y desplegado
+  (dpl_ENRDDYeNMubZRrvDZ9yWYRMz6Lro, Ready). Producción pide acceso con Google: no verificada desde aquí.
