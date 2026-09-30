@@ -76,7 +76,7 @@ ejecutar sin credenciales ni presupuesto nuevos.
 | H7 | Neon Frankfurt y `DATABASE_URL`: edición del plan en producción y base de P3.1 | P3.1 | el responsable crea la cuenta y acepta términos | bloqueado |
 | H8 | Sesión de aceptación P2: cinco flujos, dos retiradas y cuatro rutas «missing» | P2.4 | responsable SEO | bloqueado |
 | H9 | SEMrush en V2: ranking estable, competidores y SOV semanales | P3.3 | decisión de coste de unidades API | bloqueado |
-| H10 | Bandeja de decisiones P4 alimentada por informes, crawl y medición editorial | P4 | H4 | siguiente |
+| H10 | Bandeja de decisiones P4 alimentada por informes, crawl y medición editorial | P4 | H4 | en curso: pestaña «Acciones» con reglas por apartado (D-088); falta estado, responsable, plazo y resultado |
 | H11 | Archivo `/reports` con los informes congelados y exportación HTML autocontenida | P7 | H1 | **hecho** (D-081): archivo real, HTML sin conexión y CSV con sello |
 | H12 | Plan editorial con una sola base de datos para workbench y preview y tabla editable tipo hoja de cálculo | P3.1 | H7 | pendiente (rumbo fijado en D-085) |
 

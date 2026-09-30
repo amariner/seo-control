@@ -2251,3 +2251,32 @@ No se reescriben decisiones antiguas. Si una cambia, se añade una nueva entrada
 - Consecuencias: la estructura llega a producción al publicar un crawl posterior a D-086
   («publica el crawl de <marca>», commit y despliegue). El JSON publicado crece ~70 bytes por URL
   declarada (XTONE: 161 KB con 810 URL).
+
+## D-088 · Pestaña «Acciones» del proyecto: repaso de todos los apartados
+
+- Fecha: 2026-09-30.
+- Estado: vigente (primer paso de H10; amplía D-075).
+- Contexto: el usuario pide en el visor un apartado «Acciones» que repase todos los apartados del
+  proyecto. Elige pestaña del proyecto (no la pantalla `/actions` del menú) y acciones por reglas
+  automáticas (no redactadas por el equipo).
+- Decisión:
+  - Reglas en `packages/reports/src/project-actions.ts`, sin IA y con umbrales a la vista
+    (`REVIEW_THRESHOLDS`). `reportPlanActions` contiene las reglas del plan de acción del informe
+    (D-075), extraídas sin cambios de `project-report.ts`, que ahora las usa. Comprobado: los tres
+    informes congelados publicados se pintan idénticos antes y después (con una acción de equipo).
+  - `projectActionReview` repasa en el orden de las pestañas Resumen, Keywords, Páginas, Mercados,
+    Migración (si la hay), Plan editorial y Estado del sitio (Informes no tiene bloque, a petición
+    del usuario: recopila los demás apartados): un hallazgo con su cifra
+    por apartado (o «sin datos») y sus acciones por prioridad, cada una con motivo, área, fuente y
+    si forma parte del plan del informe («En el informe»). Reglas nuevas, solo en la pestaña:
+    fuente caída (urgente); clics sin marca −10 % o peor (alta, las tres keywords que más pierden);
+    3+ keywords top 3 con CTR bajo (media); clics netos negativos (media, las tres URLs que más
+    pierden); 10+ páginas con clics fuera de los sitemaps (alta desde el 10 % de los clics, D-087);
+    mercados entre −30 % y −50 % (media, «vigilar»; ≤ −50 % sigue en el plan); sin crawl publicado
+    (media); crawl de 45+ días (baja); las dos incidencias medias del crawl con más URL (baja).
+  - Visor: pestaña «Acciones» al final (`?tab=acciones`), con recuento por prioridad y un bloque por
+    apartado con enlace a su pestaña (`components/report/actions-review.tsx`). Sigue periodo y
+    mercado; con un mercado elegido, Mercados no propone acciones y se dice.
+- Pendiente (H10): bandeja con estado, responsable, plazo y resultado medido de cada acción, y su
+  relación con `/actions` del menú (hoy con el conector sintético).
+

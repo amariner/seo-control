@@ -40,6 +40,7 @@ import { FilteredList } from "./filtered-list";
 import { KeywordKpis } from "./keyword-kpis";
 import { PageKpis } from "./page-kpis";
 import { PageStructurePanel } from "./page-structure";
+import { ActionsReview } from "./actions-review";
 import { pageStructure } from "@/lib/page-structure";
 import {
   analysePages,
@@ -56,6 +57,7 @@ import {
   closedQuarters,
   curationCount,
   periodIdOf,
+  projectActionReview,
   reportIdOf,
 } from "@seo/reports";
 import { getPublishedReports } from "@seo/reports/published";
@@ -81,6 +83,7 @@ export const REPORT_TABS = [
   { key: "editorial", label: "Plan editorial" },
   { key: "estado", label: "Estado del sitio" },
   { key: "informes", label: "Informes" },
+  { key: "acciones", label: "Acciones" },
 ] as const;
 export type ReportTab = (typeof REPORT_TABS)[number]["key"];
 
@@ -1040,6 +1043,14 @@ export function BrandReportView({
           {tab === "estado" && (
             <SiteStatus report={report} audit={siteAudit ?? null} />
           )}
+          {tab === "acciones" && (
+            <Actions
+              report={report}
+              pieces={editorialPieces ?? []}
+              audit={siteAudit ?? null}
+              href={href}
+            />
+          )}
         </div>
         <Quality report={report} />
         <footer className="brand-footer">
@@ -1772,6 +1783,59 @@ function Pages({
         </div>
       )}
     </>
+  );
+}
+/**
+ * Pestaña Acciones (D-088): repaso de todos los apartados con las acciones
+ * que proponen sus datos. Mismas entradas que el informe del proyecto, más la
+ * brecha de sitemaps de Páginas.
+ */
+function Actions({
+  report,
+  pieces,
+  audit,
+  href,
+}: {
+  report: BrandReport;
+  pieces: EditorialPlanRow[];
+  audit: SiteAuditSummary | null;
+  href: (tab: ReportTab) => string;
+}) {
+  const today = new Date().toISOString().slice(0, 10);
+  const outside = pageStructure(report, audit).outside;
+  const sections = projectActionReview({
+    report,
+    pieces,
+    audit,
+    rootLabel: rootLabelOf(report.markets),
+    today,
+    sitemapGap: outside
+      ? {
+          pages: outside.root.pages,
+          clicks: outside.root.clicks,
+          share: outside.root.share,
+          folders: [
+            ...new Set(
+              outside.root.children
+                .filter((node) => node.clicks > 0 && node.children.length)
+                .map((node) => node.name.split("/")[0]!),
+            ),
+          ].slice(0, 4),
+        }
+      : null,
+  });
+  return (
+    <Section
+      id="acciones"
+      title="Acciones"
+      subtitle="Repaso de cada apartado: qué dicen sus datos y qué acciones proponen, por prioridad."
+    >
+      <ActionsReview
+        sections={sections}
+        href={href}
+        marketFiltered={report.market !== "all"}
+      />
+    </Section>
   );
 }
 /**

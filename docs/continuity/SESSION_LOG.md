@@ -1189,3 +1189,17 @@
 - Verificación: typecheck (12 tareas), visor 131 (4 nuevas) / site-audit 14 / workbench 5; visor
   local en escritorio y 375 px sin desbordamiento ni errores de consola en carga limpia. Sin commit.
 - A petición del usuario: commit 70a23f5 en main (D-086 y D-087) y subido a GitHub. Sin desplegar.
+
+## 2026-09-30 · Pestaña «Acciones» del proyecto (D-088)
+
+- A petición del usuario, pestaña «Acciones» en cada marca del visor: repaso de los apartados (sin
+  bloque de Informes, retirado a petición del usuario)
+  con un hallazgo por apartado y acciones por reglas (prioridad, motivo con la cifra, área, fuente y
+  si están en el plan del informe). Las reglas del plan del informe se extrajeron a
+  `packages/reports/src/project-actions.ts` sin cambiar su salida.
+- XTONE (últimos 90 días): 1 urgente, 6 altas, 6 medias y 3 bajas, entre ellas incluir en los
+  sitemaps las 1.973 páginas con clics que no declaran (30,8 % de los clics).
+- Verificación: typecheck (12 tareas), reports 36 (3 nuevas) / visor 131 / site-audit 14 /
+  workbench 5; los tres informes congelados se pintan idénticos; visor local en escritorio, 375 px
+  y con mercado ES, sin errores de consola. Sin commit.
+

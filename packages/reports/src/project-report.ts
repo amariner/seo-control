@@ -1,6 +1,15 @@
 import type { BrandReport, SiteAuditSummary } from "@seo/contracts";
 import type { EditorialPlanRow } from "@seo/editorial-ui";
+import { change, listOf, nf, pathOf, pct, signed } from "./format";
 import { analysePages } from "./page-analysis";
+import {
+  PRIORITY_LABEL,
+  PRIORITY_ORDER,
+  SEVERITY_ORDER,
+  reportPlanActions,
+  TASKS,
+  type Priority,
+} from "./project-actions";
 
 /**
  * Informe del proyecto (D-073, D-074, D-075): recopilación simplificada de las
@@ -75,21 +84,6 @@ export type DeckSlide = {
   bars?: DeckBars;
 };
 
-const nf = (value: number | null, digits = 0) =>
-  value === null
-    ? "—"
-    : new Intl.NumberFormat("es-ES", {
-        maximumFractionDigits: digits,
-        useGrouping: "always" as unknown as boolean,
-      }).format(value);
-const pct = (value: number | null, digits = 1) =>
-  value === null ? "—" : `${nf(value, digits)} %`;
-const change = (value: number | null, base: number | null) =>
-  value === null || base === null || base === 0
-    ? null
-    : ((value - base) / Math.abs(base)) * 100;
-const signed = (value: number, digits = 1, unit = " %") =>
-  `${value > 0 ? "+" : value < 0 ? "−" : ""}${nf(Math.abs(value), digits)}${unit}`;
 const dmy = (value: string) => value.split("-").reverse().join("/");
 const shortDate = (value: string) =>
   new Date(`${value}T00:00:00Z`).toLocaleDateString("es-ES", {
@@ -104,13 +98,6 @@ const dayMonth = (value: string) =>
     month: "short",
     timeZone: "UTC",
   });
-/** «A», «A y B», «A, B y C»; «e» ante sonido /i/ («Portugal e Italia»). */
-const listOf = (items: string[]) => {
-  if (items.length <= 1) return items[0] ?? "";
-  const last = items.at(-1)!;
-  const and = /^h?[ií](?![aeoáéó])/i.test(last) ? "e" : "y";
-  return `${items.slice(0, -1).join(", ")} ${and} ${last}`;
-};
 /** Tono de una variación para el resumen ejecutivo: por debajo del umbral es ruido. */
 const toneOf = (diff: number | null, threshold = 5): DeckTone =>
   diff === null || Math.abs(diff) < threshold
@@ -118,14 +105,6 @@ const toneOf = (diff: number | null, threshold = 5): DeckTone =>
     : diff > 0
       ? "good"
       : "bad";
-const pathOf = (url: string) => {
-  try {
-    return decodeURIComponent(new URL(url, "https://x").pathname);
-  } catch {
-    return url;
-  }
-};
-
 function delta(
   value: number | null,
   base: number | null,
@@ -178,40 +157,6 @@ const moverRow = (
   item.change === null ? "Nueva" : signed(item.change, 0),
 ];
 
-/** Tarea concreta por incidencia del crawl: el verbo es lo que hay que hacer. */
-const TASKS: Record<string, string> = {
-  http_4xx: "Redirigir con 301 o recuperar las URL que dan error 4xx",
-  http_5xx: "Revisar con sistemas los errores de servidor",
-  redirect_internal:
-    "Apuntar los enlaces internos al destino final, sin redirección",
-  noindex: "Confirmar si el noindex es intencionado; si no, quitarlo",
-  canonical_other:
-    "Revisar que el canonical apunte a la versión que debe posicionar",
-  canonical_missing: "Añadir canonical autorreferente",
-  sitemap_non_indexable: "Sacar del sitemap las URL no indexables",
-  not_in_sitemap: "Incluir en el sitemap las páginas indexables que faltan",
-  title_missing: "Escribir el title de las páginas que no lo tienen",
-  title_duplicate: "Diferenciar los titles duplicados",
-  title_too_long: "Acortar titles a menos de 60 caracteres",
-  title_too_short: "Completar titles demasiado cortos con la keyword",
-  description_missing: "Redactar meta descriptions que vendan el clic",
-  description_duplicate: "Diferenciar las meta descriptions duplicadas",
-  description_too_long: "Acortar descriptions a menos de 160 caracteres",
-  description_too_short: "Ampliar descriptions demasiado cortas",
-  h1_missing: "Añadir un H1 con el tema de la página",
-  h1_multiple: "Dejar un único H1 por página",
-  thin_content: "Ampliar el contenido de las páginas con poco texto",
-  img_missing_alt: "Añadir texto alternativo a las imágenes",
-  broken_links: "Corregir los enlaces internos que apuntan a errores",
-  links_to_redirects: "Actualizar enlaces internos que pasan por redirecciones",
-  lang_missing: "Declarar el idioma con el atributo lang",
-  hreflang_missing: "Enlazar las versiones de idioma con hreflang",
-  hreflang_no_xdefault: "Añadir hreflang x-default",
-  hreflang_no_self: "Incluir la propia URL en el grupo hreflang",
-  slow_response: "Comprobar el tiempo de respuesta del servidor (medido en local, orientativo)",
-  html_heavy: "Aligerar el HTML de las páginas más pesadas",
-};
-const SEVERITY_ORDER = { critica: 0, alta: 1, media: 2, baja: 3 } as const;
 const SEVERITY_LABEL = {
   critica: "Urgente",
   alta: "Alta",
@@ -220,33 +165,11 @@ const SEVERITY_LABEL = {
 } as const;
 
 /**
- * Plan de acción: cada apartado aporta sus acciones con prioridad y motivo (la
- * cifra que la justifica). Los próximos pasos del informe (`report.nextSteps`)
- * toman la prioridad de su área: técnica y medición condicionan todo lo demás.
+ * Plan de acción: las reglas viven en `project-actions.ts` (D-088), compartidas
+ * con la pestaña «Acciones» del visor; aquí solo se ordenan y recortan.
  */
-export type Priority = "urgente" | "alta" | "media" | "baja";
+export type { Priority };
 type Action = { priority: Priority; title: string; why: string; area: string };
-const PRIORITY_ORDER: Record<Priority, number> = {
-  urgente: 0,
-  alta: 1,
-  media: 2,
-  baja: 3,
-};
-const PRIORITY_LABEL: Record<Priority, string> = {
-  urgente: "Urgente",
-  alta: "Alta",
-  media: "Media",
-  baja: "Baja",
-};
-const STEP_AREA = {
-  tecnico: { label: "Técnico", priority: "alta" },
-  medicion: { label: "Medición", priority: "alta" },
-  contenido: { label: "Contenido", priority: "media" },
-  editorial: { label: "Editorial", priority: "media" },
-} as const satisfies Record<
-  BrandReport["nextSteps"][number]["area"],
-  { label: string; priority: Priority }
->;
 const priorityTone = (priority: Priority): DeckTone =>
   priority === "urgente" || priority === "alta" ? "bad" : "neutral";
 
@@ -296,12 +219,7 @@ export function buildProjectReport({
     .filter((item) => item.tone === "warn")
     .map((item) => item.text);
   const slides: DeckSlide[] = [];
-  const actions: Action[] = report.nextSteps.map((step) => ({
-    priority: STEP_AREA[step.area].priority,
-    title: step.title,
-    why: step.why,
-    area: STEP_AREA[step.area].label,
-  }));
+  const actions: Action[] = reportPlanActions({ report, pieces, audit, rootLabel, today }).map(({ priority, title, why, area }) => ({ priority, title, why, area }));
   // Las del equipo van primero dentro de su prioridad: son decisiones, no reglas.
   actions.unshift(
     ...teamActions.map((action) => ({
@@ -541,13 +459,6 @@ export function buildProjectReport({
     // URLs que no tenían clics antes: tras una migración, son los destinos nuevos.
     const newUrls = report.contentUp.filter((item) => item.change === null).length;
     const visibleChange = change(pages.visible, pages.previousVisible);
-    if (pages.variantGroups >= 10)
-      actions.push({
-        priority: "media",
-        title: "Unificar las rutas servidas en varias URLs con 301 y canonical",
-        why: `${nf(pages.variantGroups)} rutas aparecen en Google con y sin barra final, mayúsculas o parámetros; ${nf(pages.variantClicks)} clics caen en variantes secundarias.`,
-        area: "Técnico",
-      });
     slides.push({
       id: "paginas",
       title: "Páginas",
@@ -634,13 +545,6 @@ export function buildProjectReport({
       .map((item) => item.name);
     // Con un mercado filtrado, el reparto es contexto: no entra en el resumen ni en el plan.
     const allMarkets = report.market === "all";
-    if (allMarkets && collapsed.length)
-      actions.push({
-        priority: "alta",
-        title: `Revisar ${listOf(collapsed)}: carpeta de idioma, hreflang y redirecciones`,
-        why: `${collapsed.length === 1 ? "Cae" : "Caen"} más de un 50 % en visitas SEO frente al ${prev}; una caída así no se explica por la demanda.`,
-        area: "Mercados",
-      });
     slides.push({
       id: "mercados",
       title: "Mercados",
@@ -818,20 +722,6 @@ export function buildProjectReport({
       ["backlog", "desconocido"].includes(piece.statusKey),
     ).length;
     const measured = new Map(report.editorial.map((item) => [item.id, item]));
-    if (published.length === 0 && doing + pending > 0)
-      actions.push({
-        priority: "media",
-        title: "Fijar una cadencia mínima de publicación",
-        why: `Ninguna pieza publicada en el periodo, con ${nf(doing)} en marcha y ${nf(pending)} por empezar.`,
-        area: "Editorial",
-      });
-    if (next.length === 0 && pending > 0)
-      actions.push({
-        priority: "baja",
-        title: "Dar fecha a las piezas por empezar",
-        why: `${nf(pending)} ${pending === 1 ? "pieza sin fecha no entra" : "piezas sin fecha no entran"} en el calendario.`,
-        area: "Editorial",
-      });
     const first28 = (piece: EditorialPlanRow) => {
       const item = piece.measurements?.find((m) => m.windowDays === 28 && m.status === "medido");
       return item && item.result !== null && item.baseline !== null ? { result: item.result, baseline: item.baseline } : null;
@@ -928,25 +818,6 @@ export function buildProjectReport({
     const urgent = tasks.filter(
       (task) => task.severity === "critica" || task.severity === "alta",
     );
-    // En el plan, una sola fila para el crawl: el detalle por tarea ya está en
-    // su apartado y no debe desplazar acciones de más alcance.
-    const urls = (n: number) => `${nf(n)} ${n === 1 ? "URL" : "URLs"}`;
-    if (urgent.length === 1)
-      actions.push({
-        priority: urgent[0]!.severity === "critica" ? "urgente" : "alta",
-        title: TASKS[urgent[0]!.id] ?? urgent[0]!.label,
-        why: `${urls(urgent[0]!.affected)} en el crawl del ${crawled}${urgent[0]!.sample[0] ? `, p. ej. ${urgent[0]!.sample[0]}` : ""}.`,
-        area: "Técnico",
-      });
-    else if (urgent.length > 1)
-      actions.push({
-        priority: urgent.some((task) => task.severity === "critica")
-          ? "urgente"
-          : "alta",
-        title: `Resolver las ${nf(urgent.length)} incidencias urgentes o altas del crawl`,
-        why: `${listOf(urgent.map((task) => `${task.label} (${urls(task.affected)})`))} en el crawl del ${crawled}; tareas y ejemplos en «Estado del sitio».`,
-        area: "Técnico",
-      });
     slides.push({
       id: "estado",
       title: "Estado del sitio",
