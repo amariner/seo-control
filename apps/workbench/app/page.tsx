@@ -17,7 +17,7 @@ export const dynamic = "force-dynamic";
  */
 const STAGES = [
   ["01", ScanSearch, "Adquirir", "Crawls hasta 1.000 URL e importación editorial con procedencia.", "disponible"],
-  ["02", Bot, "Depurar", "Curación editorial, puntualizaciones de informes y revisión.", "disponible"],
+  ["02", Bot, "Depurar", "Curación editorial y, desde el chat, puntualizaciones de informes.", "disponible"],
   ["03", FileCheck2, "Aprobar", "Autor y revisor distintos antes de publicar.", "P5"],
   ["04", ShieldCheck, "Firmar", "Contrato, allowlist, hash y firma del paquete.", "P5"],
   ["05", UploadCloud, "Promover", "Hoy: commit y despliegue pedidos en el chat.", "manual"],
@@ -37,7 +37,7 @@ export default async function Page() {
   const additional = listAdditionalReports();
   const sync = publishStatus();
   const frozen = catalog.rows.filter((row) => row.published?.snapshot);
-  const pendingReports = catalog.rows.filter((row) => row.sync === "pending" || row.sync === "new");
+  const pendingReports = catalog.pending;
   const lastRun = runs[0];
   const curated = curation.curatedPieces + curation.createdPieces + curation.curatedSlots + curation.curatedEvents;
   const toSync = sync.channels.filter((channel) => channel.changed.length);
@@ -49,7 +49,7 @@ export default async function Page() {
       at: row.published!.snapshot!.generatedAt,
       title: `Informe congelado · ${row.brand.name} · ${row.period.label}`,
       detail: `${row.published!.snapshot!.generatedBy} · corte ${row.published!.snapshot!.cutoff}`,
-      href: `/informes/${row.brand.slug}/${row.period.id}`,
+      href: "/informes",
       tone: "good" as const,
     })),
     ...catalog.rows
@@ -59,7 +59,7 @@ export default async function Page() {
         at: row.published!.curation!.updatedAt,
         title: `Puntualizaciones · ${row.brand.name} · ${row.period.label}`,
         detail: `${row.notes} ajustes · ${row.published!.curation!.updatedBy}`,
-        href: `/informes/${row.brand.slug}/${row.period.id}`,
+        href: "/informes",
         tone: "neutral" as const,
       })),
     ...runs.slice(0, 5).map((run) => ({

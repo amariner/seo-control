@@ -1099,3 +1099,28 @@
 - Arreglo lateral: vitest de las apps excluye `.next/**` (el build standalone copiaba las pruebas).
 - Enlace «Presentación» explícito en cada informe congelado de `/reports`, a petición del usuario.
 - Commit en main y subido a GitHub a petición del usuario; sin desplegar en Vercel.
+
+## 2026-09-29 · Informes solo del último trimestre y operación desde el chat (D-082)
+
+- A petición del usuario, el workbench deja de generar desde la interfaz: todo se pide en el chat de
+  Claude Code o Codex. Regla para nuevos desarrollos en `AGENTS.md` («Operación desde el chat»).
+- Workbench `/informes`: tabla única de las ocho marcas por el 2.º trimestre 2026, sin «Regenerar»,
+  «Congelar» ni «Personalizar»; panel con frases y comandos. Retirados la página de personalizar,
+  las Server Actions de informes y su CSS.
+- Nuevo `pnpm report:curate` (mapa del informe, `--file` validado, `--reset`) y `--discard` en
+  `report:generate`. Probado en xtone:2026-Q2 y revertido.
+- Visor: la pestaña «Informes» muestra solo el trimestre revisado y el periodo seleccionado.
+- Verificación: typecheck, reports 33 / visor 127 / workbench 5, build del workbench, axe del
+  workbench (0 incumplimientos), 1440 y 375 px sin desbordamiento. Sin commit.
+
+
+## 2026-09-30 · Informe del periodo anclado y despliegue (H6)
+
+- Visor, pestaña «Informes» del proyecto: el informe del periodo seleccionado va el primero, con
+  una chincheta; si coincide con el trimestre, la lleva el trimestral. Fuera la nota al pie y
+  subtítulo más breve. «Fuentes y calidad del dato» y el pie bajan al final de la pantalla cuando
+  el contenido es corto (todas las pestañas del informe).
+- Verificación: typecheck (12 tareas), reports 33 / visor 127 / workbench 5, revisión visual en
+  Informes (90 días y 2.º trimestre) y Resumen.
+- A petición del usuario: commit de D-082 y del retoque en main, subido a GitHub y
+  `vercel deploy --prod` (entran D-075…D-082).

@@ -6,6 +6,7 @@ import {
   Database,
   FileDown,
   Info,
+  Pin,
   Presentation,
 } from "lucide-react";
 import {
@@ -52,10 +53,8 @@ import {
 import {
   closedQuarters,
   curationCount,
-  lastClosedMonth,
   periodIdOf,
   reportIdOf,
-  type ReportPeriod,
 } from "@seo/reports";
 import { getPublishedReports } from "@seo/reports/published";
 import { OPPORTUNITY_KINDS } from "./opportunity-kinds";
@@ -1016,6 +1015,7 @@ export function BrandReportView({
           </Notice>
         )}
         <div
+          className="brand-report-body"
           key={`${tab}:${report.window.start}:${report.window.end}:${report.window.previousStart}:${report.window.previousEnd}:${report.window.previousYearStart}:${report.window.previousYearEnd}:${report.market}`}
         >
           {tab === "resumen" && <Summary report={report} href={href} />}
@@ -1749,9 +1749,10 @@ function Pages({ report }: { report: BrandReport }) {
   );
 }
 /**
- * Pestaña Informes (D-073): cada fila enlaza el informe del proyecto en modo
- * presentación y en PDF. El informe recopila los apartados del proyecto,
- * simplificados, para un periodo cerrado o el periodo que se está viendo.
+ * Pestaña Informes (D-073, D-082): dos informes, con presentación y PDF. El
+ * del último trimestre cerrado, que el equipo SEO congela y comenta desde el
+ * chat del workbench, y uno genérico en vivo del periodo y mercado elegidos
+ * arriba. El informe recopila los apartados del proyecto, simplificados.
  */
 function Reports({
   report,
@@ -1777,8 +1778,6 @@ function Reports({
     const search = next.toString();
     return `${baseHref}/informe${search ? `?${search}` : ""}`;
   };
-  // D-076: mes cerrado y los cuatro últimos trimestres cerrados, con su
-  // versión congelada en el workbench si la hay y sus puntualizaciones.
   const today = new Date().toISOString().slice(0, 10);
   const published = getPublishedReports().reports;
   type ReportRow = {
@@ -1789,28 +1788,35 @@ function Reports({
     params: Record<string, string>;
     status: string;
     notes: number;
+    /** Coincide con el periodo elegido arriba: va anclado el primero. */
+    pinned: boolean;
   };
-  const rowOf = (period: ReportPeriod, kind: string): ReportRow => {
-    const item = published[reportIdOf(report.brand, period.id)];
+  // Los primeros días tras cerrar un trimestre los datos aún no lo cubren
+  // (corte con retraso): hasta que haya versión congelada o dato, manda el anterior.
+  const quarter = closedQuarters(today, 2).find(
+    (period) =>
+      published[reportIdOf(report.brand, period.id)]?.snapshot ||
+      period.end <= report.cutoff,
+  );
+  const rows: ReportRow[] = [];
+  if (quarter) {
+    const item = published[reportIdOf(report.brand, quarter.id)];
     const frozen = item?.snapshot && report.market === "all";
-    return {
-      key: period.id,
-      name: `${kind} · ${period.label}`,
-      start: period.start,
-      end: period.end,
-      params: { periodo: period.id },
+    rows.push({
+      key: quarter.id,
+      name: `Informe trimestral · ${quarter.label}`,
+      start: quarter.start,
+      end: quarter.end,
+      params: { periodo: quarter.id },
       status: frozen
         ? `Versión del ${date(item.snapshot!.generatedAt.slice(0, 10))}`
         : "En vivo",
       notes: curationCount(item?.curation),
-    };
-  };
-  const rows: ReportRow[] = [
-    rowOf(lastClosedMonth(today), "Informe mensual"),
-    ...closedQuarters(today, 4).map((period) =>
-      rowOf(period, "Informe trimestral"),
-    ),
-  ].filter((item) => item.end <= report.cutoff);
+      pinned:
+        quarter.start === report.window.start &&
+        quarter.end === report.window.end,
+    });
+  }
   const w = report.window;
   if (!rows.some((item) => item.start === w.start && item.end === w.end)) {
     const params: Record<string, string> = {};
@@ -1819,9 +1825,9 @@ function Reports({
       if (value) params[key] = value;
     }
     const periodId = periodIdOf(w.start, w.end);
-    rows.push({
+    rows.unshift({
       key: "actual",
-      name: `Periodo seleccionado · ${w.label}`,
+      name: `Informe del periodo · ${w.label}`,
       start: w.start,
       end: w.end,
       params,
@@ -1829,13 +1835,14 @@ function Reports({
       notes: periodId
         ? curationCount(published[reportIdOf(report.brand, periodId)]?.curation)
         : 0,
+      pinned: true,
     });
   }
   return (
     <Section
       id="informes"
       title="Informes"
-      subtitle="Resumen ejecutivo, cifras clave y lectura SEO de cada apartado del proyecto y plan de acción priorizado, redactados con reglas a partir de los datos."
+      subtitle="Resumen, cifras clave, lectura SEO y plan de acción del proyecto."
     >
       <div className="brand-reports-wrap">
         <table className="brand-reports">
@@ -1853,7 +1860,16 @@ function Reports({
             {rows.map((item) => (
               <tr key={item.key}>
                 <td>
-                  <strong>{item.name}</strong>
+                  <strong>
+                    {item.pinned ? (
+                      <Pin
+                        className="brand-report-pin"
+                        size={13}
+                        aria-label="Periodo seleccionado"
+                      />
+                    ) : null}
+                    {item.name}
+                  </strong>
                 </td>
                 <td>
                   {date(item.start)} – {date(item.end)}
@@ -1896,14 +1912,6 @@ function Reports({
           </tbody>
         </table>
       </div>
-      <p className="brand-list-foot">
-        El PDF se genera con la impresión del navegador: elige «Guardar como
-        PDF» en el diálogo. El mercado es el seleccionado arriba; el periodo
-        anterior y el año pasado se comparan igual que en el resto del proyecto.
-        Los trimestres con «Versión» se congelaron en el workbench con sus
-        cifras de ese día (solo para todos los mercados); las puntualizaciones
-        las escribe el equipo SEO y se aplican también al informe en vivo.
-      </p>
     </Section>
   );
 }

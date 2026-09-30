@@ -60,6 +60,18 @@ export const reportCurationSchema = z.object({
 });
 export type ReportCuration = z.infer<typeof reportCurationSchema>;
 
+/**
+ * Lo que el chat entrega a `pnpm report:curate -- --file` (D-082): las
+ * puntualizaciones sin autor ni fecha, que pone el script. Estricto: una
+ * clave mal escrita (`hiddenMetric`) es un error, no una puntualización que
+ * se pierde en silencio.
+ */
+export const reportCurationInputSchema = z.strictObject({
+  slides: z.record(z.string(), z.strictObject(reportSlideCurationSchema.shape)).default({}),
+  actions: z.array(z.strictObject(reportTeamActionSchema.shape)).max(12).default([]),
+});
+export type ReportCurationInput = z.infer<typeof reportCurationInputSchema>;
+
 export const reportSnapshotSchema = z.object({
   /** Versión del contrato del informe de marca con la que se generó. */
   reportVersion: z.string(),

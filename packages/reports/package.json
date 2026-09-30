@@ -20,6 +20,7 @@
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
     "generate": "tsx scripts/generate.ts",
+    "curate": "tsx scripts/curate.ts",
     "measure": "tsx scripts/measure-editorial.ts"
   },
   "dependencies": {

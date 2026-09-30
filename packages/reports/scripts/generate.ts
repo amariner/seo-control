@@ -2,13 +2,16 @@
  * `pnpm report:generate -- --project <slug> --period <2026-Q2|2026-08>` (D-076).
  * Congela un informe con datos reales de GA4 y Search Console. Lee las
  * credenciales de apps/workbench/.env.local (o, en su defecto, de las del
- * visor). Lo mismo que el botón «Regenerar» de /informes en el workbench.
+ * visor). Desde D-082 es el único camino: el workbench ya no tiene botones.
+ *
+ * `--discard` retira la versión congelada (las puntualizaciones se quedan y
+ * el visor vuelve a mostrar el informe en vivo).
  */
 import { existsSync, readFileSync } from "node:fs";
 import { resolve } from "node:path";
 import { brandSlugSchema } from "@seo/contracts";
 import { generateSnapshot } from "../src/generate";
-import { localAuthor, repositoryRoot, saveSnapshot } from "../src/store";
+import { localAuthor, readReports, removeSnapshot, repositoryRoot, saveSnapshot } from "../src/store";
 
 function loadEnv() {
   const root = repositoryRoot();
@@ -32,6 +35,13 @@ const value = (flag: string) => {
 const project = brandSlugSchema.parse(value("--project"));
 const period = value("--period");
 if (!period) throw new Error("Falta --period (p. ej. 2026-Q2 o 2026-08)");
+if (args.includes("--discard")) {
+  const id = `${project}:${period}`;
+  if (!readReports().reports[id]?.snapshot) throw new Error(`${id} no tiene versión congelada`);
+  removeSnapshot(id);
+  console.log(`✓ ${id}: versión congelada retirada; el visor vuelve a calcularlo en vivo`);
+  process.exit(0);
+}
 const source = loadEnv();
 console.log(`Generando ${project} · ${period} (credenciales: ${source ?? "entorno"})…`);
 const started = Date.now();

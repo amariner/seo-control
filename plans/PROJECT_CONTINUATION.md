@@ -1,9 +1,23 @@
 # Checkpoint operativo — SEO Dashboard V2
 
-Última actualización: 29 de septiembre de 2026 (archivo de informes congelados y exportación HTML/CSV, D-081).
+Última actualización: 30 de septiembre de 2026 (D-075…D-082 subidos a GitHub y desplegados; H6).
 
 ## Reanudar aquí · plan de hitos (D-078)
 
+- **2026-09-30 · H6 hecho:** D-075…D-082 en main, en GitHub y desplegados en producción. Retoque
+  del visor: en la pestaña «Informes» el informe del periodo seleccionado va el primero con una
+  chincheta (`brand-report-pin`), sin nota al pie y con subtítulo breve; fuentes y pie del informe
+  bajan al final de la pantalla (`.brand-report` en columna, `.brand-report-body` crece).
+  Siguiente: comprobar en producción una descarga HTML de un informe congelado y seguir con H10.
+- **D-082, en local sin commit** (pedir commit al usuario): el workbench no genera desde la
+  interfaz. `/informes` es una tabla única (ocho marcas × último trimestre cerrado) con panel
+  «Desde el chat»; se retiraron `app/informes/[brand]/[period]/page.tsx` y `app/informes/actions.ts`.
+  Nuevo `pnpm report:curate` (`packages/reports/scripts/curate.ts`, con `describeSlides`,
+  `curationProblems` y `reportCurationInputSchema`) y `--discard` en `report:generate`. Visor:
+  pestaña «Informes» con solo el último trimestre y el periodo seleccionado
+  (`components/report/brand-report.tsx`). Regla para nuevos desarrollos en `AGENTS.md`,
+  «Operación desde el chat». Pendiente de decisión del usuario: retirar o no «Medir publicaciones»
+  (D-079) y el formulario «Solicitar» de informes adicionales.
 - En main (0f555ae) y en GitHub, **sin desplegar**: H1 Informes del workbench (D-076), H2 shell
   del visor en el workbench (D-077), H3 axe AA (D-078), H4 medición editorial real (D-079), H5
   diferencias entre crawls (D-080) y D-075 (resumen ejecutivo del informe).
@@ -29,11 +43,12 @@
   `periods.ts`, `schema.ts`, `curate.ts`, `generate.ts` (congelar con GA4/GSC reales), `store.ts`
   (escritura y estado frente a HEAD), `published.ts` (lectura en el visor), `measure.ts` (D-079).
 - Datos: `data/published/reports.json` (índice empaquetado) y `data/published/snapshots/<marca>/<periodo>.json`.
-- Workbench: `/informes`, `/informes/<marca>/<periodo>`, `/informes/adicionales[/<proyecto>/<carpeta>]`,
+- Workbench: `/informes` (desde D-082, tabla de solo lectura; `/informes/<marca>/<periodo>` retirado), `/informes/adicionales[/<proyecto>/<carpeta>]`,
   descarga en `/informes/adicionales/fichero`. Credenciales de lectura en `apps/workbench/.env.local`.
 - Visor: `?periodo=` en `/projects/<slug>/informe` sirve la versión congelada (todos los mercados) y
   aplica las puntualizaciones; la pestaña «Informes» lista mes y cuatro trimestres cerrados.
-- CLI: `pnpm report:generate -- --project <slug> --period 2026-Q2`.
+- CLI: `pnpm report:generate -- --project <slug> --period 2026-Q2 [--discard]` y, desde D-082,
+  `pnpm report:curate -- --project <slug> --period 2026-Q2 [--file <json> | --reset]`.
 
 ## Workbench con el aspecto del visor · D-077 (2026-09-29, sin commit)
 

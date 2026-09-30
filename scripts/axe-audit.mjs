@@ -73,8 +73,6 @@ const APPS = {
       { name: "herramientas", path: "/herramientas" },
       { name: "plan", path: "/editorial/plan" },
       { name: "informes", path: "/informes" },
-      { name: "informe-editor", path: "/informes/xtone/2026-Q2" },
-      { name: "informe-sin-datos", path: "/informes/krion/2026-Q2" },
       { name: "adicionales", path: "/informes/adicionales" },
       { name: "adicional", path: "/informes/adicionales/xtone/2026-09-24-keywords-objetivo" },
       { name: "crawls", path: "/crawls" },

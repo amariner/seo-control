@@ -1,19 +1,14 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { ExternalLink, FolderOpen, RefreshCw, SlidersHorizontal } from "lucide-react";
+import { ExternalLink, FolderOpen } from "lucide-react";
 import { PILOT_PROJECTS } from "@seo/contracts";
 import { ScrollRegion } from "@/components/scroll-region";
 import { WorkbenchFrame } from "@/components/workbench-frame";
-import { FlashMessages } from "@/components/flash-messages";
-import { SubmitButton } from "@/components/submit-button";
 import { listAdditionalReports } from "@/lib/additional-reports";
-import { reportCatalog, viewerReportUrl, type CatalogRow } from "@/lib/reports";
-import { regenerateQuarter, regenerateReport } from "./actions";
+import { reportCatalog, viewerReportUrl } from "@/lib/reports";
 
 export const metadata: Metadata = { title: "Informes" };
 export const dynamic = "force-dynamic";
-
-type Props = { searchParams: Promise<Record<string, string | string[] | undefined>> };
 
 const when = (iso: string) =>
   new Date(iso).toLocaleString("es-ES", { day: "numeric", month: "short", year: "numeric", hour: "2-digit", minute: "2-digit", timeZone: "Europe/Madrid" });
@@ -27,42 +22,30 @@ const SYNC = {
 } as const;
 
 /**
- * Informes (D-076): control de los informes de las ocho marcas. Se congelan
- * los trimestres cerrados con datos reales, se personalizan con
- * puntualizaciones y llegan al visor con «sube los informes» en el chat. Los
- * informes adicionales, pedidos ad hoc, se quedan siempre en local.
+ * Informes (D-076, D-082): una sola tabla con el último trimestre cerrado de
+ * las ocho marcas, el informe que el equipo SEO revisa y comenta. La pantalla
+ * es de solo lectura: congelar, puntualizar y subir al visor se piden en el
+ * chat del asistente (Claude Code o Codex), que ejecuta los scripts `pnpm`.
+ * Los informes adicionales, pedidos ad hoc, se quedan siempre en local.
  */
-export default async function ReportsPage({ searchParams }: Props) {
-  const params = await searchParams;
-  const pick = (key: string) => {
-    const value = params[key];
-    return Array.isArray(value) ? value[0] : value;
-  };
-  const brandFilter = pick("marca");
-  const { rows, quarters, month, archived, invalid } = reportCatalog();
-  const visible = rows.filter((row) => !brandFilter || row.brand.slug === brandFilter);
+export default async function ReportsPage() {
+  const { rows, quarter, pending, archived, invalid } = reportCatalog();
   const frozen = rows.filter((row) => row.published?.snapshot);
   const curated = rows.filter((row) => row.notes > 0);
-  const pending = rows.filter((row) => row.sync === "pending" || row.sync === "new");
   const additional = listAdditionalReports();
-  const latest = quarters[0]!;
-  const latestMissing = PILOT_PROJECTS.filter((brand) => !rows.find((row) => row.id === `${brand.slug}:${latest.id}`)?.published?.snapshot);
-  const byBrand = new Map<string, CatalogRow[]>();
-  for (const row of visible) byBrand.set(row.brand.slug, [...(byBrand.get(row.brand.slug) ?? []), row]);
+  const example = PILOT_PROJECTS[0]!.slug;
 
   return (
     <WorkbenchFrame
       eyebrow="Workbench · Informes"
       title="Informes"
-      description="Informes trimestrales y mensuales de las ocho marcas: congela un periodo cerrado con datos reales, añade puntualizaciones y súbelo al visor. Los informes adicionales se quedan en este equipo."
+      description={`Informe trimestral de las ocho marcas: ${quarter.label}, congelado con datos reales y revisado por el equipo SEO. Aquí solo se consulta; congelar, puntualizar y subir al visor se piden en el chat.`}
     >
-      <FlashMessages ok={pick("ok")} error={pick("error")} />
-
       <section className="rp-kpis" aria-label="Resumen">
         <article className="wb-card rp-kpi">
-          <span>Versiones congeladas</span>
+          <span>Congelados</span>
           <strong>{frozen.length}</strong>
-          <small>de {PILOT_PROJECTS.length * (quarters.length + 1)} posibles en el piloto</small>
+          <small>de {PILOT_PROJECTS.length} marcas del piloto · {quarter.label}</small>
         </article>
         <article className="wb-card rp-kpi">
           <span>Con puntualizaciones</span>
@@ -81,126 +64,100 @@ export default async function ReportsPage({ searchParams }: Props) {
         </article>
       </section>
 
-      <section className="wb-card panel rp-bulk" aria-labelledby="regenerar">
-        <div className="panel-head">
-          <div>
-            <p className="eyebrow">Regenerar</p>
-            <h2 id="regenerar">{latest.label}</h2>
-          </div>
-          <span className={`badge ${latestMissing.length ? "badge-warn" : "badge-good"}`}>
-            {latestMissing.length ? `${latestMissing.length} sin congelar` : "piloto completo"}
+      {invalid.length ? (
+        <p className="notice">Entradas que ya no cumplen el contrato y se han leído en parte: {invalid.join(", ")}. Pide en el chat que se regeneren.</p>
+      ) : null}
+
+      <section className="rp-brand" aria-labelledby="rp-trimestre">
+        <header className="rp-brand-head">
+          <h2 id="rp-trimestre">{quarter.label}</h2>
+          <span className="rp-domain">
+            {day(quarter.start)} – {day(quarter.end)} · último trimestre cerrado
           </span>
-        </div>
-        <p className="tool-note">
-          Congela el último trimestre cerrado ({day(latest.start)} – {day(latest.end)}) para {PILOT_PROJECTS.map((brand) => brand.name).join(", ")} con datos reales de GA4 y Search Console, el plan editorial curado y el último crawl publicado. Si una fuente falla, esa marca no se congela. Tarda unos 15 s por marca.
-        </p>
-        <form action={regenerateQuarter} className="rp-bulk-form">
-          <input type="hidden" name="period" value={latest.id} />
-          <SubmitButton className="button button-primary" pending="Regenerando…">
-            <RefreshCw size={15} aria-hidden /> Regenerar {latest.label}
-          </SubmitButton>
-        </form>
+        </header>
+        <ScrollRegion label={`Informes del ${quarter.label}`}>
+          <table className="rp-table">
+            <thead>
+              <tr>
+                <th>Marca</th>
+                <th>Versión</th>
+                <th>Puntualizaciones</th>
+                <th>Sincronización</th>
+                <th>Visor</th>
+              </tr>
+            </thead>
+            <tbody>
+              {rows.map((row) => (
+                <tr key={row.id}>
+                  <td>
+                    <strong>{row.brand.name}</strong>
+                    <span className="rp-sub">{row.brand.domain}</span>
+                  </td>
+                  <td>
+                    {row.published?.snapshot ? (
+                      <>
+                        Congelada el {when(row.published.snapshot.generatedAt)}
+                        <span className="rp-sub">
+                          {row.published.snapshot.generatedBy} · corte {day(row.published.snapshot.cutoff)}
+                          {row.stale ? " · contrato antiguo, pide regenerarla" : ""}
+                        </span>
+                      </>
+                    ) : row.brand.pilot ? (
+                      <span className="rp-muted">Sin congelar: el visor lo calcula en vivo</span>
+                    ) : (
+                      <span className="rp-muted">Sin datos analíticos hasta P11</span>
+                    )}
+                  </td>
+                  <td>{row.notes ? `${row.notes} ${row.notes === 1 ? "ajuste" : "ajustes"}` : <span className="rp-muted">Ninguna</span>}</td>
+                  <td>{row.sync ? <span className={`badge ${SYNC[row.sync].tone}`}>{SYNC[row.sync].label}</span> : <span className="rp-muted">—</span>}</td>
+                  <td>
+                    {row.brand.pilot ? (
+                      <a className="button button-small button-ghost" href={viewerReportUrl(row.brand.slug, row.period.id)} target="_blank" rel="noopener">
+                        <ExternalLink size={14} aria-hidden /> Ver<span className="sr-only"> el informe de {row.brand.name}</span>
+                      </a>
+                    ) : (
+                      <span className="rp-muted">—</span>
+                    )}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </ScrollRegion>
       </section>
 
-      <nav className="rp-filter" aria-label="Filtrar por marca">
-        <Link href="/informes" aria-current={!brandFilter ? "page" : undefined}>Todas</Link>
-        {[...new Set(rows.map((row) => row.brand))].map((brand) => (
-          <Link key={brand.slug} href={`/informes?marca=${brand.slug}`} aria-current={brandFilter === brand.slug ? "page" : undefined}>
-            {brand.name}
-          </Link>
-        ))}
-      </nav>
-
-      {invalid.length ? (
-        <p className="notice">Entradas que ya no cumplen el contrato y se han leído en parte: {invalid.join(", ")}. Regenera esos informes.</p>
-      ) : null}
-
-      {[...byBrand.entries()].map(([slug, items]) => {
-        const brand = items[0]!.brand;
-        return (
-          <section className="rp-brand" key={slug} aria-labelledby={`rp-${slug}`}>
-            <header className="rp-brand-head">
-              <h2 id={`rp-${slug}`}>{brand.name}</h2>
-              <span className="rp-domain">{brand.domain}</span>
-              {!brand.pilot ? <span className="badge">Sin datos analíticos hasta P11</span> : null}
-            </header>
-            <ScrollRegion label={`Informes de ${brand.name}`}>
-              <table className="rp-table">
-                <thead>
-                  <tr>
-                    <th>Informe</th>
-                    <th>Periodo</th>
-                    <th>Versión</th>
-                    <th>Puntualizaciones</th>
-                    <th>Visor</th>
-                    <th><span className="sr-only">Acciones</span></th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {items.map((row) => (
-                    <tr key={row.id}>
-                      <td>
-                        <strong>{row.period.kind === "quarter" ? "Trimestral" : "Mensual"}</strong>
-                        <span className="rp-sub">{row.period.label}</span>
-                      </td>
-                      <td>{day(row.period.start)} – {day(row.period.end)}</td>
-                      <td>
-                        {row.published?.snapshot ? (
-                          <>
-                            Congelada el {when(row.published.snapshot.generatedAt)}
-                            <span className="rp-sub">
-                              {row.published.snapshot.generatedBy} · corte {day(row.published.snapshot.cutoff)}
-                              {row.stale ? " · contrato antiguo, regenerar" : ""}
-                            </span>
-                          </>
-                        ) : brand.pilot ? (
-                          <span className="rp-muted">En vivo en el visor</span>
-                        ) : (
-                          <span className="rp-muted">—</span>
-                        )}
-                      </td>
-                      <td>{row.notes ? `${row.notes} ${row.notes === 1 ? "ajuste" : "ajustes"}` : <span className="rp-muted">Ninguna</span>}</td>
-                      <td>{row.sync ? <span className={`badge ${SYNC[row.sync].tone}`}>{SYNC[row.sync].label}</span> : <span className="rp-muted">—</span>}</td>
-                      <td className="rp-actions">
-                        {brand.pilot ? (
-                          <>
-                            <form action={regenerateReport}>
-                              <input type="hidden" name="id" value={row.id} />
-                              <SubmitButton className="button button-small" pending="Congelando…" title={row.published?.snapshot ? "Volver a pedir los datos y sustituir la versión" : "Congelar con los datos de hoy"}>
-                                <RefreshCw size={14} aria-hidden /> {row.published?.snapshot ? "Regenerar" : "Congelar"}
-                              </SubmitButton>
-                            </form>
-                            <Link className="button button-small" href={`/informes/${slug}/${row.period.id}`}>
-                              <SlidersHorizontal size={14} aria-hidden /> Personalizar
-                            </Link>
-                            <a className="button button-small button-ghost" href={viewerReportUrl(slug, row.period.id)} target="_blank" rel="noopener">
-                              <ExternalLink size={14} aria-hidden /> Ver
-                            </a>
-                          </>
-                        ) : null}
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </ScrollRegion>
-          </section>
-        );
-      })}
-
       {archived.length ? (
-        <p className="tool-note">Otros informes guardados fuera de estos periodos: {archived.join(", ")}.</p>
+        <p className="tool-note">
+          Otros informes guardados de periodos anteriores (siguen en el archivo <code>/reports</code> del visor): {archived.join(", ")}.
+        </p>
       ) : null}
 
-      <section className="wb-card panel rp-sync" aria-labelledby="sincronizar">
+      <section className="wb-card panel rp-sync" aria-labelledby="chat">
         <div className="panel-head">
           <div>
-            <p className="eyebrow">Sincronización</p>
-            <h2 id="sincronizar">Llevar los informes al visor</h2>
+            <p className="eyebrow">Desde el chat</p>
+            <h2 id="chat">Cómo se prepara y se sube un informe</h2>
           </div>
         </div>
+        <ul className="rp-howto">
+          <li>
+            <strong>«Congela el {quarter.label} de {PILOT_PROJECTS[0]!.name}»</strong>
+            <code>pnpm report:generate -- --project {example} --period {quarter.id}</code>
+            <span>Datos reales de GA4 y Search Console, el plan editorial curado y el último crawl publicado. Si una fuente falla, no se congela.</span>
+          </li>
+          <li>
+            <strong>«Puntualiza el informe de {PILOT_PROJECTS[0]!.name}: …»</strong>
+            <code>pnpm report:curate -- --project {example} --period {quarter.id} [--file puntualizaciones.json]</code>
+            <span>Notas por apartado, cifras, tablas o filas ocultas y acciones del equipo. Sin <code>--file</code> enseña los apartados y lo ya puntualizado.</span>
+          </li>
+          <li>
+            <strong>«Sube los informes»</strong>
+            <code>git commit · vercel deploy --prod</code>
+            <span>Se revisa el diff de <code>packages/reports/data/published/</code> y se confirma contigo antes del commit y del despliegue.</span>
+          </li>
+        </ul>
         <p className="tool-note">
-          Lo que se congela y se puntualiza aquí se guarda en <code>packages/reports/data/published/</code>. Llega al visor desplegado con un commit y <code>vercel deploy --prod</code>: pídelo en el chat con «sube los informes». El visor local (puerto 3000) ya lo muestra al instante. El mensual de {month.label} y los trimestres sin congelar se calculan en vivo en el visor, con las puntualizaciones aplicadas igual.
+          El visor local (puerto 3000) muestra cada cambio al instante. En la pestaña «Informes» de cada proyecto el visor enseña este trimestre y un informe en vivo del periodo que se elija arriba.
         </p>
         <p className="tool-note">
           <Link href="/informes/adicionales"><FolderOpen size={14} aria-hidden /> Informes adicionales (solo local) →</Link>

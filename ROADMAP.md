@@ -67,12 +67,12 @@ ejecutar sin credenciales ni presupuesto nuevos.
 
 | Hito | Qué entrega | Fase | Depende de | Estado |
 | --- | --- | --- | --- | --- |
-| H1 | Pestaña «Informes» del workbench: versiones congeladas de los trimestres, puntualizaciones por informe, sincronización con preview e informes adicionales solo en local | P7 | — | **hecho** (D-076) |
+| H1 | Pestaña «Informes» del workbench: versiones congeladas de los trimestres, puntualizaciones por informe, sincronización con preview e informes adicionales solo en local | P7 | — | **hecho** (D-076); desde D-082, tabla única del último trimestre y operación desde el chat |
 | H2 | Workbench con el shell y el aspecto del visor; portada «Inicio» con lo pendiente de subir | P1 | — | **hecho** (D-077) |
 | H3 | Calidad: axe en visor y workbench (incluidas las pantallas nuevas) y corrección de incidencias | P10 | — | **hecho** (D-078): 0 incumplimientos WCAG salvo la excepción aceptada de D-045 |
 | H4 | Medición editorial real: ventanas de 28, 90 y 180 días por pieza publicada con Search Console | P3.5 | credenciales de lectura locales (ya disponibles) | **hecho** (D-079) |
 | H5 | Histórico y diff entre crawls de un proyecto | P5 | crawls locales | **hecho** (D-080) |
-| H6 | Llevar a producción D-070…D-077 (commit y `vercel deploy --prod`) | — | confirmación del usuario | pendiente |
+| H6 | Llevar a producción D-070…D-077 (commit y `vercel deploy --prod`) | — | confirmación del usuario | hecho (2026-09-30, D-075…D-082) |
 | H7 | Neon Frankfurt y `DATABASE_URL`: edición del plan en producción y base de P3.1 | P3.1 | el responsable crea la cuenta y acepta términos | bloqueado |
 | H8 | Sesión de aceptación P2: cinco flujos, dos retiradas y cuatro rutas «missing» | P2.4 | responsable SEO | bloqueado |
 | H9 | SEMrush en V2: ranking estable, competidores y SOV semanales | P3.3 | decisión de coste de unidades API | bloqueado |
@@ -530,7 +530,8 @@ Objetivo: crear, revisar, aprobar, publicar y exportar una narrativa inmutable y
 
 - [x] Editor por bloques sobre el informe generado: por apartado, mostrar u ocultar
       cifras, gráficos, tablas y filas, nota del equipo y acciones propias con prioridad
-      (D-076, `/informes/<marca>/<periodo>` del workbench). Sustituye al editor Tiptap
+      (D-076; desde D-082 con `pnpm report:curate` desde el chat, validado contra el informe
+      congelado, en lugar de la página `/informes/<marca>/<periodo>`). Sustituye al editor Tiptap
       libre, que se retira (D-077, D-078): el texto libre sin cifras enlazadas era
       justo lo que P7 quiere evitar.
 - [~] Plantillas mensual ejecutiva, trimestral profunda y especial. Mensual y

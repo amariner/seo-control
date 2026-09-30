@@ -1962,7 +1962,9 @@ No se reescriben decisiones antiguas. Si una cambia, se añade una nueva entrada
 ## D-076 · Pestaña «Informes» del workbench: versiones congeladas, puntualizaciones e informes adicionales
 
 - Fecha: 2026-09-29.
-- Estado: vigente (amplía D-073…D-075; cierra el pendiente «guardar el informe con versión inmutable»).
+- Estado: vigente en contrato y datos; la interfaz del workbench (botones, `/informes/<marca>/<periodo>`)
+  y el catálogo de mes + cuatro trimestres quedan sustituidos por D-082 (amplía D-073…D-075; cierra
+  el pendiente «guardar el informe con versión inmutable»).
 - Decisión:
   - El generador del informe (`project-report.ts`, `page-analysis.ts`) pasa a `packages/reports`
     (`@seo/reports`), compartido por visor y workbench. El visor lo importa desde el paquete.
@@ -2096,3 +2098,42 @@ No se reescriben decisiones antiguas. Si una cambia, se añade una nueva entrada
     del despliegue por `outputFileTracingIncludes`.
 - Vitest de las dos apps excluye `.next/**`: el build `standalone` copia allí las pruebas y hacía
   fallar `pnpm test` tras un build local.
+
+## D-082 · Informes: solo el último trimestre y operación desde el chat
+
+- Fecha: 2026-09-29.
+- Estado: vigente (sustituye la interfaz de D-076; el contrato de `reports.json` y los snapshots no
+  cambian).
+- Contexto: el usuario decide que el workbench no genere nada desde la interfaz: todo se pide en el
+  chat del asistente (Claude Code o Codex). Y que los informes se reduzcan a lo que se usa: el
+  trimestre revisado por el equipo y uno genérico del periodo elegido.
+- Decisión:
+  - **Regla general para nuevos desarrollos** (en `AGENTS.md`, «Operación desde el chat»): la
+    interfaz del workbench muestra estado, procedencia, diff y enlaces; no genera ni publica. Cada
+    operación es un script `pnpm` validado más un activador en `AGENTS.md`; sin botones, Server
+    Actions ni formularios que generen, regeneren o publiquen. Sigue la línea de D-071 (crawls).
+    Excepciones pendientes de decisión del usuario: «Medir publicaciones» (D-079) y «Solicitar»
+    informe adicional. La curación del plan editorial (D-067) es edición y se mantiene.
+  - **Workbench `/informes`**: una sola tabla con las ocho marcas por el último trimestre cerrado
+    (marca, versión congelada, puntualizaciones, sincronización frente a HEAD y «Ver» en el visor) y
+    un panel «Desde el chat» con las frases y los comandos. Se retiran «Regenerar <trimestre>», los
+    botones «Regenerar/Congelar» y «Personalizar» por fila, el filtro por marca, la página
+    `/informes/<marca>/<periodo>` y todas las Server Actions de informes. «Pendientes de subir» cuenta
+    cualquier periodo; los informes guardados de periodos anteriores se citan debajo.
+  - **Puntualizaciones desde el chat**: `pnpm report:curate -- --project <slug> --period <id>`
+    imprime el mapa del informe congelado (apartados, cifras, tablas y claves de fila) y lo ya
+    puntualizado; `--file` sustituye las puntualizaciones por un JSON `{ slides, actions }` validado
+    con `reportCurationInputSchema` (estricto: una clave mal escrita es error) y con
+    `curationProblems` (apartado, cifra, tabla o fila inexistente = no se guarda nada); `--reset` las
+    quita. Autor y fecha los pone el script (`git config user.name`). `pnpm report:generate` gana
+    `--discard` para retirar una versión congelada.
+  - **Visor, pestaña «Informes» del proyecto**: dos filas. El informe trimestral del último trimestre
+    cerrado (versión congelada y puntualizaciones si las hay) y el «Periodo seleccionado», en vivo
+    con el periodo y el mercado de la cabecera. Los primeros días tras cerrar un trimestre, si el
+    corte aún no lo cubre y no hay versión congelada, se muestra el anterior. Se retiran el mes
+    cerrado y los trimestres anteriores de la pestaña; `?periodo=` sigue abriendo cualquier periodo y
+    el archivo `/reports` (D-081) sigue listando todas las versiones congeladas.
+- Consecuencias: nada del flujo de informes depende de la interfaz; el editor visual de
+  puntualizaciones desaparece a cambio de un comando que valida más que el formulario. Revertir es
+  recuperar `app/informes/[brand]/[period]/page.tsx` y `app/informes/actions.ts` del commit 3caff34.
+

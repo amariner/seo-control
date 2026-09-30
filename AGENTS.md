@@ -48,18 +48,44 @@ Cuando el usuario diga «informe adicional», «saca un informe», «necesito un
 - «Publica el crawl de <proyecto>»: `pnpm crawl:publish -- --project <slug> [--run <id>]` y, si el
   usuario lo confirma, commit y despliegue. Al visor solo va el resumen acotado, nunca el crawl.
 
-## Activador de informes (D-076)
+## Activador de informes (D-076, D-082)
 
-- «Regenera los informes de <periodo>» / «congela el <trimestre> de <marca>»: botón en `/informes`
-  del workbench o `pnpm report:generate -- --project <slug> --period <2026-Q2|2026-08>`. Solo datos
-  reales (GA4/GSC con las credenciales de `apps/workbench/.env.local`); si una fuente falla, no se
-  congela.
+El workbench no tiene botones para informes: todo se pide aquí, en el chat.
+
+- «Regenera los informes de <periodo>» / «congela el <trimestre> de <marca>»:
+  `pnpm report:generate -- --project <slug> --period <2026-Q2|2026-08>`, una marca cada vez
+  (las APIs de Google limitan la concurrencia). Solo datos reales (GA4/GSC con las credenciales de
+  `apps/workbench/.env.local`); si una fuente falla, no se congela. «Retira la versión congelada»:
+  el mismo comando con `--discard`.
+- «Puntualiza / comenta el informe de <marca>»: `pnpm report:curate -- --project <slug> --period <id>`
+  imprime los apartados (`id`), cifras (`label`), tablas (`title`, más `__bars` y `__series`) y claves
+  de fila, junto a las puntualizaciones vigentes con la forma `{ slides, actions }`. Redacta el JSON
+  completo en el scratchpad de la sesión (nunca dentro del repo), aplícalo con `--file <ruta>`
+  (sustituye las anteriores; falla si nombra algo que el informe no tiene) y compruébalo en el visor
+  local (`/projects/<slug>/informe?periodo=<id>`). `--reset` las quita. Solo sobre versiones
+  congeladas. Las cifras nunca se editan: se muestran u ocultan, con nota y acciones del equipo.
 - «Sube los informes» / «sincroniza los informes con preview»: revisa el diff de
   `packages/reports/data/published/` (índice `reports.json` y `snapshots/`), resume qué cambia por
   informe, confirma con el usuario, haz commit y `vercel deploy --prod`. Nunca incluyas
   `informes-adicionales/` ni datos de prueba.
 - «Haz el informe adicional <proyecto>/<fecha-tema>»: completa la solicitud creada desde
   `/informes/adicionales` siguiendo el activador de informes adicionales.
+
+## Operación desde el chat (D-082)
+
+Regla para todo desarrollo nuevo del workbench:
+
+- La interfaz del workbench **muestra** estado, procedencia, diff y enlaces al visor; **no genera ni
+  publica**. Congelar, regenerar, puntualizar informes, lanzar crawls, medir y subir a preview se
+  piden en el chat de Claude Code o Codex, que ejecuta scripts `pnpm` versionados y confirma con el
+  usuario lo que sale del equipo.
+- Cada operación nueva se entrega como script `pnpm` (validado con el contrato de su paquete, con
+  salida legible y código de error si no guarda nada) más su activador en este archivo. No se añaden
+  botones, Server Actions ni formularios que generen, regeneren o publiquen.
+- Cada pantalla que dependa de una operación indica la frase del chat y el comando equivalentes.
+- Excepciones vigentes hasta que el usuario decida: el botón «Medir publicaciones» del plan (D-079)
+  y el formulario «Solicitar» de informes adicionales. La curación del plan editorial en la interfaz
+  (D-067) es edición, no generación, y se mantiene.
 
 ## Prioridades permanentes
 

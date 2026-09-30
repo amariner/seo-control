@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
-import { applyCuration, curationCount, rowKeyFor } from "./curate";
+import { applyCuration, curationCount, curationProblems, describeSlides, rowKeyFor } from "./curate";
 import type { DeckSlide } from "./project-report";
-import type { ReportCuration } from "./schema";
+import { reportCurationInputSchema, type ReportCuration } from "./schema";
 
 const slides: DeckSlide[] = [
   {
@@ -63,5 +63,32 @@ describe("puntualizaciones (D-076)", () => {
     expect(applyCuration(slides, undefined)).toBe(slides);
     expect(curationCount(curation)).toBe(7);
     expect(curationCount(undefined)).toBe(0);
+  });
+});
+
+describe("puntualizaciones desde el chat (D-082)", () => {
+  it("describe lo que se puede ocultar con las mismas claves que se aplican", () => {
+    const [executive, keywords] = describeSlides(slides);
+    expect(keywords!.metrics).toEqual([{ label: "Clics", value: "10" }, { label: "Top 3", value: "2" }]);
+    expect(keywords!.lists.map((list) => list.title)).toEqual(["En tendencia", "__bars"]);
+    expect(executive!.lists[0]!.rows).toEqual(["Prioridades␟Corregir", "Prioridades␟Publicar"]);
+    expect(curationProblems(slides, curation)).toEqual([]);
+  });
+
+  it("señala apartados, cifras, tablas y filas que no existen", () => {
+    const problems = curationProblems(slides, {
+      slides: {
+        paginas: { hidden: true },
+        migracion: { hideReading: true, hiddenMetrics: ["Clics"], hiddenLists: ["__series"], hiddenRows: ["X␟y"] },
+      },
+    });
+    expect(problems).toHaveLength(5);
+    expect(problems[0]).toContain("Apartado desconocido: «paginas»");
+  });
+
+  it("rechaza claves mal escritas en lugar de ignorarlas", () => {
+    expect(reportCurationInputSchema.safeParse({ slides: { keywords: { hiddenMetric: ["Clics"] } } }).success).toBe(false);
+    expect(reportCurationInputSchema.safeParse({ slides: {}, actions: [], updatedBy: "x" }).success).toBe(false);
+    expect(reportCurationInputSchema.parse({ slides: { keywords: { note: "  Nota  " } } })).toEqual({ slides: { keywords: { note: "Nota" } }, actions: [] });
   });
 });

@@ -1,5 +1,5 @@
 import type { DeckList, DeckSlide } from "./project-report";
-import { rowKeyOf, type ReportCuration } from "./schema";
+import { rowKeyOf, type ReportCuration, type ReportCurationInput } from "./schema";
 
 /**
  * Identidad estable de una fila para ocultarla: la primera celda (keyword,
@@ -64,4 +64,53 @@ export function curationCount(curation: ReportCuration | undefined): number {
     count += (item.hiddenMetrics?.length ?? 0) + (item.hiddenLists?.length ?? 0) + (item.hiddenRows?.length ?? 0);
   }
   return count;
+}
+
+/**
+ * Mapa de lo que se puede puntualizar en un informe, para el chat (D-082):
+ * `pnpm report:curate -- --show` lo imprime y las claves son las mismas que
+ * espera `--file` (id del apartado, etiqueta de cifra, título de tabla y
+ * clave de fila).
+ */
+export function describeSlides(slides: DeckSlide[]) {
+  return slides.map((slide) => ({
+    id: slide.id,
+    title: slide.title,
+    note: slide.note,
+    ...(slide.reading ? { reading: slide.reading } : {}),
+    metrics: slide.metrics.map((metric) => ({ label: metric.label, value: metric.value })),
+    lists: [
+      ...slide.lists.map((list) => ({ title: list.title, rows: list.rows.map((row) => rowKeyFor(list, row)) })),
+      ...(slide.bars ? [{ title: "__bars", rows: [] as string[] }] : []),
+      ...(slide.series && slide.series.length > 1 ? [{ title: "__series", rows: [] as string[] }] : []),
+    ],
+  }));
+}
+
+/**
+ * Referencias que no existen en el informe: un apartado, cifra, tabla o fila
+ * que no está no se puede ocultar, y aplicarlo sería un no-op silencioso.
+ * `slides` debe calcularse con las acciones del equipo de `input` para que
+ * sus filas del plan de acción cuenten.
+ */
+export function curationProblems(slides: DeckSlide[], input: Pick<ReportCurationInput, "slides">): string[] {
+  const problems: string[] = [];
+  for (const [id, item] of Object.entries(input.slides)) {
+    const slide = slides.find((candidate) => candidate.id === id);
+    if (!slide) {
+      problems.push(`Apartado desconocido: «${id}» (hay: ${slides.map((candidate) => candidate.id).join(", ")})`);
+      continue;
+    }
+    if (item.hideReading && !slide.reading) problems.push(`${id}: no tiene lectura SEO que ocultar`);
+    for (const label of item.hiddenMetrics ?? [])
+      if (!slide.metrics.some((metric) => metric.label === label)) problems.push(`${id}: cifra desconocida «${label}»`);
+    for (const title of item.hiddenLists ?? []) {
+      const known =
+        title === "__bars" ? Boolean(slide.bars) : title === "__series" ? (slide.series?.length ?? 0) > 1 : slide.lists.some((list) => list.title === title);
+      if (!known) problems.push(`${id}: tabla o gráfico desconocido «${title}»`);
+    }
+    const rows = new Set(slide.lists.flatMap((list) => list.rows.map((row) => rowKeyFor(list, row))));
+    for (const key of item.hiddenRows ?? []) if (!rows.has(key)) problems.push(`${id}: fila desconocida «${key}»`);
+  }
+  return problems;
 }
