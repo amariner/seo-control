@@ -1188,3 +1188,4 @@
   fuera de los sitemaps (13.607 clics, 30,8 %: pt/it/de/pl no tienen sitemap).
 - Verificación: typecheck (12 tareas), visor 131 (4 nuevas) / site-audit 14 / workbench 5; visor
   local en escritorio y 375 px sin desbordamiento ni errores de consola en carga limpia. Sin commit.
+- A petición del usuario: commit 70a23f5 en main (D-086 y D-087) y subido a GitHub. Sin desplegar.
