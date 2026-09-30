@@ -3,6 +3,7 @@ import { X } from "lucide-react";
 import { ReportDataTable, type ReportDataRow } from "@seo/ui/data-table";
 import { EDITORIAL_COLUMNS, planMonthLabel, sortPlanRows, statusTone, type EditorialPlanRow } from "./rows";
 import { PublicationSlider, type PublicationEvent } from "./publication-slider";
+import { brandShortCode } from "./brands";
 import { PublicationDateEditor, StatusEditor, type PieceEditAction } from "./plan-editors";
 import { BriefCopy } from "./brief-copy";
 import { Url } from "./url-label";
@@ -60,6 +61,19 @@ export function EditorialPlan({
 }) {
   const piecesByMonth: Record<string, string[]> = {};
   for (const item of calendarPieces) if (item.month) (piecesByMonth[item.month] ??= []).push(item.title ?? item.id);
+  // Las piezas con mes y sin fecha también se ven en el calendario, en su mes (D-084).
+  const undated: Record<string, PublicationEvent[]> = {};
+  for (const item of calendarPieces)
+    if (item.month && !item.publicationDate)
+      (undated[item.month] ??= []).push({
+        date: item.month,
+        type: "POST",
+        label: item.status,
+        title: item.title ?? item.keyword ?? "Pieza sin título",
+        brand: item.brand,
+        code: brandShortCode(item.brandSlug ?? null, item.brand),
+        color: item.brandColor,
+      });
   // La lista arranca en el mes en curso: lo pendiente de publicar, en orden (D-052).
   const today = new Date().toISOString().slice(0, 10);
   const currentMonth = today.slice(0, 7);
@@ -84,7 +98,7 @@ export function EditorialPlan({
     : undefined;
   return (
     <>
-      {calendar && calendar.events.length > 0 && <PublicationSlider events={calendar.events} piecesByMonth={piecesByMonth} today={today} source={calendar.source} />}
+      {calendar && calendar.events.length > 0 && <PublicationSlider events={calendar.events} undated={undated} piecesByMonth={piecesByMonth} today={today} source={calendar.source} />}
       <ReportDataTable
         id="editorial"
         caption={caption}

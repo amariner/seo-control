@@ -1139,3 +1139,11 @@
   (recuentos del dataset actualizados), workbench 5; plan del workbench y del visor con 112 piezas.
 - «Sube el plan» a petición del usuario: commit 3a38554 en main, subido a GitHub y desplegado
   (dpl_ENRDDYeNMubZRrvDZ9yWYRMz6Lro, Ready). Producción pide acceso con Google: no verificada desde aquí.
+
+## 2026-09-30 · Calendario con los posts sin fecha (D-084)
+
+- El usuario no veía los posts de oct–dic: no tienen fecha y el calendario solo pintaba lo fechado.
+  Cada mes muestra ahora «Sin fecha · N» (chips por marca en la tira, lista con título en «Mes
+  completo»); visor y workbench coinciden (94 posts sin fecha entre agosto y diciembre).
+- Verificación: typecheck, editorial-ui 4 / visor 127 / workbench 5, revisión visual en escritorio y
+  375 px sin desbordamiento. Commit, GitHub y despliegue a petición del usuario.

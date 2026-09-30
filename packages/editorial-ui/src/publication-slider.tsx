@@ -17,9 +17,9 @@ const WEEK_HEAD = ["Lun", "Mar", "Mié", "Jue", "Vie", "Sáb", "Dom"];
 const MONTHS = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
 const pad = (value: number) => String(value).padStart(2, "0");
 
-/** Meses completos entre el primer y el último evento, día a día. */
-function buildMonths(events: PublicationEvent[]) {
-  const sorted = events.map((event) => event.date).sort();
+/** Meses completos entre el primer y el último evento (o mes con piezas sin fecha), día a día. */
+function buildMonths(dates: string[]) {
+  const sorted = [...dates].sort();
   const [fy, fm] = sorted[0]!.split("-").map(Number) as [number, number];
   const [ly, lm] = sorted.at(-1)!.split("-").map(Number) as [number, number];
   const months: Array<{ key: string; year: number; month: number; days: Array<{ date: string; day: number; weekday: number }> }> = [];
@@ -49,18 +49,22 @@ type View = "strip" | "month";
  */
 export function PublicationSlider({
   events,
+  undated = {},
   piecesByMonth,
   today,
   source,
 }: {
   events: PublicationEvent[];
+  /** Piezas del plan con mes y sin fecha de publicación, por mes (`AAAA-MM`, D-084). */
+  undated?: Record<string, PublicationEvent[]>;
   /** Títulos de las piezas del plan por mes (`AAAA-MM`). */
   piecesByMonth: Record<string, string[]>;
   today: string;
   source: string;
 }) {
   const track = useRef<HTMLDivElement>(null);
-  const months = events.length ? buildMonths(events) : [];
+  const undatedMonths = Object.keys(undated).filter((month) => undated[month]!.length);
+  const months = events.length || undatedMonths.length ? buildMonths([...events.map((event) => event.date), ...undatedMonths.map((month) => `${month}-01`)]) : [];
   const byDate = new Map<string, PublicationEvent[]>();
   for (const event of events) byDate.set(event.date, [...(byDate.get(event.date) ?? []), event]);
   const anchor = months.some((month) => month.key === today.slice(0, 7)) ? today.slice(0, 7) : months[0]?.key;
@@ -95,6 +99,7 @@ export function PublicationSlider({
     node.scrollTo({ left: next ?? (direction === 1 ? node.scrollWidth : 0), behavior: "smooth" });
   };
   const posts = events.filter((event) => event.type === "POST").length;
+  const pendingDate = undatedMonths.reduce((total, month) => total + undated[month]!.length, 0);
   const news = events.length - posts;
   const multi = events.some((event) => event.color);
   const slotText = (slot: PublicationEvent) => `${multi ? `${slot.brand} · ${kind(slot)}` : slot.title ? kind(slot) : slot.label}${slot.title ? `: ${slot.title}` : ""}`;
@@ -105,7 +110,7 @@ export function PublicationSlider({
         <div>
           <h3>Calendario de publicación</h3>
           <p>
-            {posts} posts · {news} newsletters · {source}
+            {posts} posts · {news} newsletters{pendingDate ? ` · ${pendingDate} posts sin fecha` : ""} · {source}
           </p>
         </div>
         <div className="pub-slider-tools">
@@ -172,6 +177,7 @@ export function PublicationSlider({
                   );
                 })}
               </div>
+              <UndatedList items={undated[month.key] ?? []} multi={multi} detailed />
             </section>
           );
         })}
@@ -212,9 +218,34 @@ export function PublicationSlider({
                 );
               })}
             </ol>
+            <UndatedList items={undated[month.key] ?? []} multi={multi} />
           </section>
         ))}
       </div>
+    </div>
+  );
+}
+
+/**
+ * Posts del mes sin fecha de publicación (D-084): en la tira, un chip por pieza
+ * con el código de marca; en el mes completo, además, el título.
+ */
+function UndatedList({ items, multi, detailed = false }: { items: PublicationEvent[]; multi: boolean; detailed?: boolean }) {
+  if (!items.length) return null;
+  const text = (item: PublicationEvent) => `${multi ? `${item.brand} · ` : ""}${item.title} (${item.label})`;
+  return (
+    <div className={`pub-undated${detailed ? " is-detailed" : ""}`}>
+      <span className="pub-undated-head">Sin fecha · {items.length}</span>
+      <ul aria-label={`${items.length} posts sin fecha de publicación`}>
+        {items.map((item, index) => (
+          <li key={index} title={text(item)} aria-label={text(item)}>
+            <span className="pub-chip is-post" style={tint(item)}>
+              {multi ? item.code : "Post"}
+            </span>
+            {detailed ? <span className="pub-undated-title">{item.title}</span> : null}
+          </li>
+        ))}
+      </ul>
     </div>
   );
 }

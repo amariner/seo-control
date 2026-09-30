@@ -2162,3 +2162,18 @@ No se reescriben decisiones antiguas. Si una cambia, se añade una nueva entrada
     la V1 no tiene propuestas para ellos.
 - Consecuencias: si la hoja del equipo se reimporta con esos meses, habrá duplicados; hay que
   retirarlos con `--undo` para el rango que la hoja ya cubra.
+
+## D-084 · El calendario de publicación muestra también los posts sin fecha
+
+- Fecha: 2026-09-30.
+- Estado: vigente (amplía D-051/D-054/D-067).
+- Contexto: el calendario solo pintaba huecos de la hoja «Calendario» y piezas con fecha de
+  publicación. Las 51 piezas V1 de D-083 y el resto del plan sin fecha no se veían; el usuario pide
+  que workbench, visor local y preview muestren todos los posts del plan (propuestos, en curso y
+  publicados) con la misma calendarización.
+- Decisión: cada mes del calendario (`PublicationSlider`, compartido por visor y workbench) añade
+  «Sin fecha · N» con las piezas del plan de ese mes sin fecha de publicación: chips con el código y
+  el color de la marca en la tira y la lista con título en «Mes completo». La cabecera suma
+  «N posts sin fecha». Al poner fecha en la tabla, la pieza pasa a su día (D-067).
+- Consecuencias: el calendario cuenta todo el plan, no solo lo fechado; los meses con piezas sin
+  fecha entran en el rango aunque no tengan huecos.
