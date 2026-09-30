@@ -1147,3 +1147,4 @@
   completo»); visor y workbench coinciden (94 posts sin fecha entre agosto y diciembre).
 - Verificación: typecheck, editorial-ui 4 / visor 127 / workbench 5, revisión visual en escritorio y
   375 px sin desbordamiento. Commit, GitHub y despliegue a petición del usuario.
+- Desplegado: commit 6aee934, dpl_8Jpbn6HKps3Fds4MesuvBx2Cf59z (Ready, alias de producción).
