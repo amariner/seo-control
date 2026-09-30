@@ -20,7 +20,8 @@
     "test": "vitest run",
     "import:v1": "tsx scripts/import-v1.ts",
     "import:sheet": "tsx scripts/import-sheet.ts",
-    "pull": "tsx scripts/pull-inbox.ts"
+    "pull": "tsx scripts/pull-inbox.ts",
+    "plan-from-v1": "tsx scripts/plan-from-v1.ts"
   },
   "dependencies": {
     "@seo/contracts": "workspace:*",

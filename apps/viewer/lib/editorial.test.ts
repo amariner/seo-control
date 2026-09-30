@@ -32,24 +32,28 @@ describe("dataset servido por el visor", () => {
     // Las ocho marcas toman su calendario de la hoja «Calendario 2026» (D-051, D-057):
     // 75 huecos − 4 posts de eventos sin marca (LDF, Cersaie) sustituyen los 39 eventos V1.
     expect(dataset.calendar.events).toHaveLength(71);
-    expect(dataset.backlog).toHaveLength(115);
-    // Las 61 filas de la hoja del equipo sustituyen los 146 del plan V1 (D-050, D-057).
-    expect(dataset.plan).toHaveLength(61);
+    // 51 de las 115 piezas del backlog V1 pasan al plan para oct–dic (D-083).
+    expect(dataset.backlog).toHaveLength(64);
+    // Las 61 filas de la hoja del equipo sustituyen los 146 del plan V1 (D-050, D-057), más esas 51.
+    expect(dataset.plan).toHaveLength(112);
     expect(dataset.slots).toHaveLength(34);
     expect(dataset.slots.reduce((total, slot) => total + slot.proposals.length, 0)).toBe(68);
     expect(dataset.brands).toHaveLength(8);
     expect(dataset.mode).toBe("v1-import");
   });
 
-  it("toma el plan de las ocho marcas de la hoja del equipo (D-050, D-057)", () => {
+  it("toma el plan de las ocho marcas de la hoja del equipo (D-050, D-057) y del plan V1 donde no llega (D-083)", () => {
     const xtone = dataset.plan.filter((piece) => piece.brand.slug === "xtone");
-    expect(xtone).toHaveLength(9);
-    expect(dataset.plan.every((piece) => piece.provenance.source === "plan-sheet" && piece.id.startsWith("ed-ps-"))).toBe(true);
+    expect(xtone).toHaveLength(12);
+    expect(dataset.plan.filter((piece) => piece.provenance.source === "plan-sheet" && piece.id.startsWith("ed-ps-"))).toHaveLength(61);
+    const v1 = dataset.plan.filter((piece) => piece.provenance.source === "conjunto-backlog");
+    expect(v1).toHaveLength(51);
+    expect(v1.every((piece) => piece.kind === "plan" && (piece.month.month ?? 0) >= 10)).toBe(true);
     expect(dataset.calendar.events.every((event) => event.provenance.source === "plan-sheet")).toBe(true);
   });
 
   it("conserva los briefs completos con su hash", () => {
-    const withBrief = dataset.backlog.filter((piece) => piece.brief);
+    const withBrief = [...dataset.backlog, ...dataset.plan].filter((piece) => piece.provenance.source === "conjunto-backlog" && piece.brief);
     expect(withBrief).toHaveLength(115);
     expect(withBrief.every((piece) => piece.brief!.sha256.length === 64)).toBe(true);
     expect(withBrief.reduce((total, piece) => total + piece.brief!.text.length, 0)).toBe(288635);
@@ -58,16 +62,16 @@ describe("dataset servido por el visor", () => {
 
 describe("filtros compartibles y CSV", () => {
   it("separa backlog y plan como fuentes distintas", () => {
-    expect(queryPieces({ kind: "backlog" }).items).toHaveLength(115);
-    expect(queryPieces({ kind: "plan" }).items).toHaveLength(61);
+    expect(queryPieces({ kind: "backlog" }).items).toHaveLength(64);
+    expect(queryPieces({ kind: "plan" }).items).toHaveLength(112);
     expect(queryPieces({}).items).toHaveLength(176);
   });
 
   it("aplica marca, mercado y búsqueda sin acentos", () => {
     const noken = queryPieces({ kind: "backlog", brand: "noken" });
-    expect(noken.items).toHaveLength(17);
+    expect(noken.items).toHaveLength(8); // 17 V1 menos las 9 de oct–dic que pasan al plan (D-083)
     expect(noken.items.every((piece) => piece.brand.slug === "noken")).toBe(true);
-    expect(queryPieces({ kind: "backlog", market: "UK" }).items).toHaveLength(9);
+    expect(queryPieces({ kind: "backlog", market: "UK" }).items).toHaveLength(6); // 3 de octubre pasan al plan (D-083)
     const accentless = queryPieces({ kind: "backlog", q: "porcelanico" });
     expect(accentless.items.length).toBeGreaterThan(0);
   });

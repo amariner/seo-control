@@ -103,6 +103,12 @@ const pad = (value: number) => String(value).padStart(2, "0");
 export const fromPlanSheet = (dataset: EditorialDataset, slug: EditorialBrandSlug) =>
   dataset.plan.some((piece) => piece.brand.slug === slug && piece.provenance.source === "plan-sheet");
 
+/** Procedencia añadida cuando el plan incluye piezas del plan editorial V1 (D-083). */
+export const v1PlanOrigin = (dataset: EditorialDataset, brand: EditorialBrandSlug | "all") =>
+  dataset.plan.some((piece) => piece.provenance.source === "conjunto-backlog" && (brand === "all" || piece.brand.slug === brand))
+    ? " y plan editorial V1 en los meses que la hoja no cubre"
+    : "";
+
 /** Piezas del plan de una marca: la hoja si la tiene (D-050); si no, plan y backlog V1. */
 export const brandPlan = (dataset: EditorialDataset, slug: EditorialBrandSlug) =>
   (fromPlanSheet(dataset, slug) ? dataset.plan : [...dataset.plan, ...dataset.backlog]).filter((piece) => piece.brand.slug === slug);

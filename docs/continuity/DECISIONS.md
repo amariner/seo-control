@@ -2137,3 +2137,28 @@ No se reescriben decisiones antiguas. Si una cambia, se añade una nueva entrada
   puntualizaciones desaparece a cambio de un comando que valida más que el formulario. Revertir es
   recuperar `app/informes/[brand]/[period]/page.tsx` y `app/informes/actions.ts` del commit 3caff34.
 
+
+## D-083 · Plan editorial V1 en los meses que la hoja del equipo no cubre
+
+- Fecha: 2026-09-30.
+- Estado: vigente (complementa D-050; la copia de la hoja `plan-sheet.json` no cambia).
+- Contexto: desde D-050/D-057 las ocho marcas toman el plan de la hoja «Plan editorial» del equipo,
+  que llega hasta septiembre de 2026. El plan editorial de la V1 (`/conjunto/plan-editorial`, el
+  backlog `conjunto-backlog` ya importado) tiene 72 posts de septiembre a diciembre; el usuario pide
+  completar el plan con ellos.
+- Decisión:
+  - La curación gana `planned` (pieza → autor, fecha y nota; opcional en ficheros anteriores). En
+    `applyCuration` esas piezas salen del backlog y entran en el plan con `kind: "plan"` y su
+    procedencia V1 intacta (`conjunto-backlog`, índice y hash); los recuentos por marca se ajustan.
+    Se editan en la tabla del plan como las demás (estado, fechas).
+  - Operación desde el chat (D-082): `pnpm editorial:plan-from-v1 -- --from AAAA-MM --to AAAA-MM
+    [--brand <slug>] [--dry-run] [--undo]`. Solo marcas cuyo plan sale de la hoja; omite las piezas
+    que ya están en el plan (misma keyword o título, sin tildes ni mayúsculas), lista los meses y
+    marcas que siguen vacíos y sale con código 1 si no añade nada. `--undo` las devuelve al backlog.
+  - La procedencia de la tabla (visor, ficha de marca y workbench) añade «y plan editorial V1 en los
+    meses que la hoja no cubre» cuando hay piezas V1 en el plan.
+  - Aplicado a 2026-09…2026-12: 51 piezas (21 de octubre, 15 de noviembre y 15 de diciembre); las 21
+    de septiembre ya estaban en la hoja. Siguen sin piezas Krion (sep–dic) y Ecommerce (nov–dic):
+    la V1 no tiene propuestas para ellos.
+- Consecuencias: si la hoja del equipo se reimporta con esos meses, habrá duplicados; hay que
+  retirarlos con `--undo` para el rango que la hoja ya cubra.

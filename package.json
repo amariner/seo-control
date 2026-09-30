@@ -21,6 +21,7 @@
     "editorial:import": "pnpm --filter @seo/editorial import:v1",
     "editorial:import-sheet": "pnpm --filter @seo/editorial import:sheet",
     "editorial:pull": "pnpm --filter @seo/editorial pull",
+    "editorial:plan-from-v1": "pnpm --filter @seo/editorial plan-from-v1",
     "editorial:measure": "pnpm --filter @seo/reports measure",
     "crawl": "pnpm --filter @seo/site-audit crawl",
     "crawl:publish": "pnpm --filter @seo/site-audit publish:audit",

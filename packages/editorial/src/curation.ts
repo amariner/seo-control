@@ -66,6 +66,26 @@ export function addCreatedPiece(store: EditorialCurationStore, piece: EditorialP
   return { ...store, updatedAt: now, createdPieces: [...store.createdPieces, piece] };
 }
 
+/**
+ * Lleva piezas del backlog al plan (D-083). Idempotente: una pieza ya planificada
+ * conserva su registro original.
+ */
+export function planBacklogPieces(store: EditorialCurationStore, pieceIds: string[], meta: CurationMeta): EditorialCurationStore {
+  const fresh = pieceIds.filter((pieceId) => !store.planned[pieceId]);
+  if (!fresh.length) return store;
+  const planned = { ...store.planned };
+  for (const pieceId of fresh) planned[pieceId] = { pieceId, addedAt: meta.now, addedBy: meta.updatedBy, note: meta.note };
+  return { ...store, updatedAt: meta.now, planned };
+}
+
+/** Devuelve piezas planificadas al backlog (D-083). */
+export function unplanBacklogPieces(store: EditorialCurationStore, pieceIds: string[], now: string): EditorialCurationStore {
+  const drop = new Set(pieceIds.filter((pieceId) => store.planned[pieceId]));
+  if (!drop.size) return store;
+  const planned = Object.fromEntries(Object.entries(store.planned).filter(([pieceId]) => !drop.has(pieceId)));
+  return { ...store, updatedAt: now, planned };
+}
+
 /** Metadato de curación (versión, autor, nota) para mostrar procedencia sin tocar el contrato de la pieza. */
 export function findPieceCuration(store: EditorialCurationStore, pieceId: string): EditorialPieceCurationRevision | null {
   return store.pieces[pieceId]?.current ?? null;
@@ -177,13 +197,17 @@ function overlayEvent(event: EditorialCalendarEvent, record: EditorialEventCurat
  */
 export function applyCuration(dataset: EditorialDataset, store: EditorialCurationStore): EditorialDataset {
   const createdPieces = store.createdPieces.map((piece) => overlayPiece(piece, store.pieces[piece.id]));
-  const backlog = [...dataset.backlog.map((piece) => overlayPiece(piece, store.pieces[piece.id])), ...createdPieces];
-  const plan = dataset.plan.map((piece) => overlayPiece(piece, store.pieces[piece.id]));
+  const allBacklog = [...dataset.backlog.map((piece) => overlayPiece(piece, store.pieces[piece.id])), ...createdPieces];
+  // D-083: las piezas planificadas pasan del backlog al plan con su procedencia V1.
+  const backlog = allBacklog.filter((piece) => !store.planned[piece.id]);
+  const promoted = allBacklog.filter((piece) => store.planned[piece.id]).map((piece) => ({ ...piece, kind: "plan" as const }));
+  const plan = [...dataset.plan.map((piece) => overlayPiece(piece, store.pieces[piece.id])), ...promoted];
   const slots = dataset.slots.map((slot) => overlaySlot(slot, store.slots[slot.id]));
   const events = dataset.calendar.events.map((event) => overlayEvent(event, store.events[event.id]));
   const brands = dataset.brands.map((brand) => {
     const created = store.createdPieces.filter((piece) => piece.brand.slug === brand.slug).length;
-    return created ? { ...brand, backlogPieces: brand.backlogPieces + created } : brand;
+    const moved = promoted.filter((piece) => piece.brand.slug === brand.slug).length;
+    return created || moved ? { ...brand, backlogPieces: brand.backlogPieces + created - moved, planPieces: brand.planPieces + moved } : brand;
   });
   return { ...dataset, brands, backlog, plan, calendar: { ...dataset.calendar, events }, slots };
 }

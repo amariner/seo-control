@@ -39,6 +39,10 @@ Cuando el usuario diga «informe adicional», «saca un informe», «necesito un
   y `vercel deploy --prod`. «Mide las publicaciones»: `pnpm editorial:measure` o el botón del
   plan del workbench. Al visor solo llegan el dataset y la curación: nunca informes
   adicionales ni datos intermedios.
+- «Completa el plan con la V1 de <meses>» / «importa las propuestas de la V1»:
+  `pnpm editorial:plan-from-v1 -- --from AAAA-MM --to AAAA-MM` (primero con `--dry-run`); lleva al
+  plan las piezas del plan editorial V1 de los meses que la hoja del equipo no cubre (D-083).
+  `--undo` las devuelve al backlog. Después, «sube el plan».
 
 ## Activador de crawls (D-070)
 

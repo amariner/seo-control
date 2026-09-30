@@ -40,8 +40,8 @@ describe("getPortfolio", () => {
     const backlog = data.brands.reduce((total, brand) => total + brand.editorial.backlogPieces, 0);
     const plan = data.brands.reduce((total, brand) => total + brand.editorial.planPieces, 0);
     const events = data.brands.reduce((total, brand) => total + brand.editorial.calendarEvents, 0);
-    expect(backlog).toBe(115);
-    expect(plan).toBe(61); // hoja del equipo para las ocho marcas (D-050, D-057)
+    expect(backlog).toBe(64); // 51 piezas V1 pasan al plan (D-083)
+    expect(plan).toBe(112); // hoja del equipo para las ocho marcas (D-050, D-057) + plan V1 oct–dic (D-083)
     expect(events).toBe(71);
     expect(data.editorialPlanningYear).toBe(2026);
   });

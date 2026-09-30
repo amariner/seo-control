@@ -95,6 +95,18 @@ export const editorialEventCurationRecordSchema = z.object({
 });
 export type EditorialEventCurationRecord = z.infer<typeof editorialEventCurationRecordSchema>;
 
+/**
+ * Pieza del backlog V1 llevada al plan editorial (D-083) para un mes que la hoja
+ * «Plan editorial» del equipo aún no cubre. La pieza conserva su procedencia V1.
+ */
+export const editorialPlannedPieceSchema = z.object({
+  pieceId: z.string(),
+  addedAt: z.string().datetime(),
+  addedBy: z.string().nullable(),
+  note: z.string().nullable(),
+});
+export type EditorialPlannedPiece = z.infer<typeof editorialPlannedPieceSchema>;
+
 export const editorialCurationStoreSchema = z.object({
   schemaVersion: z.literal(EDITORIAL_CURATION_SCHEMA_VERSION),
   updatedAt: z.string().datetime(),
@@ -103,9 +115,11 @@ export const editorialCurationStoreSchema = z.object({
   events: z.record(z.string(), editorialEventCurationRecordSchema),
   /** Piezas creadas íntegramente en el workbench (sin fila V1 de origen). Siempre `kind: "backlog"`. */
   createdPieces: z.array(editorialPieceSchema),
+  /** Piezas del backlog V1 que pasan al plan (D-083). Opcional en ficheros anteriores. */
+  planned: z.record(z.string(), editorialPlannedPieceSchema).default({}),
 });
 export type EditorialCurationStore = z.infer<typeof editorialCurationStoreSchema>;
 
 export function emptyCurationStore(now: string): EditorialCurationStore {
-  return { schemaVersion: EDITORIAL_CURATION_SCHEMA_VERSION, updatedAt: now, pieces: {}, slots: {}, events: {}, createdPieces: [] };
+  return { schemaVersion: EDITORIAL_CURATION_SCHEMA_VERSION, updatedAt: now, pieces: {}, slots: {}, events: {}, createdPieces: [], planned: {} };
 }

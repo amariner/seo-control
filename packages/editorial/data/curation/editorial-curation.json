@@ -1,6 +1,6 @@
 {
  "schemaVersion": "editorial-curation.v1",
- "updatedAt": "2026-09-28T07:57:36.844Z",
+ "updatedAt": "2026-09-30T07:22:48.832Z",
  "pieces": {
   "ed-ps-e63c2c66460c91e0": {
    "pieceId": "ed-ps-e63c2c66460c91e0",
@@ -167,5 +167,313 @@
  },
  "slots": {},
  "events": {},
- "createdPieces": []
+ "createdPieces": [],
+ "planned": {
+  "ed-bk-96b88ccb46c6d4a2": {
+   "pieceId": "ed-bk-96b88ccb46c6d4a2",
+   "addedAt": "2026-09-30T07:22:48.832Z",
+   "addedBy": "Andreu Mariner",
+   "note": "Plan editorial V1 2026-09…2026-12 (D-083)"
+  },
+  "ed-bk-2f627a72b0be088f": {
+   "pieceId": "ed-bk-2f627a72b0be088f",
+   "addedAt": "2026-09-30T07:22:48.832Z",
+   "addedBy": "Andreu Mariner",
+   "note": "Plan editorial V1 2026-09…2026-12 (D-083)"
+  },
+  "ed-bk-5919aaa44aab36e1": {
+   "pieceId": "ed-bk-5919aaa44aab36e1",
+   "addedAt": "2026-09-30T07:22:48.832Z",
+   "addedBy": "Andreu Mariner",
+   "note": "Plan editorial V1 2026-09…2026-12 (D-083)"
+  },
+  "ed-bk-04e2b84f098fb9b8": {
+   "pieceId": "ed-bk-04e2b84f098fb9b8",
+   "addedAt": "2026-09-30T07:22:48.832Z",
+   "addedBy": "Andreu Mariner",
+   "note": "Plan editorial V1 2026-09…2026-12 (D-083)"
+  },
+  "ed-bk-1b44fd0f3db408a4": {
+   "pieceId": "ed-bk-1b44fd0f3db408a4",
+   "addedAt": "2026-09-30T07:22:48.832Z",
+   "addedBy": "Andreu Mariner",
+   "note": "Plan editorial V1 2026-09…2026-12 (D-083)"
+  },
+  "ed-bk-486a66f1e3224395": {
+   "pieceId": "ed-bk-486a66f1e3224395",
+   "addedAt": "2026-09-30T07:22:48.832Z",
+   "addedBy": "Andreu Mariner",
+   "note": "Plan editorial V1 2026-09…2026-12 (D-083)"
+  },
+  "ed-bk-0fa64ef43a8921f6": {
+   "pieceId": "ed-bk-0fa64ef43a8921f6",
+   "addedAt": "2026-09-30T07:22:48.832Z",
+   "addedBy": "Andreu Mariner",
+   "note": "Plan editorial V1 2026-09…2026-12 (D-083)"
+  },
+  "ed-bk-3ede7242d6557b35": {
+   "pieceId": "ed-bk-3ede7242d6557b35",
+   "addedAt": "2026-09-30T07:22:48.832Z",
+   "addedBy": "Andreu Mariner",
+   "note": "Plan editorial V1 2026-09…2026-12 (D-083)"
+  },
+  "ed-bk-e3110f84b54e94c9": {
+   "pieceId": "ed-bk-e3110f84b54e94c9",
+   "addedAt": "2026-09-30T07:22:48.832Z",
+   "addedBy": "Andreu Mariner",
+   "note": "Plan editorial V1 2026-09…2026-12 (D-083)"
+  },
+  "ed-bk-972c05bd87f4a469": {
+   "pieceId": "ed-bk-972c05bd87f4a469",
+   "addedAt": "2026-09-30T07:22:48.832Z",
+   "addedBy": "Andreu Mariner",
+   "note": "Plan editorial V1 2026-09…2026-12 (D-083)"
+  },
+  "ed-bk-309819289cbf06dc": {
+   "pieceId": "ed-bk-309819289cbf06dc",
+   "addedAt": "2026-09-30T07:22:48.832Z",
+   "addedBy": "Andreu Mariner",
+   "note": "Plan editorial V1 2026-09…2026-12 (D-083)"
+  },
+  "ed-bk-f84ea6227df355f7": {
+   "pieceId": "ed-bk-f84ea6227df355f7",
+   "addedAt": "2026-09-30T07:22:48.832Z",
+   "addedBy": "Andreu Mariner",
+   "note": "Plan editorial V1 2026-09…2026-12 (D-083)"
+  },
+  "ed-bk-3415ad945a0263bc": {
+   "pieceId": "ed-bk-3415ad945a0263bc",
+   "addedAt": "2026-09-30T07:22:48.832Z",
+   "addedBy": "Andreu Mariner",
+   "note": "Plan editorial V1 2026-09…2026-12 (D-083)"
+  },
+  "ed-bk-ef3bd2b874fb7981": {
+   "pieceId": "ed-bk-ef3bd2b874fb7981",
+   "addedAt": "2026-09-30T07:22:48.832Z",
+   "addedBy": "Andreu Mariner",
+   "note": "Plan editorial V1 2026-09…2026-12 (D-083)"
+  },
+  "ed-bk-cb2040c279f3042a": {
+   "pieceId": "ed-bk-cb2040c279f3042a",
+   "addedAt": "2026-09-30T07:22:48.832Z",
+   "addedBy": "Andreu Mariner",
+   "note": "Plan editorial V1 2026-09…2026-12 (D-083)"
+  },
+  "ed-bk-8c8a19fe78f6f915": {
+   "pieceId": "ed-bk-8c8a19fe78f6f915",
+   "addedAt": "2026-09-30T07:22:48.832Z",
+   "addedBy": "Andreu Mariner",
+   "note": "Plan editorial V1 2026-09…2026-12 (D-083)"
+  },
+  "ed-bk-9b5a0929afa454be": {
+   "pieceId": "ed-bk-9b5a0929afa454be",
+   "addedAt": "2026-09-30T07:22:48.832Z",
+   "addedBy": "Andreu Mariner",
+   "note": "Plan editorial V1 2026-09…2026-12 (D-083)"
+  },
+  "ed-bk-28e279d6cc177f2d": {
+   "pieceId": "ed-bk-28e279d6cc177f2d",
+   "addedAt": "2026-09-30T07:22:48.832Z",
+   "addedBy": "Andreu Mariner",
+   "note": "Plan editorial V1 2026-09…2026-12 (D-083)"
+  },
+  "ed-bk-85d495504c4c579b": {
+   "pieceId": "ed-bk-85d495504c4c579b",
+   "addedAt": "2026-09-30T07:22:48.832Z",
+   "addedBy": "Andreu Mariner",
+   "note": "Plan editorial V1 2026-09…2026-12 (D-083)"
+  },
+  "ed-bk-f3cda7728dd34ab3": {
+   "pieceId": "ed-bk-f3cda7728dd34ab3",
+   "addedAt": "2026-09-30T07:22:48.832Z",
+   "addedBy": "Andreu Mariner",
+   "note": "Plan editorial V1 2026-09…2026-12 (D-083)"
+  },
+  "ed-bk-77f681a4eb6bbdd4": {
+   "pieceId": "ed-bk-77f681a4eb6bbdd4",
+   "addedAt": "2026-09-30T07:22:48.832Z",
+   "addedBy": "Andreu Mariner",
+   "note": "Plan editorial V1 2026-09…2026-12 (D-083)"
+  },
+  "ed-bk-ca1f39ade0564603": {
+   "pieceId": "ed-bk-ca1f39ade0564603",
+   "addedAt": "2026-09-30T07:22:48.832Z",
+   "addedBy": "Andreu Mariner",
+   "note": "Plan editorial V1 2026-09…2026-12 (D-083)"
+  },
+  "ed-bk-36c97fc711542994": {
+   "pieceId": "ed-bk-36c97fc711542994",
+   "addedAt": "2026-09-30T07:22:48.832Z",
+   "addedBy": "Andreu Mariner",
+   "note": "Plan editorial V1 2026-09…2026-12 (D-083)"
+  },
+  "ed-bk-d27b3b97bc5d88f5": {
+   "pieceId": "ed-bk-d27b3b97bc5d88f5",
+   "addedAt": "2026-09-30T07:22:48.832Z",
+   "addedBy": "Andreu Mariner",
+   "note": "Plan editorial V1 2026-09…2026-12 (D-083)"
+  },
+  "ed-bk-97d0e70f21d73fec": {
+   "pieceId": "ed-bk-97d0e70f21d73fec",
+   "addedAt": "2026-09-30T07:22:48.832Z",
+   "addedBy": "Andreu Mariner",
+   "note": "Plan editorial V1 2026-09…2026-12 (D-083)"
+  },
+  "ed-bk-347293c272c66735": {
+   "pieceId": "ed-bk-347293c272c66735",
+   "addedAt": "2026-09-30T07:22:48.832Z",
+   "addedBy": "Andreu Mariner",
+   "note": "Plan editorial V1 2026-09…2026-12 (D-083)"
+  },
+  "ed-bk-a560c54740fe49a9": {
+   "pieceId": "ed-bk-a560c54740fe49a9",
+   "addedAt": "2026-09-30T07:22:48.832Z",
+   "addedBy": "Andreu Mariner",
+   "note": "Plan editorial V1 2026-09…2026-12 (D-083)"
+  },
+  "ed-bk-22998c58db511c7f": {
+   "pieceId": "ed-bk-22998c58db511c7f",
+   "addedAt": "2026-09-30T07:22:48.832Z",
+   "addedBy": "Andreu Mariner",
+   "note": "Plan editorial V1 2026-09…2026-12 (D-083)"
+  },
+  "ed-bk-ed60316868532e9a": {
+   "pieceId": "ed-bk-ed60316868532e9a",
+   "addedAt": "2026-09-30T07:22:48.832Z",
+   "addedBy": "Andreu Mariner",
+   "note": "Plan editorial V1 2026-09…2026-12 (D-083)"
+  },
+  "ed-bk-f6cf4f4325942715": {
+   "pieceId": "ed-bk-f6cf4f4325942715",
+   "addedAt": "2026-09-30T07:22:48.832Z",
+   "addedBy": "Andreu Mariner",
+   "note": "Plan editorial V1 2026-09…2026-12 (D-083)"
+  },
+  "ed-bk-7bd8e8a5c66c2362": {
+   "pieceId": "ed-bk-7bd8e8a5c66c2362",
+   "addedAt": "2026-09-30T07:22:48.832Z",
+   "addedBy": "Andreu Mariner",
+   "note": "Plan editorial V1 2026-09…2026-12 (D-083)"
+  },
+  "ed-bk-7ac90539800c49d9": {
+   "pieceId": "ed-bk-7ac90539800c49d9",
+   "addedAt": "2026-09-30T07:22:48.832Z",
+   "addedBy": "Andreu Mariner",
+   "note": "Plan editorial V1 2026-09…2026-12 (D-083)"
+  },
+  "ed-bk-518d92e076908ab6": {
+   "pieceId": "ed-bk-518d92e076908ab6",
+   "addedAt": "2026-09-30T07:22:48.832Z",
+   "addedBy": "Andreu Mariner",
+   "note": "Plan editorial V1 2026-09…2026-12 (D-083)"
+  },
+  "ed-bk-e28cea2ea2dc4219": {
+   "pieceId": "ed-bk-e28cea2ea2dc4219",
+   "addedAt": "2026-09-30T07:22:48.832Z",
+   "addedBy": "Andreu Mariner",
+   "note": "Plan editorial V1 2026-09…2026-12 (D-083)"
+  },
+  "ed-bk-8864de658c8d9e54": {
+   "pieceId": "ed-bk-8864de658c8d9e54",
+   "addedAt": "2026-09-30T07:22:48.832Z",
+   "addedBy": "Andreu Mariner",
+   "note": "Plan editorial V1 2026-09…2026-12 (D-083)"
+  },
+  "ed-bk-d16143fab35f1535": {
+   "pieceId": "ed-bk-d16143fab35f1535",
+   "addedAt": "2026-09-30T07:22:48.832Z",
+   "addedBy": "Andreu Mariner",
+   "note": "Plan editorial V1 2026-09…2026-12 (D-083)"
+  },
+  "ed-bk-3afc5f8fde22e3cd": {
+   "pieceId": "ed-bk-3afc5f8fde22e3cd",
+   "addedAt": "2026-09-30T07:22:48.832Z",
+   "addedBy": "Andreu Mariner",
+   "note": "Plan editorial V1 2026-09…2026-12 (D-083)"
+  },
+  "ed-bk-c5ea18a2dd427247": {
+   "pieceId": "ed-bk-c5ea18a2dd427247",
+   "addedAt": "2026-09-30T07:22:48.832Z",
+   "addedBy": "Andreu Mariner",
+   "note": "Plan editorial V1 2026-09…2026-12 (D-083)"
+  },
+  "ed-bk-dc3a891c3ebb9818": {
+   "pieceId": "ed-bk-dc3a891c3ebb9818",
+   "addedAt": "2026-09-30T07:22:48.832Z",
+   "addedBy": "Andreu Mariner",
+   "note": "Plan editorial V1 2026-09…2026-12 (D-083)"
+  },
+  "ed-bk-82b45413c2787492": {
+   "pieceId": "ed-bk-82b45413c2787492",
+   "addedAt": "2026-09-30T07:22:48.832Z",
+   "addedBy": "Andreu Mariner",
+   "note": "Plan editorial V1 2026-09…2026-12 (D-083)"
+  },
+  "ed-bk-9318661a265cfce7": {
+   "pieceId": "ed-bk-9318661a265cfce7",
+   "addedAt": "2026-09-30T07:22:48.832Z",
+   "addedBy": "Andreu Mariner",
+   "note": "Plan editorial V1 2026-09…2026-12 (D-083)"
+  },
+  "ed-bk-edece7843cd829aa": {
+   "pieceId": "ed-bk-edece7843cd829aa",
+   "addedAt": "2026-09-30T07:22:48.832Z",
+   "addedBy": "Andreu Mariner",
+   "note": "Plan editorial V1 2026-09…2026-12 (D-083)"
+  },
+  "ed-bk-fb7d9a97a32017a4": {
+   "pieceId": "ed-bk-fb7d9a97a32017a4",
+   "addedAt": "2026-09-30T07:22:48.832Z",
+   "addedBy": "Andreu Mariner",
+   "note": "Plan editorial V1 2026-09…2026-12 (D-083)"
+  },
+  "ed-bk-fcbaf167540efc28": {
+   "pieceId": "ed-bk-fcbaf167540efc28",
+   "addedAt": "2026-09-30T07:22:48.832Z",
+   "addedBy": "Andreu Mariner",
+   "note": "Plan editorial V1 2026-09…2026-12 (D-083)"
+  },
+  "ed-bk-1bb1e4e0dbbfcb03": {
+   "pieceId": "ed-bk-1bb1e4e0dbbfcb03",
+   "addedAt": "2026-09-30T07:22:48.832Z",
+   "addedBy": "Andreu Mariner",
+   "note": "Plan editorial V1 2026-09…2026-12 (D-083)"
+  },
+  "ed-bk-5bb5cb8198ba2e2a": {
+   "pieceId": "ed-bk-5bb5cb8198ba2e2a",
+   "addedAt": "2026-09-30T07:22:48.832Z",
+   "addedBy": "Andreu Mariner",
+   "note": "Plan editorial V1 2026-09…2026-12 (D-083)"
+  },
+  "ed-bk-6eb0ba38d651e258": {
+   "pieceId": "ed-bk-6eb0ba38d651e258",
+   "addedAt": "2026-09-30T07:22:48.832Z",
+   "addedBy": "Andreu Mariner",
+   "note": "Plan editorial V1 2026-09…2026-12 (D-083)"
+  },
+  "ed-bk-f883b7f0dad2d876": {
+   "pieceId": "ed-bk-f883b7f0dad2d876",
+   "addedAt": "2026-09-30T07:22:48.832Z",
+   "addedBy": "Andreu Mariner",
+   "note": "Plan editorial V1 2026-09…2026-12 (D-083)"
+  },
+  "ed-bk-9c82db8430bf4a62": {
+   "pieceId": "ed-bk-9c82db8430bf4a62",
+   "addedAt": "2026-09-30T07:22:48.832Z",
+   "addedBy": "Andreu Mariner",
+   "note": "Plan editorial V1 2026-09…2026-12 (D-083)"
+  },
+  "ed-bk-ec0b5bd3f4be899e": {
+   "pieceId": "ed-bk-ec0b5bd3f4be899e",
+   "addedAt": "2026-09-30T07:22:48.832Z",
+   "addedBy": "Andreu Mariner",
+   "note": "Plan editorial V1 2026-09…2026-12 (D-083)"
+  },
+  "ed-bk-5bde2ceb30f6cbe2": {
+   "pieceId": "ed-bk-5bde2ceb30f6cbe2",
+   "addedAt": "2026-09-30T07:22:48.832Z",
+   "addedBy": "Andreu Mariner",
+   "note": "Plan editorial V1 2026-09…2026-12 (D-083)"
+  }
+ }
 }

@@ -1,5 +1,5 @@
 import { BRAND_REPORT_VERSION, type BrandSlug, type BrandReport } from "@seo/contracts";
-import { fromPlanSheet as sheetFor, generalCalendar, generalPlanRows } from "@seo/editorial-ui";
+import { fromPlanSheet as sheetFor, generalCalendar, generalPlanRows, v1PlanOrigin } from "@seo/editorial-ui";
 import { editorialTargetsOf } from "@seo/reports/generate";
 import { resolveRepository } from "@seo/repository";
 import { getEditorial, getLiveEditorial } from "./editorial";
@@ -52,7 +52,7 @@ export function editorialOrigin(slug: BrandSlug) {
   const dataset = getEditorial();
   const importedAt = dataset.report.importedAt.slice(0, 10);
   return fromPlanSheet(slug)
-    ? { label: `hoja «Plan editorial» del equipo, importada el ${importedAt}`, sheet: true }
+    ? { label: `hoja «Plan editorial» del equipo, importada el ${importedAt}${v1PlanOrigin(dataset, slug)}`, sheet: true }
     : { label: `plan y backlog importados de V1 el ${importedAt}`, sheet: false };
 }
 

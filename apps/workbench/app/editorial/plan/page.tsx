@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { generalCalendar, generalPlanRows } from "@seo/editorial-ui";
+import { generalCalendar, generalPlanRows, v1PlanOrigin } from "@seo/editorial-ui";
 import { EditorialPlan } from "@seo/editorial-ui/plan";
 import { ThemeTimeline } from "@seo/editorial-ui/theme-timeline";
 import { PlanMeasurements } from "@seo/editorial-ui/plan-measurements";
@@ -59,7 +59,7 @@ export default async function WorkbenchPlanPage({ searchParams }: Props) {
         <EditorialPlan
           pieces={pieces}
           caption="Plan editorial de las ocho marcas"
-          origin={{ label: `hoja «Plan editorial» del equipo, importada el ${importedAt}, con la curación local` }}
+          origin={{ label: `hoja «Plan editorial» del equipo, importada el ${importedAt}${v1PlanOrigin(dataset, "all")}, con la curación local` }}
           calendar={calendar}
           filterable
           showPast

@@ -1126,3 +1126,15 @@
   `vercel deploy --prod` (entran D-075…D-082).
 - Desplegado en producción (dpl_CJSjCxhWm7Yz2x39zMRhPsvHhhpG, commit 5d581bd, Ready). El primer
   `vercel deploy` devolvió «Not authorized» sin causa aparente; el reintento entró sin cambios.
+
+## 2026-09-30 · Plan editorial completado con la V1 de octubre a diciembre (D-083)
+
+- El plan de la V2 (hoja del equipo) llegaba a septiembre. Se llevan al plan las piezas del plan
+  editorial V1 (`/conjunto/plan-editorial`) de oct–dic: 51 piezas con brief y procedencia V1; las
+  21 de septiembre ya estaban en la hoja y se omiten. `editorial:pull` previo: nada que traer.
+- Nuevo `pnpm editorial:plan-from-v1` (rango, marca, `--dry-run`, `--undo`) y campo `planned` en la
+  curación; la procedencia de la tabla lo indica. Krion (sep–dic) y Ecommerce (nov–dic) siguen sin
+  piezas: la V1 no tiene propuestas.
+- Verificación: typecheck (12 tareas), editorial 55 (1 nueva), editorial-ui 4, reports 33, visor 127
+  (recuentos del dataset actualizados), workbench 5; plan del workbench y del visor con 112 piezas.
+  Sin commit.

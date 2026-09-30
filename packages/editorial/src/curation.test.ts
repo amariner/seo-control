@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { editorialDatasetSchema, editorialPieceSchema, emptyCurationStore, type EditorialCalendarEvent, type EditorialCurationFields, type EditorialDataset, type EditorialPiece, type EditorialSlot } from "@seo/contracts";
-import { addCreatedPiece, applyCuration, buildPieceFromInput, findPieceCuration, upsertEventCuration, upsertPieceCuration, upsertSlotCuration } from "./curation";
+import { addCreatedPiece, applyCuration, buildPieceFromInput, findPieceCuration, planBacklogPieces, unplanBacklogPieces, upsertEventCuration, upsertPieceCuration, upsertSlotCuration } from "./curation";
 
 const NOW = "2026-09-03T09:00:00.000Z";
 
@@ -195,5 +195,22 @@ describe("applyCuration", () => {
     expect(effective.backlog.map((item) => item.id)).toContain(created.id);
     expect(effective.brands.find((brand) => brand.slug === "krion")!.backlogPieces).toBe(1);
     expect(effective.brands.find((brand) => brand.slug === "noken")!.backlogPieces).toBe(0);
+  });
+
+  it("lleva piezas del backlog V1 al plan con su curación y las devuelve (D-083)", () => {
+    const base = dataset({ backlog: [piece({ id: PIECE_1, month: { year: 2026, month: 10, yearSource: "calendar", literal: "10 Octubre" } })], brands: dataset().brands.map((brand) => (brand.slug === "noken" ? { ...brand, backlogPieces: 1 } : brand)) });
+    const meta = { updatedBy: "Andreu", note: "Plan editorial V1", now: NOW };
+    let store = planBacklogPieces(emptyCurationStore(NOW), [PIECE_1], meta);
+    store = upsertPieceCuration(store, PIECE_1, { ...EMPTY_FIELDS, publicationDate: "2026-10-14" }, { updatedBy: null, note: null, now: NOW });
+    const effective = applyCuration(base, store);
+    expect(effective.backlog).toHaveLength(0);
+    expect(effective.plan.map((item) => [item.id, item.kind, item.provenance.source, item.publicationDate])).toEqual([[PIECE_1, "plan", "conjunto-backlog", "2026-10-14"]]);
+    expect(effective.brands.find((brand) => brand.slug === "noken")).toMatchObject({ backlogPieces: 0, planPieces: 1 });
+    expect(editorialDatasetSchema.parse(effective)).toBeTruthy();
+    // Idempotente: repetir no cambia el registro original.
+    expect(planBacklogPieces(store, [PIECE_1], { ...meta, now: "2026-10-01T00:00:00.000Z" })).toBe(store);
+    const back = applyCuration(base, unplanBacklogPieces(store, [PIECE_1], NOW));
+    expect(back.plan).toHaveLength(0);
+    expect(back.backlog.map((item) => item.id)).toEqual([PIECE_1]);
   });
 });

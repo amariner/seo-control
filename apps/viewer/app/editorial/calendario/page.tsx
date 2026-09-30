@@ -4,7 +4,7 @@ import { Notice, StatusBadge } from "@seo/ui";
 import { DetailPanel } from "@/components/editorial/detail-panel";
 import { EditorialFrame } from "@/components/editorial/editorial-frame";
 import { PieceDetail, statusBadge } from "@/components/editorial/piece-detail";
-import { generalCalendar, generalPlanRows } from "@seo/editorial-ui";
+import { generalCalendar, generalPlanRows, v1PlanOrigin } from "@seo/editorial-ui";
 import { EditorialPlan } from "@seo/editorial-ui/plan";
 import { ThemeTimeline } from "@seo/editorial-ui/theme-timeline";
 import { PlanMeasurements } from "@seo/editorial-ui/plan-measurements";
@@ -54,7 +54,7 @@ export default async function CalendarPage({ searchParams }: { searchParams: Pro
         <EditorialPlan
           pieces={pieces}
           caption={label}
-          origin={{ label: `hoja «Plan editorial» del equipo, importada el ${importedAt}` }}
+          origin={{ label: `hoja «Plan editorial» del equipo, importada el ${importedAt}${v1PlanOrigin(dataset, brand)}` }}
           calendar={calendar}
           filterable
           showPast

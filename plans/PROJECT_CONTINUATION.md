@@ -1,9 +1,14 @@
 # Checkpoint operativo — SEO Dashboard V2
 
-Última actualización: 30 de septiembre de 2026 (D-075…D-082 subidos a GitHub y desplegados; H6).
+Última actualización: 30 de septiembre de 2026 (plan editorial completado con la V1 de oct–dic, D-083).
 
 ## Reanudar aquí · plan de hitos (D-078)
 
+- **2026-09-30 · D-083, en local sin commit:** el plan editorial incluye 51 piezas del plan
+  editorial V1 (oct 21, nov 15, dic 15) mediante `planned` en la curación y
+  `pnpm editorial:plan-from-v1` (`packages/editorial/scripts/plan-from-v1.ts`, `planBacklogPieces`,
+  `unplanBacklogPieces`, `v1PlanOrigin`). Septiembre ya estaba en la hoja. Sin piezas: Krion sep–dic
+  y Ecommerce nov–dic. Pendiente: revisión del usuario y «sube el plan».
 - **2026-09-30 · H6 hecho:** D-075…D-082 en main, en GitHub y desplegados en producción. Retoque
   del visor: en la pestaña «Informes» el informe del periodo seleccionado va el primero con una
   chincheta (`brand-report-pin`), sin nota al pie y con subtítulo breve; fuentes y pie del informe
