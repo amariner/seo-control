@@ -2280,3 +2280,19 @@ No se reescriben decisiones antiguas. Si una cambia, se añade una nueva entrada
 - Pendiente (H10): bandeja con estado, responsable, plazo y resultado medido de cada acción, y su
   relación con `/actions` del menú (hoy con el conector sintético).
 
+## D-089 · Pestaña «Acciones»: una lista de tareas por prioridad
+
+- Fecha: 2026-09-30.
+- Estado: vigente (ajusta la presentación de D-088; las reglas no cambian).
+- Contexto: el usuario pide simplificar la pestaña y hacerla más útil.
+- Decisión:
+  - Una sola lista con todas las acciones, agrupada por prioridad (urgente → baja) en lugar de un
+    bloque por apartado. Cada fila: tarea, motivo con la cifra, área · fuente, «En el informe» y
+    enlace al apartado de donde sale. Desaparecen las cuatro tarjetas de recuento: el recuento va
+    en la cabecera de cada grupo.
+  - Filtro por área (Técnico, Contenido, Mercados, Medición, Editorial) para repartir el trabajo, y
+    «Copiar lista»: texto con casillas y HTML con enlaces al visor, encabezados por marca, periodo,
+    mercado y área filtrada. Es lectura: no guarda estado (eso sigue pendiente en H10).
+  - Debajo, «Cómo está cada apartado»: una línea por apartado con su hallazgo y cuántas acciones
+    propone, para conservar el repaso completo de D-088.
+

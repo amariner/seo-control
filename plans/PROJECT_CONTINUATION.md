@@ -1,9 +1,13 @@
 # Checkpoint operativo — SEO Dashboard V2
 
-Última actualización: 30 de septiembre de 2026 (pestaña «Acciones» del proyecto, D-088).
+Última actualización: 30 de septiembre de 2026 (pestaña «Acciones» simplificada, D-089).
 
 ## Reanudar aquí · plan de hitos (D-078)
 
+- **2026-09-30 · D-089, en local sin commit:** la pestaña «Acciones» es una lista única por prioridad
+  con filtro por área, «Copiar lista» y «Cómo está cada apartado» (`components/report/actions-review.tsx`,
+  ahora componente de cliente). **Punto exacto de reanudación:** pedir commit al usuario; después
+  `vercel deploy --prod` cuando lo confirme y H10 (estado, responsable, plazo y resultado de cada acción).
 - **2026-09-30 · D-088, en main (27a55d8) y en GitHub, sin desplegar:** pestaña «Acciones» del proyecto en el visor
   (`?tab=acciones`, `components/report/actions-review.tsx`) con el repaso de todos los apartados.
   Reglas en `packages/reports/src/project-actions.ts`: `reportPlanActions` (plan del informe,

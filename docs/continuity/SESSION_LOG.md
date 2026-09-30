@@ -1203,3 +1203,12 @@
   workbench 5; los tres informes congelados se pintan idénticos; visor local en escritorio, 375 px
   y con mercado ES, sin errores de consola. Sin commit.
 - A petición del usuario: commit 27a55d8 en main (D-088) y subido a GitHub. Sin desplegar.
+
+## 2026-09-30 · Pestaña «Acciones» simplificada (D-089)
+
+- A petición del usuario, la pestaña «Acciones» del visor pasa a una lista única por prioridad con
+  filtro por área, «Copiar lista» (texto y HTML con enlaces) y una línea de estado por apartado.
+  Sin cambios en las reglas de `project-actions.ts`.
+- Verificación: typecheck y lint del visor, visor 131; visor local en escritorio y 375 px sin
+  desbordamiento; filtro y copia comprobados. Sin commit.
+

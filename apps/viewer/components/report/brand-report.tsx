@@ -59,6 +59,8 @@ import {
   periodIdOf,
   projectActionReview,
   reportIdOf,
+  ACTION_TABS,
+  type ActionTab,
 } from "@seo/reports";
 import { getPublishedReports } from "@seo/reports/published";
 import { OPPORTUNITY_KINDS } from "./opportunity-kinds";
@@ -1828,12 +1830,13 @@ function Actions({
     <Section
       id="acciones"
       title="Acciones"
-      subtitle="Repaso de cada apartado: qué dicen sus datos y qué acciones proponen, por prioridad."
+      subtitle="Qué hacer primero, según los datos de todos los apartados. Filtra por área y copia la lista para repartirla."
     >
       <ActionsReview
         sections={sections}
-        href={href}
+        links={Object.fromEntries(ACTION_TABS.map((item) => [item.key, href(item.key)])) as Record<ActionTab, string>}
         marketFiltered={report.market !== "all"}
+        context={`${findBrand(report.brand)?.name ?? report.brand} · ${date(report.window.start)} – ${date(report.window.end)} · ${report.markets.find((item) => item.code === report.market)?.name ?? "Todos los mercados"}`}
       />
     </Section>
   );
