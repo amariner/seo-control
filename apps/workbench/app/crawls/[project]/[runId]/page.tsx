@@ -8,6 +8,7 @@ import { diffRuns } from "@seo/site-audit/diff";
 import { listRuns, loadRun, readPublished } from "@seo/site-audit/runs";
 import { Notice } from "@seo/ui";
 import { CrawlDiffPanel } from "@/components/crawl-diff";
+import { CrawlSitemaps } from "@/components/crawl-sitemaps";
 import { WorkbenchFrame } from "@/components/workbench-frame";
 import { AutoRefresh } from "../../auto-refresh";
 import { CrawlUrlTable } from "../../url-table";
@@ -18,7 +19,8 @@ export const dynamic = "force-dynamic";
 /**
  * Detalle de un crawl (D-070, D-071). Mientras corre, muestra el avance y se
  * refresca; al terminar, el panel que verá el visor (resumen que se publicaría)
- * y, debajo, todas las URL del crawl completo con enlace a su ficha.
+ * y, debajo, los sitemaps encontrados con su estructura de URL y todas las URL
+ * del crawl completo con enlace a su ficha.
  */
 export default async function CrawlDetailPage({
   params,
@@ -65,6 +67,7 @@ export default async function CrawlDetailPage({
           ) : (
             <p className="tool-note">Es el primer crawl de {brand?.name ?? run.project}: con el siguiente aparecerá aquí qué se ha corregido y qué es nuevo.</p>
           )}
+          <CrawlSitemaps run={run} base={`/crawls/${run.project}/${run.runId}`} brandName={brand?.name ?? run.project} />
           <section className="crawl-urls" aria-labelledby="urls-titulo">
             <h2 id="urls-titulo">URL rastreadas</h2>
             <p>Todas las URL del crawl con sus datos on-page. Abre una para ver su ficha completa: metadatos, encabezados, enlaces, hreflang, schema e incidencias explicadas.</p>

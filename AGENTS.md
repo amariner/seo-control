@@ -49,6 +49,8 @@ Cuando el usuario diga «informe adicional», «saca un informe», «necesito un
 - «Lanza un crawl de <proyecto>»: `pnpm crawl -- --project <slug> [--max N]` (necesita red; hasta
   1.000 URL sin preflight de 50 GiB), en segundo plano; el avance y el resultado URL a URL se ven en
   `/crawls` del workbench, que ya no lanza crawls (D-071). Resume incidencias al terminar.
+  «Crawl de <proyecto> con el sitemap <url>»: añade `--sitemap <url>` (repetible) a los de
+  robots.txt; el detalle del crawl muestra los sitemaps encontrados y su estructura de URL (D-086).
 - «Publica el crawl de <proyecto>»: `pnpm crawl:publish -- --project <slug> [--run <id>]` y, si el
   usuario lo confirma, commit y despliegue. Al visor solo va el resumen acotado, nunca el crawl.
 

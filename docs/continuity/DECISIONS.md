@@ -2198,3 +2198,56 @@ No se reescriben decisiones antiguas. Si una cambia, se añade una nueva entrada
     cálculo (más columnas editables). Depende de H7 (Neon + `DATABASE_URL`); queda como H12.
 - Consecuencias: cada columna editable nueva pasa por el mismo camino (contrato de la bandeja,
   fusión, persistencia y editor) hasta que exista la base de datos única.
+
+## D-086 · «Sitemaps encontrados» con estructura de URL en el detalle del crawl
+
+- Fecha: 2026-09-30.
+- Estado: vigente (amplía D-070, D-071).
+- Contexto: el usuario quiere ver en el crawl los sitemaps encontrados a partir de
+  `https://www.xtone-surface.com/sitemap_index.xml`, abrir cada uno y ver la ramificación de páginas
+  que se deduce de sus URL.
+- Decisión:
+  - `readSitemaps` registra cada fichero (`SitemapFile`: índice padre, origen, tipo índice/URL/
+    ilegible, `lastmod` del índice, hijos y URL) y cuántos quedaron sin leer por el tope de 60. El
+    crawl lo guarda en `run.sitemap.sitemaps` y `run.sitemap.notRead` (opcionales: los crawls
+    anteriores no los tienen).
+  - Raíces: las de robots.txt, más las indicadas con `pnpm crawl -- --sitemap <url>` (repetible);
+    sin ninguna, se prueban `/sitemap_index.xml` y `/sitemap.xml` y solo cuentan si responden.
+  - Workbench, detalle del crawl: sección «Sitemaps encontrados» entre el diff y la tabla de URL.
+    Cada sitemap cuelga de su índice, con «Abrir» (el XML en otra pestaña) y «Ver estructura de
+    URLs», que despliega las URL que declara (en un índice, las de todos sus descendientes)
+    ramificadas por carpeta (`urlTree`: un árbol por host, carpetas de una sola hija unidas, 200
+    hijos por nivel como máximo). Cada URL enlaza a la página y, si se rastreó, a su ficha con el
+    HTTP; si no, «no rastreada».
+  - Crawls anteriores: se muestran los sitemaps de robots.txt con todas las URL juntas y un aviso.
+  - Solo workbench: nada de esto va al resumen publicado ni al visor.
+- Consecuencias: la estructura es la que declara el sitio en sus sitemaps, en el momento del crawl;
+  no la del enlazado interno.
+
+## D-087 · «Estructura del sitio» en la pestaña «Páginas» del visor
+
+- Fecha: 2026-09-30.
+- Estado: vigente (amplía D-072 y D-086).
+- Contexto: el usuario quiere ver en «Páginas» la anidación de las páginas del sitio basada en la
+  estructura de sus sitemaps, compacta y acompañada de los clics.
+- Decisión:
+  - El resumen publicado del crawl (`siteAuditSummarySchema`) lleva un bloque opcional `sitemap`:
+    cada fichero (URL, índice padre, tipo, lastmod) con las URL que declara, hasta 10.000 URL en
+    total (`SITE_AUDIT_LIMITS.sitemapUrls`, `truncated` si se recorta) y 60 ficheros; `detailed`
+    es falso en crawls anteriores a D-086 (todas las URL en un fichero). Los resúmenes anteriores
+    no lo tienen y siguen siendo válidos.
+  - Visor, pestaña «Páginas»: sección «Estructura del sitio» tras la tabla «Páginas en Google»
+    (`apps/viewer/lib/page-structure.ts`, `components/report/page-structure.tsx`). El esquema sigue
+    los sitemaps: un grupo por sitemap en el orden del índice (con enlace al XML y su lastmod) y,
+    dentro, sus URL ramificadas por carpeta (`urlTree` de `@seo/site-audit/sitemap-tree`,
+    carpetas de una sola hija unidas, portada como página). Cada fila: páginas, páginas con clics,
+    clics, cuota de clics de la muestra y posición media ponderada por impresiones de Search
+    Console. La misma ruta con y sin barra final se cruza como una página. Al final, «Fuera de los
+    sitemaps»: páginas con datos en Search Console que ningún sitemap declara.
+  - Filas compactas (32 px, 13 px) y plegables con `<details>`, sin JS; ramas ordenadas por clics,
+    200 hijos por nivel como máximo. En móvil quedan nombre, con clics y clics.
+  - Sin crawl publicado con sitemaps no hay estructura: se avisa. Los sitemaps cubren todos los
+    idiomas; los clics siguen el mercado elegido y se indica.
+- Consecuencias: la estructura llega a producción al publicar un crawl posterior a D-086
+  («publica el crawl de <marca>», commit y despliegue). El JSON publicado crece ~70 bytes por URL
+  declarada (XTONE: 161 KB con 810 URL).

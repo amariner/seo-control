@@ -1,9 +1,22 @@
 # Checkpoint operativo — SEO Dashboard V2
 
-Última actualización: 30 de septiembre de 2026 (plan editorial completado con la V1 de oct–dic, D-083).
+Última actualización: 30 de septiembre de 2026 (sitemaps en el crawl y estructura del sitio en «Páginas», D-086 y D-087).
 
 ## Reanudar aquí · plan de hitos (D-078)
 
+- **2026-09-30 · D-087, en local sin commit:** «Estructura del sitio» en la pestaña «Páginas» del
+  visor (`apps/viewer/lib/page-structure.ts`, `components/report/page-structure.tsx`), basada en
+  los sitemaps (grupo por sitemap › carpetas › páginas, filas compactas, clics de Search Console y
+  grupo «Fuera de los sitemaps»), con bloque opcional `sitemap` (URL por fichero) en
+  `siteAuditSummarySchema`. El resumen de XTONE 20260930-084731-5272 está publicado en local.
+  **Punto exacto de reanudación:** pedir commit y `vercel deploy --prod` al usuario.
+- **2026-09-30 · D-086, en local sin commit** (pedir commit al usuario): el detalle del crawl
+  (`apps/workbench/app/crawls/[project]/[runId]/page.tsx`) tiene «Sitemaps encontrados»
+  (`components/crawl-sitemaps.tsx`, `components/sitemap-disclosure.tsx`): índice y sitemaps hijos
+  con «Abrir» y «Ver estructura de URLs» (árbol por carpetas, `urlTree`/`sitemapUrls`/
+  `crawlSitemaps` en `packages/site-audit/src/sitemap-tree.ts`). `readSitemaps` guarda cada fichero
+  (`run.sitemap.sitemaps`, `notRead`); `pnpm crawl -- --sitemap <url>` añade raíces. Crawl de
+  XTONE 20260930-084731-5272 con 13 sitemaps, sin publicar.
 - **2026-09-30 · D-085 (revoca D-084):** el calendario vuelve a marcar solo posts con fecha. La
   fecha de redacción es editable en la tabla (workbench y visor): `WritingDateEditor` en
   `packages/editorial-ui/src/plan-editors.tsx`, `writingDate` en la bandeja y columna

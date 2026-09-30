@@ -1,6 +1,7 @@
 import { SITE_AUDIT_LIMITS, SITE_AUDIT_SCHEMA_VERSION, siteAuditSummarySchema, type SiteAuditSummary } from "@seo/contracts";
 import type { CrawlRun } from "./crawler";
 import { auditRun, isIndexable, SEVERE, severityOf } from "./issues";
+import { crawlSitemaps } from "./sitemap-tree";
 
 const path = (url: string) => {
   const parsed = new URL(url);
@@ -12,6 +13,22 @@ const tally = <K extends string | number>(values: K[]) => {
   for (const value of values) map.set(value, (map.get(value) ?? 0) + 1);
   return [...map].sort((a, b) => (a[0] < b[0] ? -1 : 1));
 };
+
+/** Sitemaps con sus URL, hasta `SITE_AUDIT_LIMITS.sitemapUrls` en total (D-087). */
+function sitemapBlock(run: CrawlRun): NonNullable<SiteAuditSummary["sitemap"]> {
+  const { files, detailed } = crawlSitemaps(run);
+  let left: number = SITE_AUDIT_LIMITS.sitemapUrls;
+  const total = files.reduce((sum, file) => sum + file.urls.length, 0);
+  return {
+    files: files.slice(0, SITE_AUDIT_LIMITS.sitemapFiles).map((file) => {
+      const urls = file.urls.slice(0, left);
+      left -= urls.length;
+      return { url: file.url, parent: file.parent, kind: file.kind, lastmod: file.lastmod, urls };
+    }),
+    detailed,
+    truncated: total > SITE_AUDIT_LIMITS.sitemapUrls,
+  };
+}
 
 /**
  * Resumen publicable de un crawl (D-070): lo único que viaja al visor. Topes en
@@ -85,6 +102,7 @@ export function buildSummary(run: CrawlRun, publishedAt = new Date().toISOString
       issues: byPage.get(page.url) ?? [],
     })),
     pagesTruncated: rows.length > SITE_AUDIT_LIMITS.pages,
+    sitemap: sitemapBlock(run),
     publishedAt,
   });
 }

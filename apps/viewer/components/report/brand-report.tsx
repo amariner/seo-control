@@ -39,6 +39,8 @@ type EditorialThemes = EditorialDataset["calendar"]["themes"];
 import { FilteredList } from "./filtered-list";
 import { KeywordKpis } from "./keyword-kpis";
 import { PageKpis } from "./page-kpis";
+import { PageStructurePanel } from "./page-structure";
+import { pageStructure } from "@/lib/page-structure";
 import {
   analysePages,
   localeOf,
@@ -1020,7 +1022,7 @@ export function BrandReportView({
         >
           {tab === "resumen" && <Summary report={report} href={href} />}
           {tab === "busquedas" && <Keywords report={report} />}
-          {tab === "paginas" && <Pages report={report} />}
+          {tab === "paginas" && <Pages report={report} audit={siteAudit ?? null} />}
           {tab === "mercados" && <Markets report={report} />}
           {tab === "migracion" && <Migration report={report} />}
           {tab === "editorial" && (
@@ -1631,8 +1633,15 @@ function PageGroupList({
     </Section>
   );
 }
-function Pages({ report }: { report: BrandReport }) {
+function Pages({
+  report,
+  audit,
+}: {
+  report: BrandReport;
+  audit: SiteAuditSummary | null;
+}) {
   const analysis = analysePages(report, rootLabelOf(report.markets));
+  const structure = pageStructure(report, audit);
   const locales = [...new Set(report.pages.map((item) => localeOf(item.page)))];
   return (
     <>
@@ -1729,6 +1738,23 @@ function Pages({ report }: { report: BrandReport }) {
           />
         )}
       </Section>
+      {report.explorerCoverage.pages.available && (
+        <Section
+          id="paginas-estructura"
+          skeleton="rows"
+          title="Estructura del sitio"
+          subtitle="Sitemaps del sitio y sus páginas por carpeta, con los clics de Search Console de cada rama."
+        >
+          <PageStructurePanel
+            structure={structure}
+            brandName={findBrand(report.brand)?.name ?? report.brand}
+            marketLabel={
+              report.markets.find((item) => item.code === report.market)
+                ?.name ?? null
+            }
+          />
+        </Section>
+      )}
       {analysis.available && (
         <div className="brand-summary-grid">
           <PageGroupList

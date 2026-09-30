@@ -1,7 +1,7 @@
 import type { BrandSlug } from "@seo/contracts";
 import { parsePage, type PageFacts } from "./parse";
 import { parseRobots, type Robots } from "./robots";
-import { normalizeUrl, readSitemaps } from "./sitemap";
+import { normalizeUrl, readSitemaps, type SitemapFile, type SitemapRoot } from "./sitemap";
 
 export const USER_AGENT = "PorcelanosaSEOAuditBot/2.0 (+internal-authorized-audit)";
 export const RUN_SCHEMA_VERSION = "site-audit-run.v1" as const;
@@ -37,7 +37,12 @@ export type CrawlRun = {
   error: string | null;
   config: CrawlConfig;
   robots: { found: boolean; sitemaps: string[]; crawlDelayMs: number | null };
-  sitemap: { files: number; urls: string[] };
+  /**
+   * `sitemaps`: cada fichero leído con su índice padre y sus URL; `notRead`:
+   * sitemaps declarados que quedaron fuera del tope de ficheros. Ausentes en
+   * crawls anteriores a la sección «Sitemaps encontrados».
+   */
+  sitemap: { files: number; urls: string[]; sitemaps?: SitemapFile[]; notRead?: number };
   /** URL descubiertas que robots.txt no permite rastrear (no se piden). */
   blockedByRobots: string[];
   pages: CrawledPage[];
@@ -74,7 +79,7 @@ async function request(url: string, config: CrawlConfig, signal?: AbortSignal) {
  * sitemap solo para medir cobertura. Educado por defecto: 2 peticiones a la vez
  * y pausa entre peticiones (o el `Crawl-delay` del sitio, hasta 5 s).
  */
-export async function crawlSite(input: { project: BrandSlug; startUrl: string; runId: string; config?: Partial<CrawlConfig>; signal?: AbortSignal; onProgress?: (run: CrawlRun) => void }): Promise<CrawlRun> {
+export async function crawlSite(input: { project: BrandSlug; startUrl: string; runId: string; config?: Partial<CrawlConfig>; sitemaps?: string[]; signal?: AbortSignal; onProgress?: (run: CrawlRun) => void }): Promise<CrawlRun> {
   const config = { ...DEFAULT_CONFIG, ...input.config };
   if (!Number.isInteger(config.maxUrls) || config.maxUrls < 1 || config.maxUrls > 50_000) throw new Error("El crawl debe limitarse entre 1 y 50.000 URLs.");
   config.concurrency = Math.min(Math.max(1, Math.floor(config.concurrency)), 8);
@@ -114,8 +119,13 @@ export async function crawlSite(input: { project: BrandSlug; startUrl: string; r
     const robots: Robots = parseRobots(robotsText ?? "", config.userAgent);
     run.robots = { found: robotsText !== null, sitemaps: robots.sitemaps, crawlDelayMs: robots.crawlDelayMs };
     const delay = Math.min(Math.max(config.delayMs, robots.crawlDelayMs ?? 0), 5_000);
-    const sitemap = await readSitemaps(robots.sitemaps.length ? robots.sitemaps : [new URL("/sitemap.xml", origin).toString()], fetchText);
-    run.sitemap = { files: sitemap.files, urls: [...sitemap.urls] };
+    // Raíces: las de robots.txt más las indicadas; sin ninguna, se prueban las rutas habituales.
+    const roots: SitemapRoot[] = [...robots.sitemaps.map((url) => ({ url, origin: "robots" as const })), ...(input.sitemaps ?? []).map((url) => ({ url, origin: "indicado" as const }))];
+    if (!roots.length) roots.push(...["/sitemap_index.xml", "/sitemap.xml"].map((path) => ({ url: new URL(path, origin).toString(), origin: "ruta-habitual" as const })));
+    const sitemap = await readSitemaps(roots, fetchText);
+    // Una ruta habitual que no existe no es un sitemap encontrado.
+    const sitemaps = sitemap.sitemaps.filter((file) => !(file.origin === "ruta-habitual" && file.kind === "ilegible"));
+    run.sitemap = { files: sitemaps.length, urls: [...sitemap.urls], sitemaps, notRead: sitemap.notRead };
     progress();
 
     const queue: Array<{ url: string; depth: number }> = [{ url: start, depth: 0 }];

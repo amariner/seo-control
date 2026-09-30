@@ -12,7 +12,7 @@ import { brandSlugSchema } from "./portfolio";
 
 export const SITE_AUDIT_SCHEMA_VERSION = "site-audit.v1" as const;
 /** Topes del resumen publicado: lo que el visor recibe como máximo. */
-export const SITE_AUDIT_LIMITS = { pages: 500, samplesPerIssue: 10 } as const;
+export const SITE_AUDIT_LIMITS = { pages: 500, samplesPerIssue: 10, sitemapUrls: 10_000, sitemapFiles: 60 } as const;
 
 export const siteAuditSeveritySchema = z.enum(["critica", "alta", "media", "baja"]);
 export type SiteAuditSeverity = z.infer<typeof siteAuditSeveritySchema>;
@@ -104,6 +104,31 @@ export const siteAuditSummarySchema = z.object({
   pages: z.array(siteAuditPageRowSchema).max(SITE_AUDIT_LIMITS.pages),
   /** Cierto si había más páginas que el tope y la tabla se recortó. */
   pagesTruncated: z.boolean(),
+  /**
+   * Sitemaps leídos al empezar el crawl y URL que declara cada uno (D-087),
+   * para la estructura de la pestaña «Páginas». Ausente en resúmenes anteriores.
+   */
+  sitemap: z
+    .object({
+      files: z
+        .array(
+          z.object({
+            url: z.string(),
+            parent: z.string().nullable(),
+            kind: z.enum(["indice", "urls", "ilegible"]),
+            lastmod: z.string().nullable(),
+            /** URL que declara (solo los `urls`); el tope `sitemapUrls` es la suma de todos. */
+            urls: z.array(z.string()),
+          }),
+        )
+        .max(SITE_AUDIT_LIMITS.sitemapFiles),
+      /** Detalle por fichero: falso en crawls anteriores a D-086 (todas las URL en el primero). */
+      detailed: z.boolean(),
+      /** Cierto si el sitio declara más URL que el tope y las listas se recortaron. */
+      truncated: z.boolean(),
+    })
+    .refine((value) => value.files.reduce((sum, file) => sum + file.urls.length, 0) <= SITE_AUDIT_LIMITS.sitemapUrls, "Demasiadas URL de sitemap.")
+    .optional(),
   publishedAt: z.string().datetime(),
 });
 export type SiteAuditSummary = z.infer<typeof siteAuditSummarySchema>;

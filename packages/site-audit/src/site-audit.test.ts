@@ -8,6 +8,7 @@ import { parsePage } from "./parse";
 import { parseRobots } from "./robots";
 import { buildSummary } from "./summary";
 import { readSitemaps } from "./sitemap";
+import { sitemapUrls, urlTree } from "./sitemap-tree";
 
 const ROBOTS = `
 User-agent: *
@@ -48,6 +49,34 @@ describe("sitemaps", () => {
     const { urls, files: read } = await readSitemaps(["https://e.com/index.xml"], async (url) => files[url] ?? null);
     expect([...urls]).toEqual(["https://e.com/uno/", "https://e.com/dos/"]);
     expect(read).toBe(2);
+  });
+
+  it("registra cada fichero con su índice, lastmod y origen", async () => {
+    const files: Record<string, string> = {
+      "https://e.com/sitemap_index.xml": `<sitemapindex><sitemap><loc>https://e.com/page-sitemap.xml</loc><lastmod>2026-09-01</lastmod></sitemap><sitemap><loc>https://e.com/roto.xml</loc></sitemap></sitemapindex>`,
+      "https://e.com/page-sitemap.xml": `<urlset><url><loc>https://e.com/en/a/</loc></url><url><loc>https://e.com/en/b/</loc></url></urlset>`,
+    };
+    const result = await readSitemaps([{ url: "https://e.com/sitemap_index.xml", origin: "indicado" }], async (url) => files[url] ?? null);
+    expect(result.sitemaps.map((file) => [file.url, file.kind, file.parent, file.origin])).toEqual([
+      ["https://e.com/sitemap_index.xml", "indice", null, "indicado"],
+      ["https://e.com/page-sitemap.xml", "urls", "https://e.com/sitemap_index.xml", null],
+      ["https://e.com/roto.xml", "ilegible", "https://e.com/sitemap_index.xml", null],
+    ]);
+    expect(result.sitemaps[1]!.lastmod).toBe("2026-09-01");
+    expect(sitemapUrls(result.sitemaps, "https://e.com/sitemap_index.xml")).toEqual(["https://e.com/en/a/", "https://e.com/en/b/"]);
+  });
+
+  it("ramifica las URL por carpeta y une las carpetas de una sola hija", () => {
+    const [tree] = urlTree(["https://e.com/", "https://e.com/fr/produits/a/", "https://e.com/fr/produits/b/", "https://e.com/es/", "https://e.com/es/x/"]);
+    expect(tree!.host).toBe("e.com");
+    expect(tree!.root.url).toBe("https://e.com/");
+    expect(tree!.root.total).toBe(5);
+    expect(tree!.depth).toBe(3);
+    expect(tree!.root.children.map((node) => [node.name, node.total, node.url])).toEqual([
+      ["es", 2, "https://e.com/es/"],
+      ["fr/produits", 2, null],
+    ]);
+    expect(tree!.root.children[1]!.children.map((node) => node.path)).toEqual(["/fr/produits/a/", "/fr/produits/b/"]);
   });
 });
 

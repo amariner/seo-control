@@ -1781,3 +1781,130 @@
 .brand-report-link:hover {
   text-decoration: underline;
 }
+
+/* Estructura del sitio en Páginas (D-087): sitemaps › carpetas › páginas, filas compactas. */
+.brand-structure {
+  container-type: inline-size;
+  font-size: 13px;
+  border-top: 1px solid var(--ds-line);
+}
+.brand-structure-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 52px 60px 60px 54px 52px;
+  gap: 8px;
+  align-items: center;
+  min-height: 32px;
+  border-bottom: 1px solid var(--ds-line);
+}
+.brand-structure .brand-list-head {
+  min-height: 28px;
+  padding: 0;
+}
+.brand-structure-row > :nth-child(n + 2) {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+.brand-structure-row > strong {
+  color: var(--ds-ink);
+  font-weight: 500;
+}
+.brand-structure-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.brand-structure summary {
+  cursor: pointer;
+  list-style: none;
+}
+.brand-structure summary::-webkit-details-marker {
+  display: none;
+}
+.brand-structure summary:hover {
+  background: var(--ds-surface-subtle);
+}
+.brand-structure summary:focus-visible {
+  outline: 2px solid var(--ds-accent);
+  outline-offset: -2px;
+}
+.brand-structure-name {
+  --depth: 0;
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+  padding-left: calc(16px + var(--depth) * 16px);
+}
+.brand-structure-list .brand-structure-name { --depth: 1; }
+.brand-structure-list .brand-structure-list .brand-structure-name { --depth: 2; }
+.brand-structure-list .brand-structure-list .brand-structure-list .brand-structure-name { --depth: 3; }
+.brand-structure-list .brand-structure-list .brand-structure-list .brand-structure-list .brand-structure-name { --depth: 4; }
+.brand-structure-list .brand-structure-list .brand-structure-list .brand-structure-list .brand-structure-list .brand-structure-name { --depth: 5; }
+.brand-structure .brand-list-head .brand-structure-name,
+.brand-structure .brand-list-head > span:first-child {
+  padding-left: 0;
+}
+.brand-structure-label {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.brand-structure summary .brand-structure-label {
+  font-weight: 550;
+}
+.brand-structure-group > summary .brand-structure-label {
+  color: var(--ds-ink);
+  font-weight: 600;
+}
+.brand-structure-name a {
+  display: inline-flex;
+  flex: 0 0 auto;
+  color: var(--ds-accent);
+}
+.brand-structure-name small {
+  flex: 0 0 auto;
+  color: var(--ds-muted);
+  font-size: 11px;
+}
+.brand-structure summary .brand-structure-name::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: calc(2px + var(--depth) * 16px);
+  width: 5px;
+  height: 5px;
+  margin-top: -4px;
+  border-right: 1.5px solid var(--ds-muted);
+  border-bottom: 1.5px solid var(--ds-muted);
+  transform: rotate(-45deg);
+  transition: transform 120ms;
+}
+.brand-structure details[open] > summary .brand-structure-name::before {
+  margin-top: -5px;
+  transform: rotate(45deg);
+}
+.brand-structure-outside {
+  margin-top: 12px;
+  border-top: 1px solid var(--ds-line);
+}
+.brand-structure-outside .brand-structure-group > summary .brand-structure-label {
+  color: var(--ds-warning);
+}
+.brand-structure-more {
+  padding: 6px 0 6px 48px;
+  color: var(--ds-muted);
+  border-bottom: 1px solid var(--ds-line);
+}
+@container (max-width: 560px) {
+  .brand-structure-row {
+    grid-template-columns: minmax(0, 1fr) 48px 56px;
+  }
+  .brand-structure-row > :nth-child(2),
+  .brand-structure-row > :nth-child(5),
+  .brand-structure-row > :nth-child(6),
+  .brand-structure-name small {
+    display: none;
+  }
+}

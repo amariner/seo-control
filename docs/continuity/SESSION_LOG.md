@@ -1166,3 +1166,25 @@
   plan editorial incluido) y el paginador editorial del visor ofrecen también 500, 1.000 y 50.000.
 - Verificación: typecheck, ui 4 / visor 127 / workbench 5; plan con 500 filas muestra 1–112 de 112.
 - Commit eff8433 subido y desplegado (dpl_FgFgLDK6poXX5y9xVejfZq6fUTox, Ready).
+
+## 2026-09-30 · Sitemaps encontrados y estructura de URL en el crawl (D-086)
+
+- A petición del usuario, el detalle del crawl del workbench lista los sitemaps encontrados (índice
+  y sitemaps hijos) con «Abrir» y «Ver estructura de URLs», que ramifica por carpetas las URL de
+  cada sitemap y enlaza a la ficha de las rastreadas. `pnpm crawl` acepta `--sitemap <url>`.
+- Crawl real nuevo de XTONE (20260930-084731-5272, 200 URL, sin publicar): 13 sitemaps (1 índice,
+  12 hijos), 810 URL declaradas, 164 rastreadas.
+- Verificación: typecheck (12 tareas), site-audit 14 (2 nuevas) / workbench 5; revisión en el
+  workbench local con el crawl nuevo y con uno anterior (aviso de crawl antiguo), 375 px sin
+  desbordamiento. Sin commit.
+
+## 2026-09-30 · Estructura del sitio en «Páginas» (D-087)
+
+- A petición del usuario, la pestaña «Páginas» del visor muestra la estructura de los sitemaps
+  (un grupo por sitemap, carpetas y páginas dentro) con los clics de Search Console de cada rama,
+  en filas compactas, y agrupa aparte las páginas con clics fuera de los sitemaps.
+- Con permiso del usuario, `pnpm crawl:publish -- --project xtone --run 20260930-084731-5272` en
+  local (sin commit ni despliegue): 12 sitemaps, 810 URL, 494 con clics; 1.973 páginas con datos
+  fuera de los sitemaps (13.607 clics, 30,8 %: pt/it/de/pl no tienen sitemap).
+- Verificación: typecheck (12 tareas), visor 131 (4 nuevas) / site-audit 14 / workbench 5; visor
+  local en escritorio y 375 px sin desbordamiento ni errores de consola en carga limpia. Sin commit.

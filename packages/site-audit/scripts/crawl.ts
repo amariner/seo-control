@@ -5,7 +5,7 @@ import { buildSummary } from "../src/summary";
 import { newRunId, saveRun } from "../src/runs";
 
 /**
- * Uso: pnpm crawl -- --project xtone [--max 200] [--start https://…] [--concurrency 2]
+ * Uso: pnpm crawl -- --project xtone [--max 200] [--start https://…] [--concurrency 2] [--sitemap https://…/sitemap_index.xml]…
  *
  * Crawl local (D-070). Guarda el crawl completo en data/local/crawls (fuera de git)
  * e imprime el resumen. No publica: para eso, `pnpm crawl:publish -- --project xtone`.
@@ -22,6 +22,8 @@ const startUrl = value("--start") ?? (brand.domain ? defaultStartUrl(brand.domai
 if (!startUrl) throw new Error(`${brand.name} no tiene dominio; indica --start.`);
 const maxUrls = Number(value("--max") ?? 200);
 const concurrency = Number(value("--concurrency") ?? 2);
+// Sitemaps además de los de robots.txt (repetible); sus índices se siguen igual.
+const sitemaps = args.flatMap((arg, index) => (arg === "--sitemap" && args[index + 1] ? [args[index + 1]!] : []));
 const runId = newRunId();
 
 console.log(`Crawl ${runId}: ${startUrl}, hasta ${maxUrls} URL, ${concurrency} a la vez.`);
@@ -31,6 +33,7 @@ const run: CrawlRun = await crawlSite({
   startUrl,
   runId,
   config: { maxUrls, concurrency },
+  sitemaps,
   onProgress: (current) => {
     if (current.pages.length - last >= 10 || current.status !== "running") {
       last = current.pages.length;
@@ -48,6 +51,7 @@ const t = summary.totals;
 console.log(`URL: ${t.crawled} (${t.html} HTML) · 2xx ${t.ok} · 3xx ${t.redirects} · 4xx ${t.clientErrors} · 5xx ${t.serverErrors} · sin respuesta ${t.failed}`);
 console.log(`Indexables: ${t.indexable} · noindex ${t.noindex} · bloqueadas por robots ${t.blockedByRobots} · sitemap ${t.crawledInSitemap}/${t.sitemapUrls}`);
 console.log(`Respuesta media ${t.avgResponseMs} ms · p90 ${t.p90ResponseMs} ms · con incidencias graves ${t.pagesWithSevere}`);
+console.log(`Sitemaps: ${run.sitemap.files} ficheros (${run.sitemap.sitemaps?.filter((file) => file.kind === "indice").length ?? 0} índices, ${run.sitemap.sitemaps?.filter((file) => file.kind === "ilegible").length ?? 0} ilegibles)${run.sitemap.notRead ? `, ${run.sitemap.notRead} sin leer por el tope` : ""}.`);
 console.log("\nIncidencias:");
 for (const issue of summary.issues) console.log(`  [${issue.severity}] ${issue.label}: ${issue.affected}`);
 console.log(`\nGuardado en data/local/crawls/${project}/${runId}.json. Publicar: pnpm crawl:publish -- --project ${project} --run ${runId}`);

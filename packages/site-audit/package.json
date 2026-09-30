@@ -9,7 +9,8 @@
     "./runs": "./src/runs.ts",
     "./panel": "./src/ui/panel.tsx",
     "./panel.css": "./src/ui/panel.css",
-    "./diff": "./src/diff.ts"
+    "./diff": "./src/diff.ts",
+    "./sitemap-tree": "./src/sitemap-tree.ts"
   },
   "scripts": {
     "build": "tsc --noEmit",
