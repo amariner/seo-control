@@ -2166,7 +2166,8 @@ No se reescriben decisiones antiguas. Si una cambia, se añade una nueva entrada
 ## D-084 · El calendario de publicación muestra también los posts sin fecha
 
 - Fecha: 2026-09-30.
-- Estado: vigente (amplía D-051/D-054/D-067).
+- Estado: **revocada** el mismo día por el usuario: el calendario solo marca los posts con fecha
+  (vuelve D-051/D-054/D-067); los posts sin fecha se ven en la tabla. Ver D-085.
 - Contexto: el calendario solo pintaba huecos de la hoja «Calendario» y piezas con fecha de
   publicación. Las 51 piezas V1 de D-083 y el resto del plan sin fecha no se veían; el usuario pide
   que workbench, visor local y preview muestren todos los posts del plan (propuestos, en curso y
@@ -2177,3 +2178,23 @@ No se reescriben decisiones antiguas. Si una cambia, se añade una nueva entrada
   «N posts sin fecha». Al poner fecha en la tabla, la pieza pasa a su día (D-067).
 - Consecuencias: el calendario cuenta todo el plan, no solo lo fechado; los meses con piezas sin
   fecha entran en el rango aunque no tengan huecos.
+
+## D-085 · Fecha de redacción editable y rumbo del plan editorial compartido
+
+- Fecha: 2026-09-30.
+- Estado: vigente (amplía D-067; revoca D-084).
+- Contexto: el usuario decide que el calendario solo marque posts con fecha, pide editar también la
+  fecha de redacción y fija el rumbo: workbench y preview compartirán la misma base de datos del
+  plan editorial, y la tabla será editable casi como un Excel.
+- Decisión:
+  - Fecha de redacción editable en la tabla del plan, en workbench (curación directa) y visor
+    (bandeja, D-067), con el mismo editor de celda que la de publicación (`WritingDateEditor`).
+    No cambia el mes del plan ni el calendario, que siguen dependiendo de la publicación.
+  - Bandeja: `writingDate` en el cambio (por defecto `null`, así que se leen los cambios
+    anteriores) y columna `writing_date` en `editorial_inbox`, añadida con `alter table … add column
+    if not exists` al primer uso. `editorial:pull` la resume como «redacción → fecha».
+  - Rumbo (sin implementar): una sola base de datos del plan para workbench y preview, que sustituye
+    el circuito curación en git + bandeja + `editorial:pull`, y tabla con edición tipo hoja de
+    cálculo (más columnas editables). Depende de H7 (Neon + `DATABASE_URL`); queda como H12.
+- Consecuencias: cada columna editable nueva pasa por el mismo camino (contrato de la bandeja,
+  fusión, persistencia y editor) hasta que exista la base de datos única.

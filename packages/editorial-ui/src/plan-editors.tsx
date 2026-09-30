@@ -4,8 +4,8 @@ import { useOptimistic, useState, useTransition } from "react";
 import { EDITORIAL_STATUS_LABELS, editorialStatusSchema, type EditorialStatus } from "@seo/contracts";
 import { statusTone } from "./rows";
 
-/** Cambio de estado o fecha de publicación de una pieza (D-067). */
-export type PieceEdit = { status?: EditorialStatus; publicationDate?: string };
+/** Cambio de estado o de fecha de redacción o publicación de una pieza (D-067, D-084). */
+export type PieceEdit = { status?: EditorialStatus; publicationDate?: string; writingDate?: string };
 export type PieceEditResult = { ok: true } | { ok: false; error: string };
 export type PieceEditAction = (pieceId: string, edit: PieceEdit) => Promise<PieceEditResult>;
 
@@ -56,19 +56,29 @@ export function StatusEditor({ pieceId, value, label, action }: { pieceId: strin
 
 const validDate = (value: string) => /^20\d{2}-\d{2}-\d{2}$/.test(value);
 
+type DateEditorProps = { pieceId: string; value: string | null; label: string; action: PieceEditAction };
+
+/** Fecha de publicación en la celda; al fijarla, la pieza entra en el calendario. */
+export const PublicationDateEditor = (props: DateEditorProps) => <DateEditor {...props} field="publicationDate" />;
+
+/** Fecha de redacción en la celda (D-084). */
+export const WritingDateEditor = (props: DateEditorProps) => <DateEditor {...props} field="writingDate" />;
+
+const FIELD_LABEL = { publicationDate: "Fecha de publicación", writingDate: "Fecha de redacción" } as const;
+
 /**
- * Fecha de publicación en la celda; al fijarla, la pieza entra en el calendario.
- * Guarda al salir del campo o con Intro: Chrome emite `change` por cada dígito
- * del año («0002», «0020»…) y guardar en `change` escribiría fechas a medias.
+ * Fecha editable en la celda. Guarda al salir del campo o con Intro: Chrome
+ * emite `change` por cada dígito del año («0002», «0020»…) y guardar en
+ * `change` escribiría fechas a medias.
  */
-export function PublicationDateEditor({ pieceId, value, label, action }: { pieceId: string; value: string | null; label: string; action: PieceEditAction }) {
+function DateEditor({ pieceId, value, label, action, field }: DateEditorProps & { field: keyof typeof FIELD_LABEL }) {
   const [draft, setDraft] = useState(value ?? "");
   const [saved, setSaved] = useOptimistic(value ?? "");
   const { pending, error, run } = useEdit(pieceId, action);
   const commit = () => {
     // Vaciar la fecha no se guarda: el plan importado puede traer una y desde aquí no se borra.
     if (!validDate(draft) || draft === saved) return setDraft(saved);
-    run({ publicationDate: draft }, () => setSaved(draft));
+    run({ [field]: draft }, () => setSaved(draft));
   };
   return (
     <span className={`plan-edit${pending ? " is-saving" : ""}${error ? " is-error" : ""}`} title={error ?? undefined}>
@@ -78,7 +88,7 @@ export function PublicationDateEditor({ pieceId, value, label, action }: { piece
         value={draft}
         min="2020-01-01"
         max="2100-12-31"
-        aria-label={`Fecha de publicación de «${label}»`}
+        aria-label={`${FIELD_LABEL[field]} de «${label}»`}
         disabled={pending}
         onChange={(event) => setDraft(event.target.value)}
         onBlur={commit}

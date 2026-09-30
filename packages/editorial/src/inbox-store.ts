@@ -13,7 +13,7 @@ import { editorialInboxChangeSchema, type EditorialInboxChange } from "@seo/cont
  *   workbench (3001), para probar el circuito completo sin nube.
  * - En Vercel sin base de datos: no disponible. El visor lo dice y no edita.
  *
- * Solo viajan estado, fecha, pieza, autor y hora: filas de ~200 bytes.
+ * Solo viajan estado, fechas, pieza, autor y hora: filas de ~200 bytes.
  */
 
 export type ListOptions = {
@@ -70,7 +70,7 @@ function fileStore(path: string): EditorialInboxStore {
   };
 }
 
-type Row = { id: string; piece_id: string; status: string | null; publication_date: string | null; actor: string; created_at: Date; pulled_at: Date | null };
+type Row = { id: string; piece_id: string; status: string | null; publication_date: string | null; writing_date: string | null; actor: string; created_at: Date; pulled_at: Date | null };
 
 function postgresStore(url: string): EditorialInboxStore {
   let ready: Promise<import("postgres").Sql> | null = null;
@@ -90,6 +90,8 @@ function postgresStore(url: string): EditorialInboxStore {
           pulled_at timestamptz
         )`;
       await client`create index if not exists editorial_inbox_pulled_at on editorial_inbox (pulled_at)`;
+      // Fecha de redacción editable desde el visor (D-084): columna añadida a tablas ya creadas.
+      await client`alter table editorial_inbox add column if not exists writing_date text`;
       return client;
     })().catch((error) => {
       ready = null;
@@ -101,6 +103,7 @@ function postgresStore(url: string): EditorialInboxStore {
       pieceId: row.piece_id,
       status: row.status,
       publicationDate: row.publication_date,
+      writingDate: row.writing_date,
       actor: row.actor,
       createdAt: row.created_at.toISOString(),
       pulledAt: row.pulled_at?.toISOString() ?? null,
@@ -118,8 +121,8 @@ function postgresStore(url: string): EditorialInboxStore {
     add: async (change) => {
       const valid = editorialInboxChangeSchema.parse(change);
       const client = await sql();
-      await client`insert into editorial_inbox (id, piece_id, status, publication_date, actor, created_at, pulled_at)
-        values (${valid.id}, ${valid.pieceId}, ${valid.status}, ${valid.publicationDate}, ${valid.actor}, ${valid.createdAt}, ${valid.pulledAt})`;
+      await client`insert into editorial_inbox (id, piece_id, status, publication_date, writing_date, actor, created_at, pulled_at)
+        values (${valid.id}, ${valid.pieceId}, ${valid.status}, ${valid.publicationDate}, ${valid.writingDate}, ${valid.actor}, ${valid.createdAt}, ${valid.pulledAt})`;
     },
     markPulled: async (ids, at) => {
       if (!ids.length) return;

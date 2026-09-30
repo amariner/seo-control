@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { editorialInboxEditSchema, emptyCurationStore, type EditorialInboxChange } from "@seo/contracts";
+import { editorialInboxChangeSchema, editorialInboxEditSchema, emptyCurationStore, type EditorialInboxChange } from "@seo/contracts";
 import { getEditorialDataset } from "./dataset";
 import { upsertPieceCuration } from "./curation";
 import { applyInbox, editPieceCuration, pendingInboxChanges, pullInbox } from "./inbox";
@@ -16,6 +16,7 @@ const change = (overrides: Partial<EditorialInboxChange>): EditorialInboxChange 
   pieceId: target.id,
   status: null,
   publicationDate: null,
+  writingDate: null,
   actor: "responsable@porcelanosa.com",
   createdAt: "2026-09-28T10:00:00.000Z",
   pulledAt: null,
@@ -79,5 +80,21 @@ describe("bandeja de cambios del visor (D-067)", () => {
     expect(editorialInboxEditSchema.safeParse({ publicationDate: "2026-13-01" }).success).toBe(false);
     expect(editorialInboxEditSchema.safeParse({ status: "redactando", title: "x" }).success).toBe(false);
     expect(editorialInboxEditSchema.safeParse({ status: "programado", publicationDate: "2026-10-01" }).success).toBe(true);
+    expect(editorialInboxEditSchema.safeParse({ writingDate: "2026-10-01" }).success).toBe(true);
+    expect(editorialInboxEditSchema.safeParse({ writingDate: "2026-02-30" }).success).toBe(false);
+  });
+
+  it("la fecha de redacción se superpone, se trae y no cambia el mes del plan (D-084)", () => {
+    const { dataset: live } = applyInbox(dataset, empty, [change({ writingDate: "2026-10-02" })]);
+    const piece = live.plan.find((item) => item.id === target.id)!;
+    expect(piece.writingDate).toBe("2026-10-02");
+    expect(piece.month).toEqual(target.month);
+    const result = pullInbox(empty, [change({ writingDate: "2026-10-02" })], ids, "2026-09-28T14:00:00.000Z");
+    expect(result.store.pieces[target.id]!.current).toMatchObject({ writingDate: "2026-10-02", publicationDate: null, year: null, month: null });
+  });
+
+  it("lee cambios guardados antes de existir la fecha de redacción", () => {
+    const { writingDate: _writingDate, ...legacy } = change({ status: "aceptado" });
+    expect(editorialInboxChangeSchema.parse(legacy).writingDate).toBeNull();
   });
 });

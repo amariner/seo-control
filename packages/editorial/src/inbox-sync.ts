@@ -28,7 +28,7 @@ export async function syncInboxToCuration({ dryRun = false }: { dryRun?: boolean
   const pieces = new Map([...dataset.plan, ...dataset.backlog].map((piece) => [piece.id, piece]));
   const describe = (change: EditorialInboxChange): DescribedChange => {
     const piece = pieces.get(change.pieceId);
-    const summary = [change.status ? `estado → ${EDITORIAL_STATUS_LABELS[change.status]}` : null, change.publicationDate ? `publicación → ${change.publicationDate}` : null].filter(Boolean).join(", ");
+    const summary = [change.status ? `estado → ${EDITORIAL_STATUS_LABELS[change.status]}` : null, change.writingDate ? `redacción → ${change.writingDate}` : null, change.publicationDate ? `publicación → ${change.publicationDate}` : null].filter(Boolean).join(", ");
     return { ...change, piece: piece?.title ?? piece?.keyword ?? change.pieceId, brand: piece?.brand.literal ?? null, summary };
   };
 

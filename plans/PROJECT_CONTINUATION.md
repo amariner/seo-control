@@ -4,9 +4,11 @@
 
 ## Reanudar aquí · plan de hitos (D-078)
 
-- **2026-09-30 · D-084:** el calendario de publicación (`packages/editorial-ui/src/publication-slider.tsx`,
-  `UndatedList`) enseña en cada mes los posts del plan sin fecha («Sin fecha · N»); cabecera con
-  «N posts sin fecha». Mismo componente en visor y workbench.
+- **2026-09-30 · D-085 (revoca D-084):** el calendario vuelve a marcar solo posts con fecha. La
+  fecha de redacción es editable en la tabla (workbench y visor): `WritingDateEditor` en
+  `packages/editorial-ui/src/plan-editors.tsx`, `writingDate` en la bandeja y columna
+  `writing_date` en `editorial_inbox`. Rumbo: base de datos única del plan y tabla tipo hoja de
+  cálculo (H12, tras H7).
 - **2026-09-30 · D-083, en main (3a38554), en GitHub y desplegado:** el plan editorial incluye 51 piezas del plan
   editorial V1 (oct 21, nov 15, dic 15) mediante `planned` en la curación y
   `pnpm editorial:plan-from-v1` (`packages/editorial/scripts/plan-from-v1.ts`, `planBacklogPieces`,

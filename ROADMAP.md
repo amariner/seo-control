@@ -78,6 +78,7 @@ ejecutar sin credenciales ni presupuesto nuevos.
 | H9 | SEMrush en V2: ranking estable, competidores y SOV semanales | P3.3 | decisión de coste de unidades API | bloqueado |
 | H10 | Bandeja de decisiones P4 alimentada por informes, crawl y medición editorial | P4 | H4 | siguiente |
 | H11 | Archivo `/reports` con los informes congelados y exportación HTML autocontenida | P7 | H1 | **hecho** (D-081): archivo real, HTML sin conexión y CSV con sello |
+| H12 | Plan editorial con una sola base de datos para workbench y preview y tabla editable tipo hoja de cálculo | P3.1 | H7 | pendiente (rumbo fijado en D-085) |
 
 Regla: un hito «hecho» cita su decisión y su verificación; uno bloqueado nombra quién
 lo desbloquea. Los hitos no sustituyen a los criterios de fase: los marcan cuando los

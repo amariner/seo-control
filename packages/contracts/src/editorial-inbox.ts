@@ -16,20 +16,23 @@ export const editorialInboxChangeSchema = z
     pieceId: z.string().min(1),
     status: editorialStatusSchema.nullable(),
     publicationDate: z.string().date().nullable(),
+    /** Fecha de redacción; opcional en cambios anteriores a su edición. */
+    writingDate: z.string().date().nullable().default(null),
     actor: z.string().min(1),
     createdAt: z.string().datetime({ offset: true }),
     /** Cuándo lo incorporó el workbench a la curación; `null` mientras siga pendiente. */
     pulledAt: z.string().datetime({ offset: true }).nullable(),
   })
-  .refine((change) => change.status !== null || change.publicationDate !== null, { message: "El cambio no modifica nada." });
+  .refine((change) => change.status !== null || change.publicationDate !== null || change.writingDate !== null, { message: "El cambio no modifica nada." });
 export type EditorialInboxChange = z.infer<typeof editorialInboxChangeSchema>;
 
-/** Lo que el visor puede cambiar de una pieza: estado y fecha de publicación. */
+/** Lo que el visor puede cambiar de una pieza: estado y fechas de redacción y publicación. */
 export const editorialInboxEditSchema = z
   .object({
     status: editorialStatusSchema.exclude(["desconocido"]).optional(),
     publicationDate: z.string().date().optional(),
+    writingDate: z.string().date().optional(),
   })
   .strict()
-  .refine((edit) => edit.status !== undefined || edit.publicationDate !== undefined, { message: "Indica un estado o una fecha de publicación." });
+  .refine((edit) => edit.status !== undefined || edit.publicationDate !== undefined || edit.writingDate !== undefined, { message: "Indica un estado o una fecha." });
 export type EditorialInboxEdit = z.infer<typeof editorialInboxEditSchema>;

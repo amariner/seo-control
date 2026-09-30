@@ -419,58 +419,6 @@
   white-space: pre-wrap;
 }
 
-/* Posts del mes sin fecha de publicación (D-084). */
-.pub-undated {
-  margin-top: 10px;
-  padding-top: 8px;
-  border-top: 1px dashed var(--ds-line);
-}
-.pub-undated-head {
-  display: block;
-  margin-bottom: 6px;
-  font-size: 11px;
-  color: var(--ds-muted);
-}
-.pub-undated ul {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 3px;
-  max-width: 100%;
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
-.pub-month .pub-undated ul {
-  max-width: 560px;
-}
-.pub-undated li {
-  display: flex;
-  align-items: center;
-  min-width: 0;
-}
-.pub-undated .pub-chip {
-  opacity: 0.55;
-}
-.pub-undated.is-detailed ul {
-  flex-direction: column;
-  flex-wrap: nowrap;
-  gap: 4px;
-}
-.pub-undated.is-detailed li {
-  gap: 6px;
-  font-size: 12px;
-  color: var(--ds-ink);
-}
-.pub-undated.is-detailed .pub-chip {
-  flex: none;
-}
-.pub-undated-title {
-  min-width: 0;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
 /* Plan editorial general (D-057): un color por marca en el calendario y la tabla. */
 .pub-slider.is-multi .pub-legend .pub-dot.is-post {
   background: var(--ds-ink);

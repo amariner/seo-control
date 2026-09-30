@@ -1148,3 +1148,13 @@
 - Verificación: typecheck, editorial-ui 4 / visor 127 / workbench 5, revisión visual en escritorio y
   375 px sin desbordamiento. Commit, GitHub y despliegue a petición del usuario.
 - Desplegado: commit 6aee934, dpl_8Jpbn6HKps3Fds4MesuvBx2Cf59z (Ready, alias de producción).
+
+## 2026-09-30 · Fecha de redacción editable; se retira «Sin fecha» del calendario (D-085)
+
+- A petición del usuario, el calendario vuelve a marcar solo lo fechado (D-084 revocada) y la fecha
+  de redacción se edita en la tabla del plan de workbench y visor.
+- Rumbo anotado: una sola base de datos del plan para workbench y preview y tabla tipo hoja de
+  cálculo (H12, tras H7).
+- Verificación: typecheck, editorial 57 (2 nuevas) / editorial-ui 4 / reports 33 / visor 127 /
+  workbench 5; edición real en workbench (curación con autor y nota, mes intacto) y en visor
+  (bandeja local con `writingDate`, `editorial:pull --dry-run` la resume); datos de prueba retirados.

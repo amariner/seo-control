@@ -37,6 +37,7 @@ function currentFields(store: EditorialCurationStore, pieceId: string): Editoria
 export function editPieceCuration(store: EditorialCurationStore, pieceId: string, edit: EditorialInboxEdit, meta: CurationMeta): EditorialCurationStore {
   const fields = currentFields(store, pieceId);
   if (edit.status) fields.status = edit.status;
+  if (edit.writingDate) fields.writingDate = edit.writingDate;
   if (edit.publicationDate) {
     fields.publicationDate = edit.publicationDate;
     fields.year = Number(edit.publicationDate.slice(0, 4));
@@ -62,6 +63,7 @@ function overlay(piece: EditorialPiece, change: EditorialInboxChange): Editorial
   return {
     ...piece,
     status: change.status ?? piece.status,
+    writingDate: change.writingDate ?? piece.writingDate,
     publicationDate: date ?? piece.publicationDate,
     month: date ? { year: Number(date.slice(0, 4)), month: Number(date.slice(5, 7)), yearSource: "date", literal: piece.month.literal } : piece.month,
   };
@@ -112,6 +114,7 @@ export function pullInbox(store: EditorialCurationStore, changes: readonly Edito
     const edit: EditorialInboxEdit = {
       ...(change.status && change.status !== "desconocido" ? { status: change.status } : {}),
       ...(change.publicationDate ? { publicationDate: change.publicationDate } : {}),
+      ...(change.writingDate ? { writingDate: change.writingDate } : {}),
     };
     result.store = editPieceCuration(result.store, change.pieceId, edit, { updatedBy: change.actor, note: `Visor · ${change.createdAt} · ${change.id}`, now });
     result.applied.push(change);

@@ -9,7 +9,7 @@ import { auth } from "@/auth";
 import { getEditorial } from "@/lib/editorial";
 
 /**
- * Única escritura del visor (D-067): estado y fecha de publicación de una pieza
+ * Única escritura del visor (D-067): estado y fechas de redacción y publicación de una pieza
  * del plan. No toca la curación —vive en el repositorio—; deja el cambio en la
  * bandeja, que el plan superpone al instante y el workbench incorpora al
  * sincronizar. Cada cambio guarda quién y cuándo.
@@ -30,6 +30,7 @@ export async function editPieceFromViewer(pieceId: string, edit: PieceEdit): Pro
       pieceId,
       status: parsed.data.status ?? null,
       publicationDate: parsed.data.publicationDate ?? null,
+      writingDate: parsed.data.writingDate ?? null,
       actor,
       createdAt: new Date().toISOString(),
       pulledAt: null,
