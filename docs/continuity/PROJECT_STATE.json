@@ -128,7 +128,8 @@
       "dataSource": "live",
       "publicAccess": true,
       "plan": "hobby",
-      "deployedAt": "2026-09-28"
+      "deployedAt": "2026-09-30",
+      "deploymentId": "dpl_CJSjCxhWm7Yz2x39zMRhPsvHhhpG"
     },
     "workbench": "local"
   }

@@ -1124,3 +1124,5 @@
   Informes (90 días y 2.º trimestre) y Resumen.
 - A petición del usuario: commit de D-082 y del retoque en main, subido a GitHub y
   `vercel deploy --prod` (entran D-075…D-082).
+- Desplegado en producción (dpl_CJSjCxhWm7Yz2x39zMRhPsvHhhpG, commit 5d581bd, Ready). El primer
+  `vercel deploy` devolvió «Not authorized» sin causa aparente; el reintento entró sin cambios.
