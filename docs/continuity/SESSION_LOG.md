@@ -1165,3 +1165,4 @@
 - A petición del usuario, el selector «Filas» de la tabla compartida (`packages/ui/src/data-table.tsx`,
   plan editorial incluido) y el paginador editorial del visor ofrecen también 500, 1.000 y 50.000.
 - Verificación: typecheck, ui 4 / visor 127 / workbench 5; plan con 500 filas muestra 1–112 de 112.
+- Commit eff8433 subido y desplegado (dpl_FgFgLDK6poXX5y9xVejfZq6fUTox, Ready).
