@@ -1211,4 +1211,4 @@
   Sin cambios en las reglas de `project-actions.ts`.
 - Verificación: typecheck y lint del visor, visor 131; visor local en escritorio y 375 px sin
   desbordamiento; filtro y copia comprobados. Sin commit.
-
+- A petición del usuario: commit 4832386 en main (D-089) y subido a GitHub. Sin desplegar.
