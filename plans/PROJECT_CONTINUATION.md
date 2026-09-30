@@ -4,11 +4,11 @@
 
 ## Reanudar aquí · plan de hitos (D-078)
 
-- **2026-09-30 · D-088, en local sin commit:** pestaña «Acciones» del proyecto en el visor
+- **2026-09-30 · D-088, en main (27a55d8) y en GitHub, sin desplegar:** pestaña «Acciones» del proyecto en el visor
   (`?tab=acciones`, `components/report/actions-review.tsx`) con el repaso de todos los apartados.
   Reglas en `packages/reports/src/project-actions.ts`: `reportPlanActions` (plan del informe,
   extraído sin cambios de `project-report.ts`) y `projectActionReview` (reglas nuevas con
-  `REVIEW_THRESHOLDS`). **Punto exacto de reanudación:** pedir commit y despliegue; después H10:
+  `REVIEW_THRESHOLDS`). **Punto exacto de reanudación:** `vercel deploy --prod` cuando el usuario lo confirme; después H10:
   bandeja con estado, responsable, plazo y resultado medido de cada acción.
 - **2026-09-30 · D-087, en main (70a23f5) y en GitHub, sin desplegar:** «Estructura del sitio» en la pestaña «Páginas» del
   visor (`apps/viewer/lib/page-structure.ts`, `components/report/page-structure.tsx`), basada en

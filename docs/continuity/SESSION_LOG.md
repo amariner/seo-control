@@ -1202,4 +1202,4 @@
 - Verificación: typecheck (12 tareas), reports 36 (3 nuevas) / visor 131 / site-audit 14 /
   workbench 5; los tres informes congelados se pintan idénticos; visor local en escritorio, 375 px
   y con mercado ES, sin errores de consola. Sin commit.
-
+- A petición del usuario: commit 27a55d8 en main (D-088) y subido a GitHub. Sin desplegar.
