@@ -1260,3 +1260,5 @@
   editorial-ui 4, local-data 3). Pasan los builds de producción de visor y workbench. El axe completo
   (82 páginas, 1440 y 375 px) solo marca la excepción aceptada de D-045 y avisos previos. El fichero
   de seguimiento sigue vacío; curación, medición y publicados no cambian.
+- A petición del usuario: commit c4e0be4 (D-090…D-094), fusionado en main desde la rama
+  `feat/seguimiento-acciones` y subido a GitHub. Sin desplegar.

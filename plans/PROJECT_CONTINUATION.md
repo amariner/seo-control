@@ -4,7 +4,7 @@
 
 ## Reanudar aquí · plan de hitos (D-078)
 
-- **2026-10-05 · D-093 y D-094, en local sin commit ni despliegue:**
+- **2026-10-05 · D-093 y D-094, en main (c4e0be4) y en GitHub, sin desplegar:**
   - D-093: las erratas de «porcelanosa» cuentan como marca (`brandTypos` en
     `packages/repository/src/live/brands.ts`; el 12 % de los clics «sin marca» de Porcelanosa eran
     erratas).
@@ -20,14 +20,14 @@
     (`pnpm action:track`) y enlace piezas en la curación con `action:<marca>:<clave>`.
   - Mejora menor pendiente: el informe congelado no tiene `<main id="contenido">`, así que el enlace
     de salto del layout no lleva a ningún sitio (avisos `landmark-one-main` y `skip-link` de axe).
-- **2026-10-05 · D-091 y D-092, en local sin commit ni despliegue:** la cronología toma las
+- **2026-10-05 · D-091 y D-092, en main (c4e0be4) y en GitHub, sin desplegar:** la cronología toma las
   anotaciones con `MetricsRepository.annotations?(period)` sin pedir la portada de 24 meses
   (~110 s → milisegundos), y el recorrido oportunidad → pieza → acción → resultado queda cerrado
   (P3.5, P3 al 38 %): `packages/reports/src/action-journey.ts` (`actionPieces`, `pieceResult`,
   `actionLinkOf`) deriva de `piece.links` las piezas de cada acción y su medición D-079; el enlace se
   crea en la curación del workbench con `action:<marca>:<clave>`. `/actions` ancla cada fila con el id
-  de la acción. **Punto exacto de reanudación:** el mismo que D-090 (commit y despliegue con permiso).
-- **2026-10-05 · D-090 (H10 hecho), en local sin commit ni despliegue:** seguimiento de acciones.
+  de la acción. **Punto exacto de reanudación:** el mismo que D-094 (`vercel deploy --prod` con permiso).
+- **2026-10-05 · D-090 (H10 hecho), en main (c4e0be4) y en GitHub, sin desplegar:** seguimiento de acciones.
   Cada acción de la pestaña «Acciones» tiene clave estable y cifra con criterio de éxito
   (`packages/reports/src/project-actions.ts`: `key`, `metric`, `actionMetric`); el seguimiento
   (estado, responsable, plazo/SLA, nota, aprendizaje, punto de partida, resultado e historial) vive en
@@ -36,7 +36,7 @@
   `src/tracking-published.ts`. Chat: `pnpm action:track` y `pnpm action:measure` (scripts en
   `packages/reports/scripts/`, repaso real en `src/review-input.ts`). Visor: pestaña «Acciones»
   (`components/report/actions-review.tsx`), `/actions` real y cronología. Workbench: `/acciones`.
-  **Punto exacto de reanudación:** pedir commit de D-090 y `vercel deploy --prod` (entran D-086…D-090);
+  **Punto exacto de reanudación:** `vercel deploy --prod` cuando el usuario lo confirme (entran D-086…D-094);
   después, que el equipo siga sus primeras acciones desde el chat. Pendiente del responsable: bloqueo
   `reconciliation-editorial` (`pnpm reconcile:check` falla desde D-057).
 - **2026-09-30 · D-089, en main (4832386) y en GitHub, sin desplegar:** la pestaña «Acciones» es una lista única por prioridad
