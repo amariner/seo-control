@@ -150,3 +150,22 @@ export function pageStructure(report: BrandReport, audit: SiteAuditSummary | nul
     sitemap: { completedAt: audit.completedAt, index, files: groups.length, truncated: sitemap.truncated, detailed: sitemap.detailed },
   };
 }
+
+/**
+ * Páginas con clics que ningún sitemap declara (D-087), en la forma que usa
+ * la regla de la pestaña «Acciones» (D-088): páginas, clics, cuota y las
+ * carpetas de primer nivel con clics. `null` sin sitemaps publicados (no hay
+ * dato); con sitemaps y nada fuera, cero páginas (el resultado buscado, D-090).
+ */
+export function sitemapGapOf(report: BrandReport, audit: SiteAuditSummary | null) {
+  const structure = pageStructure(report, audit);
+  if (!structure.available) return null;
+  const outside = structure.outside;
+  if (!outside) return { pages: 0, clicks: 0, share: 0, folders: [] as string[] };
+  return {
+    pages: outside.root.pages,
+    clicks: outside.root.clicks,
+    share: outside.root.share,
+    folders: [...new Set(outside.root.children.filter((node) => node.clicks > 0 && node.children.length).map((node) => node.name.split("/")[0]!))].slice(0, 4),
+  };
+}

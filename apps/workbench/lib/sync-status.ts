@@ -23,6 +23,13 @@ export const PUBLISH_CHANNELS = [
     href: "/informes",
   },
   {
+    id: "actions",
+    label: "Seguimiento de acciones",
+    paths: ["packages/reports/data/tracking"],
+    ask: "sube las acciones",
+    href: "/acciones",
+  },
+  {
     id: "crawl",
     label: "Estado del sitio",
     paths: ["packages/site-audit/data/published"],

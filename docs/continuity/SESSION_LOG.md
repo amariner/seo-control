@@ -1212,3 +1212,51 @@
 - Verificación: typecheck y lint del visor, visor 131; visor local en escritorio y 375 px sin
   desbordamiento; filtro y copia comprobados. Sin commit.
 - A petición del usuario: commit 4832386 en main (D-089) y subido a GitHub. Sin desplegar.
+
+## 2026-10-05 · Seguimiento de acciones: estado, responsable, plazo y resultado (D-090, H10)
+
+- Continuidad: se retoma H10 (siguiente hito sin bloqueos; P3 sigue bloqueada por H7, H8 y H9).
+- Cada acción de la pestaña «Acciones» gana clave estable y cifra con criterio de éxito; el equipo la
+  sigue desde el chat con `pnpm action:track` (estado, responsable, plazo o SLA por prioridad, nota,
+  aprendizaje, punto de partida con datos reales e historial) y mide el resultado con
+  `pnpm action:measure` (misma ventana, último corte, provisional si no hay datos posteriores o crawl
+  nuevo). Visor: seguimiento en la pestaña «Acciones», `/actions` como bandeja real (con el origen
+  real salía vacía) y acciones en la cronología. Workbench: `/acciones` y canal «Seguimiento de
+  acciones» en Inicio. `page-structure` pasa a `@seo/reports`.
+- Prueba real (XTONE, 90 días, corte 2026-10-02): 14 acciones propuestas; alta, cambio, medición y
+  rechazos probados sobre una copia del fichero; el fichero real queda vacío (sin acciones del
+  equipo todavía).
+- Verificación: typecheck y lint (12 tareas), reports 53 (13 nuevas), visor 127 (4 trasladadas a
+  reports), resto sin cambios; builds de producción de visor y workbench; axe sin incumplimientos
+  WCAG en las rutas nuevas (1440 y 375 px); capturas en escritorio y 375 px sin desbordamiento.
+- Hallazgos previos, no causados por esta sesión: `pnpm reconcile:check` falla desde D-057 (el plan y
+  el calendario publicados salen de la hoja y el contrato V1 fija 146 y 39; el plan histórico V1 ya no
+  se ve en el visor) → bloqueo `reconciliation-editorial` para el responsable. `/cronologia` tarda
+  ~110 s en frío con el origen real porque pide la portada de 24 meses en vivo.
+- `nextAction` de PROJECT_STATE se acorta a la acción actual; la cadena anterior se conserva íntegra
+  en `previousNextActions`. Sin commit ni despliegue.
+- D-091: la cronología deja de pedir la portada de 24 meses para leer anotaciones
+  (`MetricsRepository.annotations?`); con el origen real pasa de ~110 s en frío a milisegundos con
+  los mismos 80 hitos. repository 60 (1 nueva), visor 127.
+- D-092: recorrido oportunidad → pieza → acción → resultado (segundo criterio de P3.5; P3 al 38 %).
+  Las piezas se enlazan a una acción en la curación (`action:<marca>:<clave>`, solo en `piece.links`)
+  y la acción muestra cada pieza con su medición de 28/90/180 días; la ficha de la pieza abre la fila
+  de `/actions`. Verificado con una cadena real de Porcelanosa (sin marca −13,9 % → «Azulejos turquesa»,
+  65 clics frente a 23 a 28 días) y revertido. `/actions` oculta los filtros globales con el origen real.
+- Verificación final: typecheck y lint (12 tareas), reports 55, repository 60, visor 127 y el resto sin
+  cambios. Hallazgo para el equipo: la regla «sin marca» de Porcelanosa cuenta «porcelenosa» y
+  «porcelainosa», erratas de la marca que la detección no reconoce.
+- D-093: las erratas de «porcelanosa» (a una letra y las frecuentes a dos) cuentan como marca. Con
+  datos reales, los clics sin marca de Porcelanosa en 90 días pasan de 69.590 a 61.191 (el 12 % eran
+  erratas de marca) y la acción de keywords nombra búsquedas genéricas de verdad. repository 63 (3
+  nuevas). Los informes congelados no cambian.
+- D-094: con el origen real, la portada enseña las acciones en seguimiento (abiertas, vencidas primero)
+  y la fila «Crawl» de las fuentes refleja los crawls publicados: XTONE `correcto`, el piloto completo
+  `parcial` con 1/3. La barra lateral del visor pasa a región con nombre (aviso `region` de axe). El
+  selector de periodo del gráfico se abrevia en móvil, porque la portada desbordaba a 375 px. Visor
+  129 (2 nuevas).
+- Verificación final: typecheck, lint y pruebas (46 tareas de turbo, 577 pruebas: contracts 204,
+  visor 129, repository 63, editorial 57, reports 55, sync 39, site-audit 14, workbench 5, ui 4,
+  editorial-ui 4, local-data 3). Pasan los builds de producción de visor y workbench. El axe completo
+  (82 páginas, 1440 y 375 px) solo marca la excepción aceptada de D-045 y avisos previos. El fichero
+  de seguimiento sigue vacío; curación, medición y publicados no cambian.

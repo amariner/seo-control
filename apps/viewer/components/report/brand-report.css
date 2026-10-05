@@ -2063,7 +2063,161 @@
   font-size: 12px;
   line-height: 1.6;
 }
+/* Seguimiento de cada acción (D-090): estado, responsable, plazo, criterio y resultado. */
+.brand-actions-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 12px;
+}
+.brand-actions-filters .brand-list-filter {
+  margin-bottom: 0;
+}
+.brand-actions-follow-filter {
+  padding-left: 12px;
+  border-left: 1px solid var(--ds-line);
+}
+.brand-actions-summary {
+  margin: -4px 0 16px;
+  color: var(--ds-muted);
+  font-size: 12px;
+  line-height: 1.6;
+}
+.brand-actions-track {
+  margin-top: 8px;
+  padding: 8px 12px;
+  border-left: 2px solid var(--ds-accent);
+  background: var(--ds-surface);
+}
+.brand-actions-track p {
+  margin: 0;
+}
+.brand-actions-follow {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 12px;
+  color: var(--ds-ink);
+  font-size: 13px;
+  font-variant-numeric: tabular-nums;
+}
+.brand-actions-follow .is-overdue {
+  color: var(--ds-danger);
+  font-weight: 500;
+}
+.brand-actions-state {
+  padding: 1px 8px;
+  border-radius: 999px;
+  background: var(--ds-surface-subtle);
+  color: var(--ds-ink);
+  font-size: 12px;
+  font-weight: 550;
+}
+.brand-actions-state.is-en_curso {
+  background: var(--ds-accent-soft);
+  color: var(--ds-accent-hover);
+}
+.brand-actions-state.is-bloqueada {
+  background: var(--ds-danger-soft);
+  color: var(--ds-danger);
+}
+.brand-actions-state.is-completada {
+  background: var(--ds-positive-soft);
+  color: var(--ds-positive);
+}
+.brand-actions-state.is-descartada {
+  color: var(--ds-muted);
+}
+.brand-actions-result {
+  margin-top: 4px !important;
+  color: var(--ds-text);
+  font-size: 12px;
+  line-height: 1.6;
+  font-variant-numeric: tabular-nums;
+}
+.brand-actions-result strong {
+  color: var(--ds-ink);
+  font-weight: 550;
+}
+.brand-actions-verdict {
+  margin-left: 8px;
+  padding: 0 6px;
+  border-radius: 999px;
+  background: var(--ds-surface-subtle);
+  color: var(--ds-ink);
+  font-weight: 550;
+  white-space: nowrap;
+}
+.brand-actions-verdict.is-cumplido,
+.brand-actions-verdict.is-mejora {
+  background: var(--ds-positive-soft);
+  color: var(--ds-positive);
+}
+.brand-actions-verdict.is-empeora {
+  background: var(--ds-danger-soft);
+  color: var(--ds-danger);
+}
+.brand-actions-aside {
+  margin-top: 2px !important;
+  color: var(--ds-muted);
+  font-size: 12px;
+  line-height: 1.55;
+}
+.brand-actions-pieces {
+  margin-top: 6px;
+  padding-top: 6px;
+  border-top: 1px solid var(--ds-line);
+  font-size: 12px;
+  line-height: 1.55;
+}
+.brand-actions-pieces strong {
+  color: var(--ds-ink);
+  font-weight: 550;
+}
+.brand-actions-pieces ul {
+  margin: 2px 0 0;
+  padding: 0;
+  list-style: none;
+}
+.brand-actions-pieces li {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0 8px;
+}
+.brand-actions-pieces li a {
+  color: var(--ds-accent);
+  font-weight: 500;
+}
+.brand-actions-pieces li a:hover {
+  text-decoration: underline;
+}
+.brand-actions-pieces li span {
+  color: var(--ds-text);
+  font-variant-numeric: tabular-nums;
+}
+.brand-actions-elsewhere {
+  margin-top: 32px;
+}
+.brand-actions-elsewhere h3 {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0;
+  color: var(--ds-ink);
+  font: 550 15px/1.4 var(--ds-font-sans);
+}
+.brand-actions-elsewhere h3 span {
+  color: var(--ds-muted);
+  font-weight: 400;
+  font-variant-numeric: tabular-nums;
+}
+.brand-actions-elsewhere .brand-actions-note {
+  margin: 4px 0 4px;
+}
 @media (max-width: 640px) {
+  .brand-actions-follow-filter {
+    padding-left: 0;
+    border-left: 0;
+  }
   .brand-actions-row {
     grid-template-columns: minmax(0, 1fr);
     gap: 4px;

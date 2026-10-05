@@ -77,6 +77,29 @@ El workbench no tiene botones para informes: todo se pide aquí, en el chat.
 - «Haz el informe adicional <proyecto>/<fecha-tema>»: completa la solicitud creada desde
   `/informes/adicionales` siguiendo el activador de informes adicionales.
 
+## Activador de acciones (D-090)
+
+Las acciones las proponen las reglas de la pestaña «Acciones» de cada marca (D-088); su seguimiento
+se pide aquí, en el chat. El workbench (`/acciones`) y el visor solo lo muestran.
+
+- «¿Qué acciones propone <marca>?»: `pnpm action:track -- --project <slug> [--range 90d] [--market all]`
+  lista lo propuesto con datos reales (clave, prioridad, motivo, cifra, criterio de éxito) y lo que ya
+  se sigue. Usa la clave que imprime; no la inventes.
+- «Sigue / asigna la acción <…> de <marca>: responsable <nombre>, plazo <fecha>»:
+  `pnpm action:track -- --project <slug> --action <clave> [--owner "Nombre"] [--due AAAA-MM-DD] [--status en_curso] [--note "…"]`.
+  Empieza el seguimiento y guarda el punto de partida con GA4/Search Console reales (credenciales de
+  `apps/workbench/.env.local`); sin `--due`, el plazo es el SLA de la prioridad. Solo acciones que los
+  datos proponen. Prueba antes con `--dry-run` si hay dudas.
+- «Marca como en curso / bloqueada / completada / descartada…», «cambia el responsable o el plazo»,
+  «anota el aprendizaje»: el mismo comando con `--status`, `--owner`, `--due` (o `--due sla`),
+  `--note` o `--learning`; no consulta a Google. «Deja de seguir…»: `--remove` (confírmalo antes: se
+  pierde su historial).
+- «Mide las acciones»: `pnpm action:measure [-- --project <slug>]`. Resume qué cumple, mejora o empeora
+  y qué es provisional (y por qué).
+- «Sube las acciones»: revisa el diff de `packages/reports/data/tracking/actions.json`, resume qué
+  cambia por marca, confirma con el usuario, haz commit y `vercel deploy --prod`. Nunca subas
+  datos de prueba.
+
 ## Operación desde el chat (D-082)
 
 Regla para todo desarrollo nuevo del workbench:

@@ -9,6 +9,17 @@ import {
   type DashboardPayload,
 } from "@seo/contracts";
 import { Badge, MetricStrip } from "@seo/ui";
+import { linkTargetHref } from "@seo/editorial";
+import {
+  PRIORITY_ORDER,
+  TRACKED_STATUS_LABEL,
+  dueState,
+  dueText,
+  isClosedStatus,
+  trackedIdOf,
+  trackingSummary,
+  type TrackedAction,
+} from "@seo/reports";
 import { ReportDataTable } from "@seo/ui/data-table";
 import { AppShell } from "./app-shell";
 import { ChartAreaInteractive } from "./chart-area-interactive";
@@ -72,7 +83,14 @@ function Section({
   );
 }
 
-export function Dashboard({ data }: { data: DashboardPayload }) {
+export function Dashboard({
+  data,
+  tracking,
+}: {
+  data: DashboardPayload;
+  /** Acciones en seguimiento (D-090) para el bloque «Acciones» con el origen real. */
+  tracking?: { records: TrackedAction[]; today: string };
+}) {
   const points = data.series.organic_sessions ?? [];
   const semrushConnected = data.sources.some(
     (source) =>
@@ -273,6 +291,8 @@ export function Dashboard({ data }: { data: DashboardPayload }) {
           </Section>
         </div>
 
+        {data.actions.length === 0 && tracking ? <TrackedActions {...tracking} /> : null}
+
         {data.actions.length > 0 && (
           <Section
             id="acciones"
@@ -412,5 +432,70 @@ export function Dashboard({ data }: { data: DashboardPayload }) {
         </Section>
       </main>
     </AppShell>
+  );
+}
+
+/**
+ * Bloque «Acciones» de la portada con el origen real (D-090): las abiertas que
+ * sigue el equipo, vencidas primero y por prioridad y plazo. Sin seguimiento,
+ * dice dónde están las propuestas.
+ */
+function TrackedActions({ records, today }: { records: TrackedAction[]; today: string }) {
+  const summary = trackingSummary(records, today);
+  const open = records
+    .filter((record) => !isClosedStatus(record.status))
+    .sort(
+      (a, b) =>
+        Number(dueState(b, today).state === "vencida") - Number(dueState(a, today).state === "vencida") ||
+        PRIORITY_ORDER[a.priority] - PRIORITY_ORDER[b.priority] ||
+        a.due.localeCompare(b.due),
+    );
+  return (
+    <Section
+      id="acciones"
+      title="Acciones"
+      description={
+        records.length
+          ? `${summary.open} abiertas${summary.overdue ? `, ${summary.overdue} vencidas` : ""} · ${summary.met} cumplen su criterio de éxito.`
+          : "Lo que el equipo SEO decide seguir de lo que proponen los datos de cada marca."
+      }
+      href="/actions"
+      linkLabel="Ver plan"
+    >
+      {open.length ? (
+        <ul className="overview-list">
+          {open.slice(0, 5).map((record) => {
+            const id = trackedIdOf(record.brand, record.key);
+            const overdue = dueState(record, today).state === "vencida";
+            return (
+              <li key={id}>
+                <Link href={linkTargetHref("action", id) ?? "/actions"}>
+                  <span className="overview-list-name">
+                    <strong>{record.title}</strong>
+                    <span>
+                      {projectName(record.brand)} · {record.owner ?? "sin responsable"} · {TRACKED_STATUS_LABEL[record.status]}
+                    </span>
+                  </span>
+                  <span className={`overview-list-value${overdue ? " is-overdue" : ""}`}>{dueText(record, today).split(" · ")[1] ?? dueText(record, today)}</span>
+                </Link>
+              </li>
+            );
+          })}
+        </ul>
+      ) : (
+        <p className="muted">
+          {records.length ? "Todas las acciones en seguimiento están cerradas." : "Ninguna en seguimiento todavía."} Las propuestas por los datos están en la pestaña «Acciones» de{" "}
+          {PILOT_PROJECTS.map((project, index) => (
+            <span key={project.slug}>
+              {index ? (index === PILOT_PROJECTS.length - 1 ? " y " : ", ") : ""}
+              <Link className="section-link" href={`/projects/${project.slug}?tab=acciones`}>
+                {project.name}
+              </Link>
+            </span>
+          ))}
+          .
+        </p>
+      )}
+    </Section>
   );
 }

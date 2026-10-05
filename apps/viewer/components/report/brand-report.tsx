@@ -41,7 +41,10 @@ import { KeywordKpis } from "./keyword-kpis";
 import { PageKpis } from "./page-kpis";
 import { PageStructurePanel } from "./page-structure";
 import { ActionsReview } from "./actions-review";
-import { pageStructure } from "@/lib/page-structure";
+import { pageStructure, sitemapGapOf } from "@seo/reports/page-structure";
+import { getBrandTracking } from "@seo/reports/tracking-published";
+import { actionPieces } from "@seo/reports/action-journey";
+import { editorialBacklinkIndex } from "@/lib/editorial";
 import {
   analysePages,
   localeOf,
@@ -59,6 +62,7 @@ import {
   periodIdOf,
   projectActionReview,
   reportIdOf,
+  withTracking,
   ACTION_TABS,
   type ActionTab,
 } from "@seo/reports";
@@ -1790,7 +1794,8 @@ function Pages({
 /**
  * Pestaña Acciones (D-088): repaso de todos los apartados con las acciones
  * que proponen sus datos. Mismas entradas que el informe del proyecto, más la
- * brecha de sitemaps de Páginas.
+ * brecha de sitemaps de Páginas. Cada acción lleva su seguimiento publicado
+ * (D-090): estado, responsable, plazo, criterio y resultado medido.
  */
 function Actions({
   report,
@@ -1804,28 +1809,18 @@ function Actions({
   href: (tab: ReportTab) => string;
 }) {
   const today = new Date().toISOString().slice(0, 10);
-  const outside = pageStructure(report, audit).outside;
   const sections = projectActionReview({
     report,
     pieces,
     audit,
     rootLabel: rootLabelOf(report.markets),
     today,
-    sitemapGap: outside
-      ? {
-          pages: outside.root.pages,
-          clicks: outside.root.clicks,
-          share: outside.root.share,
-          folders: [
-            ...new Set(
-              outside.root.children
-                .filter((node) => node.clicks > 0 && node.children.length)
-                .map((node) => node.name.split("/")[0]!),
-            ),
-          ].slice(0, 4),
-        }
-      : null,
+    sitemapGap: sitemapGapOf(report, audit),
   });
+  const { tracked, elsewhere } = withTracking(sections, getBrandTracking(report.brand));
+  // Recorrido (D-092): piezas del plan que enlazan cada acción seguida, derivadas de `piece.links`.
+  const index = editorialBacklinkIndex();
+  const linkedPieces = Object.fromEntries([...Object.values(tracked), ...elsewhere].map((record) => [record.key, actionPieces(index, record.brand, record.key)]));
   return (
     <Section
       id="acciones"
@@ -1836,6 +1831,10 @@ function Actions({
         sections={sections}
         links={Object.fromEntries(ACTION_TABS.map((item) => [item.key, href(item.key)])) as Record<ActionTab, string>}
         marketFiltered={report.market !== "all"}
+        tracked={tracked}
+        elsewhere={elsewhere}
+        linkedPieces={linkedPieces}
+        today={today}
         context={`${findBrand(report.brand)?.name ?? report.brand} · ${date(report.window.start)} – ${date(report.window.end)} · ${report.markets.find((item) => item.code === report.market)?.name ?? "Todos los mercados"}`}
       />
     </Section>

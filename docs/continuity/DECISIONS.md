@@ -2296,3 +2296,163 @@ No se reescriben decisiones antiguas. Si una cambia, se añade una nueva entrada
   - Debajo, «Cómo está cada apartado»: una línea por apartado con su hallazgo y cuántas acciones
     propone, para conservar el repaso completo de D-088.
 
+## D-090 · Seguimiento de acciones: estado, responsable, plazo y resultado medido (H10)
+
+- Fecha: 2026-10-05.
+- Estado: vigente (cierra H10; cumple el criterio de P4 «Acción con responsable, fecha, estado, SLA,
+  criterio de éxito y resultado» para las acciones por reglas del piloto; amplía D-088 y D-089).
+- Contexto: la pestaña «Acciones» (D-088, D-089) proponía acciones por reglas, pero no guardaba qué
+  decidía el equipo sobre ellas, y `/actions` del menú solo tenía el plan del conector sintético; con
+  el origen real (`live`, el de producción) el repositorio no devuelve acciones y la pantalla salía
+  vacía.
+- Decisión:
+  - **Identidad y cifra.** Cada acción lleva una clave estable de su regla
+    (`<apartado>:<regla>[:<sujeto>]`, p. ej. `paginas:fuera-sitemaps`, `estado:urgentes`,
+    `estado:description_missing`, `busquedas:oportunidad:<consulta>`) y su cifra (`ActionMetric`:
+    valor, dirección, criterio de éxito y qué dato la mueve: búsqueda, crawl, plan editorial o
+    fuentes). `actionMetric(clave, datos)` la calcula aunque la regla no salte, para medir el
+    resultado. Prueba de invariante: una regla que salta nunca cumple su propio criterio. Los textos de
+    las acciones no cambian (los informes congelados se siguen pintando igual).
+  - **Seguimiento** en `packages/reports/data/tracking/actions.json`, por `<marca>:<clave>`: estado
+    (planificada, en curso, bloqueada, completada, descartada; «propuesta» es no tener seguimiento),
+    responsable, plazo (el del equipo o el SLA de la prioridad: urgente 7, alta 30, media 60 y baja
+    90 días), nota, aprendizaje, punto de partida (la cifra con corte, ventana, mercado y crawl),
+    criterio fijado al empezar (el de la regla o, si no tiene objetivo fijo, mejorar el punto de
+    partida), último resultado e historial de cambios con autor y fecha. Solo se empieza a seguir una
+    acción que los datos proponen.
+  - **Operación desde el chat (D-082):** `pnpm action:track -- --project <slug>` lista lo propuesto
+    con claves, cifras y criterios; con `--action <clave>` empieza el seguimiento con datos reales
+    (GA4, Search Console, plan curado y crawl publicado; no guarda el punto de partida si la fuente de
+    la cifra no responde) o lo cambia sin consultar a Google (`--status`, `--owner`, `--due
+    AAAA-MM-DD|sla`, `--note`, `--learning`, `--remove`, `--dry-run`); sale con código 1 si no guarda
+    nada. `pnpm action:measure` recalcula la cifra con la misma ventana y mercado y el último corte;
+    una marca cuya fuente no responde no se mide. «Sube las acciones» = commit y despliegue. Sin
+    botones ni formularios.
+  - **Lectura del resultado:** cumple el criterio, mejora, sin cambios, empeora o sin dato.
+    Provisional si hay menos de 28 días de datos posteriores a la acción, si la ventana medida aún
+    incluye días anteriores o, en cifras de crawl, si no hay un crawl publicado después. Nunca se
+    extrapola. El efecto cuenta desde el cierre si se completó; si no, desde el inicio del
+    seguimiento.
+  - **Visor:** la pestaña «Acciones» muestra en cada acción seguida su estado, responsable y plazo
+    (vencido en rojo y con texto), criterio, partida → última medición y veredicto; filtro «En
+    seguimiento / Sin asignar»; bloque aparte con las que se siguen y el periodo o mercado elegidos ya
+    no proponen; «Copiar lista» incluye el seguimiento. `/actions` pasa a ser la bandeja real de todas
+    las marcas (filtros por marca y estado, cifras de abiertas, vencidas, sin responsable, completadas
+    y que cumplen); el plan sintético solo aparece, rotulado como ejemplo, con el origen sintético. La
+    cronología pinta cada acción seguida en su plazo o en su cierre.
+  - **Workbench:** `/acciones` (grupo «Decisiones») es la bandeja de solo lectura con la
+    sincronización frente a HEAD y las frases del chat; Inicio suma el canal «Seguimiento de
+    acciones» a lo pendiente de subir y sus cambios a la actividad.
+  - `page-structure` (D-087) pasa del visor a `@seo/reports`, con `sitemapGapOf`, porque los scripts
+    necesitan la misma brecha de sitemaps que la pestaña. Sin sitemaps publicados la cifra es «sin
+    dato»; con sitemaps y nada fuera, cero.
+- Consecuencias: una acción conserva su seguimiento aunque cambie la cifra de su título; si una regla
+  cambia de clave, su seguimiento pasa a «ya no lo proponen». El enum de estados no coincide con
+  `action_status` del esquema Drizzle (añade `descartada` y no tiene `propuesta`): al llevarlo a
+  Postgres (P3.1, H7) hay que ampliarlo. Hasta H7 el visor desplegado no edita: todo pasa por el chat y
+  el despliegue.
+
+## D-091 · La cronología no pide cifras a Google
+
+- Fecha: 2026-10-05.
+- Estado: vigente (rendimiento, P3.4).
+- Contexto: `/cronologia` pedía la portada del grupo con 24 meses (`getDashboard` con `24m`) solo
+  para leer sus anotaciones. Con el origen real eso son decenas de consultas a GA4 y Search Console:
+  ~110 s en frío, y la caché de datos guarda el resultado por corte, así que el primer visitante de
+  cada día lo pagaba (o lo cortaba el límite de la función).
+- Decisión: `MetricsRepository` gana `annotations?(period)`, opcional. El origen real devuelve las
+  anotaciones configuradas de sus marcas en la misma ventana que usaría la portada (función común
+  `periodAnnotations`) sin llamar a la red; el sintético no lo implementa y la cronología sigue
+  leyendo su portada, que no cuesta. Con el origen real la portada no trae acciones, así que la
+  cronología no pierde nada: las acciones salen del seguimiento (D-090).
+- Consecuencias: `/cronologia` responde en milisegundos con el origen real (80 hitos, los mismos
+  que antes). Prueba: el origen real da las anotaciones del periodo sin ninguna llamada a `fetch`.
+
+## D-092 · Recorrido oportunidad → pieza → acción → resultado medido (P3.5)
+
+- Fecha: 2026-10-05.
+- Estado: vigente (cierra el segundo criterio de P3.5, heredado de P1 por D-017).
+- Decisión: el recorrido se cierra con piezas que ya existían, sin un segundo almacén de la relación:
+  - **Oportunidad**: el motivo de la regla que propone la acción, con su cifra real de Search Console
+    o GA4 (D-088).
+  - **Acción**: su seguimiento con punto de partida, criterio y resultado medido (D-090).
+  - **Pieza**: la del plan editorial que el equipo enlaza en la curación del workbench con
+    `action:<marca>:<clave>` en «Enlaces». La relación vive solo en `piece.links` (D-015) y se deriva
+    con el índice de reciprocidad (`actionPieces` en `@seo/reports/action-journey`).
+  - **Resultado**: el de la acción y la medición real de la pieza a 28, 90 y 180 días (D-079):
+    `pieceResult` da la ventana cerrada más larga o, si no hay, la de 28 días en curso.
+  - Se ve en la acción (pestaña «Acciones», `/actions`, bandeja del workbench y `pnpm action:track`) y
+    en la ficha de la pieza, cuyo enlace «Acción» abre la fila de `/actions` (el ancla es el id de la
+    acción, el mismo que resuelve `linkTargetHref`; la cronología también enlaza así).
+  - `/actions` oculta los filtros globales de la cabecera con el origen real: solo filtraban el plan
+    de ejemplo del sintético.
+- Verificación: con datos reales de Porcelanosa en local, la acción `busquedas:sin-marca` (clics sin
+  marca −13,9 %) seguida y enlazada a «Azulejos turquesa y verde azulado» (publicada el 13 de agosto;
+  28 días: 65 clics frente a 23) muestra la cadena en las cinco superficies y en los dos sentidos. Los
+  datos de prueba se revirtieron: el equipo crea los enlaces reales en la curación.
+
+## D-093 · Las erratas de «porcelanosa» cuentan como búsquedas de marca
+
+- Fecha: 2026-10-05.
+- Estado: vigente (calidad del dato; segmentación de marca de P3.2).
+- Contexto: la marca se detectaba con la palabra exacta. Con datos reales de Porcelanosa (90 días al
+  2 de octubre de 2026), 26 erratas de la marca sumaban 3.986 clics, el 9 % de la muestra «sin marca»
+  de Search Console («porcelenosa» 971, «porcelainosa» 628, «porcellanosa» 577…), y la acción de
+  keywords sin marca proponía «recuperar» búsquedas que son de marca.
+- Decisión: `brandTypos(palabra, observadas)` (`packages/repository/src/live/brands.ts`) genera la
+  palabra exacta y todas las que están a una letra (falta, sobra, cambia o se intercambian dos
+  seguidas) como alternancia RE2 de literales, más las erratas a dos letras observadas con más de
+  30 clics («porcelonsa», «porcelonasa», «porselenosa», «porselonosa», «porclenosa», «porcelosa»).
+  Se deja fuera lo que también puede ser errata de un genérico («porcelona», «porcelina»,
+  «porcelano»). Se aplica a Porcelanosa como marca propia y como paraguas en Noken y XTONE; no a
+  marcas cortas («token» está a una letra de «noken»). 51 variantes, 608 caracteres. Pruebas: 16
+  erratas reales detectadas y 11 genéricos del sector (porcelanato, porcelánico, porcelana,
+  porcellana…) que siguen fuera.
+- Efecto medido: clics sin marca de Porcelanosa en 90 días de 69.590 a 61.191 (−8.399, el 12 %
+  pasa a marca); en el periodo anterior, de 80.852 a 70.623. La variación sin marca queda en
+  −13,4 % (antes −13,9 %) y la acción de keywords nombra ahora búsquedas genéricas («tendenze
+  piastrelle bagno 2026», «muebles de baño», «tendance salle de bain 2026»).
+- Consecuencias: los informes en vivo, las oportunidades y el reparto de keywords cambian; los
+  informes congelados del 2.º trimestre conservan la clasificación con la que se generaron (son
+  inmutables) y, si se regeneran, usarán la nueva. No cambia la forma del informe, así que
+  `BRAND_REPORT_VERSION` no se toca: la caché del visor desplegado puede servir hasta seis horas la
+  clasificación anterior tras el despliegue.
+
+## D-094 · La portada dice qué acciones están en marcha y de cuándo es el crawl publicado
+
+- Fecha: 2026-10-05.
+- Estado: vigente (visor: portada con el origen real, accesibilidad y móvil).
+- Contexto: con el origen real, el repositorio de métricas no genera acciones (salen del seguimiento,
+  D-090), así que la portada perdía su bloque «Acciones». La fila «Crawl» de las fuentes decía «no
+  configurado» aunque XTONE tuviera un crawl publicado, porque ese repositorio no ve los crawls
+  (D-070). axe marcaba la barra lateral del visor como contenido fuera de regiones (`region`, 1440 px).
+  Y a 375 px la portada desbordaba en horizontal: el selector de periodo del gráfico de evolución
+  acababa en 426 px.
+- Decisión:
+  - **Portada · «Acciones»**: con el origen real, `Dashboard` recibe el seguimiento publicado
+    (`getPublishedTracking`) de la marca del filtro o de todas. Pinta hasta cinco abiertas (vencidas
+    primero, después prioridad y plazo) con marca, responsable, estado y plazo (en rojo si vence),
+    bajo el resumen «N abiertas, M vencidas · K cumplen su criterio de éxito». Cada fila abre su fila
+    de `/actions` (`linkTargetHref("action", id)`). Sin seguimiento, dice dónde están las propuestas
+    y enlaza la pestaña «Acciones» de cada marca del piloto. El sintético conserva su bloque de ejemplo.
+  - **Fuentes · «Crawl publicado»**: `withPublishedCrawls` (`apps/viewer/lib/data.ts`) rellena la
+    fila del crawl con los resúmenes publicados de las marcas del filtro. El estado es `correcto` si
+    todas tienen crawl y `parcial` si no. La cobertura es la parte de marcas con crawl, y el corte es
+    el del crawl más reciente. La nota da la fecha de cada crawl, quién falta y que la publicación va
+    sin firma (la firmada llega con P5). Se aplica fuera de la caché de datos: el resumen cambia con
+    el despliegue, no con el corte. Si ninguna marca del filtro tiene crawl, la fila no cambia.
+  - **Barra lateral**: `role="complementary"` con `aria-label="Barra lateral"`, como la del
+    workbench (D-078).
+  - **Selector de periodo del gráfico en móvil**: por debajo de 640 px las etiquetas se abrevian
+    («28 d», «90 d», «180 d», «12 m», «24 m») y el relleno baja a 8 px. En escritorio no cambia.
+- Verificación: visor 129 pruebas (2 nuevas de la fila del crawl: XTONE `correcto` con cobertura 1,
+  el piloto completo `parcial` con 1/3 y «sin crawl: Porcelanosa, Noken», Noken sin cambios). La
+  portada a 375 px queda sin desplazamiento horizontal (documento de 375 px). El axe completo (82
+  páginas, 1440 y 375 px) no da incumplimientos nuevos.
+  - Solo queda la excepción aceptada de D-045 en `/projects/porcelanosa` (pie del gráfico en grafito,
+    3,75:1).
+  - Hay avisos de buenas prácticas previos, en ficheros que esta decisión no toca:
+    - `heading-order` y `landmark-unique` en el calendario y el plan (`.pub-slider-head`,
+      `.plan-measure`).
+    - `landmark-one-main`, `region` y `skip-link` en el informe congelado, que no tiene
+      `<main id="contenido">` para el enlace de salto del layout.

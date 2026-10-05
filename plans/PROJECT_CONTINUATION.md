@@ -1,9 +1,44 @@
 # Checkpoint operativo — SEO Dashboard V2
 
-Última actualización: 30 de septiembre de 2026 (pestaña «Acciones» simplificada, D-089).
+Última actualización: 5 de octubre de 2026 (D-090 seguimiento de acciones, D-091 cronología rápida, D-092 recorrido de P3.5, D-093 erratas de marca, D-094 portada y fuentes).
 
 ## Reanudar aquí · plan de hitos (D-078)
 
+- **2026-10-05 · D-093 y D-094, en local sin commit ni despliegue:**
+  - D-093: las erratas de «porcelanosa» cuentan como marca (`brandTypos` en
+    `packages/repository/src/live/brands.ts`; el 12 % de los clics «sin marca» de Porcelanosa eran
+    erratas).
+  - D-094, portada con el origen real: el bloque «Acciones» lee el seguimiento publicado
+    (`components/dashboard.tsx`, `TrackedActions`). La fila «Crawl» de las fuentes refleja los
+    crawls publicados (`withPublishedCrawls` en `apps/viewer/lib/data.ts`).
+  - D-094, accesibilidad y móvil: la barra lateral del visor es región con nombre, y el selector de
+    periodo del gráfico se abrevia por debajo de 640 px.
+  - Verificación completa: 577 pruebas, builds de producción y axe de 82 páginas. Solo marca la
+    excepción aceptada de D-045 y avisos previos.
+  - **Punto exacto de reanudación:** `vercel deploy --prod` cuando el usuario lo confirme (entran
+    D-086…D-094). Después, que el equipo siga sus primeras acciones desde el chat
+    (`pnpm action:track`) y enlace piezas en la curación con `action:<marca>:<clave>`.
+  - Mejora menor pendiente: el informe congelado no tiene `<main id="contenido">`, así que el enlace
+    de salto del layout no lleva a ningún sitio (avisos `landmark-one-main` y `skip-link` de axe).
+- **2026-10-05 · D-091 y D-092, en local sin commit ni despliegue:** la cronología toma las
+  anotaciones con `MetricsRepository.annotations?(period)` sin pedir la portada de 24 meses
+  (~110 s → milisegundos), y el recorrido oportunidad → pieza → acción → resultado queda cerrado
+  (P3.5, P3 al 38 %): `packages/reports/src/action-journey.ts` (`actionPieces`, `pieceResult`,
+  `actionLinkOf`) deriva de `piece.links` las piezas de cada acción y su medición D-079; el enlace se
+  crea en la curación del workbench con `action:<marca>:<clave>`. `/actions` ancla cada fila con el id
+  de la acción. **Punto exacto de reanudación:** el mismo que D-090 (commit y despliegue con permiso).
+- **2026-10-05 · D-090 (H10 hecho), en local sin commit ni despliegue:** seguimiento de acciones.
+  Cada acción de la pestaña «Acciones» tiene clave estable y cifra con criterio de éxito
+  (`packages/reports/src/project-actions.ts`: `key`, `metric`, `actionMetric`); el seguimiento
+  (estado, responsable, plazo/SLA, nota, aprendizaje, punto de partida, resultado e historial) vive en
+  `packages/reports/data/tracking/actions.json` (vacío: sin acciones reales todavía) con contrato en
+  `src/action-tracking.ts`, escritura en `src/tracking-store.ts` y lectura del visor en
+  `src/tracking-published.ts`. Chat: `pnpm action:track` y `pnpm action:measure` (scripts en
+  `packages/reports/scripts/`, repaso real en `src/review-input.ts`). Visor: pestaña «Acciones»
+  (`components/report/actions-review.tsx`), `/actions` real y cronología. Workbench: `/acciones`.
+  **Punto exacto de reanudación:** pedir commit de D-090 y `vercel deploy --prod` (entran D-086…D-090);
+  después, que el equipo siga sus primeras acciones desde el chat. Pendiente del responsable: bloqueo
+  `reconciliation-editorial` (`pnpm reconcile:check` falla desde D-057).
 - **2026-09-30 · D-089, en main (4832386) y en GitHub, sin desplegar:** la pestaña «Acciones» es una lista única por prioridad
   con filtro por área, «Copiar lista» y «Cómo está cada apartado» (`components/report/actions-review.tsx`,
   ahora componente de cliente). **Punto exacto de reanudación:**
@@ -69,6 +104,22 @@
 - Después: H10 (bandeja de decisiones P4 sobre informes, crawl y medición). Pendiente menor de
   P7: sello de usuario y confidencialidad en el PDF por impresión. Bloqueados por el
   responsable: H7 Neon + `DATABASE_URL`, H8 aceptación P2, H9 SEMrush.
+
+## Seguimiento de acciones · D-090 (2026-10-05, sin commit)
+
+- Reglas: `project-actions.ts` añade `key` (`<apartado>:<regla>[:<sujeto>]`) y `metric` a cada acción;
+  `actionMetric(key, input)` calcula la cifra aunque la regla no salte. Prueba de invariante: una regla
+  que salta nunca cumple su criterio. Los textos no cambian (informes congelados idénticos).
+- Contrato: `action-tracking.ts` (`trackedActionSchema`, `startTracking`, `updateTracking`,
+  `measureKey`, `resultOf`, `dueState`, `withTracking`, SLA `ACTION_SLA_DAYS` = 7/30/60/90 días).
+- CLI: `pnpm action:track -- --project <slug>` (lista), `--action <clave>` con `--status`, `--owner`,
+  `--due`, `--note`, `--learning`, `--remove`, `--dry-run`; `pnpm action:measure [-- --project <slug>]`.
+  `ACTION_TRACKING_PATH` apunta a otro fichero para probar sin tocar el real.
+- `page-structure.ts` (+ prueba) se movió de `apps/viewer/lib` a `packages/reports/src` con
+  `sitemapGapOf`; el visor lo importa de `@seo/reports/page-structure`.
+- QA visual: herramienta de capturas por CDP en el scratchpad de la sesión (no versionada); `pnpm axe
+  --route <nombres>` filtra rutas. Rutas nuevas en axe: `cronologia-acciones`, `project-acciones`
+  (visor) y `acciones` (workbench).
 
 ## Informes en el workbench · D-076 (2026-09-29, sin commit)
 

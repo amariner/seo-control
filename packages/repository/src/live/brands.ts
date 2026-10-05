@@ -36,6 +36,35 @@ export type LiveExtraMarket = { code: string; name: string; pathPrefix: string }
 /** Lo único que necesitan los filtros: la sección de la web y, si hace falta, el país. */
 export type MarketScope = { pathPrefix: string; country?: LiveCountry };
 
+/**
+ * Erratas de una marca larga como alternancia RE2 (D-093): la palabra exacta y
+ * todas las que están a una letra (falta una, sobra una, cambia una o se
+ * intercambian dos seguidas), más las erratas a dos letras que se observen
+ * con volumen en Search Console. Solo para marcas largas: en una de cinco
+ * letras como «noken», una letra de distancia ya es otra palabra («token»).
+ * En Porcelanosa las erratas eran el 9 % de los clics de la muestra «sin
+ * marca» (3.986 de 44.437 en los 90 días al 2 de octubre de 2026).
+ */
+export function brandTypos(word: string, observed: readonly string[] = []): string {
+  const variants = new Set<string>([word]);
+  for (let index = 0; index < word.length; index += 1) {
+    variants.add(word.slice(0, index) + word.slice(index + 1));
+    variants.add(`${word.slice(0, index)}.${word.slice(index + 1)}`);
+    if (index < word.length - 1) variants.add(word.slice(0, index) + word[index + 1] + word[index] + word.slice(index + 2));
+  }
+  for (let index = 0; index <= word.length; index += 1) variants.add(`${word.slice(0, index)}.${word.slice(index)}`);
+  for (const typo of observed) variants.add(typo);
+  return [...variants].join("|");
+}
+
+/**
+ * Porcelanosa con sus erratas: marca propia de Porcelanosa y paraguas del
+ * resto. Las de dos letras son las observadas con más de 30 clics en 90 días;
+ * se dejan fuera las que también son erratas de un genérico («porcelona»,
+ * «porcelina», «porcelano» pueden ser «porcelana» o «porcelanato»).
+ */
+export const PORCELANOSA_BRAND = brandTypos("porcelanosa", ["porcelonsa", "porcelonasa", "porselenosa", "porselonosa", "porclenosa", "porcelosa"]);
+
 export type LiveBrandConfig = {
   slug: BrandSlug;
   propertyEnv: string;
@@ -92,7 +121,7 @@ export const LIVE_BRANDS: readonly LiveBrandConfig[] = [
       { code: "IL", name: "Israel", pathPrefix: "il" },
     ],
     allPrefixes: ["uk", "en", "us", "au", "fr", "fra", "de", "it", "pt", "br", "mx", "co", "cl", "ru", "cn", "kr", "il"],
-    brandRegex: "porcelanosa",
+    brandRegex: PORCELANOSA_BRAND,
   },
   {
     slug: "noken",
@@ -113,7 +142,7 @@ export const LIVE_BRANDS: readonly LiveBrandConfig[] = [
       { code: "AU", name: "Australia", pathPrefix: "au" },
     ],
     allPrefixes: ["es", "en_gb", "us", "au", "fr", "de", "it", "pt", "mx", "ru"],
-    brandRegex: "noken|нокен|porcelanosa",
+    brandRegex: `noken|нокен|${PORCELANOSA_BRAND}`,
   },
   {
     /*
@@ -139,7 +168,7 @@ export const LIVE_BRANDS: readonly LiveBrandConfig[] = [
       { code: "ZH", name: "China (chino)", pathPrefix: "zh" },
     ],
     allPrefixes: ["en", "fr", "de", "pt", "it", "pl", "zh"],
-    brandRegex: "x[ -]?s?tone|porcelanosa",
+    brandRegex: `x[ -]?s?tone|${PORCELANOSA_BRAND}`,
     // Tamara Falcó es embajadora de Xtone: ~55 k impresiones al trimestre que buscan a la persona, no la superficie.
     opportunityExcludeRegex: "tamara|falc[oó]",
     annotations: [

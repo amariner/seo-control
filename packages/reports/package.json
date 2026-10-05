@@ -7,12 +7,18 @@
     ".": "./src/index.ts",
     "./project-report": "./src/project-report.ts",
     "./page-analysis": "./src/page-analysis.ts",
+    "./page-structure": "./src/page-structure.ts",
     "./published": "./src/published.ts",
     "./store": "./src/store.ts",
     "./generate": "./src/generate.ts",
     "./measure": "./src/measure.ts",
     "./archive": "./src/archive.ts",
-    "./export": "./src/export.ts"
+    "./export": "./src/export.ts",
+    "./action-tracking": "./src/action-tracking.ts",
+    "./tracking-store": "./src/tracking-store.ts",
+    "./tracking-published": "./src/tracking-published.ts",
+    "./review-input": "./src/review-input.ts",
+    "./action-journey": "./src/action-journey.ts"
   },
   "scripts": {
     "build": "tsc --noEmit",
@@ -21,7 +27,9 @@
     "test": "vitest run",
     "generate": "tsx scripts/generate.ts",
     "curate": "tsx scripts/curate.ts",
-    "measure": "tsx scripts/measure-editorial.ts"
+    "measure": "tsx scripts/measure-editorial.ts",
+    "track-action": "tsx scripts/track-action.ts",
+    "measure-actions": "tsx scripts/measure-actions.ts"
   },
   "dependencies": {
     "@seo/contracts": "workspace:*",

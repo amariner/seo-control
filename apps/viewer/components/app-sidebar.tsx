@@ -117,7 +117,8 @@ export function AppSidebar({
   };
 
   return (
-    <Sidebar collapsible="offcanvas" {...props}>
+    // Región con nombre (como en el workbench, D-078): marca y sesión quedan dentro de un punto de referencia.
+    <Sidebar collapsible="offcanvas" role="complementary" aria-label="Barra lateral" {...props}>
       <SidebarHeader>
         <SidebarMenu>
           <SidebarMenuItem>

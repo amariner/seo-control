@@ -247,6 +247,10 @@
   text-align: right;
   font-size: 12px;
 }
+.overview-list-value.is-overdue {
+  color: var(--ds-danger);
+  font-weight: 500;
+}
 .overview-list-value strong {
   color: var(--ds-ink);
   font-size: 14px;

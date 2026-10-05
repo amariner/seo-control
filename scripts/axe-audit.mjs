@@ -9,6 +9,7 @@
  * Uso:
  *   node scripts/axe-audit.mjs                       # visor + workbench, 1440 y 375 px
  *   node scripts/axe-audit.mjs --app viewer          # solo una app
+ *   node scripts/axe-audit.mjs --route acciones,project-acciones   # solo esas rutas (por nombre)
  *   node scripts/axe-audit.mjs --viewport 375        # solo un ancho
  *   node scripts/axe-audit.mjs --json docs/design/axe-report.json
  *   node scripts/axe-audit.mjs --viewer-base http://localhost:3010 --workbench-base http://127.0.0.1:3011
@@ -44,6 +45,7 @@ const APPS = {
       { name: "propuestas", path: "/editorial/propuestas" },
       { name: "insights", path: "/insights" },
       { name: "actions", path: "/actions" },
+      { name: "cronologia-acciones", path: "/cronologia?lane=accion" },
       { name: "cronologia", path: "/cronologia" },
       { name: "cronologia-carril", path: "/cronologia?lane=informe&project=noken" },
       { name: "cronologia-vacia", path: "/cronologia?lane=contexto-externo" },
@@ -59,6 +61,7 @@ const APPS = {
       { name: "no-encontrada", path: "/pages/page-1" },
       { name: "project", path: "/projects/porcelanosa" },
       { name: "project-informes", path: "/projects/xtone?tab=informes" },
+      { name: "project-acciones", path: "/projects/xtone?tab=acciones" },
       { name: "informe-congelado", path: "/projects/xtone/informe?periodo=2026-Q2" },
       { name: "data", path: "/data" },
     ],
@@ -76,6 +79,7 @@ const APPS = {
       { name: "adicionales", path: "/informes/adicionales" },
       { name: "adicional", path: "/informes/adicionales/xtone/2026-09-24-keywords-objetivo" },
       { name: "crawls", path: "/crawls" },
+      { name: "acciones", path: "/acciones" },
       { name: "no-encontrada", path: "/no-existe" },
     ],
   },
@@ -96,11 +100,13 @@ const viewerBase = flag("viewer-base", null);
 const workbenchBase = flag("workbench-base", null);
 const viewportFilter = flag("viewport", "all");
 const jsonOut = flag("json", null);
+const routeFilter = flag("route", null)?.split(",") ?? null;
 
 const viewports = viewportFilter === "all" ? VIEWPORTS : VIEWPORTS.filter((viewport) => String(viewport.width) === viewportFilter);
 if (viewerBase) APPS.viewer.base = viewerBase.replace(/\/$/, "");
 if (workbenchBase) APPS.workbench.base = workbenchBase.replace(/\/$/, "");
 const apps = Object.entries(APPS).filter(([name]) => appFilter === "all" || name === appFilter);
+if (routeFilter) for (const [, app] of apps) app.routes = app.routes.filter((route) => routeFilter.includes(route.name));
 if (!viewports.length) throw new Error(`Viewport desconocido: ${viewportFilter}. Usa 1440 o 375.`);
 if (!apps.length) throw new Error(`App desconocida: ${appFilter}. Usa viewer o workbench.`);
 

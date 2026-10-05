@@ -6,6 +6,10 @@ import {
   type TimelineEntry,
   type TimelineFilters,
 } from "@seo/contracts";
+import { linkTargetHref } from "@seo/editorial";
+import { dueState, isClosedStatus } from "@seo/reports";
+import { getPublishedTracking } from "@seo/reports/tracking-published";
+import { resolveRepository } from "@seo/repository";
 import { getDashboard } from "./data";
 import { getEditorial } from "./editorial";
 import { getReportArchive } from "./reports";
@@ -19,7 +23,8 @@ import { getReportArchive } from "./reports";
  * - `annotations` del payload de métricas (releases, incidencias, campañas…).
  * - Versiones publicadas del archivo de informes, incluidas las correcciones.
  * - Eventos del calendario editorial, que es dato real importado de V1.
- * - Acciones con fecha de vencimiento.
+ * - Acciones con fecha de vencimiento: las del repositorio y las que el equipo
+ *   sigue (D-090), estas en su plazo o, si se cerraron, en su cierre.
  *
  * El carril de contexto externo (radar de V1) llega vacío a propósito: P2.1
  * decidió no conservarlo como vertical hasta automatizar su recogida (P4).
@@ -46,13 +51,19 @@ const ANNOTATION_KIND = {
 } as const;
 
 export async function getTimeline(filters: TimelineFilters) {
-  const data = await getDashboard({ project: "all", market: "all", period: "24m" });
+  // Con el origen real las anotaciones están en su configuración: pedir la
+  // portada de 24 meses solo para leerlas costaba ~110 s en frío. Su portada
+  // no trae acciones, así que no se pierde nada.
+  const repository = resolveRepository();
+  const data = repository.annotations ? null : await getDashboard({ project: "all", market: "all", period: "24m" });
+  const annotations = data ? data.annotations : await repository.annotations!("24m");
+  const generatedAt = data?.generatedAt ?? new Date().toISOString();
   const archive = getReportArchive({ project: "all", type: "all", status: "all", year: "all" });
   const dataset = getEditorial();
-  const asOf = data.generatedAt.slice(0, 10);
+  const asOf = generatedAt.slice(0, 10);
 
   const entries: TimelineEntry[] = [
-    ...data.annotations.map((annotation) => ({
+    ...annotations.map((annotation) => ({
       id: `tl-ann-${annotation.id}`,
       date: annotation.date,
       lane: "anotacion" as const,
@@ -94,7 +105,7 @@ export async function getTimeline(filters: TimelineFilters) {
       tone: "neutral" as const,
     })),
 
-    ...data.actions
+    ...(data?.actions ?? [])
       .filter((action) => action.dueDate !== null)
       .map((action) => {
         const tracked = trackAction(action, asOf);
@@ -110,9 +121,25 @@ export async function getTimeline(filters: TimelineFilters) {
           tone: tracked.tracking === "vencida" ? ("bad" as const) : tracked.tracking === "cerrada" ? ("good" as const) : ("info" as const),
         };
       }),
+
+    ...Object.values(getPublishedTracking().actions).map((record) => {
+      const closed = isClosedStatus(record.status);
+      const overdue = dueState(record, asOf).state === "vencida";
+      return {
+        id: `tl-tracked-${record.brand}-${record.key}`,
+        date: closed && record.closedAt ? record.closedAt.slice(0, 10) : record.due,
+        lane: "accion" as const,
+        kind: closed ? (record.status === "completada" ? "Acción completada" : "Acción descartada") : overdue ? "Acción vencida" : "Acción comprometida",
+        title: record.title,
+        detail: `${record.owner ?? "Sin responsable"} · ${record.criterion}`,
+        project: record.brand,
+        href: linkTargetHref("action", `${record.brand}:${record.key}`) ?? "/actions",
+        tone: closed ? ("good" as const) : overdue ? ("bad" as const) : ("info" as const),
+      };
+    }),
   ];
 
-  return buildTimeline({ generatedAt: data.generatedAt, asOf, filters, entries });
+  return buildTimeline({ generatedAt, asOf, filters, entries });
 }
 
 export function timelineFiltersFromUrl(request: Request): TimelineFilters {

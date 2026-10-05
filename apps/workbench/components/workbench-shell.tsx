@@ -7,6 +7,7 @@ import {
   FileBarChart,
   FolderOpen,
   House,
+  ListChecks,
   NotebookPen,
   ScanSearch,
   CalendarRange,
@@ -56,6 +57,7 @@ export const NAVIGATION: Array<{ label: string; items: NavItem[] }> = [
       { href: "/informes/adicionales", label: "Adicionales", icon: FolderOpen },
     ],
   },
+  { label: "Decisiones", items: [{ href: "/acciones", label: "Acciones", icon: ListChecks }] },
   {
     label: "Técnico",
     items: [

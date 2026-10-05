@@ -1,6 +1,6 @@
 # SEO Dashboard V2 — roadmap vivo de desarrollo
 
-Última actualización: 29 de septiembre de 2026 (roadmap rehecho, D-078).
+Última actualización: 5 de octubre de 2026 (H10 hecho: seguimiento de acciones, D-090).
 
 ## Norte de producto
 
@@ -46,7 +46,7 @@ resultado de criterios terminados, nunca una estimación subjetiva.
 | P1 | Sistema visual compartido + calendario editorial general | **complete** |
 | P2 | Paridad crítica verificada con SEO Dashboard V1 | **blocked** (79 %, decisiones del responsable) |
 | P3 | Datos reales fiables para el piloto (Porcelanosa, Noken, XTONE) | **active** |
-| P4 | Sistema operativo de decisiones y acciones | planned |
+| P4 | Sistema operativo de decisiones y acciones | planned · adelantado: acciones por reglas con seguimiento y resultado medido (D-088…D-090) |
 | P5 | Inteligencia técnica, monitorización y prevención | planned · adelantado: crawl local y «Estado del sitio» (D-070, D-071) |
 | P6 | Demanda, contenido, competencia y enlazado editorial | planned |
 | P7 | Informes ejecutivos, aprobación y exportaciones | planned · adelantado: informe por proyecto, PDF, versiones congeladas y puntualizaciones (D-073…D-076) |
@@ -76,7 +76,7 @@ ejecutar sin credenciales ni presupuesto nuevos.
 | H7 | Neon Frankfurt y `DATABASE_URL`: edición del plan en producción y base de P3.1 | P3.1 | el responsable crea la cuenta y acepta términos | bloqueado |
 | H8 | Sesión de aceptación P2: cinco flujos, dos retiradas y cuatro rutas «missing» | P2.4 | responsable SEO | bloqueado |
 | H9 | SEMrush en V2: ranking estable, competidores y SOV semanales | P3.3 | decisión de coste de unidades API | bloqueado |
-| H10 | Bandeja de decisiones P4 alimentada por informes, crawl y medición editorial | P4 | H4 | en curso: pestaña «Acciones» con reglas por apartado (D-088); falta estado, responsable, plazo y resultado |
+| H10 | Bandeja de decisiones P4 alimentada por informes, crawl y medición editorial | P4 | H4 | **hecho** (D-088…D-090): acciones por reglas con clave y cifra; seguimiento con estado, responsable, plazo (SLA), criterio y resultado medido con datos reales desde el chat; bandeja en el workbench (`/acciones`), en la pestaña «Acciones» y en `/actions` del visor |
 | H11 | Archivo `/reports` con los informes congelados y exportación HTML autocontenida | P7 | H1 | **hecho** (D-081): archivo real, HTML sin conexión y CSV con sello |
 | H12 | Plan editorial con una sola base de datos para workbench y preview y tabla editable tipo hoja de cálculo | P3.1 | H7 | pendiente (rumbo fijado en D-085) |
 
@@ -330,7 +330,7 @@ responsable SEO.
 
 ## P3 · Plataforma de datos reales del piloto
 
-Estado: **active** (31 %, 5 de 16 criterios; D-079 cierra el primero de P3.5). Se activó porque `P2` agotó su trabajo de desarrollo y
+Estado: **active** (38 %, 6 de 16 criterios; D-079 y D-092 cierran dos de los tres de P3.5). Se activó porque `P2` agotó su trabajo de desarrollo y
 porque `P3` es, además, lo que desbloquea dos de sus criterios: la reconciliación
 de GA4 y GSC exige este almacén (D-027). 4 de los 16 criterios de la fase están
 terminados, los cuatro que **no** dependían de credenciales: el adapter de
@@ -438,9 +438,15 @@ reinterpretan: se cumplen aquí con el mismo alcance con que se escribieron.
   días cubiertos, alcance y confianza; «Resultado de lo publicado» en el plan del
   visor, del workbench y en el informe. Se guarda en fichero
   (`packages/editorial/data/measurement/`) hasta que exista Postgres (P3.1).
-- [ ] Cerrar el recorrido oportunidad -> pieza -> acción -> **resultado medido**
+- [x] Cerrar el recorrido oportunidad -> pieza -> acción -> **resultado medido**
   usando la reciprocidad de `links` entregada en P1.4 (D-015), sin añadir un
-  segundo almacén de la relación.
+  segundo almacén de la relación. **Hecho el 2026-10-05 (D-092)**: la oportunidad
+  es el motivo de la regla con su cifra real (D-088); la acción, su seguimiento
+  con punto de partida, criterio y resultado medido (D-090); la pieza se enlaza en
+  la curación con `action:<marca>:<clave>` en `piece.links` y su resultado es la
+  medición de 28/90/180 días (D-079). Se ve en la acción y en la pieza, en los dos
+  sentidos. Verificado con una cadena real de Porcelanosa en local, después
+  revertida: los enlaces reales los crea el equipo.
 - [ ] Sustituir `packages/editorial/data/curation/editorial-curation.json` por
   PostgreSQL sin cambiar la firma de lectura `getEffectiveEditorialDataset()`
   (previsto desde D-012).
@@ -465,11 +471,20 @@ reinterpretan: se cumplen aquí con el mismo alcance con que se escribieron.
 
 Objetivo: unificar señal, explicación, prioridad, decisión, ejecución y aprendizaje.
 
-- [ ] Bandeja única de señales, riesgos, oportunidades, insights y anomalías de calidad.
+- [~] Bandeja única de señales, riesgos, oportunidades, insights y anomalías de calidad.
+      Bandeja de **acciones** en seguimiento (D-090) y repaso por reglas de todos los apartados
+      (D-088); faltan señales, riesgos e insights como entidades propias y su detección (siguiente
+      criterio).
 - [ ] Detección con materialidad, volumen y persistencia; excepción crítica explícita.
 - [ ] Insight con evidencia, segmento, causa/hipótesis, confianza y justificación.
 - [ ] Recomendación con impacto x confianza / esfuerzo, urgencia y dependencias.
-- [ ] Acción con responsable, fecha, estado, SLA, criterio de éxito y resultado.
+- [x] Acción con responsable, fecha, estado, SLA, criterio de éxito y resultado.
+      **Hecho el 2026-10-05 (D-090)** para las acciones por reglas de las marcas del piloto: clave
+      estable por regla, estado, responsable, plazo del equipo o SLA por prioridad (7/30/60/90 días),
+      criterio de éxito fijado al empezar, punto de partida y resultado medidos con GA4, Search
+      Console y crawl reales en la misma ventana (provisional mientras no hay datos posteriores
+      suficientes) e historial con autor. Se opera desde el chat (`pnpm action:track`,
+      `pnpm action:measure`) y se guarda en fichero hasta Postgres (P3.1).
 - [ ] Selección humana de máximo cinco conclusiones ejecutivas.
 - [ ] Árboles de contribución y explicación del movimiento de cada KPI agregado.
 - [ ] Fichas URL, query, contenido e incidencia con relaciones e histórico.
@@ -480,6 +495,8 @@ Objetivo: unificar señal, explicación, prioridad, decisión, ejecución y apre
 - Todo insight publicado es reproducible desde sus evidencias.
 - El gerente puede identificar estado, cambio, explicación y próxima acción en un minuto.
 - Una acción cerrada conserva baseline, resultado y aprendizaje reutilizable.
+  **Cumplido para las acciones en seguimiento** (D-090): el cierre conserva punto de partida,
+  último resultado, aprendizaje e historial; falta reutilizar el aprendizaje en recomendaciones.
 
 ## P5 · Inteligencia técnica, monitorización y prevención
 

@@ -27,6 +27,8 @@
     "crawl:publish": "pnpm --filter @seo/site-audit publish:audit",
     "report:generate": "pnpm --filter @seo/reports generate",
     "report:curate": "pnpm --filter @seo/reports curate",
+    "action:track": "pnpm --filter @seo/reports track-action",
+    "action:measure": "pnpm --filter @seo/reports measure-actions",
     "projects:import": "pnpm --filter @seo/contracts import:v1-projects",
     "ingest:dry-run": "pnpm --filter @seo/sync ingest:dry-run",
     "screenshots": "node scripts/capture-screenshots.mjs",

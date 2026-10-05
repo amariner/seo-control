@@ -9,6 +9,7 @@ export * from "./curate";
 export * from "./parse";
 export * from "./project-report";
 export * from "./project-actions";
+export * from "./action-tracking";
 export * from "./archive";
 export * from "./export";
 

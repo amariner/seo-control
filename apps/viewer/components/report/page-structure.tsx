@@ -1,6 +1,6 @@
 import { ArrowUpRight, Info } from "lucide-react";
 import { Notice } from "@seo/ui";
-import type { PageStructure as Structure, StructureGroup, StructureNode } from "@/lib/page-structure";
+import type { PageStructure as Structure, StructureGroup, StructureNode } from "@seo/reports/page-structure";
 
 /**
  * «Estructura del sitio» de la pestaña Páginas (D-087): un grupo por sitemap

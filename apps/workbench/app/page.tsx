@@ -2,6 +2,7 @@ import Link from "next/link";
 import { ArrowUpRight, Bot, FileCheck2, ScanSearch, ShieldCheck, UploadCloud } from "lucide-react";
 import { BRANDS } from "@seo/contracts";
 import { listRuns } from "@seo/site-audit/runs";
+import { readTracking } from "@seo/reports/tracking-store";
 import { WorkbenchFrame } from "@/components/workbench-frame";
 import { listAdditionalReports } from "@/lib/additional-reports";
 import { reportCatalog } from "@/lib/reports";
@@ -36,6 +37,7 @@ export default async function Page() {
   const runs = listRuns();
   const additional = listAdditionalReports();
   const sync = publishStatus();
+  const tracked = Object.values(readTracking().actions);
   const frozen = catalog.rows.filter((row) => row.published?.snapshot);
   const pendingReports = catalog.pending;
   const lastRun = runs[0];
@@ -62,6 +64,14 @@ export default async function Page() {
         href: "/informes",
         tone: "neutral" as const,
       })),
+    ...tracked.map((record) => ({
+      id: `action-${record.brand}-${record.key}`,
+      at: record.history.at(-1)!.at,
+      title: `Acción · ${brandName(record.brand)} · ${record.title}`,
+      detail: `${record.history.at(-1)!.change} · ${record.history.at(-1)!.by}`,
+      href: "/acciones",
+      tone: record.status === "completada" ? ("good" as const) : record.status === "bloqueada" ? ("warn" as const) : ("neutral" as const),
+    })),
     ...runs.slice(0, 5).map((run) => ({
       id: `run-${run.runId}`,
       at: run.startedAt,

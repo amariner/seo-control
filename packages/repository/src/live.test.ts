@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
-import { BRAND_SLUGS, aggregatePortfolio } from "@seo/contracts";
-import { LIVE_BRANDS, ga4MarketFilter, gscMarketFilters, reportMarketsOf } from "./live/brands";
+import { BRAND_SLUGS, aggregatePortfolio, buildPeriodWindow } from "@seo/contracts";
+import { LIVE_BRANDS, PORCELANOSA_BRAND, ga4MarketFilter, gscMarketFilters, reportMarketsOf } from "./live/brands";
 import { gscFloor } from "./live/figures";
 import { ctrCurve, normalizePath, pageTypeOf, titleOf } from "./live/opportunities";
 import { keywordFilters } from "./live/report";
@@ -158,5 +158,51 @@ describe("mercados del informe (D-039)", () => {
     const filter = new RegExp(gscMarketFilters(xtone, pt.scope)[0]!.expression);
     expect(filter.test("https://www.xtone-surface.com/pt/produtos/")).toBe(true);
     expect(filter.test("https://www.xtone-surface.com/productos/")).toBe(false);
+  });
+});
+
+describe("anotaciones sin cifras (cronología)", () => {
+  it("da las anotaciones configuradas del periodo sin llamar a Google", async () => {
+    const repository = createLiveRepository({ GOOGLE_CLIENT_ID: "id", GOOGLE_CLIENT_SECRET: "secret", GOOGLE_REFRESH_TOKEN: "token" });
+    const original = globalThis.fetch;
+    let calls = 0;
+    globalThis.fetch = (async () => {
+      calls += 1;
+      throw new Error("no debe llamar a la red");
+    }) as typeof fetch;
+    try {
+      const annotations = await repository.annotations!("24m");
+      expect(calls).toBe(0);
+      // Las configuradas de las marcas del piloto dentro de la ventana de 24 meses, como en la portada.
+      const window = buildPeriodWindow("24m", liveCutoff());
+      const expected = LIVE_BRANDS.flatMap((brand) => brand.annotations ?? []).filter((item) => item.date >= window.start && item.date <= window.end);
+      expect(annotations.map((item) => item.id).sort()).toEqual(expected.map((item) => item.id).sort());
+      expect(expected.length).toBeGreaterThan(0);
+    } finally {
+      globalThis.fetch = original;
+    }
+  });
+});
+
+describe("erratas de marca (D-093)", () => {
+  const brand = new RegExp(`(${porcelanosa.brandRegex})`, "i");
+
+  it("cuenta como marca las erratas de «porcelanosa» que se ven en Search Console", () => {
+    for (const query of ["porcelanosa tiles", "porcelenosa", "porcelainosa", "porcellanosa", "porcelonosa", "porselanosa", "porcelanoza", "parcelanosa", "porcelinosa", "porcelanossa", "porcelanisa", "porcelnosa", "porcelanos", "porcelansoa", "porcelonsa", "porselenosa"])
+      expect(brand.test(query), query).toBe(true);
+  });
+
+  it("no convierte en marca los genéricos del sector", () => {
+    for (const query of ["porcelanato", "porcelánico", "porcelanicos", "gres porcelánico", "porcelain tiles", "porcelana", "porcelanas", "porcellana", "porcelona", "porcelina", "porcelano"])
+      expect(brand.test(query), query).toBe(false);
+  });
+
+  it("es RE2 sencillo (alternancia de literales) y lo comparten las marcas que usan el paraguas", () => {
+    expect(PORCELANOSA_BRAND).toMatch(/^[a-z.|]+$/);
+    expect(PORCELANOSA_BRAND.length).toBeLessThan(1000);
+    expect(noken.brandRegex).toContain(PORCELANOSA_BRAND);
+    expect(xtone.brandRegex).toContain(PORCELANOSA_BRAND);
+    // Una marca corta no se amplía: «token» está a una letra de «noken».
+    expect(new RegExp(`(${noken.brandRegex})`, "i").test("token")).toBe(false);
   });
 });

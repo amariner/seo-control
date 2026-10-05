@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import type { BrandReport, SiteAuditSummary } from "@seo/contracts";
-import { projectActionReview, reportPlanActions } from "./project-actions";
+import { actionMetric, meetsTarget, projectActionReview, reportPlanActions } from "./project-actions";
 
 const kpi = (key: BrandReport["kpis"][number]["key"], value: number, previous: number, source: "ga4" | "gsc" = "gsc") =>
   ({ key, label: key, help: "", unit: "number", value, previous, previousYear: null, source }) as unknown as BrandReport["kpis"][number];
@@ -81,5 +81,44 @@ describe("acciones del proyecto (D-088)", () => {
       ["Revisar Portugal: carpeta de idioma, hreflang y redirecciones", true],
       ["Vigilar Italia", false],
     ]);
+  });
+});
+
+describe("clave y cifra de cada acción (D-090)", () => {
+  // Coherente con el próximo paso «Revisar la medición…» del fixture: dos señales anómalas.
+  const ok = { ...report, sources: [{ source: "gsc", ok: true, note: "" }, { source: "ga4", ok: true, note: "" }], dataQuality: [{ tone: "warn", text: "a" }, { tone: "warn", text: "b" }] } as unknown as BrandReport;
+  const input = { report: { ...ok, markets: [market("España", 500, 600), market("Portugal", 30, 100), market("Italia", 60, 100)] } as BrandReport, pieces: [], audit, today: "2026-09-30", sitemapGap: { pages: 40, clicks: 300, share: 30, folders: ["pt"] } };
+  const actions = projectActionReview(input).flatMap((section) => section.actions);
+
+  it("cada acción tiene una clave única con la forma <apartado>:<regla>", () => {
+    const keys = actions.map((action) => action.key);
+    expect(new Set(keys).size).toBe(keys.length);
+    for (const key of keys) expect(key).toMatch(/^[a-z]+(:[a-z0-9_-]+)+$/);
+    expect(keys).toEqual(expect.arrayContaining(["resumen:medicion-ga4", "busquedas:sin-marca", "paginas:fuera-sitemaps", "mercados:caidas", "mercados:vigilar", "estado:urgentes", "estado:repetir-crawl", "estado:description_missing"]));
+  });
+
+  it("una regla que salta nunca cumple su propio criterio de éxito", () => {
+    for (const action of actions) {
+      if (!action.metric?.target || action.metric.value === null) continue;
+      expect(meetsTarget(action.metric.value, action.metric.target), action.key).toBe(false);
+    }
+  });
+
+  it("la cifra se calcula aunque la regla no salte, para medir el resultado", () => {
+    const fixed = { ...input, sitemapGap: { pages: 3, clicks: 10, share: 1, folders: [] } };
+    expect(projectActionReview(fixed).flatMap((section) => section.actions).some((action) => action.key === "paginas:fuera-sitemaps")).toBe(false);
+    const metric = actionMetric("paginas:fuera-sitemaps", fixed)!;
+    expect(metric).toMatchObject({ value: 3, better: "lower", target: { op: "lt", value: 10 }, evidence: "crawl" });
+    expect(meetsTarget(metric.value!, metric.target!)).toBe(true);
+    // Una incidencia que ya no aparece en el crawl cuenta como cero URL.
+    expect(actionMetric("estado:http_5xx", fixed)).toMatchObject({ value: 0, target: { op: "eq", value: 0 } });
+    expect(actionMetric("estado:http_5xx", { ...fixed, audit: null })!.value).toBeNull();
+  });
+
+  it("el próximo paso de una oportunidad lleva su consulta en la clave", () => {
+    const withStep = { ...input, report: { ...input.report, nextSteps: [{ title: "Atacar «Encimera de cocina» y «porcelánico»", why: "", area: "contenido" }] } as BrandReport };
+    const step = reportPlanActions(withStep)[0]!;
+    expect(step.key).toBe("busquedas:oportunidad:encimera-de-cocina");
+    expect(step.metric).toMatchObject({ target: null, criterion: null, better: "higher" });
   });
 });

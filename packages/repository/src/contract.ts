@@ -1,4 +1,4 @@
-import type { BrandEditorialActivity, BrandReport, BrandSlug, DashboardFilters, DashboardPayload, MarketCode, PortfolioFilters, PortfolioPayload } from "@seo/contracts";
+import type { BrandEditorialActivity, BrandReport, BrandSlug, DashboardFilters, DashboardPayload, MarketCode, PeriodKey, PortfolioFilters, PortfolioPayload } from "@seo/contracts";
 
 /**
  * Adapter de repositorio (P3.1).
@@ -67,6 +67,14 @@ export type MetricsRepository = {
   brandReport?(input: BrandReportRequest): Promise<BrandReport>;
   /** Corte del dato del origen: último día cerrado. */
   cutoff?(): string;
+  /**
+   * Anotaciones del periodo (releases, migraciones, incidencias…) sin calcular
+   * cifras: las mismas que `dashboard()` del grupo, para quien solo necesita
+   * situarlas en el tiempo (la cronología). Opcional: el sintético las da con
+   * su portada, que no cuesta; el origen real las tiene en su configuración y
+   * no debe pedir 24 meses a Google para leerlas.
+   */
+  annotations?(period: PeriodKey): Promise<DashboardPayload["annotations"]>;
 };
 
 export type BrandReportRequest = {

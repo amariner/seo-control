@@ -14,6 +14,7 @@ import {
   type DashboardPayload,
   type MarketCode,
   type MetricKey,
+  type PeriodKey,
   type PeriodWindow,
   type PortfolioFilters,
 } from "@seo/contracts";
@@ -129,6 +130,10 @@ export function createLiveRepository(env: Env = process.env): MetricsRepository 
     describe: () => LIVE_DESCRIPTION,
     cutoff: () => liveCutoff(),
 
+    async annotations(period: PeriodKey) {
+      return periodAnnotations(brands, buildPeriodWindow(period, liveCutoff()));
+    },
+
     async brandReport(request: BrandReportRequest) {
       const brand = brands.find((item) => item.slug === request.brand);
       if (!brand) throw new RepositoryUnavailableError("live", `La marca «${request.brand}» no tiene lectura directa configurada.`, "Añádela a LIVE_BRANDS con su propiedad GA4 y su sitio de Search Console.");
@@ -169,6 +174,14 @@ export function createLiveRepository(env: Env = process.env): MetricsRepository 
       });
     },
   };
+}
+
+/** Anotaciones configuradas de las marcas dentro de la ventana: las de la portada y las de la cronología. */
+function periodAnnotations(brands: ReadonlyArray<Pick<ResolvedLiveBrand, "annotations">>, window: Pick<PeriodWindow, "start" | "end">): DashboardPayload["annotations"] {
+  return brands
+    .flatMap((brand) => brand.annotations ?? [])
+    .filter((annotation) => annotation.date >= window.start && annotation.date <= window.end)
+    .map((annotation) => ({ ...annotation }));
 }
 
 // ---------------------------------------------------------------------------
@@ -278,10 +291,7 @@ function buildDashboard(filters: DashboardFilters, window: PeriodWindow, cutoff:
     actions: [],
     sources: sourceStatus(loaded, cutoff, generatedAt),
     series: buildSeries(loaded, window),
-    annotations: loaded
-      .flatMap((item) => item.brand.annotations ?? [])
-      .filter((annotation) => annotation.date >= window.start && annotation.date <= window.end)
-      .map((annotation) => ({ ...annotation })),
+    annotations: periodAnnotations(loaded.map((item) => item.brand), window),
     technicalIssues: [],
     opportunities: loaded.flatMap((item) => item.opportunities?.pages ?? []).sort((a, b) => b.opportunityScore - a.opportunityScore),
     queryOpportunities: loaded.flatMap((item) => item.opportunities?.queries ?? []).sort((a, b) => b.potentialClicks - a.potentialClicks),

@@ -39,6 +39,10 @@ h3 { font: 600 var(--ds-text-h3); }
 .badge { display: inline-flex; align-items: center; padding: 3px 8px; border-radius: 999px; background: var(--ds-surface-subtle); color: var(--ds-text); font: 600 var(--ds-text-meta); white-space: nowrap; }
 .badge-good { background: var(--ds-positive-soft); color: var(--ds-positive); }
 .badge-warn { background: var(--ds-warning-soft); color: var(--ds-warning); }
+.badge-info { background: var(--ds-accent-soft); color: var(--ds-accent-hover); }
+.badge-bad { background: var(--ds-danger-soft); color: var(--ds-danger); }
+/* Bandeja de acciones (D-090): plazo vencido con color y peso, nunca solo color. */
+.ac-overdue { color: var(--ds-danger); font-weight: 600; }
 .job-list { display: grid; gap: 8px; }
 .job { display: grid; grid-template-columns: 36px 1fr auto; gap: 10px; align-items: center; padding: 12px; background: var(--ds-surface); border: 1px solid var(--ds-line); border-radius: var(--ds-radius-sm); }
 .job-icon { width: 32px; height: 32px; display: grid; place-items: center; border-radius: var(--ds-radius-sm); background: #fff; color: var(--ds-accent); }

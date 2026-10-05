@@ -13,6 +13,8 @@ const SHORT_PERIOD: Record<string, string> = {
   "12m": "12 meses",
   "24m": "24 meses",
 };
+/** En móvil los cinco botones con «días/meses» no caben en 343 px: se abrevian (el nombre accesible es el completo). */
+const TINY_PERIOD: Record<string, string> = { "28d": "28 d", "90d": "90 d", "180d": "180 d", "12m": "12 m", "24m": "24 m" };
 
 /**
  * Evolución sobre ECharts (D-041) con el patrón de sección de la ficha (D-049). El selector usa
@@ -64,7 +66,7 @@ export function ChartAreaInteractive({
           variant="outline"
           aria-label="Periodo del gráfico"
           disabled={pending}
-          className="*:data-[slot=toggle-group-item]:h-9 *:data-[slot=toggle-group-item]:px-3"
+          className="max-w-full *:data-[slot=toggle-group-item]:h-9 *:data-[slot=toggle-group-item]:px-3 max-sm:*:data-[slot=toggle-group-item]:px-2"
         >
           {PERIODS.map((item) => (
             <ToggleGroupItem
@@ -73,7 +75,8 @@ export function ChartAreaInteractive({
               aria-label={item.label}
               className="data-[state=on]:bg-accent-band data-[state=on]:text-primary"
             >
-              {SHORT_PERIOD[item.key] ?? item.label}
+              <span className="max-sm:hidden">{SHORT_PERIOD[item.key] ?? item.label}</span>
+              <span className="sm:hidden">{TINY_PERIOD[item.key] ?? item.label}</span>
             </ToggleGroupItem>
           ))}
         </ToggleGroup>
