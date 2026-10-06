@@ -4,7 +4,7 @@
 
 ## Reanudar aquí · plan de hitos (D-078)
 
-- **2026-10-06 · D-095, en local sin commit (verificado):** pestaña «Mantenimiento» del plan editorial
+- **2026-10-06 · D-095, en main (aa7070e) y desplegado (dpl_Fnpg7ZmHU9rZappRZteXEZccCgo6, entran D-086…D-095); main sin subir a GitHub:** pestaña «Mantenimiento» del plan editorial
   (`/editorial/mantenimiento`). Muestra publicados y actualizados (ocho marcas, con medición
   28/90/180 días), posts que potenciar (piloto, Search Console de la sección) y candidatos a retirar
   (sitemaps del crawl publicado; hoy solo XTONE). Hay dos acciones nuevas en «Acciones»:
@@ -15,9 +15,9 @@
     `components/editorial/maintenance.tsx`, y CSV en `/api/v1/editorial/export/mantenimiento-*.csv`.
   - El código lo dejó una sesión del 5 de octubre sin registrar. Esta sesión lo ha verificado:
     591 pruebas, build del visor, axe limpio en 1440 y 375 px y datos reales en las tres marcas.
-  - **Punto exacto de reanudación:** commit de D-095 cuando el usuario lo pida y
-    `vercel deploy --prod` cuando lo confirme (entran D-086…D-095). Después, crawls publicados de
-    Porcelanosa y Noken para su lista de retirada.
+  - **Punto exacto de reanudación:** `git push origin main` (lo hace el usuario). Después, comprobar en
+    producción con sesión `/editorial/mantenimiento` y publicar crawls de Porcelanosa y Noken para
+    su lista de retirada.
   - `.claude/agents/` es una plantilla del usuario ajena a D-095: no entra en el commit salvo que lo pida.
 
 - **2026-10-05 · D-093 y D-094, en main (c4e0be4) y en GitHub, sin desplegar:**

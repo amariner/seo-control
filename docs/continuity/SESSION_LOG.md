@@ -1279,3 +1279,6 @@
   resto sin cambios), build de producción del visor y axe limpio en 3 rutas a 1440 y 375 px. Capturas
   sin desbordamiento horizontal.
 - `.claude/agents/` (plantilla del usuario, 6 oct) queda fuera de D-095. Sin commit ni despliegue.
+- A petición del usuario: commit aa7070e (D-095) y `vercel deploy --prod` → dpl_Fnpg7ZmHU9rZappRZteXEZccCgo6
+  (Ready, alias seo-dashboard-viewer.vercel.app; entran D-086…D-095). curl sin sesión → 429 del firewall
+  (D-048), como siempre. El `git push` no se ha hecho: lo bloqueó la política de permisos de la sesión.
