@@ -1,5 +1,6 @@
 import type { BrandReport, SiteAuditSummary } from "@seo/contracts";
 import type { EditorialPlanRow } from "@seo/editorial-ui";
+import type { MaintenanceDigest } from "./content-maintenance";
 import { change, listOf, nf, pathOf, pct, signed } from "./format";
 import { analysePages } from "./page-analysis";
 
@@ -174,7 +175,7 @@ const STEP_AREA = {
 } as const satisfies Record<BrandReport["nextSteps"][number]["area"], { label: string; priority: Priority; tab: ActionTab }>;
 const STEP_SOURCE = { tecnico: "Search Console y comprobación de redirecciones", medicion: "GA4", contenido: "Search Console", editorial: "Plan editorial y Search Console" } as const;
 
-const crawlDate = (audit: SiteAuditSummary) =>
+const crawlDate = (audit: Pick<SiteAuditSummary, "completedAt">) =>
   new Date(audit.completedAt).toLocaleDateString("es-ES", { day: "numeric", month: "long", year: "numeric", timeZone: "Europe/Madrid" });
 const urls = (n: number) => `${nf(n)} ${n === 1 ? "URL" : "URLs"}`;
 
@@ -326,7 +327,11 @@ export function reportPlanActions(input: ActionInput): ProjectAction[] {
 /** Páginas con clics fuera de los sitemaps, calculadas en el visor (D-087). */
 export type SitemapGap = { pages: number; clicks: number; share: number; folders: string[] };
 
-export type ReviewInput = ActionInput & { sitemapGap?: SitemapGap | null };
+export type ReviewInput = ActionInput & {
+  sitemapGap?: SitemapGap | null;
+  /** Posts que potenciar y retirar de la sección editorial (D-095), con el plan ya descontado; `null` sin dato. */
+  maintenance?: MaintenanceDigest | null;
+};
 
 export type ReviewSection = {
   tab: ActionTab;
@@ -348,12 +353,18 @@ export const REVIEW_THRESHOLDS = {
   lowCtrKeywords: 3,
   /** Días desde el último crawl publicado para proponer repetirlo. */
   staleCrawlDays: 45,
+  /** Posts del blog que potenciar y candidatos a retirar para proponer cada acción (D-095). */
+  boostPosts: 3,
+  retirePosts: 10,
 } as const;
+
+/** Motivos de potenciar, en plural para el motivo de la acción. */
+const BOOST_WORDS = { pierde: "pierden clics", ctr: "con CTR bajo en el top 3", primera: "en primera página", segunda: "en segunda página" } as const;
 
 const daysBetween = (from: string, to: string) => Math.round((Date.parse(to) - Date.parse(from)) / 86_400_000);
 
 export function projectActionReview(input: ReviewInput): ReviewSection[] {
-  const { report, pieces, audit, rootLabel, today, sitemapGap } = input;
+  const { report, pieces, audit, rootLabel, today, sitemapGap, maintenance } = input;
   const T = REVIEW_THRESHOLDS;
   const prev = report.window.previousLabel;
   const plan = reportPlanActions(input);
@@ -477,6 +488,46 @@ export function projectActionReview(input: ReviewInput): ReviewSection[] {
     const { published, next, doing, pending } = editorialState(report, pieces, today);
     findings.editorial = `${nf(published.length)} ${published.length === 1 ? "pieza publicada" : "piezas publicadas"} en el periodo, ${nf(doing)} en marcha, ${nf(pending)} por empezar y ${nf(next.length)} con fecha próxima.`;
   } else findings.editorial = null;
+
+  // Mantenimiento de los posts (D-095): potenciar lo que tiene recorrido y decidir sobre lo que no tiene tráfico.
+  if (maintenance) {
+    const { boost, retire, label } = maintenance;
+    if (boost.length >= T.boostPosts) {
+      const top = boost[0]!;
+      const reasons = (["pierde", "ctr", "primera", "segunda"] as const)
+        .map((reason) => [reason, boost.filter((item) => item.reason === reason).length] as const)
+        .filter(([, count]) => count)
+        .map(([reason, count]) => `${nf(count)} ${BOOST_WORDS[reason]}`);
+      extra.push({
+        key: "editorial:posts-potenciar",
+        priority: "media",
+        title: `Potenciar los ${nf(boost.length)} posts del ${label} con más recorrido`,
+        why: `Suman ${nf(boost.reduce((sum, item) => sum + item.atStake, 0))} clics en juego en 90 días (${listOf(reasons)}); primero ${pathOf(top.page)}${top.reason === "pierde" ? ` (${nf(top.previousClicks)} → ${nf(top.clicks)} clics)` : top.topQuery ? ` («${top.topQuery.query}», posición ${nf(top.topQuery.position, 1)})` : ""}.`,
+        area: "Contenido",
+        tab: "editorial",
+        source: "Search Console",
+        inReport: false,
+      });
+    }
+    if (retire.available && retire.candidates.length >= T.retirePosts) {
+      const unseen = retire.candidates.filter((item) => item.signal === "sin-impresiones").length;
+      extra.push({
+        key: "editorial:posts-retirar",
+        priority: "baja",
+        title: `Decidir qué hacer con ${nf(retire.candidates.length)} posts del ${label} sin clics en 12 meses`,
+        why: `${nf(retire.candidates.length)} de los ${nf(retire.declared)} posts que declaran los sitemaps no tienen clics en 12 meses${unseen ? ` (${nf(unseen)} sin ninguna impresión)` : ""}: redirigir, fusionar, actualizar o retirar. Antes de borrar, comprobar sus enlaces externos.`,
+        area: "Contenido",
+        tab: "editorial",
+        source: `Sitemaps del crawl del ${crawlDate({ completedAt: retire.crawl! })} y Search Console`,
+        inReport: false,
+      });
+    }
+    const parts = [
+      `${label}: ${nf(boost.length)} ${boost.length === 1 ? "post que potenciar" : "posts que potenciar"}`,
+      retire.available ? `${nf(retire.candidates.length)} ${retire.candidates.length === 1 ? "candidato" : "candidatos"} a retirar` : "candidatos a retirar sin crawl publicado",
+    ];
+    findings.editorial = `${findings.editorial ? `${findings.editorial} ` : ""}${parts.join(" y ")}.`;
+  }
 
   // Estado del sitio: sin crawl, crawl antiguo y on-page de severidad media.
   if (!audit)
@@ -702,6 +753,24 @@ function metricOf(key: string, ctx: MetricContext): ActionMetric | null {
         { op: "gte", value: 1 },
         "Al menos una pieza con fecha de publicación próxima",
         "editorial",
+      );
+    case "editorial:posts-potenciar":
+      return metric(
+        `Clics de los posts del ${ctx.maintenance?.label ?? "blog"} en 90 días`,
+        ctx.maintenance?.totals.clicks ?? null,
+        "higher",
+        null,
+        null,
+        "busqueda",
+      );
+    case "editorial:posts-retirar":
+      return metric(
+        `Posts del ${ctx.maintenance?.label ?? "blog"} sin clics en 12 meses`,
+        ctx.maintenance?.retire.available ? ctx.maintenance.retire.candidates.length : null,
+        "lower",
+        null,
+        null,
+        "crawl",
       );
     case "editorial:compiten-top3":
       return metric(

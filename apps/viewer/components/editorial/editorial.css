@@ -320,3 +320,47 @@
 
 /* Cabecera simple como la ficha de marca y sin segundo separador (D-062). */
 .editorial-page .editorial-simple-header { padding-bottom: 22px; }
+
+/* Reglas propias de la cabecera simple: las de la ficha de marca viven en
+   brand-report.css, que las páginas editoriales no cargan; sin ellas, al abrir
+   la página directamente el título y su apunte salían apilados (D-095). */
+.editorial-simple-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+}
+.editorial-simple-header .brand-title {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 20px;
+}
+.editorial-simple-header .brand-title h1 {
+  margin: 0;
+  font: 500 clamp(34px, 4vw, 44px)/1.15 var(--ds-font-sans);
+  letter-spacing: -0.045em;
+}
+.editorial-simple-header .brand-title > span {
+  padding-left: 20px;
+  border-left: 1px solid var(--ds-line-strong);
+  color: var(--ds-muted);
+  font-size: 15px;
+}
+.editorial-simple-header .brand-domain {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 10px 0 0;
+  color: var(--ds-muted);
+  font-size: 13px;
+}
+@media (max-width: 760px) {
+  .editorial-simple-header .brand-title {
+    gap: 14px;
+  }
+  .editorial-simple-header .brand-title > span {
+    padding-left: 14px;
+    font-size: 14px;
+  }
+}

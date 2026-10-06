@@ -1,6 +1,6 @@
 # SEO Dashboard V2 — roadmap vivo de desarrollo
 
-Última actualización: 5 de octubre de 2026 (H10 hecho: seguimiento de acciones, D-090).
+Última actualización: 6 de octubre de 2026 («Mantenimiento» del plan editorial, D-095; H10 hecho con D-090).
 
 ## Norte de producto
 
@@ -535,6 +535,8 @@ Objetivo: decidir qué crear, actualizar, consolidar o retirar y medir su result
 - [ ] Competidores por proyecto/mercado, SOV, gaps, solapamiento y features SERP.
 - [ ] Resultado de cada publicación/actualización a 28, 90 y 180 días en el calendario.
 - [ ] Paid Search solo como contexto de sinergia, solapamiento y ahorro potencial.
+
+Adelanto (D-095, sin cerrar criterios): «Mantenimiento» del plan editorial ya aplica decay y quick wins por reglas sobre los posts de la sección editorial del piloto, e inventaría los posts desde los sitemaps del crawl publicado para proponer retiradas.
 
 #### Criterios de salida P6
 

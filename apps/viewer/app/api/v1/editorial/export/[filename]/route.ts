@@ -2,6 +2,7 @@ import { piecesToCsv, slotsToCsv } from "@seo/editorial";
 import { auth } from "@/auth";
 import { describePlanFilters, filterPlanRows, generalPlanRows, planExportFilters } from "@seo/editorial-ui";
 import { planWorkbook } from "@seo/editorial-ui/plan-xlsx";
+import { maintenanceCsv } from "@/lib/content-maintenance";
 import { brandName, getLiveEditorial, parseBrand, queryPieces, querySlots } from "@/lib/editorial";
 
 /**
@@ -10,6 +11,8 @@ import { brandName, getLiveEditorial, parseBrand, queryPieces, querySlots } from
  * - plan-editorial-propuestas.csv: columnas dinámicas por número real de alternativas.
  * - plan-editorial.xlsx: el plan general (o el de `?brand=`) tal como se ve en la
  *   tabla, con su búsqueda y filtros y los cambios pendientes del visor (D-069).
+ * - mantenimiento-potenciar.csv y mantenimiento-retirar.csv: las listas de
+ *   «Mantenimiento» (D-095) con la búsqueda y los filtros de su tabla.
  * La descarga queda registrada con usuario y fecha en cabeceras privadas.
  */
 export async function GET(request: Request, { params }: { params: Promise<{ filename: string }> }) {
@@ -31,6 +34,8 @@ export async function GET(request: Request, { params }: { params: Promise<{ file
     const { items } = querySlots(input);
     csv = slotsToCsv(items);
     rows = items.length;
+  } else if (filename === "mantenimiento-potenciar.csv" || filename === "mantenimiento-retirar.csv") {
+    ({ csv, rows } = await maintenanceCsv(filename === "mantenimiento-potenciar.csv" ? "potenciar" : "retirar", url.searchParams));
   } else {
     return new Response("Exportación no disponible", { status: 404 });
   }

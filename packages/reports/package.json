@@ -18,7 +18,8 @@
     "./tracking-store": "./src/tracking-store.ts",
     "./tracking-published": "./src/tracking-published.ts",
     "./review-input": "./src/review-input.ts",
-    "./action-journey": "./src/action-journey.ts"
+    "./action-journey": "./src/action-journey.ts",
+    "./content-maintenance": "./src/content-maintenance.ts"
   },
   "scripts": {
     "build": "tsc --noEmit",

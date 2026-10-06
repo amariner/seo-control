@@ -2456,3 +2456,54 @@ No se reescriben decisiones antiguas. Si una cambia, se añade una nueva entrada
       `.plan-measure`).
     - `landmark-one-main`, `region` y `skip-link` en el informe congelado, que no tiene
       `<main id="contenido">` para el enlace de salto del layout.
+
+## D-095 · «Mantenimiento» del plan editorial: qué se publicó, qué potenciar y qué retirar
+
+- Fecha: 2026-10-05 (código) y 2026-10-06 (verificación y registro).
+- Estado: vigente (visor: pestaña nueva del plan editorial y dos reglas nuevas en «Acciones»).
+- Contexto: el plan editorial decía qué crear, pero no qué hacer con lo ya publicado. La muestra de
+  5.000 páginas del informe de marca no sirve para los posts: en Porcelanosa y Noken se llena antes de
+  llegar a los de poco tráfico, y un post que falta en ella no es un post sin tráfico. Search Console
+  solo ve lo que Google muestra, así que un post sin impresiones solo aparece en el inventario de los
+  sitemaps.
+- Decisión:
+  - **Sección editorial por marca** (`packages/contracts/src/content-sections.ts`): Porcelanosa →
+    Trendbook (`/trendbook/`), Noken y XTONE → Blog (`/blog/`), en cualquier nivel de la ruta.
+    `postKey` cruza Search Console, sitemaps y plan (host + ruta sin barra ni parámetros), e
+    `isSectionPost` descarta portadas, listados y taxonomías.
+  - **Lectura** (`MetricsRepository.contentSection?`, solo el origen real;
+    `packages/repository/src/live/content-section.ts`): cuatro consultas de Search Console filtradas
+    por la carpeta. Pide 12 meses por página, 90 días y los 90 anteriores por página, y 90 días por
+    búsqueda sin marca y página con la curva de CTR del sitio (D-036). Una ventana que falla deja
+    nulos, nunca ceros.
+  - **Reglas** (`packages/reports/src/content-maintenance.ts`, `MAINTENANCE_THRESHOLDS`, sin IA):
+    - *Publicados y actualizados*: piezas publicadas del plan de las ocho marcas con su medición
+      28/90/180 días (D-079); reedición, migración y refresco cuentan como actualización.
+    - *Potenciar* (piloto): «Pierde clics» (≥ 30 clics antes y caída ≥ 30 %), o ≥ 20 clics en juego
+      con la búsqueda principal hasta la posición 20 («CTR bajo en el top 3», «Primera página»,
+      «Segunda página»). Ordena por clics en juego, que no son una previsión.
+    - *Retirar*: posts que declaran los sitemaps del crawl publicado sin clics y con < 100 impresiones
+      en 12 meses, o sin ninguna impresión. No se juzgan los que solo tienen 90 días de historia ni
+      los publicados en el plan hace menos de 12 meses (`withoutRecentPlan`). Sin crawl no hay lista:
+      solo una cifra orientativa de Search Console y la frase del chat para lanzarlo.
+  - **Visor**: pestaña «Mantenimiento» en `/editorial/mantenimiento` con filtro de marca, tres tablas
+    con búsqueda, filtros y CSV (`mantenimiento-potenciar.csv`, `mantenimiento-retirar.csv`, mismas
+    filas que en pantalla) y «Cómo actuar», que remite al CMS y al chat (`pnpm action:track`,
+    `pnpm crawl`). Solo muestra (D-082). El resumen se guarda en caché (la lectura del Trendbook pasa
+    de 2 MB) y el plan se descuenta fuera de ella.
+  - **«Acciones» (D-088/D-090)**: `editorial:posts-potenciar` (media, desde 3 posts; cifra: clics de
+    los posts en 90 días, más es mejor) y `editorial:posts-retirar` (baja, desde 10 candidatos y solo
+    con crawl; cifra: candidatos, menos es mejor). `pnpm action:track` las ve igual, y si la sección
+    falla el repaso sigue sin ellas.
+  - La cabecera simple del plan editorial lleva sus propias reglas en `editorial.css`: al abrir la
+    página directamente, título y apunte salían apilados.
+- Datos reales (corte 3 oct 2026): Porcelanosa 323 posts que potenciar, Noken 100 de 1.318, XTONE 4
+  y 17 candidatos a retirar de 414 en los sitemaps del crawl del 30 sep. Porcelanosa y Noken no tienen
+  crawl publicado, así que no hay lista de retirada.
+- Verificación: contracts 208 (+4), repository 66 (+3), reports 62 (+7) y el resto sin cambios
+  (591 pruebas); typecheck, lint y build de producción del visor. axe sin incumplimientos ni avisos en
+  `mantenimiento`, `mantenimiento-xtone` y `project-acciones` (1440 y 375 px). Capturas sin
+  desbordamiento horizontal a 375 px.
+- Pendiente: crawls publicados de Porcelanosa y Noken para su lista de retirada. Enlaces externos de
+  cada post antes de retirarlo (con SEMrush, H9). Avanza P6 (decay, quick wins, inventario por
+  sitemap) sin cerrar ninguno de sus criterios.

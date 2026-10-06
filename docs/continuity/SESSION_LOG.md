@@ -1262,3 +1262,20 @@
   de seguimiento sigue vacío; curación, medición y publicados no cambian.
 - A petición del usuario: commit c4e0be4 (D-090…D-094), fusionado en main desde la rama
   `feat/seguimiento-acciones` y subido a GitHub. Sin desplegar.
+
+## 2026-10-06 · Verificación y registro de D-095 («Mantenimiento» del plan editorial)
+
+- Al abrir la sesión, el worktree tenía el vertical D-095 completo pero sin registrar en continuidad
+  (código del 5 de octubre, posterior al commit 65f959b). Se ha verificado y documentado sin
+  reescribirlo.
+- Qué hace: pestaña «Mantenimiento» en `/editorial/mantenimiento` con tres tablas: publicados y
+  actualizados, posts que potenciar y candidatos a retirar. Exporta CSV de las dos últimas. Añade las
+  acciones `editorial:posts-potenciar` y `editorial:posts-retirar` en «Acciones» y en
+  `pnpm action:track`.
+- Datos reales (corte 3 oct): Porcelanosa 323 que potenciar; Noken 100; XTONE 4 que potenciar y 17
+  candidatos a retirar de 414 posts en sitemaps. Porcelanosa y Noken sin crawl publicado, así que no
+  tienen lista de retirada. Carga en frío ~11 s.
+- Verificación: typecheck y lint (12 tareas), 591 pruebas (contracts 208, repository 66, reports 62,
+  resto sin cambios), build de producción del visor y axe limpio en 3 rutas a 1440 y 375 px. Capturas
+  sin desbordamiento horizontal.
+- `.claude/agents/` (plantilla del usuario, 6 oct) queda fuera de D-095. Sin commit ni despliegue.

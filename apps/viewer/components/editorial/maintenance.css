@@ -1,0 +1,111 @@
+/* «Mantenimiento» del plan editorial (D-095): secciones como las de la ficha de marca (D-049). */
+.maintenance-section {
+  min-width: 0;
+  margin-top: 38px;
+}
+.maintenance-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+.maintenance-head h2 {
+  margin: 0;
+  font: 550 22px/1.35 var(--ds-font-sans);
+  letter-spacing: -0.025em;
+}
+.maintenance-head p {
+  max-width: 78ch;
+  margin: 6px 0 0;
+  color: var(--ds-muted);
+  font-size: 14px;
+  line-height: 1.6;
+}
+.maintenance-coverage {
+  display: grid;
+  gap: 6px;
+  margin: 0 0 16px;
+  padding: 0;
+  list-style: none;
+  color: var(--ds-muted);
+  font-size: 13px;
+  line-height: 1.55;
+}
+.maintenance-coverage strong {
+  color: var(--ds-text);
+  font-weight: 500;
+}
+.maintenance-cell {
+  display: grid;
+  gap: 2px;
+  min-width: 0;
+}
+.maintenance-cell a {
+  color: var(--ds-accent);
+  overflow-wrap: anywhere;
+}
+.maintenance-cell small,
+.maintenance-muted {
+  color: var(--ds-muted);
+  font-size: 12px;
+}
+.maintenance-number {
+  justify-items: end;
+}
+.maintenance-legend {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px 32px;
+  margin: 0 0 18px;
+}
+.maintenance-legend > div {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  min-width: 0;
+}
+.maintenance-legend dt {
+  flex: none;
+}
+.maintenance-legend dd {
+  margin: 0;
+  color: var(--ds-muted);
+  font-size: 13px;
+  line-height: 1.5;
+}
+.maintenance-steps {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0 32px;
+  margin: 0;
+}
+.maintenance-steps > div {
+  padding: 14px 0;
+  border-top: 1px solid var(--ds-line);
+}
+.maintenance-steps dt {
+  color: var(--ds-text);
+  font-weight: 500;
+}
+.maintenance-steps dd {
+  margin: 4px 0 0;
+  color: var(--ds-muted);
+  font-size: 14px;
+  line-height: 1.6;
+}
+.maintenance-steps code {
+  font-size: 12px;
+  overflow-wrap: anywhere;
+}
+@media (max-width: 760px) {
+  .maintenance-steps,
+  .maintenance-legend {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .maintenance-legend > div {
+    flex-direction: column;
+    gap: 4px;
+  }
+}

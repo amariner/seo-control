@@ -122,3 +122,42 @@ describe("clave y cifra de cada acción (D-090)", () => {
     expect(step.metric).toMatchObject({ target: null, criterion: null, better: "higher" });
   });
 });
+
+describe("posts que potenciar y retirar en «Acciones» (D-095)", () => {
+  const boostItem = (path: string, atStake: number) => ({ page: `https://www.noken.com${path}`, path, reason: "segunda" as const, clicks: 5, previousClicks: 6, impressions: 900, position: 14, topQuery: { query: "baño pequeño", clicks: 5, impressions: 900, position: 14 }, potentialClicks: atStake, atStake });
+  const retireItem = (index: number) => ({ page: `https://www.noken.com/es/blog/viejo-${index}`, path: `/es/blog/viejo-${index}`, sitemap: "post-sitemap.xml", signal: index ? ("sin-clics" as const) : ("sin-impresiones" as const), yearClicks: 0, yearImpressions: index * 5 });
+  const digest = (boost: number, retire: number, available = true) =>
+    ({
+      brand: "noken",
+      label: "Blog",
+      totals: { posts: 900, clicks: 12000, previousClicks: 13000 },
+      boost: Array.from({ length: boost }, (_, index) => boostItem(`/es/blog/post-${index}`, 100 - index)),
+      retire: { available, missing: available ? null : "Sin crawl publicado", crawl: "2026-09-30T08:00:00.000Z", truncated: false, declared: 400, alive: 300, shortHistory: 20, excludedByPlan: 0, candidates: Array.from({ length: retire }, (_, index) => retireItem(index)), searchConsoleOnly: null },
+    }) as unknown as import("./content-maintenance").MaintenanceDigest;
+  const base = { report, pieces: [], audit, today: "2026-09-30" };
+  const editorial = (maintenance: ReturnType<typeof digest> | null) => projectActionReview({ ...base, maintenance }).find((section) => section.tab === "editorial")!;
+
+  it("propone potenciar y decidir sobre los posts sin tráfico, con su motivo y su cifra", () => {
+    const section = editorial(digest(3, 12));
+    const byKey = Object.fromEntries(section.actions.map((action) => [action.key, action]));
+    expect(byKey["editorial:posts-potenciar"]).toMatchObject({ priority: "media", title: "Potenciar los 3 posts del Blog con más recorrido", area: "Contenido", tab: "editorial" });
+    expect(byKey["editorial:posts-potenciar"]!.why).toContain("297 clics en juego en 90 días (3 en segunda página); primero /es/blog/post-0 («baño pequeño», posición 14)");
+    expect(byKey["editorial:posts-potenciar"]!.metric).toMatchObject({ value: 12000, better: "higher", target: null, evidence: "busqueda" });
+    expect(byKey["editorial:posts-retirar"]).toMatchObject({ priority: "baja", title: "Decidir qué hacer con 12 posts del Blog sin clics en 12 meses" });
+    expect(byKey["editorial:posts-retirar"]!.why).toContain("12 de los 400 posts que declaran los sitemaps no tienen clics en 12 meses (1 sin ninguna impresión)");
+    expect(byKey["editorial:posts-retirar"]!.metric).toMatchObject({ value: 12, better: "lower", target: null, evidence: "crawl" });
+    expect(section.finding).toContain("Blog: 3 posts que potenciar y 12 candidatos a retirar.");
+  });
+
+  it("no las propone por debajo del umbral ni sin inventario, pero la cifra sigue medible", () => {
+    const keys = (maintenance: ReturnType<typeof digest>) => editorial(maintenance).actions.map((action) => action.key);
+    expect(keys(digest(2, 9))).not.toEqual(expect.arrayContaining(["editorial:posts-potenciar"]));
+    expect(keys(digest(2, 9))).not.toContain("editorial:posts-retirar");
+    expect(keys(digest(5, 40, false))).not.toContain("editorial:posts-retirar");
+    expect(editorial(digest(5, 40, false)).finding).toContain("candidatos a retirar sin crawl publicado");
+    expect(actionMetric("editorial:posts-retirar", { ...base, maintenance: digest(2, 9) })!.value).toBe(9);
+    expect(actionMetric("editorial:posts-retirar", { ...base, maintenance: digest(2, 9, false) })!.value).toBeNull();
+    expect(actionMetric("editorial:posts-potenciar", { ...base, maintenance: null })!.value).toBeNull();
+    expect(editorial(null).actions.some((action) => action.key.startsWith("editorial:posts-"))).toBe(false);
+  });
+});

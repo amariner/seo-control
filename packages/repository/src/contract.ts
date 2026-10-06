@@ -1,4 +1,4 @@
-import type { BrandEditorialActivity, BrandReport, BrandSlug, DashboardFilters, DashboardPayload, MarketCode, PeriodKey, PortfolioFilters, PortfolioPayload } from "@seo/contracts";
+import type { BrandEditorialActivity, BrandReport, BrandSlug, ContentSectionReport, DashboardFilters, DashboardPayload, MarketCode, PeriodKey, PortfolioFilters, PortfolioPayload } from "@seo/contracts";
 
 /**
  * Adapter de repositorio (P3.1).
@@ -75,6 +75,13 @@ export type MetricsRepository = {
    * no debe pedir 24 meses a Google para leerlas.
    */
   annotations?(period: PeriodKey): Promise<DashboardPayload["annotations"]>;
+  /**
+   * Posts de la sección editorial de una marca (`/blog/`, `/trendbook/`) con sus
+   * cifras de Search Console: 12 meses, 90 días frente a los 90 anteriores y
+   * búsquedas sin marca (D-095). Lo usa «Mantenimiento» del plan editorial.
+   * Opcional: solo el origen real; `null` si la marca no tiene sección.
+   */
+  contentSection?(brand: BrandSlug): Promise<ContentSectionReport | null>;
 };
 
 export type BrandReportRequest = {

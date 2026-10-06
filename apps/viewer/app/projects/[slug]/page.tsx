@@ -21,6 +21,7 @@ import {
 } from "@/components/report/brand-report";
 import { getPublishedAudit } from "@seo/site-audit/published";
 import { editorialOrigin, getBrandReport, projectEditorial, reportFilters } from "@/lib/brand-report";
+import { brandMaintenanceDigest } from "@/lib/content-maintenance";
 import { resolveReportTab } from "@/components/report/report-tab";
 
 const chapterCopy = {
@@ -68,6 +69,8 @@ export default async function ProjectPage({
       );
       const { present } = reportFilters(rawFilters);
       const editorial = await projectEditorial(slugResult.data);
+      // Posts que potenciar y retirar (D-095): solo los pide la pestaña Acciones.
+      const maintenance = tab === "acciones" ? await brandMaintenanceDigest(slugResult.data, editorial.pieces) : null;
       const query = new URLSearchParams(
         Object.entries(rawFilters).flatMap(([key, value]) =>
           key === "tab" || key === "chapter" || value === undefined
@@ -88,6 +91,7 @@ export default async function ProjectPage({
           editorialPieces={editorial.pieces}
           editorialThemes={editorial.themes}
           siteAudit={getPublishedAudit(slugResult.data)}
+          maintenance={maintenance}
         />
       );
       /* El proveedor envuelve también la cabecera: periodo y mercado viven en

@@ -5,3 +5,4 @@ export * from "./resolve";
 export { createLiveRepository, LIVE_DESCRIPTION, liveCutoff } from "./live/repository";
 export { readRealtime, realtimeScope, type RealtimeSnapshot, type RealtimeStatus } from "./live/realtime";
 export { MEASUREMENT_WINDOWS, measureEditorialPieces, measurementOf, pageFilter, planMeasurementWindow, type EditorialMeasurementRun, type MeasurablePiece } from "./live/editorial-measurement";
+export { SECTION_PAGE_ROWS, SECTION_QUERY_ROWS, buildContentSection, sectionWindows } from "./live/content-section";

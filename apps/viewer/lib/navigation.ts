@@ -66,6 +66,7 @@ const EDITORIAL_TABS: Record<string, string> = {
   calendario: "Calendario",
   backlog: "Backlog y plan",
   propuestas: "Propuestas",
+  mantenimiento: "Mantenimiento",
 };
 
 /** Fichas de detalle que no tienen entrada propia en el menú. */

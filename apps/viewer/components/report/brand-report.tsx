@@ -44,6 +44,7 @@ import { ActionsReview } from "./actions-review";
 import { pageStructure, sitemapGapOf } from "@seo/reports/page-structure";
 import { getBrandTracking } from "@seo/reports/tracking-published";
 import { actionPieces } from "@seo/reports/action-journey";
+import type { MaintenanceDigest } from "@seo/reports/content-maintenance";
 import { editorialBacklinkIndex } from "@/lib/editorial";
 import {
   analysePages,
@@ -926,6 +927,7 @@ export function BrandReportView({
   editorialPieces,
   editorialThemes,
   siteAudit,
+  maintenance,
 }: {
   report: BrandReport;
   tab: ReportTab;
@@ -939,6 +941,8 @@ export function BrandReportView({
   editorialThemes?: EditorialThemes;
   /** Último crawl publicado del proyecto (D-070); `null` si no hay ninguno. */
   siteAudit?: SiteAuditSummary | null;
+  /** Posts que potenciar y retirar del blog (D-095), solo en la pestaña Acciones; `null` sin dato. */
+  maintenance?: MaintenanceDigest | null;
   present: boolean;
   baseHref: string;
   query: string;
@@ -1054,6 +1058,7 @@ export function BrandReportView({
               report={report}
               pieces={editorialPieces ?? []}
               audit={siteAudit ?? null}
+              maintenance={maintenance ?? null}
               href={href}
             />
           )}
@@ -1801,11 +1806,13 @@ function Actions({
   report,
   pieces,
   audit,
+  maintenance,
   href,
 }: {
   report: BrandReport;
   pieces: EditorialPlanRow[];
   audit: SiteAuditSummary | null;
+  maintenance: MaintenanceDigest | null;
   href: (tab: ReportTab) => string;
 }) {
   const today = new Date().toISOString().slice(0, 10);
@@ -1816,6 +1823,7 @@ function Actions({
     rootLabel: rootLabelOf(report.markets),
     today,
     sitemapGap: sitemapGapOf(report, audit),
+    maintenance,
   });
   const { tracked, elsewhere } = withTracking(sections, getBrandTracking(report.brand));
   // Recorrido (D-092): piezas del plan que enlazan cada acción seguida, derivadas de `piece.links`.

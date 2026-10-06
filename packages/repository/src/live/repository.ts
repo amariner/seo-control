@@ -4,12 +4,15 @@ import {
   aggregatePortfolio,
   buildPeriodWindow,
   BRAND_REPORT_VERSION,
+  CONTENT_SECTION_VERSION,
+  editorialSectionOf,
   resolveReportWindow,
   dashboardPayloadSchema,
   findBrand,
   findMetric,
   isPilotProject,
   type BrandAnalytics,
+  type BrandSlug,
   type DashboardFilters,
   type DashboardPayload,
   type MarketCode,
@@ -24,6 +27,7 @@ import { fetchBrandFigures, fetchMarketFigures, gscFloor, type BrandFigures, typ
 import { hasGscCredentials, parseServiceAccount, type Env } from "./google";
 import { fetchOpportunities, type BrandOpportunities } from "./opportunities";
 import { buildBrandReport } from "./report";
+import { fetchContentSection } from "./content-section";
 
 /**
  * Origen `live`: lectura directa de GA4 y Search Console desde el servidor (D-034).
@@ -132,6 +136,15 @@ export function createLiveRepository(env: Env = process.env): MetricsRepository 
 
     async annotations(period: PeriodKey) {
       return periodAnnotations(brands, buildPeriodWindow(period, liveCutoff()));
+    },
+
+    async contentSection(slug: BrandSlug) {
+      const section = editorialSectionOf(slug);
+      if (!section) return null;
+      const brand = brands.find((item) => item.slug === slug);
+      if (!brand) throw new RepositoryUnavailableError("live", `La marca «${slug}» no tiene lectura directa configurada.`, "Añádela a LIVE_BRANDS con su propiedad GA4 y su sitio de Search Console.");
+      const cutoff = liveCutoff();
+      return remember(`section:${CONTENT_SECTION_VERSION}:${brand.slug}:${cutoff}`, () => fetchContentSection(env, brand, section, cutoff));
     },
 
     async brandReport(request: BrandReportRequest) {

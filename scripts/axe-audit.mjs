@@ -41,6 +41,8 @@ const APPS = {
       { name: "portfolio-filtrado", path: "/portfolio?brands=noken,krion&market=FR&compare=previousYear" },
       { name: "cal-year", path: "/editorial/calendario" },
       { name: "cal-month", path: "/editorial/calendario?view=month&month=9" },
+      { name: "mantenimiento", path: "/editorial/mantenimiento" },
+      { name: "mantenimiento-xtone", path: "/editorial/mantenimiento?brand=xtone" },
       { name: "backlog", path: "/editorial/backlog?kind=backlog" },
       { name: "propuestas", path: "/editorial/propuestas" },
       { name: "insights", path: "/insights" },

@@ -8,6 +8,7 @@ import { AppShell } from "@/components/app-shell";
 const tabs = [
   { href: "/editorial/calendario", label: "Calendario" },
   { href: "/editorial/propuestas", label: "Propuestas" },
+  { href: "/editorial/mantenimiento", label: "Mantenimiento" },
 ] as const;
 
 /**
